@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -19,12 +19,13 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "openapi:generate": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./openapi.yaml"
+    "openapi:generate": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./swagger.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^6.1.3",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
