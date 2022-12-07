@@ -34,4 +34,3 @@ jobs:
       - name: Stop backend container
         id: stop
         run: docker compose down
-
