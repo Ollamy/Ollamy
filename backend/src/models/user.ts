@@ -1,17 +1,28 @@
 import prisma from "../client";
 
-export const createUser = async (email: string, password: string): Promise<string> => {
+export type UserModel = {
+    Id: string;
+    Firstname: string;
+    Lastname: string;
+    Email: string;
+    Password: string;
+    Communities_id: string[];
+};
+
+
+export const createUser = async (userData: UserModel): Promise<UserModel | null> => {
     try {
         await prisma.user.create({
             data: {
-                password: password,
-                email: email,
-                firstname: "elyes",
-                lastname: "toumi"
+                password: userData.Password,
+                email: userData.Email,
+                firstname: userData.Firstname,
+                lastname: userData.Lastname,
+                communities_id: []
         }});
-        return email;
+        return userData;
     } catch (e) {
         console.log(e);
-        return "";
+        return null;
     }
-}
+};

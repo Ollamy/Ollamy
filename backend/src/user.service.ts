@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { UserModel } from "./models/user";
 
 @Injectable()
 export class UserService {
-  getHello(): string {
-    return 'Hello World!';
+  postUser(): UserModel {
+    return {Id:"", Firstname:"", Lastname:"",Email:"",Password:"",Communities_id:[]};
   }
 }

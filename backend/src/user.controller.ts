@@ -1,17 +1,14 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
+import { UserModel } from './models/user';
 import { UserService } from './user.service';
 
-@Controller('/test')
+@Controller('/user')
 export class UserController {
-  constructor(private readonly appService: UserService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  constructor(private readonly userService: UserService) {}
 
   @Post()
-  postHello(): string {
-    return this.appService.getHello();
+  async postHello(@Body() body: UserModel, @Headers() headers): Promise<UserModel> {
+    const userdata = this.userService.postUser();
+    return userdata;
   }
-}
+};
