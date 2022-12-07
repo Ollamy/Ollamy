@@ -1,0 +1,1 @@
+{"openapi":"3.0.0","paths":{"/health":{"get":{"operationId":"AppController_healthCheck","parameters":[],"responses":{"200":{"description":""}}}}},"info":{"title":"Ollamy API","description":"So insane API","version":"1.0","contact":{}},"tags":[],"servers":[],"components":{"schemas":{}}}
