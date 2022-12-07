@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Docker
     env:
       BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
