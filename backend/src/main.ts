@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { BACKEND_PORT } from 'setup';
 import * as fs from 'fs';
 
 async function bootstrap() {
@@ -16,6 +17,6 @@ async function bootstrap() {
   // save the swagger.json file
   fs.writeFileSync('./swagger.json', JSON.stringify(document));
 
-  await app.listen(3000);
+  await app.listen(BACKEND_PORT);
 }
 bootstrap();

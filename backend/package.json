@@ -27,6 +27,11 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^6.1.3",
     "@openapitools/openapi-generator-cli": "^2.5.2",
+    "@prisma/client": "^4.7.1",
+    "@types/jsonwebtoken": "^8.5.9",
+    "env-var": "^7.3.0",
+    "env-variable": "^0.0.6",
+    "jsonwebtoken": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
