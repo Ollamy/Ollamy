@@ -1,33 +1,63 @@
-import jwt from 'jsonwebtoken';
-import { Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
+import { Logger, ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
+import * as sha256 from 'crypto-js/sha256';
 
 @Injectable()
 export class UserService {
-  validateEmail(email: string) {
-    return /\S+@\S+\.\S+/.test(email);
+  createToken(userData: UserModel): string {
+    const token = jwt.sign(
+      {
+        _id: userData.Id,
+        firstname: userData.Firstname,
+        lastname: userData.Lastname,
+        email: userData.Email,
+        password: userData.Password,
+      },
+      SECRET_KEY,
+      {
+        expiresIn: '2 weeks',
+      },
+    );
+
+    if (!token) {
+      Logger.error('Token not created !');
+      throw new ConflictException('Token not created !');
+    }
+
+    return token;
   }
 
-  async hashPassword(password: string): Promise<string> {
-    const utf8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
+  validateEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  hashPassword(password: string): string {
+    return sha256(password + SECRET_KEY).toString();
   }
 
   async postUser(userData: UserModel): Promise<string | null> {
     const isEmail = this.validateEmail(userData.Email);
 
     if (!isEmail) {
-      return null;
+      Logger.error('Email is not valid !');
+      throw new UnprocessableEntityException('Email is not valid !');
     }
 
-    const hashedPass = await this.hashPassword(userData.Password);
+    const hashedPass = this.hashPassword(userData.Password);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: userData.Email,
+      },
+    });
+
+    if (user) {
+      Logger.error('Email already exists !');
+      throw new ConflictException('Email already exists !');
+    }
 
     try {
       const userDb = await prisma.user.create({
@@ -39,23 +69,11 @@ export class UserService {
           communities_id: [],
         },
       });
-      const token = jwt.sign(
-        {
-          _id: userDb.id,
-          firstname: userDb.firstname,
-          lastname: userDb.lastname,
-          email: userDb.email,
-          password: userDb.password,
-        },
-        SECRET_KEY,
-        {
-          expiresIn: '2 weeks',
-        },
-      );
-      return token;
-    } catch (e) {
-      console.log(e);
-      return null;
+      userData.Id = userDb.id;
+      return this.createToken(userData);
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not created !');
     }
   }
 }
