@@ -3,7 +3,7 @@ import { Logger, ConflictException, Injectable, UnprocessableEntityException } f
 import { UserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
-import * as sha256 from 'crypto-js/sha256';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UserService {
@@ -14,7 +14,6 @@ export class UserService {
         firstname: userData.Firstname,
         lastname: userData.Lastname,
         email: userData.Email,
-        password: userData.Password,
       },
       SECRET_KEY,
       {
@@ -35,18 +34,15 @@ export class UserService {
   }
 
   hashPassword(password: string): string {
-    return sha256(password + SECRET_KEY).toString();
+    const hash = crypto.createHmac('sha512', Buffer.from(SECRET_KEY)).update(password).digest('hex');
+    return hash;
   }
 
   async postUser(userData: UserModel): Promise<string | null> {
-    const isEmail = this.validateEmail(userData.Email);
-
-    if (!isEmail) {
+    if (!this.validateEmail(userData.Email)) {
       Logger.error('Email is not valid !');
       throw new UnprocessableEntityException('Email is not valid !');
     }
-
-    const hashedPass = this.hashPassword(userData.Password);
 
     const user = await prisma.user.findUnique({
       where: {
@@ -59,10 +55,13 @@ export class UserService {
       throw new ConflictException('Email already exists !');
     }
 
+    userData.Password = this.hashPassword(userData.Password);
+    console.log(userData.Password);
+
     try {
       const userDb = await prisma.user.create({
         data: {
-          password: hashedPass,
+          password: userData.Password,
           email: userData.Email,
           firstname: userData.Firstname,
           lastname: userData.Lastname,
