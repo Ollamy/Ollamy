@@ -3,6 +3,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 import { BACKEND_PORT } from 'setup';
 import * as fs from 'fs';
+import * as cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -18,6 +20,17 @@ async function bootstrap() {
   // save the swagger.json file
   fs.writeFileSync('./swagger.json', JSON.stringify(document));
 
+
+  app.use(cookieParser());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      stopAtFirstError: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   await app.listen(BACKEND_PORT);
 }
 bootstrap();
