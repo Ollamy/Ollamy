@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn install && yarn build
+RUN yarn install && yarn prisma migrate dev && yarn build
 
 CMD ["yarn", "start:prod"]

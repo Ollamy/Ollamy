@@ -8,3 +8,5 @@
 !*.json
 !*.js
 !.prettierrc
+!prisma/
+!.env*
