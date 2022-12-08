@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { AppModule } from 'app.module';
 import { BACKEND_PORT } from 'setup';
 import * as fs from 'fs';
 

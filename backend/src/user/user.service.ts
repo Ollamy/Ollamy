@@ -7,8 +7,7 @@ import { SECRET_KEY } from 'setup';
 @Injectable()
 export class UserService {
   validateEmail(email: string) {
-    let re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    return /\S+@\S+\.\S+/.test(email);
   }
 
   async hashPassword(password: string): Promise<string> {

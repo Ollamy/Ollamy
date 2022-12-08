@@ -3,8 +3,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log(`Database connected`);
-};
+  console.log(`Database connected`);
+}
 
 main()
   .catch((e) => {
@@ -12,6 +12,6 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  })
+  });
 
 export default prisma;

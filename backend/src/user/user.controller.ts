@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Headers, Req } from '@nestjs/common';
+import { Controller, Post, Req } from '@nestjs/common';
 import { UserModel } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -8,9 +8,8 @@ export class UserController {
 
   @Post()
   async registerUser(@Req() req: Request): Promise<string> {
-
     const userData: UserModel = JSON.parse(req.body.toString());
     const token = this.userService.postUser(userData);
     return token;
   }
-};
+}
