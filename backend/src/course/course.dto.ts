@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class LessonModel {
+export class CourseModel {
   @IsUUID()
   @IsOptional()
   Id: string;
@@ -12,5 +12,13 @@ export class LessonModel {
 
   @IsUUID()
   @IsOptional()
-  Chapter_id: string;
+  Community_id: string;
+
+//   @ApiProperty()
+//   @IsString()
+//   Chapters: chapter;
+
+  @IsUUID()
+  @IsOptional()
+  Crew_id: string;
 }
