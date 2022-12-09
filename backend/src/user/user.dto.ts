@@ -24,3 +24,22 @@ export class UserModel {
 
   Communities_id: string[];
 }
+
+export class RegisterUserModel {
+
+  @ApiProperty()
+  @IsString()
+  Firstname: string;
+
+  @ApiProperty()
+  @IsString()
+  Lastname: string;
+
+  @ApiProperty()
+  @IsEmail()
+  Email: string;
+
+  @ApiProperty()
+  @IsString()
+  Password: string;
+}

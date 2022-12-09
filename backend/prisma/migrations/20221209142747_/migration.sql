@@ -16,22 +16,13 @@ CREATE TABLE "Crew" (
     "members" TEXT[],
     "admins" TEXT[],
     "owner" TEXT NOT NULL,
-    "community_id" UUID NOT NULL,
 
     CONSTRAINT "Crew_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Community" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-
-    CONSTRAINT "Community_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Course" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "community_id" UUID NOT NULL,
     "crew_id" UUID NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
@@ -63,12 +54,6 @@ CREATE TABLE "Lesson" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- AddForeignKey
-ALTER TABLE "Crew" ADD CONSTRAINT "Crew_community_id_fkey" FOREIGN KEY ("community_id") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Course" ADD CONSTRAINT "Course_community_id_fkey" FOREIGN KEY ("community_id") REFERENCES "Community"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Course" ADD CONSTRAINT "Course_crew_id_fkey" FOREIGN KEY ("crew_id") REFERENCES "Crew"("id") ON DELETE CASCADE ON UPDATE CASCADE;

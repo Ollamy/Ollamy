@@ -21,21 +21,11 @@ model Crew {
   members      String[]
   admins       String[]
   owner        String
-  community    Community @relation(references: [id], fields: [community_id], onDelete: Cascade)
-  community_id String    @db.Uuid
   Course       Course[]
-}
-
-model Community {
-  id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Course Course[]
-  Crew   Crew[]
 }
 
 model Course {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  community    Community @relation(references: [id], fields: [community_id], onDelete: Cascade)
-  community_id String    @db.Uuid
   crew         Crew      @relation(references: [id], fields: [crew_id], onDelete: Cascade)
   crew_id      String    @db.Uuid
   Section      Section[]
