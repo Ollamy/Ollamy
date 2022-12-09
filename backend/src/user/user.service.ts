@@ -38,7 +38,7 @@ export class UserService {
     return hash;
   }
 
-  async postUser(userData: UserModel): Promise<string | null> {
+  async postUser(userData: UserModel): Promise<string> {
     if (!this.validateEmail(userData.Email)) {
       Logger.error('Email is not valid !');
       throw new UnprocessableEntityException('Email is not valid !');
@@ -56,7 +56,6 @@ export class UserService {
     }
 
     userData.Password = this.hashPassword(userData.Password);
-    console.log(userData.Password);
 
     try {
       const userDb = await prisma.user.create({
