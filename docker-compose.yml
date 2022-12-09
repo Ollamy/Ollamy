@@ -11,33 +11,33 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
-    # networks:
-    #   - db
+    networks:
+      - db
 
-  # backend:
-  #   build: backend
-  #   image: backend
-  #   restart: always
-  #   ports:
-  #     - ${BACKEND_PORT}:${BACKEND_PORT}
-  #   depends_on:
-  #     - database
-  #   networks:
-  #     - db
+  backend:
+    build: backend
+    image: backend
+    restart: always
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    depends_on:
+      - database
+    networks:
+      - db
 
-  # prismastudio:
-  #   image: backend
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   command: yarn prisma studio
-  #   restart: always
-  #   ports:
-  #     - ${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - db
+  prismastudio:
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: yarn prisma studio
+    restart: always
+    ports:
+      - ${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}
+    depends_on:
+      - backend
+    networks:
+      - db
 
 networks:
   db:
