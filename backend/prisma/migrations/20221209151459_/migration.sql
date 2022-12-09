@@ -11,19 +11,18 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Crew" (
+CREATE TABLE "UsertoCourse" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "members" TEXT[],
-    "admins" TEXT[],
-    "owner" TEXT NOT NULL,
+    "course_id" UUID NOT NULL,
+    "user_id" UUID NOT NULL,
 
-    CONSTRAINT "Crew_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UsertoCourse_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Course" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "crew_id" UUID NOT NULL,
+    "owner_id" UUID NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -56,7 +55,13 @@ CREATE TABLE "Lesson" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Course" ADD CONSTRAINT "Course_crew_id_fkey" FOREIGN KEY ("crew_id") REFERENCES "Crew"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UsertoCourse" ADD CONSTRAINT "UsertoCourse_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UsertoCourse" ADD CONSTRAINT "UsertoCourse_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Course" ADD CONSTRAINT "Course_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Section" ADD CONSTRAINT "Section_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;

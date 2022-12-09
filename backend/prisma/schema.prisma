@@ -8,27 +8,30 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstname      String
   lastname       String
-  email          String   @unique
+  email          String         @unique
   password       String
-  communities_id String[] @db.Uuid
+  communities_id String[]       @db.Uuid
+  UsertoCourse   UsertoCourse[]
+  Course         Course[]
 }
 
-model Crew {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  members      String[]
-  admins       String[]
-  owner        String
-  Course       Course[]
+model UsertoCourse {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course    Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  course_id String @db.Uuid
+  user_id   String @db.Uuid
 }
 
 model Course {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  crew         Crew      @relation(references: [id], fields: [crew_id], onDelete: Cascade)
-  crew_id      String    @db.Uuid
-  Section      Section[]
+  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section  Section[]
+  userlist UsertoCourse[]
+  user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id String         @db.Uuid
 }
 
 model Section {
