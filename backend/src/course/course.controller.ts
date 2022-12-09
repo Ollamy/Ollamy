@@ -18,8 +18,7 @@ export class CourseController {
     examples: {
       a: {
         value: {
-          Community_id: '0d157414-77b2-11ed-a1eb-0242ac120002',
-          Crew_id: '0d157414-77b2-11ed-a1eb-0242ac120002'
+          Owner_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f'
         } as CourseModel,
       },
     },

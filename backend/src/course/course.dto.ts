@@ -10,9 +10,9 @@ export class CourseModel {
 //   @IsString()
 //   Chapters: chapter;
 
-  @IsUUID()
-  @IsOptional()
-  Community_id: string;
+  // @IsUUID()
+  // @IsOptional()
+  // Community_id: string;
 
 //   @ApiProperty()
 //   @IsString()
@@ -20,5 +20,5 @@ export class CourseModel {
 
   @IsUUID()
   @IsOptional()
-  Crew_id: string;
+  Owner_id: string;
 }

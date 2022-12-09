@@ -9,7 +9,7 @@ export class CourseService {
     try {
       const courseDb = await prisma.course.create({
         data: {
-            chapter_id: courseData.Chapter_id
+            owner_id: courseData.Owner_id
         },
       });
       courseData.Id = courseDb.id;
