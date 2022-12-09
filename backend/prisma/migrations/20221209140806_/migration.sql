@@ -54,11 +54,11 @@ CREATE TABLE "Chapter" (
 );
 
 -- CreateTable
-CREATE TABLE "Lessons" (
+CREATE TABLE "Lesson" (
     "id" TEXT NOT NULL,
     "chapter_id" TEXT NOT NULL,
 
-    CONSTRAINT "Lessons_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -83,7 +83,7 @@ CREATE UNIQUE INDEX "Section_id_key" ON "Section"("id");
 CREATE UNIQUE INDEX "Chapter_id_key" ON "Chapter"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Lessons_id_key" ON "Lessons"("id");
+CREATE UNIQUE INDEX "Lesson_id_key" ON "Lesson"("id");
 
 -- AddForeignKey
 ALTER TABLE "Community" ADD CONSTRAINT "Community_crew_id_fkey" FOREIGN KEY ("crew_id") REFERENCES "Crew"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -101,4 +101,4 @@ ALTER TABLE "Section" ADD CONSTRAINT "Section_course_id_fkey" FOREIGN KEY ("cour
 ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_section_id_fkey" FOREIGN KEY ("section_id") REFERENCES "Section"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Lessons" ADD CONSTRAINT "Lessons_chapter_id_fkey" FOREIGN KEY ("chapter_id") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapter_id_fkey" FOREIGN KEY ("chapter_id") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

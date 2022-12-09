@@ -52,10 +52,10 @@ model Chapter {
   id         String    @id @unique @default(uuid())
   section    Section   @relation(references: [id], fields: [section_id])
   section_id String
-  Lessons    Lessons[]
+  Lessons    Lesson[]
 }
 
-model Lessons {
+model Lesson {
   id         String  @id @unique @default(uuid())
   chapter    Chapter @relation(references: [id], fields: [chapter_id])
   chapter_id String
