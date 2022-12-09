@@ -2,8 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 import { BACKEND_PORT } from 'setup';
-import * as fs from 'fs';
-import * as cookieParser from 'cookie-parser';
+import { writeFileSync } from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 
 
@@ -18,10 +17,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   // save the swagger.json file
-  fs.writeFileSync('./swagger.json', JSON.stringify(document));
+  writeFileSync('./swagger.json', JSON.stringify(document));
 
 
-  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
