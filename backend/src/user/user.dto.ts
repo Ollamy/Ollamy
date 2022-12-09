@@ -7,11 +7,9 @@ export class UserModel {
   Id: string;
 
   @ApiProperty()
-  @IsString()
   Firstname: string;
 
   @ApiProperty()
-  @IsString()
   Lastname: string;
 
   @ApiProperty()
