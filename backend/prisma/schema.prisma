@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  MEMBER
+  ADMIN
+}
+
 model User {
   id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstname      String
@@ -32,6 +37,7 @@ model Course {
   userlist UsertoCourse[]
   user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
   owner_id String         @db.Uuid
+  role      Role
 }
 
 model Section {

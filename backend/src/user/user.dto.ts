@@ -41,3 +41,14 @@ export class RegisterUserModel {
   @IsString()
   Password: string;
 }
+
+export class LoginUserModel {
+
+  @ApiProperty()
+  @IsEmail()
+  Email: string;
+
+  @ApiProperty()
+  @IsString()
+  Password: string;
+}

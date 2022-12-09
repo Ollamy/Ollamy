@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
-import { UserModel, RegisterUserModel } from 'user/user.dto';
+import { UserModel, RegisterUserModel, LoginUserModel } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
 @ApiBadRequestResponse({description: "Parameters are not valid"})
@@ -37,19 +37,19 @@ export class UserController {
     type: String,
   })
   @ApiBody({
-    type: RegisterUserModel,
+    type: LoginUserModel,
     description: 'user data model',
     examples: {
       a: {
         value: {
           Email: 'test@test.test',
           Password: '1234',
-        } as RegisterUserModel,
+        } as LoginUserModel,
       },
     },
   })
   @Post('/login')
-  async loginUser(@Body() body: UserModel): Promise<string> {
+  async loginUser(@Body() body: LoginUserModel): Promise<string> {
     const token = this.userService.loginUser(body);
     return token;
   }

@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { Logger, ConflictException, Injectable, UnprocessableEntityException, NotFoundException, BadRequestException } from '@nestjs/common';
-import { UserModel, RegisterUserModel } from './user.dto';
+import { UserModel, RegisterUserModel, LoginUserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import { createHmac } from 'crypto';
@@ -80,7 +80,7 @@ export class UserService {
     }
   }
 
-  async loginUser(userData: UserModel): Promise<string> {
+  async loginUser(userData: LoginUserModel): Promise<string> {
 
     const userDb = await prisma.user.findUnique({
       where: {
@@ -99,10 +99,15 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    userData.Id = userDb.id;
-    userData.Firstname = userDb.firstname;
-    userData.Lastname = userDb.lastname;
-    return this.createToken(userData);
+    const user: UserModel = {
+      Id: userDb.id,
+      Email: userDb.email,
+      Firstname: userDb.firstname,
+      Lastname: userDb.lastname,
+      Password: userDb.password,
+      Communities_id: [],
+    };
+    return this.createToken(user);
   }
 
   async updateUser(userData: UserModel): Promise<string> {
