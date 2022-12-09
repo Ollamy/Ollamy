@@ -104,4 +104,8 @@ export class UserService {
     userData.Lastname = userDb.lastname;
     return this.createToken(userData);
   }
+
+  async updateUser(userData: UserModel): Promise<string> {
+    return "";
+  }
 }

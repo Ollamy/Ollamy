@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id             String   @id @unique @default(uuid())
+  id             String   @id @db.Uuid @default(uuid())
   firstname      String
   lastname       String
   email          String   @unique
@@ -17,7 +17,7 @@ model User {
 }
 
 model Crew {
-  id        String      @id @unique @default(uuid())
+  id        String      @id @db.Uuid @default(uuid())
   members   String[]
   admins    String[]
   owner     String
@@ -26,14 +26,14 @@ model Crew {
 }
 
 model Community {
-  id      String   @id @unique @default(uuid())
+  id      String   @id @db.Uuid @default(uuid())
   crew    Crew     @relation(references: [id], fields: [crew_id])
   crew_id String
   Course  Course[]
 }
 
 model Course {
-  id           String    @id @unique @default(uuid())
+  id           String    @id @db.Uuid @default(uuid())
   community    Community @relation(references: [id], fields: [community_id])
   community_id String
   crew         Crew      @relation(references: [id], fields: [crew_id])
@@ -42,21 +42,21 @@ model Course {
 }
 
 model Section {
-  id        String    @id @unique @default(uuid())
+  id        String    @id @db.Uuid @default(uuid())
   course    Course    @relation(references: [id], fields: [course_id])
   course_id String
   Chapters  Chapter[]
 }
 
 model Chapter {
-  id         String    @id @unique @default(uuid())
+  id         String    @id @db.Uuid @default(uuid())
   section    Section   @relation(references: [id], fields: [section_id])
   section_id String
   Lessons    Lessons[]
 }
 
 model Lessons {
-  id         String  @id @unique @default(uuid())
+  id         String  @id @db.Uuid @default(uuid())
   chapter    Chapter @relation(references: [id], fields: [chapter_id])
   chapter_id String
 }
