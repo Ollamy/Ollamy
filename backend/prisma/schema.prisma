@@ -8,55 +8,55 @@ datasource db {
 }
 
 model User {
-  id             String   @id @unique @default(uuid())
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   firstname      String
   lastname       String
   email          String   @unique
   password       String
-  communities_id String[]
+  communities_id String[] @db.Uuid
 }
 
 model Crew {
-  id        String      @id @unique @default(uuid())
-  members   String[]
-  admins    String[]
-  owner     String
-  Community Community[]
-  Course    Course[]
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  members      String[]
+  admins       String[]
+  owner        String
+  community    Community @relation(references: [id], fields: [community_id])
+  community_id String    @db.Uuid
+  Course       Course[]
 }
 
 model Community {
-  id      String   @id @unique @default(uuid())
-  crew    Crew     @relation(references: [id], fields: [crew_id])
-  crew_id String
-  Course  Course[]
+  id     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Course Course[]
+  Crew   Crew[]
 }
 
 model Course {
-  id           String    @id @unique @default(uuid())
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   community    Community @relation(references: [id], fields: [community_id])
-  community_id String
+  community_id String    @db.Uuid
   crew         Crew      @relation(references: [id], fields: [crew_id])
-  crew_id      String
+  crew_id      String    @db.Uuid
   Section      Section[]
 }
 
 model Section {
-  id        String    @id @unique @default(uuid())
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   course    Course    @relation(references: [id], fields: [course_id])
-  course_id String
+  course_id String    @db.Uuid
   Chapters  Chapter[]
 }
 
 model Chapter {
-  id         String    @id @unique @default(uuid())
-  section    Section   @relation(references: [id], fields: [section_id])
-  section_id String
-  Lessons    Lessons[]
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section    Section  @relation(references: [id], fields: [section_id])
+  section_id String   @db.Uuid
+  Lessons    Lesson[]
 }
 
-model Lessons {
-  id         String  @id @unique @default(uuid())
+model Lesson {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   chapter    Chapter @relation(references: [id], fields: [chapter_id])
-  chapter_id String
+  chapter_id String  @db.Uuid
 }
