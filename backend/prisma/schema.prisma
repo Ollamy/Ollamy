@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstname      String
+  lastname       String
+  email          String         @unique
+  password       String
+  communities_id String[]       @db.Uuid
+  UsertoCourse   UsertoCourse[]
+  Course         Course[]
+}
+
+model UsertoCourse {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course    Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  course_id String @db.Uuid
+  user_id   String @db.Uuid
+}
+
+model Course {
+  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section  Section[]
+  userlist UsertoCourse[]
+  user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id String         @db.Uuid
+}
+
+model Section {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course    Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id String    @db.Uuid
+  Chapters  Chapter[]
+}
+
+model Chapter {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section    Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  section_id String   @db.Uuid
+  Lessons    Lesson[]
+}
+
+model Lesson {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapter    Chapter @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
+  chapter_id String  @db.Uuid
+}

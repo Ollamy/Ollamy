@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
-import * as fs from 'fs';
+import { AppModule } from 'app.module';
+import { BACKEND_PORT } from 'setup';
+import { writeFileSync } from 'fs';
+import { ValidationPipe } from '@nestjs/common';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,8 +17,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   // save the swagger.json file
-  fs.writeFileSync('./swagger.json', JSON.stringify(document));
+  writeFileSync('./swagger.json', JSON.stringify(document));
 
-  await app.listen(3000);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      stopAtFirstError: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
+  await app.listen(BACKEND_PORT);
 }
 bootstrap();

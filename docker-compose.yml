@@ -1,20 +1,43 @@
 version: '3.8'
 
 services:
+  database:
+    image: postgres:15.1-alpine
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    networks:
+      - db
+
   backend:
     build: backend
+    image: backend
     restart: always
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     depends_on:
+      - database
+    networks:
       - db
 
-  db:
-    image: postgres:15.1-alpine
+  prismastudio:
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: yarn prisma studio
     restart: always
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}
+    depends_on:
+      - backend
+    networks:
+      - db
+
+networks:
+  db:
