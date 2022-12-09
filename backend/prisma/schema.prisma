@@ -21,7 +21,7 @@ model Crew {
   members      String[]
   admins       String[]
   owner        String
-  community    Community @relation(references: [id], fields: [community_id])
+  community    Community @relation(references: [id], fields: [community_id], onDelete: Cascade)
   community_id String    @db.Uuid
   Course       Course[]
 }
@@ -34,29 +34,29 @@ model Community {
 
 model Course {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  community    Community @relation(references: [id], fields: [community_id])
+  community    Community @relation(references: [id], fields: [community_id], onDelete: Cascade)
   community_id String    @db.Uuid
-  crew         Crew      @relation(references: [id], fields: [crew_id])
+  crew         Crew      @relation(references: [id], fields: [crew_id], onDelete: Cascade)
   crew_id      String    @db.Uuid
   Section      Section[]
 }
 
 model Section {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course    Course    @relation(references: [id], fields: [course_id])
+  course    Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
   course_id String    @db.Uuid
   Chapters  Chapter[]
 }
 
 model Chapter {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  section    Section  @relation(references: [id], fields: [section_id])
+  section    Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
   section_id String   @db.Uuid
   Lessons    Lesson[]
 }
 
 model Lesson {
   id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  chapter    Chapter @relation(references: [id], fields: [chapter_id])
+  chapter    Chapter @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
   chapter_id String  @db.Uuid
 }
