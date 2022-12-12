@@ -23,7 +23,7 @@ export class UserService {
   private createToken(userData: JwtUserModel): string {
     const token = jwt.sign(
       {
-        _id: userData.Id,
+        id: userData.Id,
         firstname: userData.Firstname,
         lastname: userData.Lastname,
         email: userData.Email,
@@ -54,7 +54,12 @@ export class UserService {
   }
 
   async registerUser(userData: RegisterUserModel): Promise<string> {
-    if (userData.Firstname === '' || userData.Lastname === '') {
+    if (
+      userData.Firstname === '' ||
+      userData.Lastname === '' ||
+      userData.Firstname === undefined ||
+      userData.Lastname === undefined
+    ) {
       Logger.error('Firstname or lastname not provided !');
       throw new UnprocessableEntityException(
         'Firstname or lastname not provided !',
@@ -136,7 +141,7 @@ export class UserService {
 
     const userDb = await prisma.user.update({
       where: {
-        id: parsedJwt['_id'],
+        id: parsedJwt['id'],
       },
       data: {
         password: userData.Password,
@@ -166,15 +171,15 @@ export class UserService {
 
     const userDb = await prisma.user.delete({
       where: {
-        id: parsedJwt['_id']
-      }
-    })
+        id: parsedJwt['id'],
+      },
+    });
 
     if (!userDb) {
       Logger.error('User does not exists !');
       throw new NotFoundException('User does not exists !');
     }
 
-    return "Ok.";
+    return 'Ok.';
   }
 }

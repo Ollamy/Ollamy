@@ -7,9 +7,11 @@ export class UserModel {
   Id: string;
 
   @ApiProperty()
+  @IsString()
   Firstname: string;
 
   @ApiProperty()
+  @IsString()
   Lastname: string;
 
   @ApiProperty()
@@ -27,17 +29,15 @@ export class JwtUserModel {
   @IsUUID()
   Id: string;
 
-  @ApiProperty()
+  @IsString()
   Firstname: string;
 
-  @ApiProperty()
+  @IsString()
   Lastname: string;
 
-  @ApiProperty()
   @IsEmail()
   Email: string;
 
-  @ApiProperty()
   @IsString()
   Password: string;
 }
@@ -91,5 +91,4 @@ export class UpdateUserModel {
   @IsString()
   @IsOptional()
   Password: string;
-
 }

@@ -22,7 +22,7 @@ export class LoggingMiddleware implements NestMiddleware {
 
     const user = prisma.user.findUnique({
       where: {
-        id: parsedJwt['_id'],
+        id: parsedJwt['id'],
         email: parsedJwt['email'],
       },
     });

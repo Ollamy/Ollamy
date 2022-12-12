@@ -95,7 +95,7 @@ export class UserController {
   }
 
   @ApiOkResponse({
-    description: "Ok.",
+    description: 'Ok.',
     type: String,
   })
   @ApiHeader({

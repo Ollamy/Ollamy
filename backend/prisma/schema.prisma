@@ -13,7 +13,7 @@ enum Role {
 }
 
 model User {
-  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String         @id @default(uuid()) @db.Uuid
   firstname      String
   lastname       String
   email          String         @unique
@@ -24,7 +24,7 @@ model User {
 }
 
 model UsertoCourse {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String @id @default(uuid()) @db.Uuid
   course    Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
   user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
   course_id String @db.Uuid
@@ -32,7 +32,7 @@ model UsertoCourse {
 }
 
 model Course {
-  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id       String         @id @default(uuid()) @db.Uuid
   section  Section[]
   userlist UsertoCourse[]
   user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
@@ -41,21 +41,21 @@ model Course {
 }
 
 model Section {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   course    Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
   course_id String    @db.Uuid
   Chapters  Chapter[]
 }
 
 model Chapter {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   section    Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
   section_id String   @db.Uuid
   Lessons    Lesson[]
 }
 
 model Lesson {
-  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id         String  @id @default(uuid()) @db.Uuid
   chapter    Chapter @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
   chapter_id String  @db.Uuid
 }
