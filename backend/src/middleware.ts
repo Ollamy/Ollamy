@@ -14,7 +14,7 @@ export class LoggingMiddleware implements NestMiddleware {
     const token: string = req.headers.authorization_token as string;
     console.log('token = ', token);
 
-    if (token === undefined) {
+    if (!token) {
       Logger.error('No token provided');
       throw new NotAcceptableException('No token provided');
     }

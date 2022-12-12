@@ -57,8 +57,8 @@ export class UserService {
     if (
       userData.Firstname === '' ||
       userData.Lastname === '' ||
-      userData.Firstname === undefined ||
-      userData.Lastname === undefined
+      !userData.Firstname ||
+      !userData.Lastname
     ) {
       Logger.error('Firstname or lastname not provided !');
       throw new UnprocessableEntityException(
@@ -180,6 +180,6 @@ export class UserService {
       throw new NotFoundException('User does not exists !');
     }
 
-    return 'Ok.';
+    return `User's ${parsedJwt['id']} has been deleted.`;
   }
 }
