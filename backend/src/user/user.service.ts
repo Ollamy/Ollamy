@@ -175,6 +175,6 @@ export class UserService {
       throw new NotFoundException('User does not exists !');
     }
 
-    return "Ok .";
+    return "Ok.";
   }
 }
