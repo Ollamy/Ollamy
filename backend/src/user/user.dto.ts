@@ -25,8 +25,24 @@ export class UserModel {
   Communities_id: string[];
 }
 
-export class RegisterUserModel {
+export class JwtUserModel {
+  @IsUUID()
+  Id: string;
 
+  @IsString()
+  Firstname: string;
+
+  @IsString()
+  Lastname: string;
+
+  @IsEmail()
+  Email: string;
+
+  @IsString()
+  Password: string;
+}
+
+export class RegisterUserModel {
   @ApiProperty()
   @IsString()
   Firstname: string;
@@ -41,5 +57,38 @@ export class RegisterUserModel {
 
   @ApiProperty()
   @IsString()
+  Password: string;
+}
+
+export class LoginUserModel {
+  @ApiProperty()
+  @IsEmail()
+  Email: string;
+
+  @ApiProperty()
+  @IsString()
+  Password: string;
+}
+
+export class UpdateUserModel {
+  @IsUUID()
+  @IsOptional()
+  Id: string;
+
+  @ApiProperty()
+  @IsOptional()
+  Firstname: string;
+
+  @ApiProperty()
+  @IsOptional()
+  Lastname: string;
+
+  @ApiProperty()
+  @IsEmail()
+  Email: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   Password: string;
 }

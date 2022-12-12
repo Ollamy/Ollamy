@@ -1,6 +1,9 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('MEMBER', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "firstname" TEXT NOT NULL,
     "lastname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -12,7 +15,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "UsertoCourse" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "course_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
 
@@ -21,15 +24,16 @@ CREATE TABLE "UsertoCourse" (
 
 -- CreateTable
 CREATE TABLE "Course" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "owner_id" UUID NOT NULL,
+    "role" "Role" NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Section" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "course_id" UUID NOT NULL,
 
     CONSTRAINT "Section_pkey" PRIMARY KEY ("id")
@@ -37,7 +41,7 @@ CREATE TABLE "Section" (
 
 -- CreateTable
 CREATE TABLE "Chapter" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "section_id" UUID NOT NULL,
 
     CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
@@ -45,7 +49,7 @@ CREATE TABLE "Chapter" (
 
 -- CreateTable
 CREATE TABLE "Lesson" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "chapter_id" UUID NOT NULL,
 
     CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
