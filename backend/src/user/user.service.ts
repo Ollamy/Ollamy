@@ -1,6 +1,18 @@
 import * as jwt from 'jsonwebtoken';
-import { Logger, ConflictException, Injectable, UnprocessableEntityException, NotFoundException, BadRequestException } from '@nestjs/common';
-import { UserModel, RegisterUserModel, LoginUserModel } from './user.dto';
+import {
+  Logger,
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  RegisterUserModel,
+  LoginUserModel,
+  UpdateUserModel,
+  JwtUserModel,
+} from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import { createHmac } from 'crypto';
@@ -8,7 +20,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  private createToken(userData: UserModel): string {
+  private createToken(userData: JwtUserModel): string {
     const token = jwt.sign(
       {
         _id: userData.Id,
@@ -42,9 +54,11 @@ export class UserService {
   }
 
   async registerUser(userData: RegisterUserModel): Promise<string> {
-    if (userData.Firstname === "" || userData.Lastname === "") {
+    if (userData.Firstname === '' || userData.Lastname === '') {
       Logger.error('Firstname or lastname not provided !');
-      throw new UnprocessableEntityException('Firstname or lastname not provided !');
+      throw new UnprocessableEntityException(
+        'Firstname or lastname not provided !',
+      );
     }
 
     if (!this.validateEmail(userData.Email)) {
@@ -65,13 +79,12 @@ export class UserService {
         },
       });
 
-      const user: UserModel = {
+      const user: JwtUserModel = {
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-        Communities_id: [],
       };
 
       return this.createToken(user);
@@ -86,7 +99,6 @@ export class UserService {
   }
 
   async loginUser(userData: LoginUserModel): Promise<string> {
-
     const userDb = await prisma.user.findUnique({
       where: {
         email: userData.Email,
@@ -104,18 +116,65 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    const user: UserModel = {
+    const user: JwtUserModel = {
       Id: userDb.id,
       Email: userDb.email,
       Firstname: userDb.firstname,
       Lastname: userDb.lastname,
       Password: userDb.password,
-      Communities_id: [],
     };
     return this.createToken(user);
   }
 
-  async updateUser(userData: UserModel): Promise<string> {
-    return "";
+  async updateUser(userData: UpdateUserModel, token: string): Promise<string> {
+    const parsedJwt = jwt.decode(token);
+
+    if (!parsedJwt) {
+      Logger.error('Token not valid !');
+      throw new BadRequestException('Token not valid !');
+    }
+
+    const userDb = await prisma.user.update({
+      where: {
+        id: parsedJwt['_id'],
+      },
+      data: {
+        password: userData.Password,
+        email: userData.Email,
+        firstname: userData.Firstname,
+        lastname: userData.Lastname,
+      },
+    });
+
+    const user: JwtUserModel = {
+      Id: userDb.id,
+      Email: userDb.email,
+      Firstname: userDb.firstname,
+      Lastname: userDb.lastname,
+      Password: userDb.password,
+    };
+    return this.createToken(user);
+  }
+
+  async deleteUser(token: string): Promise<string> {
+    const parsedJwt = jwt.decode(token);
+
+    if (!parsedJwt) {
+      Logger.error('Token not valid !');
+      throw new BadRequestException('Token not valid !');
+    }
+
+    const userDb = await prisma.user.delete({
+      where: {
+        id: parsedJwt['_id']
+      }
+    })
+
+    if (!userDb) {
+      Logger.error('User does not exists !');
+      throw new NotFoundException('User does not exists !');
+    }
+
+    return "Ok .";
   }
 }

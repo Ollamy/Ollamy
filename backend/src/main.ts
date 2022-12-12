@@ -5,7 +5,6 @@ import { BACKEND_PORT } from 'setup';
 import { writeFileSync } from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -18,7 +17,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   // save the swagger.json file
   writeFileSync('./swagger.json', JSON.stringify(document));
-
 
   app.useGlobalPipes(
     new ValidationPipe({

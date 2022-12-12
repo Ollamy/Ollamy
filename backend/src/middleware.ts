@@ -1,20 +1,38 @@
-import { Injectable, NestMiddleware, Logger, ConflictException, UnprocessableEntityException, NotFoundException, BadRequestException, NotAcceptableException } from "@nestjs/common";
-import { NextFunction, Request, Response } from "express";
+import {
+  Injectable,
+  NestMiddleware,
+  Logger,
+  NotAcceptableException,
+} from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { abort } from "process";
+import prisma from 'client';
 
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
-    use(req: Request, _: Response, next: NextFunction) {
-        const token = req.headers.authorization;
+  use(req: Request, _: Response, next: NextFunction) {
+    const token: string = req.headers.authorization_token as string;
+    console.log('token = ', token);
 
-        if (token === undefined) {
-            Logger.error('No token provided');
-            throw new NotAcceptableException('No token provided');
-        }
-        const parsedJwt = jwt.decode(token);
-
-        console.log("Request Received");
-        next();
+    if (token === undefined) {
+      Logger.error('No token provided');
+      throw new NotAcceptableException('No token provided');
     }
+    const parsedJwt = jwt.decode(token);
+
+    const user = prisma.user.findUnique({
+      where: {
+        id: parsedJwt['_id'],
+        email: parsedJwt['email'],
+      },
+    });
+
+    console.log(parsedJwt);
+    if (!user) {
+      Logger.error('User does not exists !');
+      throw new NotAcceptableException('Invalid Token');
+    }
+    console.log('Request Received');
+    next();
+  }
 }

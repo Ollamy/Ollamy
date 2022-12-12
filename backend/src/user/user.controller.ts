@@ -1,14 +1,22 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiHeader, ApiOkResponse } from '@nestjs/swagger';
-import { UserModel, RegisterUserModel, LoginUserModel } from 'user/user.dto';
+import { Controller, Post, Body, Headers, Put, Delete } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiHeader,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import {
+  RegisterUserModel,
+  LoginUserModel,
+  UpdateUserModel,
+} from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
-@ApiBadRequestResponse({description: "Parameters are not valid"})
+@ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/register')
   @ApiOkResponse({
     description: "user's token",
     type: String,
@@ -27,6 +35,7 @@ export class UserController {
       },
     },
   })
+  @Post('/register')
   async registerUser(@Body() body: RegisterUserModel): Promise<string> {
     const token = this.userService.registerUser(body);
     return token;
@@ -58,25 +67,46 @@ export class UserController {
     description: "user's token",
     type: String,
   })
+  @ApiHeader({
+    name: 'Authorization_token',
+    description: 'token',
+    required: true,
+  })
   @ApiBody({
     type: LoginUserModel,
     description: 'user data model',
     examples: {
       a: {
         value: {
+          Firstname: 'name',
+          Lastname: 'lastname',
           Email: 'test@test.test',
           Password: '1234',
-        } as LoginUserModel,
+        } as UpdateUserModel,
       },
     },
   })
-  @ApiHeader({
-    name: 'Authentification token',
-    description: 'token'
+  @Put()
+  async updateUser(
+    @Body() body: UpdateUserModel,
+    @Headers('Authorization_token') token: string,
+  ): Promise<string> {
+    return this.userService.updateUser(body, token);
+  }
+
+  @ApiOkResponse({
+    description: "Ok.",
+    type: String,
   })
-  @Post('/update')
-  async updateUser(@Body() body: LoginUserModel): Promise<string> {
-    const token = this.userService.loginUser(body);
-    return token;
+  @ApiHeader({
+    name: 'Authorization_token',
+    description: 'token',
+    required: true,
+  })
+  @Delete()
+  async deleteUser(
+    @Headers('Authorization_token') token: string,
+  ): Promise<string> {
+    return this.userService.deleteUser(token);
   }
 }
