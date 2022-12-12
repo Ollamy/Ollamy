@@ -42,6 +42,11 @@ export class UserService {
   }
 
   async registerUser(userData: RegisterUserModel): Promise<string> {
+    if (userData.Firstname === "" || userData.Lastname === "") {
+      Logger.error('Firstname or lastname not provided !');
+      throw new UnprocessableEntityException('Firstname or lastname not provided !');
+    }
+
     if (!this.validateEmail(userData.Email)) {
       Logger.error('Email is not valid !');
       throw new UnprocessableEntityException('Email is not valid !');

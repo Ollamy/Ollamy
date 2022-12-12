@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiHeader, ApiOkResponse } from '@nestjs/swagger';
 import { UserModel, RegisterUserModel, LoginUserModel } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -50,6 +50,32 @@ export class UserController {
   })
   @Post('/login')
   async loginUser(@Body() body: LoginUserModel): Promise<string> {
+    const token = this.userService.loginUser(body);
+    return token;
+  }
+
+  @ApiOkResponse({
+    description: "user's token",
+    type: String,
+  })
+  @ApiBody({
+    type: LoginUserModel,
+    description: 'user data model',
+    examples: {
+      a: {
+        value: {
+          Email: 'test@test.test',
+          Password: '1234',
+        } as LoginUserModel,
+      },
+    },
+  })
+  @ApiHeader({
+    name: 'Authentification token',
+    description: 'token'
+  })
+  @Post('/update')
+  async updateUser(@Body() body: LoginUserModel): Promise<string> {
     const token = this.userService.loginUser(body);
     return token;
   }
