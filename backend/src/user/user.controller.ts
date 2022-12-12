@@ -37,8 +37,7 @@ export class UserController {
   })
   @Post('/register')
   async registerUser(@Body() body: RegisterUserModel): Promise<string> {
-    const token = this.userService.registerUser(body);
-    return token;
+    return this.userService.registerUser(body);
   }
 
   @ApiOkResponse({
@@ -59,8 +58,7 @@ export class UserController {
   })
   @Post('/login')
   async loginUser(@Body() body: LoginUserModel): Promise<string> {
-    const token = this.userService.loginUser(body);
-    return token;
+    return this.userService.loginUser(body);
   }
 
   @ApiOkResponse({
