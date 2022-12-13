@@ -47,6 +47,9 @@ CREATE TABLE "Chapter" (
 CREATE TABLE "Lesson" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "chapter_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "data" TEXT NOT NULL,
 
     CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
 );
