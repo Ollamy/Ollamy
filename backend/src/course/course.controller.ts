@@ -18,7 +18,9 @@ export class CourseController {
     examples: {
       a: {
         value: {
-          Owner_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f'
+          Owner_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f',
+          Title: "Course Title",
+          Description: "Course decsription",
         } as CourseModel,
       },
     },

@@ -23,6 +23,8 @@ CREATE TABLE "UsertoCourse" (
 CREATE TABLE "Course" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "owner_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -31,6 +33,8 @@ CREATE TABLE "Course" (
 CREATE TABLE "Section" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "course_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Section_pkey" PRIMARY KEY ("id")
 );
@@ -39,6 +43,8 @@ CREATE TABLE "Section" (
 CREATE TABLE "Chapter" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "section_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
 );

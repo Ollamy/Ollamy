@@ -27,25 +27,31 @@ model UsertoCourse {
 }
 
 model Course {
-  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  section  Section[]
-  userlist UsertoCourse[]
-  user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
-  owner_id String         @db.Uuid
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section     Section[]
+  userlist    UsertoCourse[]
+  user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id    String         @db.Uuid
+  title       String
+  description String
 }
 
 model Section {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course    Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  course_id String    @db.Uuid
-  Chapters  Chapter[]
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course      Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id   String    @db.Uuid
+  Chapters    Chapter[]
+  title       String
+  description String
 }
 
 model Chapter {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  section    Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
-  section_id String   @db.Uuid
-  Lessons    Lesson[]
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section     Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  section_id  String   @db.Uuid
+  Lessons     Lesson[]
+  title       String
+  description String
 }
 
 model Lesson {

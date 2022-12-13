@@ -18,7 +18,9 @@ export class SectionController {
     examples: {
       a: {
         value: {
-          Course_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f'
+          Course_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f',
+          Title: "Section Title",
+          Description: "Section decsription"
         } as SectionModel,
       },
     },

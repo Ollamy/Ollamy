@@ -9,7 +9,9 @@ export class SectionService {
     try {
       const sectionDb = await prisma.section.create({
         data: {
-            course_id: sectionData.Course_id
+            course_id: sectionData.Course_id,
+            title: sectionData.Title,
+            description: sectionData.Description
         },
       });
       sectionData.Id = sectionDb.id;

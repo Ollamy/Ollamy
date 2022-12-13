@@ -9,7 +9,9 @@ export class ChapterService {
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
-            section_id: chapterData.Section_id
+            section_id: chapterData.Section_id,
+            title: chapterData.Title,
+            description: chapterData.Description
         },
       });
       chapterData.Id = chapterDb.id;

@@ -9,4 +9,12 @@ export class SectionModel {
   @IsUUID()
   @IsOptional()
   Course_id: string;
+
+  @ApiProperty()
+  @IsString()
+  Title: string;
+
+  @ApiProperty()
+  @IsString()
+  Description: string;
 }

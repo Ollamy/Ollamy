@@ -6,19 +6,15 @@ export class ChapterModel {
   @IsOptional()
   Id: string;
 
-//   @ApiProperty()
-//   @IsString()
-//   Chapters: chapter;
-
-  // @IsUUID()
-  // @IsOptional()
-  // Community_id: string;
-
-//   @ApiProperty()
-//   @IsString()
-//   Chapters: chapter;
-
   @IsUUID()
   @IsOptional()
   Section_id: string;
+
+  @ApiProperty()
+  @IsString()
+  Title: string;
+
+  @ApiProperty()
+  @IsString()
+  Description: string;
 }

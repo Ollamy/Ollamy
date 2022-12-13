@@ -18,7 +18,9 @@ export class ChapterController {
     examples: {
       a: {
         value: {
-          Section_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f'
+          Section_id: '7d95d801-b748-40b4-995d-b8d79e0c1a0f',
+          Title: "Chapter Title",
+          Description: "Chapter decsription"
         } as ChapterModel,
       },
     },
