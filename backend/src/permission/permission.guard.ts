@@ -25,17 +25,17 @@ export class PermissionGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log('params', params);
+
     if (!params) {
       return true;
     }
+
     const type = params['type'];
     const method = params['method'];
     const requiredRoles = params['args'];
-
     const role = context.switchToHttp().getRequest()
       .__userToCourse[0] as UsertoCourse;
-    console.log('role', role);
+
     if (!role) {
       throw new UnauthorizedException();
     }
@@ -130,8 +130,6 @@ export class PermissionGuard implements CanActivate {
   ): boolean {
     switch (method) {
       case Method.ALL:
-        console.log('role.permission_section', role.permission_section);
-        console.log('requiredRoles', requiredRoles);
         return this.equals(role.permission_section, requiredRoles);
       case Method.ONE_OF:
         return role.permission_section.some((r) => requiredRoles.includes(r));
