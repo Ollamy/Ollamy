@@ -62,17 +62,17 @@ model User {
 }
 
 model UsertoCourse {
-  id        String @id @default(uuid()) @db.Uuid
-  course    Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  role_user      Role   @default(MEMBER)
-  permission_user PermissionUser[] @default([])
-  permission_course PermissionCourse[] @default([])
+  id                 String              @id @default(uuid()) @db.Uuid
+  course             Course              @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user               User                @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  role_user          Role                @default(MEMBER)
+  permission_user    PermissionUser[]    @default([])
+  permission_course  PermissionCourse[]  @default([])
   permission_section PermissionSection[] @default([])
   permission_chapter PermissionChapter[] @default([])
-  permission_lesson PermissionLesson[] @default([])
-  course_id String @db.Uuid
-  user_id   String @db.Uuid
+  permission_lesson  PermissionLesson[]  @default([])
+  course_id          String              @db.Uuid
+  user_id            String              @db.Uuid
 }
 
 model Course {
@@ -81,7 +81,7 @@ model Course {
   userlist UsertoCourse[]
   user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
   owner_id String         @db.Uuid
-  role      Role
+  role     Role
 }
 
 model Section {

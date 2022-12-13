@@ -52,6 +52,20 @@ export class MiddlewareGuard implements CanActivate {
     }
 
     req.__user = await user;
+
+    // Get the table UsertoCourse
+    const userToCourse = prisma.usertoCourse.findMany({
+      where: {
+        user_id: req.__user.id,
+      },
+    });
+
+    if (!userToCourse) {
+      Logger.error('User does not exists !');
+      throw new NotAcceptableException('Invalid Token');
+      return false;
+    }
+    req.__userToCourse = await userToCourse;
     return true;
   }
 }
