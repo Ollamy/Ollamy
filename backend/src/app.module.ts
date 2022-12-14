@@ -9,7 +9,14 @@ import { LessonModule } from 'lesson/lesson.module';
 import { QuestionModule } from 'question/question.module';
 
 @Module({
-  imports: [UserModule, CourseModule, SectionModule, ChapterModule, LessonModule, QuestionModule],
+  imports: [
+    UserModule,
+    CourseModule,
+    SectionModule,
+    ChapterModule,
+    LessonModule,
+    QuestionModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

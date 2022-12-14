@@ -1,14 +1,25 @@
-import { Logger, ConflictException, Injectable, UnprocessableEntityException, BadRequestException, NotFoundException } from '@nestjs/common';
-import { IdQuestionModel, QuestionModel, UpdateQuestionModel } from './question.dto';
+import {
+  Logger,
+  ConflictException,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  IdQuestionModel,
+  QuestionModel,
+  UpdateQuestionModel,
+} from './question.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
-
 @Injectable()
 export class QuestionService {
-
-  async postQuestion(questionData: QuestionModel, token: string): Promise<string> {
+  async postQuestion(
+    questionData: QuestionModel,
+    token: string,
+  ): Promise<string> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -19,10 +30,10 @@ export class QuestionService {
     try {
       const questionDb = await prisma.question.create({
         data: {
-            lesson_id: questionData.LessonId,
-            title: questionData.Title,
-            description: questionData.Description,
-            data: questionData.Data
+          lesson_id: questionData.LessonId,
+          title: questionData.Title,
+          description: questionData.Description,
+          data: questionData.Data,
         },
       });
 
@@ -37,7 +48,10 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(questionData: IdQuestionModel, token: string): Promise<string> {
+  async deleteQuestion(
+    questionData: IdQuestionModel,
+    token: string,
+  ): Promise<string> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -77,51 +91,55 @@ export class QuestionService {
     }
 
     try {
-        const questionDb = await prisma.question.findFirst({
-            where: {
-                id: QuestionId
-            },
-        });
+      const questionDb = await prisma.question.findFirst({
+        where: {
+          id: QuestionId,
+        },
+      });
 
-        if (!questionDb) {
-          Logger.error('Question does not exists !');
-          throw new ConflictException('Question does not exists !');
-        }
+      if (!questionDb) {
+        Logger.error('Question does not exists !');
+        throw new ConflictException('Question does not exists !');
+      }
 
-        const question: QuestionModel = {
-          Id: questionDb.id,
-          LessonId: questionDb.lesson_id,
-          Title: questionDb.title,
-          Description: questionDb.description,
-          Data: questionDb.data
-        };
+      const question: QuestionModel = {
+        Id: questionDb.id,
+        LessonId: questionDb.lesson_id,
+        Title: questionDb.title,
+        Description: questionDb.description,
+        Data: questionDb.data,
+      };
 
-        return JSON.stringify(question);
+      return JSON.stringify(question);
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not found !');
     }
   }
 
-  async updateQuestion(QuestionId: string, questionData: UpdateQuestionModel): Promise<string> {
+  async updateQuestion(
+    QuestionId: string,
+    questionData: UpdateQuestionModel,
+  ): Promise<string> {
     try {
-        const questionDb = await prisma.question.update({
-            where: {
-              id: QuestionId
-            }, data: {
-              lesson_id: questionData.LessonId,
-              title: questionData.Title,
-              description: questionData.Description,
-              data: questionData.Data
-            }
-        });
+      const questionDb = await prisma.question.update({
+        where: {
+          id: QuestionId,
+        },
+        data: {
+          lesson_id: questionData.LessonId,
+          title: questionData.Title,
+          description: questionData.Description,
+          data: questionData.Data,
+        },
+      });
 
-        if (!questionDb) {
-          Logger.error('Question does not exists !');
-          throw new ConflictException('Question does not exists !');
-        }
+      if (!questionDb) {
+        Logger.error('Question does not exists !');
+        throw new ConflictException('Question does not exists !');
+      }
 
-        return `Question with id ${QuestionId} has been updated`;
+      return `Question with id ${QuestionId} has been updated`;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not updated !');

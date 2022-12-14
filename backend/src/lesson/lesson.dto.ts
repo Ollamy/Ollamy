@@ -19,7 +19,6 @@ export class LessonModel {
   Description: string;
 }
 
-
 export class IdLessonModel {
   @ApiProperty()
   @IsUUID()

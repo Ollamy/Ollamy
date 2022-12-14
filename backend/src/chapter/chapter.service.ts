@@ -1,12 +1,21 @@
-import { Logger, ConflictException, Injectable, BadRequestException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { ChapterModel, IdChapterModel, UpdateChapterModel } from './chapter.dto';
+import {
+  Logger,
+  ConflictException,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  ChapterModel,
+  IdChapterModel,
+  UpdateChapterModel,
+} from './chapter.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
-
   async postChapter(chapterData: ChapterModel, token: string): Promise<string> {
     const parsedJwt = jwt.decode(token);
 
@@ -18,9 +27,9 @@ export class ChapterService {
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
-            section_id: chapterData.SectionId,
-            title: chapterData.Title,
-            description: chapterData.Description,
+          section_id: chapterData.SectionId,
+          title: chapterData.Title,
+          description: chapterData.Description,
         },
       });
 
@@ -35,7 +44,10 @@ export class ChapterService {
     }
   }
 
-  async deleteChapter(chapterData: IdChapterModel, token: string): Promise<string> {
+  async deleteChapter(
+    chapterData: IdChapterModel,
+    token: string,
+  ): Promise<string> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -75,49 +87,53 @@ export class ChapterService {
     }
 
     try {
-        const chapterDb = await prisma.chapter.findFirst({
-            where: {
-              id: ChapterId
-            },
-        });
+      const chapterDb = await prisma.chapter.findFirst({
+        where: {
+          id: ChapterId,
+        },
+      });
 
-        if (!chapterDb) {
-          Logger.error('Chapter does not exists !');
-          throw new ConflictException('Chapter does not exists !');
-        }
+      if (!chapterDb) {
+        Logger.error('Chapter does not exists !');
+        throw new ConflictException('Chapter does not exists !');
+      }
 
-        const chapter: ChapterModel = {
-          Id: chapterDb.id,
-          SectionId: chapterDb.section_id,
-          Title: chapterDb.title,
-          Description: chapterDb.description
-        };
+      const chapter: ChapterModel = {
+        Id: chapterDb.id,
+        SectionId: chapterDb.section_id,
+        Title: chapterDb.title,
+        Description: chapterDb.description,
+      };
 
-        return JSON.stringify(chapter);
+      return JSON.stringify(chapter);
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not found !');
     }
   }
 
-  async updateChapter(ChapterId: string, chapterData: UpdateChapterModel): Promise<string> {
+  async updateChapter(
+    ChapterId: string,
+    chapterData: UpdateChapterModel,
+  ): Promise<string> {
     try {
-        const chapterDb = await prisma.chapter.update({
-            where: {
-              id: ChapterId
-            }, data: {
-              section_id: chapterData.SectionId,
-              title: chapterData.Title,
-              description: chapterData.Description
-            }
-        });
+      const chapterDb = await prisma.chapter.update({
+        where: {
+          id: ChapterId,
+        },
+        data: {
+          section_id: chapterData.SectionId,
+          title: chapterData.Title,
+          description: chapterData.Description,
+        },
+      });
 
-        if (!chapterDb) {
-          Logger.error('Chapter does not exists !');
-          throw new ConflictException('Chapter does not exists !');
-        }
+      if (!chapterDb) {
+        Logger.error('Chapter does not exists !');
+        throw new ConflictException('Chapter does not exists !');
+      }
 
-        return `Chapter with id ${ChapterId} has been updated`;
+      return `Chapter with id ${ChapterId} has been updated`;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not updated !');

@@ -19,7 +19,6 @@ export class SectionModel {
   Description: string;
 }
 
-
 export class IdSectionModel {
   @ApiProperty()
   @IsUUID()

@@ -19,7 +19,6 @@ export class ChapterModel {
   Description: string;
 }
 
-
 export class IdChapterModel {
   @ApiProperty()
   @IsUUID()

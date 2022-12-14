@@ -23,7 +23,6 @@ export class QuestionModel {
   Data: string;
 }
 
-
 export class IdQuestionModel {
   @ApiProperty()
   @IsUUID()
