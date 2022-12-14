@@ -53,7 +53,6 @@ export class MiddlewareGuard implements CanActivate {
 
     req.__user = await user;
 
-    // Get the table UsertoCourse
     const userToCourse = prisma.usertoCourse.findMany({
       where: {
         user_id: req.__user.id,
