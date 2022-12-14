@@ -47,12 +47,8 @@ CREATE TABLE "UsertoCourse" (
 CREATE TABLE "Course" (
     "id" UUID NOT NULL,
     "owner_id" UUID NOT NULL,
-<<<<<<<< HEAD:backend/prisma/migrations/20221213164606_/migration.sql
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-========
-    "role" "Role" NOT NULL,
->>>>>>>> f414d06807bb30a929a91d694f2e0a368ac5d19b:backend/prisma/migrations/20221212153951_refracto/migration.sql
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class SectionModel {
   @IsUUID()
@@ -8,7 +8,7 @@ export class SectionModel {
 
   @IsUUID()
   @IsOptional()
-  Course_id: string;
+  CourseId: string;
 
   @ApiProperty()
   @IsString()
@@ -16,5 +16,29 @@ export class SectionModel {
 
   @ApiProperty()
   @IsString()
+  Description: string;
+}
+
+
+export class IdSectionModel {
+  @ApiProperty()
+  @IsUUID()
+  Id: string;
+}
+
+export class UpdateSectionModel {
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  CourseId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  Title: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   Description: string;
 }

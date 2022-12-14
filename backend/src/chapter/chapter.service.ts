@@ -1,38 +1,126 @@
-import { Logger, ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { ChapterModel } from './chapter.dto';
+import { Logger, ConflictException, Injectable, BadRequestException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { ChapterModel, IdChapterModel, UpdateChapterModel } from './chapter.dto';
 import prisma from 'client';
+import * as jwt from 'jsonwebtoken';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
 
-  async postChapter(chapterData: ChapterModel): Promise<string> {
+  async postChapter(chapterData: ChapterModel, token: string): Promise<string> {
+    const parsedJwt = jwt.decode(token);
+
+    if (!parsedJwt) {
+      Logger.error('Token not valid !');
+      throw new BadRequestException('Token not valid !');
+    }
+
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
-            section_id: chapterData.Section_id,
+            section_id: chapterData.SectionId,
             title: chapterData.Title,
-            description: chapterData.Description
+            description: chapterData.Description,
         },
       });
-      chapterData.Id = chapterDb.id;
-      return "Chapter created";
+
+      if (!chapterDb) {
+        Logger.error('Failed to create chapter !');
+        throw new NotFoundException('Failed to create chapter !');
+      }
+      return `Chapter created with id ${chapterDb.id}`;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not created !');
     }
   }
 
-  async deleteChapter(chapterData: ChapterModel): Promise<string> {
+  async deleteChapter(chapterData: IdChapterModel, token: string): Promise<string> {
+    const parsedJwt = jwt.decode(token);
+
+    if (!parsedJwt) {
+      Logger.error('Token not valid !');
+      throw new BadRequestException('Token not valid !');
+    }
+
     try {
-        const chapterDb = await prisma.chapter.delete({
-            where: {
-                id: chapterData.Id,
-              },
-        });
-        return "Chapter deleted"
+      const chapterDb = await prisma.chapter.delete({
+        where: {
+          id: chapterData.Id,
+        },
+      });
+
+      if (!chapterDb) {
+        Logger.error('Chapter does not exists !');
+        throw new NotFoundException('Chapter does not exists !');
+      }
+
+      return `Chapter's ${chapterData.Id} has been deleted.`;
     } catch (error) {
-        Logger.error(error);
-      throw new ConflictException('Chapter not deleted !');
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('Chapter already removed !');
+      } else {
+        throw new ConflictException('Chapter not created !');
+      }
+    }
+  }
+
+  async getChapter(ChapterId: string, token: string): Promise<string> {
+    const parsedJwt = jwt.decode(token);
+
+    if (!parsedJwt) {
+      Logger.error('Token not valid !');
+      throw new BadRequestException('Token not valid !');
+    }
+
+    try {
+        const chapterDb = await prisma.chapter.findFirst({
+            where: {
+              id: ChapterId
+            },
+        });
+
+        if (!chapterDb) {
+          Logger.error('Chapter does not exists !');
+          throw new ConflictException('Chapter does not exists !');
+        }
+
+        const chapter: ChapterModel = {
+          Id: chapterDb.id,
+          SectionId: chapterDb.section_id,
+          Title: chapterDb.title,
+          Description: chapterDb.description
+        };
+
+        return JSON.stringify(chapter);
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Chapter not found !');
+    }
+  }
+
+  async updateChapter(ChapterId: string, chapterData: UpdateChapterModel): Promise<string> {
+    try {
+        const chapterDb = await prisma.chapter.update({
+            where: {
+              id: ChapterId
+            }, data: {
+              section_id: chapterData.SectionId,
+              title: chapterData.Title,
+              description: chapterData.Description
+            }
+        });
+
+        if (!chapterDb) {
+          Logger.error('Chapter does not exists !');
+          throw new ConflictException('Chapter does not exists !');
+        }
+
+        return `Chapter with id ${ChapterId} has been updated`;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Chapter not updated !');
     }
   }
 }
