@@ -1,5 +1,20 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('MEMBER', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('MEMBER', 'OWNER', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "PermissionUser" AS ENUM ('READ', 'WRITE', 'DELETE', 'PING', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "PermissionCourse" AS ENUM ('READ', 'WRITE', 'DELETE', 'PING', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "PermissionSection" AS ENUM ('READ', 'WRITE', 'DELETE', 'PING');
+
+-- CreateEnum
+CREATE TYPE "PermissionChapter" AS ENUM ('READ', 'WRITE', 'DELETE', 'PING');
+
+-- CreateEnum
+CREATE TYPE "PermissionLesson" AS ENUM ('READ', 'WRITE', 'DELETE', 'PING');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -16,6 +31,12 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "UsertoCourse" (
     "id" UUID NOT NULL,
+    "role_user" "Role" NOT NULL DEFAULT 'MEMBER',
+    "permission_user" "PermissionUser"[] DEFAULT ARRAY[]::"PermissionUser"[],
+    "permission_course" "PermissionCourse"[] DEFAULT ARRAY[]::"PermissionCourse"[],
+    "permission_section" "PermissionSection"[] DEFAULT ARRAY[]::"PermissionSection"[],
+    "permission_chapter" "PermissionChapter"[] DEFAULT ARRAY[]::"PermissionChapter"[],
+    "permission_lesson" "PermissionLesson"[] DEFAULT ARRAY[]::"PermissionLesson"[],
     "course_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
 

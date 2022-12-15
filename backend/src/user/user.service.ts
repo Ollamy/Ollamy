@@ -139,26 +139,38 @@ export class UserService {
       throw new BadRequestException('Token not valid !');
     }
 
-    const userDb = await prisma.user.update({
-      where: {
-        id: parsedJwt['id'],
-      },
-      data: {
-        password: userData.Password,
-        email: userData.Email,
-        firstname: userData.Firstname,
-        lastname: userData.Lastname,
-      },
-    });
+    try {
+      userData.Password = this.hashPassword(userData.Password);
+      const userDb = await prisma.user.update({
+        where: {
+          id: parsedJwt['id'],
+        },
+        data: {
+          password: userData.Password,
+          email: userData.Email,
+          firstname: userData.Firstname,
+          lastname: userData.Lastname,
+        },
+      });
 
-    const user: JwtUserModel = {
-      Id: userDb.id,
-      Email: userDb.email,
-      Firstname: userDb.firstname,
-      Lastname: userDb.lastname,
-      Password: userDb.password,
-    };
-    return this.createToken(user);
+      const user: JwtUserModel = {
+        Id: userDb.id,
+        Email: userDb.email,
+        Firstname: userDb.firstname,
+        Lastname: userDb.lastname,
+        Password: userDb.password,
+      };
+
+      return this.createToken(user);
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('Email already exists !');
+      } else {
+        throw new ConflictException('User not created !');
+      }
+    }
+    throw new ConflictException('User not updated !');
   }
 
   async deleteUser(token: string): Promise<string> {
@@ -169,17 +181,28 @@ export class UserService {
       throw new BadRequestException('Token not valid !');
     }
 
-    const userDb = await prisma.user.delete({
-      where: {
-        id: parsedJwt['id'],
-      },
-    });
+    try {
+      const userDb = await prisma.user.delete({
+        where: {
+          id: parsedJwt['id'],
+        },
+      });
 
-    if (!userDb) {
-      Logger.error('User does not exists !');
-      throw new NotFoundException('User does not exists !');
+      if (!userDb) {
+        Logger.error('User does not exists !');
+        throw new NotFoundException('User does not exists !');
+      }
+
+      return `User's ${parsedJwt['id']} has been deleted.`;
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('User already removed !');
+      } else {
+        throw new ConflictException('User not created !');
+      }
     }
-
-    return `User's ${parsedJwt['id']} has been deleted.`;
+    // not reachable
+    throw new ConflictException('User not removed !');
   }
 }
