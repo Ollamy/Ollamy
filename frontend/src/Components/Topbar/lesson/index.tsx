@@ -19,7 +19,7 @@ const TopBarLesson = ({ completion, lifeCount }: TopBarLessonProps): JSX.Element
  
   return (
     <Container>
-      <Image src={closeIcon} alt={""} style={{height: "100%"}} onClick={handlClose}/>
+      <Image src={closeIcon} alt={""} onClick={handlClose}/>
       <EmptyBarLesson>
         <ProgressLesson percent={completion} />
       </EmptyBarLesson>

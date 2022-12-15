@@ -5,6 +5,9 @@ import { useCallback } from 'react';
 import { uuid } from 'UUID';
 import LessonCard from '../../../Components/Lesson/LessonCard';
 
+export interface CourseMobileProps extends PagesProps {
+  CourseId: string
+}
 export interface CourseLessons {
   id: uuid
   name: string
@@ -16,7 +19,7 @@ export interface getCourseLessons {
   lessons: CourseLessons[];
 }
 
-const CourseMobile = ({ children }: PagesProps): JSX.Element => {
+const CourseMobile = ({ children }: CourseMobileProps): JSX.Element => {
   const lessons : getCourseLessons = {
       courseId: "ddf4ec27-1445-4363-ad50-6631fda0d360",
       lessons: [
@@ -54,6 +57,7 @@ const Lessons = styled.div`
   flex-direction: column;
   overflow-y: auto;
   gap: 25px;
-  padding: 25px
+  padding: 25px;
 `;
+
 export default CourseMobile;

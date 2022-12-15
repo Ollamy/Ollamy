@@ -17,7 +17,7 @@ const LifeCounter = ({lifeCount}: LifeCounterProps): JSX.Element => {
   )
 }
 
-const LifeText = styled.div`
+const LifeText = styled.text`
   color: #3D3D3D;
   font-style: normal;
   font-weight: 500;
