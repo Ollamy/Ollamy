@@ -84,7 +84,7 @@ model Course {
   user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
   owner_id    String         @db.Uuid
   title       String
-  description String
+  description String?
 }
 
 model Section {
@@ -92,7 +92,7 @@ model Section {
   course      Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
   course_id   String    @db.Uuid
   title       String
-  description String
+  description String?
   Chapters    Chapter[]
 }
 
@@ -101,7 +101,7 @@ model Chapter {
   section     Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
   section_id  String   @db.Uuid
   title       String
-  description String
+  description String?
   Lessons     Lesson[]
 }
 
@@ -110,7 +110,7 @@ model Lesson {
   chapter     Chapter    @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
   chapter_id  String     @db.Uuid
   title       String
-  description String
+  description String?
   Questions   Question[]
 }
 
@@ -119,6 +119,6 @@ model Question {
   Lesson      Lesson @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
   lesson_id   String @db.Uuid
   title       String
-  description String
+  description String?
   data        String
 }
