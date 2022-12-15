@@ -19,6 +19,7 @@ import {
   ChapterModel,
   IdChapterModel,
   UpdateChapterModel,
+  CreateChapterModel
 } from 'chapter/chapter.dto';
 import { ChapterService } from 'chapter/chapter.service';
 import { LessonModel } from 'lesson/lesson.dto';
@@ -40,7 +41,7 @@ export class ChapterController {
     required: true,
   })
   @ApiBody({
-    type: ChapterModel,
+    type: CreateChapterModel,
     description: 'user data model',
     examples: {
       a: {
@@ -48,13 +49,13 @@ export class ChapterController {
           SectionId: 'Section Id',
           Title: 'Chapter Title',
           Description: 'Chapter description',
-        } as ChapterModel,
+        } as CreateChapterModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerChapter(@Body() body: ChapterModel): Promise<string> {
+  async registerChapter(@Body() body: CreateChapterModel): Promise<string> {
     return this.chapterService.postChapter(body);
   }
 

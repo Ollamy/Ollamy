@@ -16,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  CreateQuestionModel,
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
@@ -39,7 +40,7 @@ export class QuestionController {
     required: true,
   })
   @ApiBody({
-    type: QuestionModel,
+    type: CreateQuestionModel,
     description: 'user data model',
     examples: {
       a: {
@@ -47,13 +48,13 @@ export class QuestionController {
           LessonId: 'Lesson Id',
           Title: 'Question Title',
           Description: 'Question decsription',
-        } as QuestionModel,
+        } as CreateQuestionModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerQuestion(@Body() body: QuestionModel): Promise<string> {
+  async registerQuestion(@Body() body: CreateQuestionModel): Promise<string> {
     return this.questionService.postQuestion(body);
   }
 

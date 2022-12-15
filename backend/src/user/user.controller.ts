@@ -10,7 +10,7 @@ import {
 import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
-  RegisterUserModel,
+  CreateUserModel,
   LoginUserModel,
   UpdateUserModel,
 } from 'user/user.dto';
@@ -30,7 +30,7 @@ export class UserController {
     type: String,
   })
   @ApiBody({
-    type: RegisterUserModel,
+    type: CreateUserModel,
     description: 'user data model',
     examples: {
       template: {
@@ -39,12 +39,12 @@ export class UserController {
           Lastname: 'lastname',
           Email: 'test@test.test',
           Password: '1234',
-        } as RegisterUserModel,
+        } as CreateUserModel,
       },
     },
   })
   @Post('/register')
-  async registerUser(@Body() body: RegisterUserModel): Promise<string> {
+  async registerUser(@Body() body: CreateUserModel): Promise<string> {
     return this.userService.registerUser(body);
   }
 
@@ -79,7 +79,7 @@ export class UserController {
     required: true,
   })
   @ApiBody({
-    type: LoginUserModel,
+    type: UpdateUserModel,
     description: 'user data model',
     examples: {
       a: {

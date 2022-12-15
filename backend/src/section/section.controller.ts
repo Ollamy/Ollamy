@@ -16,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  CreateSectionModel,
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
@@ -40,7 +41,7 @@ export class SectionController {
     required: true,
   })
   @ApiBody({
-    type: SectionModel,
+    type: CreateSectionModel,
     description: 'user data model',
     examples: {
       a: {
@@ -48,13 +49,13 @@ export class SectionController {
           CourseId: 'Course Id',
           Title: 'Section Title',
           Description: 'Section decsription',
-        } as SectionModel,
+        } as CreateSectionModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerSection(@Body() body: SectionModel): Promise<string> {
+  async registerSection(@Body() body: CreateSectionModel): Promise<string> {
     return this.sectionService.postSection(body);
   }
 

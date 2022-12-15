@@ -2,12 +2,27 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ChapterModel {
+  @ApiProperty()
   @IsUUID()
-  @IsOptional()
   Id: string;
 
+  @ApiProperty()
   @IsUUID()
-  @IsOptional()
+  SectionId: string;
+
+  @ApiProperty()
+  @IsString()
+  Title: string;
+
+  @ApiProperty()
+  @IsString()
+  Description: string;
+}
+
+export class CreateChapterModel {
+
+  @ApiProperty()
+  @IsUUID()
   SectionId: string;
 
   @ApiProperty()

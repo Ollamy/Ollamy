@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
+  CreateChapterModel,
   ChapterModel,
   IdChapterModel,
   UpdateChapterModel,
@@ -15,7 +16,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
-  async postChapter(chapterData: ChapterModel): Promise<string> {
+  async postChapter(chapterData: CreateChapterModel): Promise<string> {
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
