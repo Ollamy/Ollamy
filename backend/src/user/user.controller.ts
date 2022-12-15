@@ -1,11 +1,13 @@
-import { Controller, Post, Body, Headers, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Put, Delete } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiForbiddenResponse,
   ApiHeader,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
+import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   RegisterUserModel,
@@ -15,6 +17,7 @@ import {
 import { UserService } from 'user/user.service';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags('User')
 @ApiForbiddenResponse({
   description: 'User does not have permission to execute this action',
 })
@@ -93,9 +96,9 @@ export class UserController {
   @Put()
   async updateUser(
     @Body() body: UpdateUserModel,
-    @Headers('Authorization_token') token: string,
+    @OllContext() ctx: any,
   ): Promise<string> {
-    return this.userService.updateUser(body, token);
+    return this.userService.updateUser(body, ctx);
   }
 
   @ApiOkResponse({
@@ -109,9 +112,7 @@ export class UserController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(
-    @Headers('Authorization_token') token: string,
-  ): Promise<string> {
-    return this.userService.deleteUser(token);
+  async deleteUser(@OllContext() ctx: any): Promise<string> {
+    return this.userService.deleteUser(ctx);
   }
 }

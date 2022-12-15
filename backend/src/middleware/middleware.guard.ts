@@ -31,11 +31,18 @@ export class MiddlewareGuard implements CanActivate {
       throw new NotAcceptableException('No token provided');
       return false;
     }
-    const verify = jwt.verify(token, SECRET_KEY);
-    if (!verify) {
-      Logger.error('Invalid Token');
-      throw new NotAcceptableException('Invalid Token');
-      return false;
+
+    try {
+      const verify = jwt.verify(token, SECRET_KEY);
+
+      if (!verify) {
+        Logger.error('Invalid Token');
+        throw new NotAcceptableException('Invalid Token');
+        return false;
+      }
+    } catch (error) {
+      Logger.error('Malformed Jwt');
+      throw new NotAcceptableException('Malformed Jwt');
     }
 
     const parsedJwt = jwt.decode(token);

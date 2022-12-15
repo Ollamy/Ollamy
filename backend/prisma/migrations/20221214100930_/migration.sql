@@ -47,7 +47,8 @@ CREATE TABLE "UsertoCourse" (
 CREATE TABLE "Course" (
     "id" UUID NOT NULL,
     "owner_id" UUID NOT NULL,
-    "role" "Role" NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -56,6 +57,8 @@ CREATE TABLE "Course" (
 CREATE TABLE "Section" (
     "id" UUID NOT NULL,
     "course_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Section_pkey" PRIMARY KEY ("id")
 );
@@ -64,6 +67,8 @@ CREATE TABLE "Section" (
 CREATE TABLE "Chapter" (
     "id" UUID NOT NULL,
     "section_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
 );
@@ -72,6 +77,9 @@ CREATE TABLE "Chapter" (
 CREATE TABLE "Lesson" (
     "id" UUID NOT NULL,
     "chapter_id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "data" TEXT NOT NULL,
 
     CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
 );

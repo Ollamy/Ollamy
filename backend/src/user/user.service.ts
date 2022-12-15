@@ -84,15 +84,13 @@ export class UserService {
         },
       });
 
-      const user: JwtUserModel = {
+      return this.createToken({
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-      };
-
-      return this.createToken(user);
+      } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -121,29 +119,21 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    const user: JwtUserModel = {
+    return this.createToken({
       Id: userDb.id,
       Email: userDb.email,
       Firstname: userDb.firstname,
       Lastname: userDb.lastname,
       Password: userDb.password,
-    };
-    return this.createToken(user);
+    } as JwtUserModel);
   }
 
-  async updateUser(userData: UpdateUserModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
     try {
       userData.Password = this.hashPassword(userData.Password);
       const userDb = await prisma.user.update({
         where: {
-          id: parsedJwt['id'],
+          id: ctx.__user.id,
         },
         data: {
           password: userData.Password,
@@ -153,15 +143,13 @@ export class UserService {
         },
       });
 
-      const user: JwtUserModel = {
+      return this.createToken({
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-      };
-
-      return this.createToken(user);
+      } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -173,18 +161,11 @@ export class UserService {
     throw new ConflictException('User not updated !');
   }
 
-  async deleteUser(token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async deleteUser(ctx: any): Promise<string> {
     try {
       const userDb = await prisma.user.delete({
         where: {
-          id: parsedJwt['id'],
+          id: ctx.__user.id,
         },
       });
 
@@ -193,7 +174,7 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return `User's ${parsedJwt['id']} has been deleted.`;
+      return `User's ${ctx.__user.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
