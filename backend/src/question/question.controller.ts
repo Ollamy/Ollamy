@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Headers,
   Put,
   Delete,
   Query,
@@ -54,9 +53,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerQuestion(
-    @Body() body: QuestionModel
-  ): Promise<string> {
+  async registerQuestion(@Body() body: QuestionModel): Promise<string> {
     return this.questionService.postQuestion(body);
   }
 
@@ -82,9 +79,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteQuestion(
-    @Body() body: IdQuestionModel
-  ): Promise<string> {
+  async deleteQuestion(@Body() body: IdQuestionModel): Promise<string> {
     return this.questionService.deleteQuestion(body);
   }
 
@@ -104,9 +99,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getQuestion(
-    @Query('id') id: string
-  ): Promise<QuestionModel> {
+  async getQuestion(@Query('id') id: string): Promise<QuestionModel> {
     return this.questionService.getQuestion(id);
   }
 

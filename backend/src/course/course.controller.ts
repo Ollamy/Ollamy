@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Headers,
   Delete,
   Get,
   Put,
@@ -57,7 +56,7 @@ export class CourseController {
   @Post()
   async postCourse(
     @Body() body: CourseModel,
-    @OllContext() ctx: any
+    @OllContext() ctx: any,
   ): Promise<string> {
     return this.courseService.postCourse(body, ctx);
   }
@@ -84,9 +83,7 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteCourse(
-    @Body() body: IdCourseModel
-  ): Promise<string> {
+  async deleteCourse(@Body() body: IdCourseModel): Promise<string> {
     return this.courseService.deleteCourse(body);
   }
 
@@ -106,9 +103,7 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getCourse(
-    @Param('id') id: string
-  ): Promise<CourseModel> {
+  async getCourse(@Param('id') id: string): Promise<CourseModel> {
     return this.courseService.getCourse(id);
   }
 

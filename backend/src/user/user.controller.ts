@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Put, Delete } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -96,7 +96,7 @@ export class UserController {
   @Put()
   async updateUser(
     @Body() body: UpdateUserModel,
-    @OllContext() ctx: any
+    @OllContext() ctx: any,
   ): Promise<string> {
     return this.userService.updateUser(body, ctx);
   }
@@ -112,9 +112,7 @@ export class UserController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(
-    @OllContext() ctx: any
-  ): Promise<string> {
+  async deleteUser(@OllContext() ctx: any): Promise<string> {
     return this.userService.deleteUser(ctx);
   }
 }

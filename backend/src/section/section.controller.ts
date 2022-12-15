@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Headers,
   Put,
   Delete,
   Param,
@@ -55,9 +54,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerSection(
-    @Body() body: SectionModel
-  ): Promise<string> {
+  async registerSection(@Body() body: SectionModel): Promise<string> {
     return this.sectionService.postSection(body);
   }
 
@@ -83,9 +80,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteSection(
-    @Body() body: IdSectionModel
-  ): Promise<string> {
+  async deleteSection(@Body() body: IdSectionModel): Promise<string> {
     return this.sectionService.deleteSection(body);
   }
 
@@ -105,9 +100,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getSection(
-    @Param('id') id: string
-  ): Promise<SectionModel> {
+  async getSection(@Param('id') id: string): Promise<SectionModel> {
     return this.sectionService.getSection(id);
   }
 

@@ -2,7 +2,6 @@ import {
   Logger,
   ConflictException,
   Injectable,
-  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import {
@@ -11,15 +10,11 @@ import {
   UpdateQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(
-    questionData: QuestionModel,
-  ): Promise<string> {
-
+  async postQuestion(questionData: QuestionModel): Promise<string> {
     try {
       const questionDb = await prisma.question.create({
         data: {
@@ -41,10 +36,7 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(
-    questionData: IdQuestionModel
-  ): Promise<string> {
-
+  async deleteQuestion(questionData: IdQuestionModel): Promise<string> {
     try {
       const questionDb = await prisma.question.delete({
         where: {

@@ -2,7 +2,6 @@ import {
   Logger,
   ConflictException,
   Injectable,
-  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import {
@@ -12,7 +11,6 @@ import {
 } from './chapter.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -38,9 +36,7 @@ export class ChapterService {
     }
   }
 
-  async deleteChapter(
-    chapterData: IdChapterModel
-  ): Promise<string> {
+  async deleteChapter(chapterData: IdChapterModel): Promise<string> {
     try {
       const chapterDb = await prisma.chapter.delete({
         where: {
@@ -65,7 +61,6 @@ export class ChapterService {
   }
 
   async getChapter(ChapterId: string): Promise<ChapterModel> {
-
     try {
       const chapterDb = await prisma.chapter.findFirst({
         where: {

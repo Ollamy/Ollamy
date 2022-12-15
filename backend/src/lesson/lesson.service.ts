@@ -2,19 +2,16 @@ import {
   Logger,
   ConflictException,
   Injectable,
-  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { IdLessonModel, LessonModel, UpdateLessonModel } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
-import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
   async postLesson(lessonData: LessonModel): Promise<string> {
-
     try {
       const lessonDb = await prisma.lesson.create({
         data: {
@@ -35,10 +32,7 @@ export class LessonService {
     }
   }
 
-  async deleteLesson(
-    lessonData: IdLessonModel
-  ): Promise<string> {
-
+  async deleteLesson(lessonData: IdLessonModel): Promise<string> {
     try {
       const lessonDb = await prisma.lesson.delete({
         where: {
@@ -136,7 +130,7 @@ export class LessonService {
           LessonId: question.lesson_id,
           Title: question.title,
           Description: question.description,
-          Data: question.data
+          Data: question.data,
         };
       }) as QuestionModel[];
     } catch (error) {

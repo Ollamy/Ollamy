@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Headers,
   Param,
   Get,
   Put,
@@ -55,9 +54,7 @@ export class ChapterController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerChapter(
-    @Body() body: ChapterModel
-  ): Promise<string> {
+  async registerChapter(@Body() body: ChapterModel): Promise<string> {
     return this.chapterService.postChapter(body);
   }
 
@@ -83,9 +80,7 @@ export class ChapterController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteChapter(
-    @Body() body: IdChapterModel
-  ): Promise<string> {
+  async deleteChapter(@Body() body: IdChapterModel): Promise<string> {
     return this.chapterService.deleteChapter(body);
   }
 
@@ -105,9 +100,7 @@ export class ChapterController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getChapter(
-    @Param('id') id: string
-  ): Promise<ChapterModel> {
+  async getChapter(@Param('id') id: string): Promise<ChapterModel> {
     return this.chapterService.getChapter(id);
   }
 

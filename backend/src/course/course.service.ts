@@ -32,9 +32,7 @@ export class CourseService {
     }
   }
 
-  async deleteCourse(
-    courseData: IdCourseModel,
-  ): Promise<string> {
+  async deleteCourse(courseData: IdCourseModel): Promise<string> {
     try {
       const courseDb = await prisma.course.delete({
         where: {

@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Headers,
   Put,
   Delete,
   Param,
@@ -51,9 +50,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerLesson(
-    @Body() body: LessonModel
-  ): Promise<string> {
+  async registerLesson(@Body() body: LessonModel): Promise<string> {
     return this.lessonService.postLesson(body);
   }
 
@@ -79,9 +76,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteLesson(
-    @Body() body: IdLessonModel
-  ): Promise<string> {
+  async deleteLesson(@Body() body: IdLessonModel): Promise<string> {
     return this.lessonService.deleteLesson(body);
   }
 
@@ -101,9 +96,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getLesson(
-    @Param('id') id: string
-  ): Promise<LessonModel> {
+  async getLesson(@Param('id') id: string): Promise<LessonModel> {
     return this.lessonService.getLesson(id);
   }
 
