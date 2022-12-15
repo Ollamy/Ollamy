@@ -84,15 +84,13 @@ export class UserService {
         },
       });
 
-      const user: JwtUserModel = {
+      return this.createToken({
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-      };
-
-      return this.createToken(user);
+      } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -121,14 +119,13 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    const user: JwtUserModel = {
+    return this.createToken({
       Id: userDb.id,
       Email: userDb.email,
       Firstname: userDb.firstname,
       Lastname: userDb.lastname,
       Password: userDb.password,
-    };
-    return this.createToken(user);
+    } as JwtUserModel);
   }
 
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
@@ -146,15 +143,13 @@ export class UserService {
         },
       });
 
-      const user: JwtUserModel = {
+      return this.createToken({
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-      };
-
-      return this.createToken(user);
+      } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

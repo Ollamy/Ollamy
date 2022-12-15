@@ -73,14 +73,12 @@ export class SectionService {
         throw new ConflictException('Section does not exists !');
       }
 
-      const section: SectionModel = {
+      return {
         Id: sectionDb.id,
         CourseId: sectionDb.course_id,
         Title: sectionDb.title,
         Description: sectionDb.description,
-      };
-
-      return section;
+      } as SectionModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not found !');

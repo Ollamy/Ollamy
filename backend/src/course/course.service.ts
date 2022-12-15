@@ -69,14 +69,12 @@ export class CourseService {
         throw new ConflictException('Course does not exists !');
       }
 
-      const course: CourseModel = {
+      return {
         Id: courseDb.id,
         OwnerId: courseDb.owner_id,
         Title: courseDb.title,
         Description: courseDb.description,
-      };
-
-      return course;
+      } as CourseModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not deleted !');

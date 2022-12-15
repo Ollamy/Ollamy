@@ -73,15 +73,13 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      const question: QuestionModel = {
+      return {
         Id: questionDb.id,
         LessonId: questionDb.lesson_id,
         Title: questionDb.title,
         Description: questionDb.description,
         Data: questionDb.data,
-      };
-
-      return question;
+      } as QuestionModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not found !');

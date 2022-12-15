@@ -69,14 +69,12 @@ export class LessonService {
         throw new ConflictException('Lesson does not exists !');
       }
 
-      const lesson: LessonModel = {
+      return {
         Id: lessonDb.id,
         ChapterId: lessonDb.chapter_id,
         Title: lessonDb.title,
         Description: lessonDb.description,
-      };
-
-      return lesson;
+      } as LessonModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not found !');

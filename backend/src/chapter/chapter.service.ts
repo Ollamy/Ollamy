@@ -73,14 +73,12 @@ export class ChapterService {
         throw new ConflictException('Chapter does not exists !');
       }
 
-      const chapter: ChapterModel = {
+      return {
         Id: chapterDb.id,
         SectionId: chapterDb.section_id,
         Title: chapterDb.title,
         Description: chapterDb.description,
-      };
-
-      return chapter;
+      } as ChapterModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not found !');
