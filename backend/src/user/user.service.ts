@@ -47,7 +47,6 @@ export class UserService {
   }
 
   private hashPassword(password: string): string {
-    // hash with sha512
     const hash = pbkdf2
       .pbkdf2Sync(
         password,
