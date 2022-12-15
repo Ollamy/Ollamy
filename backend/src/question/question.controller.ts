@@ -55,10 +55,9 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Post()
   async registerQuestion(
-    @Body() body: QuestionModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: QuestionModel
   ): Promise<string> {
-    return this.questionService.postQuestion(body, token);
+    return this.questionService.postQuestion(body);
   }
 
   @ApiOkResponse({
@@ -84,10 +83,9 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteQuestion(
-    @Body() body: IdQuestionModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: IdQuestionModel
   ): Promise<string> {
-    return this.questionService.deleteQuestion(body, token);
+    return this.questionService.deleteQuestion(body);
   }
 
   @ApiOkResponse({
@@ -107,10 +105,9 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getQuestion(
-    @Query('id') id: string,
-    @Headers('Authorization_token') token: string,
+    @Query('id') id: string
   ): Promise<QuestionModel> {
-    return this.questionService.getQuestion(id, token);
+    return this.questionService.getQuestion(id);
   }
 
   @ApiOkResponse({

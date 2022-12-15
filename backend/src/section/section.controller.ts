@@ -56,10 +56,9 @@ export class SectionController {
   @LoggedMiddleware(true)
   @Post()
   async registerSection(
-    @Body() body: SectionModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: SectionModel
   ): Promise<string> {
-    return this.sectionService.postSection(body, token);
+    return this.sectionService.postSection(body);
   }
 
   @ApiOkResponse({
@@ -85,10 +84,9 @@ export class SectionController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteSection(
-    @Body() body: IdSectionModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: IdSectionModel
   ): Promise<string> {
-    return this.sectionService.deleteSection(body, token);
+    return this.sectionService.deleteSection(body);
   }
 
   @ApiOkResponse({
@@ -108,10 +106,9 @@ export class SectionController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getSection(
-    @Param('id') id: string,
-    @Headers('Authorization_token') token: string,
+    @Param('id') id: string
   ): Promise<SectionModel> {
-    return this.sectionService.getSection(id, token);
+    return this.sectionService.getSection(id);
   }
 
   @ApiOkResponse({

@@ -13,13 +13,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: LessonModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
+  async postLesson(lessonData: LessonModel): Promise<string> {
 
     try {
       const lessonDb = await prisma.lesson.create({
@@ -42,15 +36,8 @@ export class LessonService {
   }
 
   async deleteLesson(
-    lessonData: IdLessonModel,
-    token: string,
+    lessonData: IdLessonModel
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
 
     try {
       const lessonDb = await prisma.lesson.delete({
@@ -75,14 +62,7 @@ export class LessonService {
     }
   }
 
-  async getLesson(LessonId: string, token: string): Promise<LessonModel> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async getLesson(LessonId: string): Promise<LessonModel> {
     try {
       const lessonDb = await prisma.lesson.findFirst({
         where: {
@@ -150,19 +130,15 @@ export class LessonService {
         throw new NotFoundException('No questions for this course !');
       }
 
-      const questions: QuestionModel[] = [];
-
-      lessonQuestionsDb.forEach((question) => {
-        questions.push({
+      return lessonQuestionsDb.map((question) => {
+        return {
           Id: question.id,
           LessonId: question.lesson_id,
           Title: question.title,
           Description: question.description,
-          Data: question.data,
-        });
-      });
-
-      return questions;
+          Data: question.data
+        };
+      }) as QuestionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');

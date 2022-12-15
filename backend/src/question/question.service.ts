@@ -18,14 +18,7 @@ import { Prisma } from '@prisma/client';
 export class QuestionService {
   async postQuestion(
     questionData: QuestionModel,
-    token: string,
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
 
     try {
       const questionDb = await prisma.question.create({
@@ -49,15 +42,8 @@ export class QuestionService {
   }
 
   async deleteQuestion(
-    questionData: IdQuestionModel,
-    token: string,
+    questionData: IdQuestionModel
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
 
     try {
       const questionDb = await prisma.question.delete({
@@ -82,14 +68,7 @@ export class QuestionService {
     }
   }
 
-  async getQuestion(QuestionId: string, token: string): Promise<QuestionModel> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async getQuestion(QuestionId: string): Promise<QuestionModel> {
     try {
       const questionDb = await prisma.question.findFirst({
         where: {

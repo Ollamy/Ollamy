@@ -24,6 +24,7 @@ import {
 import { SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Course')
@@ -54,11 +55,11 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerCourse(
+  async postCourse(
     @Body() body: CourseModel,
-    @Headers('Authorization_token') token: string,
+    @OllContext() ctx: any
   ): Promise<string> {
-    return this.courseService.postCourse(body, token);
+    return this.courseService.postCourse(body, ctx);
   }
 
   @ApiOkResponse({
@@ -84,10 +85,9 @@ export class CourseController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteCourse(
-    @Body() body: IdCourseModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: IdCourseModel
   ): Promise<string> {
-    return this.courseService.deleteCourse(body, token);
+    return this.courseService.deleteCourse(body);
   }
 
   @ApiOkResponse({
@@ -107,10 +107,9 @@ export class CourseController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getCourse(
-    @Param('id') id: string,
-    @Headers('Authorization_token') token: string,
+    @Param('id') id: string
   ): Promise<CourseModel> {
-    return this.courseService.getCourse(id, token);
+    return this.courseService.getCourse(id);
   }
 
   @ApiOkResponse({

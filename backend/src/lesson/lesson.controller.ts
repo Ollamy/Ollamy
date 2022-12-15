@@ -52,10 +52,9 @@ export class LessonController {
   @LoggedMiddleware(true)
   @Post()
   async registerLesson(
-    @Body() body: LessonModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: LessonModel
   ): Promise<string> {
-    return this.lessonService.postLesson(body, token);
+    return this.lessonService.postLesson(body);
   }
 
   @ApiOkResponse({
@@ -81,10 +80,9 @@ export class LessonController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteLesson(
-    @Body() body: IdLessonModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: IdLessonModel
   ): Promise<string> {
-    return this.lessonService.deleteLesson(body, token);
+    return this.lessonService.deleteLesson(body);
   }
 
   @ApiOkResponse({
@@ -104,10 +102,9 @@ export class LessonController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getLesson(
-    @Param('id') id: string,
-    @Headers('Authorization_token') token: string,
+    @Param('id') id: string
   ): Promise<LessonModel> {
-    return this.lessonService.getLesson(id, token);
+    return this.lessonService.getLesson(id);
   }
 
   @ApiOkResponse({

@@ -2,29 +2,20 @@ import {
   Logger,
   ConflictException,
   Injectable,
-  BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { CourseModel, IdCourseModel, UpdateCourseModel } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CourseService {
-  async postCourse(courseData: CourseModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async postCourse(courseData: CourseModel, ctx: any): Promise<string> {
     try {
       const courseDb = await prisma.course.create({
         data: {
-          owner_id: parsedJwt['id'],
+          owner_id: ctx.__user.id,
           title: courseData.Title,
           description: courseData.Description,
         },
@@ -43,15 +34,7 @@ export class CourseService {
 
   async deleteCourse(
     courseData: IdCourseModel,
-    token: string,
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
     try {
       const courseDb = await prisma.course.delete({
         where: {
@@ -75,21 +58,11 @@ export class CourseService {
     }
   }
 
-  async getCourse(CourseId: string, token: string): Promise<CourseModel> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async getCourse(CourseId: string): Promise<CourseModel> {
     try {
       const courseDb = await prisma.course.findFirst({
         where: {
-          AND: {
-            owner_id: parsedJwt['id'],
-            id: CourseId,
-          },
+          id: CourseId,
         },
       });
 
@@ -153,18 +126,14 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      const sections: SectionModel[] = [];
-
-      courseSectionsDb.forEach((section) => {
-        sections.push({
-          Id: section.id,
-          CourseId: section.course_id,
-          Title: section.title,
-          Description: section.description,
-        });
-      });
-
-      return sections;
+      return courseSectionsDb.map((lesson) => {
+        return {
+          Id: lesson.id,
+          CourseId: lesson.course_id,
+          Title: lesson.title,
+          Description: lesson.description,
+        };
+      }) as SectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');

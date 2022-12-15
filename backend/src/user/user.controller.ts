@@ -7,6 +7,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   RegisterUserModel,
@@ -95,9 +96,9 @@ export class UserController {
   @Put()
   async updateUser(
     @Body() body: UpdateUserModel,
-    @Headers('Authorization_token') token: string,
+    @OllContext() ctx: any
   ): Promise<string> {
-    return this.userService.updateUser(body, token);
+    return this.userService.updateUser(body, ctx);
   }
 
   @ApiOkResponse({
@@ -112,8 +113,8 @@ export class UserController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteUser(
-    @Headers('Authorization_token') token: string,
+    @OllContext() ctx: any
   ): Promise<string> {
-    return this.userService.deleteUser(token);
+    return this.userService.deleteUser(ctx);
   }
 }

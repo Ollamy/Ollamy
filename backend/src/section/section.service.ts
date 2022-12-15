@@ -17,13 +17,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
-  async postSection(sectionData: SectionModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
+  async postSection(sectionData: SectionModel): Promise<string> {
 
     try {
       const sectionDb = await prisma.section.create({
@@ -47,15 +41,7 @@ export class SectionService {
 
   async deleteSection(
     sectionData: IdSectionModel,
-    token: string,
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
     try {
       const sectionDb = await prisma.section.delete({
         where: {
@@ -79,14 +65,7 @@ export class SectionService {
     }
   }
 
-  async getSection(SectionId: string, token: string): Promise<SectionModel> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async getSection(SectionId: string): Promise<SectionModel> {
     try {
       const sectionDb = await prisma.section.findFirst({
         where: {
@@ -154,18 +133,14 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      const chapters: ChapterModel[] = [];
-
-      sectionChaptersDb.forEach((chapter) => {
-        chapters.push({
-          Id: chapter.id,
-          SectionId: chapter.section_id,
-          Title: chapter.title,
-          Description: chapter.description,
-        });
-      });
-
-      return chapters;
+      return sectionChaptersDb.map((lesson) => {
+        return {
+          Id: lesson.id,
+          SectionId: lesson.section_id,
+          Title: lesson.title,
+          Description: lesson.description,
+        };
+      }) as ChapterModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Chapters not found !');

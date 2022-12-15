@@ -17,14 +17,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
-  async postChapter(chapterData: ChapterModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
+  async postChapter(chapterData: ChapterModel): Promise<string> {
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
@@ -46,16 +39,8 @@ export class ChapterService {
   }
 
   async deleteChapter(
-    chapterData: IdChapterModel,
-    token: string,
+    chapterData: IdChapterModel
   ): Promise<string> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
-
     try {
       const chapterDb = await prisma.chapter.delete({
         where: {
@@ -79,13 +64,7 @@ export class ChapterService {
     }
   }
 
-  async getChapter(ChapterId: string, token: string): Promise<ChapterModel> {
-    const parsedJwt = jwt.decode(token);
-
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
-    }
+  async getChapter(ChapterId: string): Promise<ChapterModel> {
 
     try {
       const chapterDb = await prisma.chapter.findFirst({
@@ -154,18 +133,14 @@ export class ChapterService {
         throw new NotFoundException('No lessons for this course !');
       }
 
-      const lessons: LessonModel[] = [];
-
-      courseLessonsDb.forEach((lesson) => {
-        lessons.push({
+      return courseLessonsDb.map((lesson) => {
+        return {
           Id: lesson.id,
           ChapterId: lesson.chapter_id,
           Title: lesson.title,
           Description: lesson.description,
-        });
-      });
-
-      return lessons;
+        };
+      }) as LessonModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');

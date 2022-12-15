@@ -48,7 +48,7 @@ export class ChapterController {
         value: {
           SectionId: 'Section Id',
           Title: 'Chapter Title',
-          Description: 'Chapter decsription',
+          Description: 'Chapter description',
         } as ChapterModel,
       },
     },
@@ -56,10 +56,9 @@ export class ChapterController {
   @LoggedMiddleware(true)
   @Post()
   async registerChapter(
-    @Body() body: ChapterModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: ChapterModel
   ): Promise<string> {
-    return this.chapterService.postChapter(body, token);
+    return this.chapterService.postChapter(body);
   }
 
   @ApiOkResponse({
@@ -85,10 +84,9 @@ export class ChapterController {
   @LoggedMiddleware(true)
   @Delete()
   async deleteChapter(
-    @Body() body: IdChapterModel,
-    @Headers('Authorization_token') token: string,
+    @Body() body: IdChapterModel
   ): Promise<string> {
-    return this.chapterService.deleteChapter(body, token);
+    return this.chapterService.deleteChapter(body);
   }
 
   @ApiOkResponse({
@@ -108,10 +106,9 @@ export class ChapterController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getChapter(
-    @Param('id') id: string,
-    @Headers('Authorization_token') token: string,
+    @Param('id') id: string
   ): Promise<ChapterModel> {
-    return this.chapterService.getChapter(id, token);
+    return this.chapterService.getChapter(id);
   }
 
   @ApiOkResponse({
@@ -136,7 +133,7 @@ export class ChapterController {
         value: {
           SectionId: 'id',
           Title: 'Chapter Title',
-          Description: 'Chapter decsription',
+          Description: 'Chapter description',
         } as UpdateChapterModel,
       },
     },
