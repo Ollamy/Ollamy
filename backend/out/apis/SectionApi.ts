@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   ChapterModel,
+  CreateSectionModel,
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
@@ -38,7 +39,7 @@ export interface GetSectionChaptersRequest {
 
 export interface RegisterSectionRequest {
     authorizationToken: string;
-    sectionModel: SectionModel;
+    createSectionModel: CreateSectionModel;
 }
 
 export interface UpdateSectionRequest {
@@ -170,8 +171,8 @@ export class SectionApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling registerSection.');
         }
 
-        if (requestParameters.sectionModel === null || requestParameters.sectionModel === undefined) {
-            throw new runtime.RequiredError('sectionModel','Required parameter requestParameters.sectionModel was null or undefined when calling registerSection.');
+        if (requestParameters.createSectionModel === null || requestParameters.createSectionModel === undefined) {
+            throw new runtime.RequiredError('createSectionModel','Required parameter requestParameters.createSectionModel was null or undefined when calling registerSection.');
         }
 
         const queryParameters: any = {};
@@ -189,7 +190,7 @@ export class SectionApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.sectionModel,
+            body: requestParameters.createSectionModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;

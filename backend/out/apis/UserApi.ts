@@ -15,8 +15,9 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateUserModel,
   LoginUserModel,
-  RegisterUserModel,
+  UpdateUserModel,
 } from '../models';
 
 export interface DeleteUserRequest {
@@ -28,12 +29,12 @@ export interface LoginUserRequest {
 }
 
 export interface RegisterUserRequest {
-    registerUserModel: RegisterUserModel;
+    createUserModel: CreateUserModel;
 }
 
 export interface UpdateUserRequest {
     authorizationToken: string;
-    loginUserModel: LoginUserModel;
+    updateUserModel: UpdateUserModel;
 }
 
 /**
@@ -107,8 +108,8 @@ export class UserApi extends runtime.BaseAPI {
     /**
      */
     async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        if (requestParameters.registerUserModel === null || requestParameters.registerUserModel === undefined) {
-            throw new runtime.RequiredError('registerUserModel','Required parameter requestParameters.registerUserModel was null or undefined when calling registerUser.');
+        if (requestParameters.createUserModel === null || requestParameters.createUserModel === undefined) {
+            throw new runtime.RequiredError('createUserModel','Required parameter requestParameters.createUserModel was null or undefined when calling registerUser.');
         }
 
         const queryParameters: any = {};
@@ -122,7 +123,7 @@ export class UserApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.registerUserModel,
+            body: requestParameters.createUserModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;
@@ -142,8 +143,8 @@ export class UserApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling updateUser.');
         }
 
-        if (requestParameters.loginUserModel === null || requestParameters.loginUserModel === undefined) {
-            throw new runtime.RequiredError('loginUserModel','Required parameter requestParameters.loginUserModel was null or undefined when calling updateUser.');
+        if (requestParameters.updateUserModel === null || requestParameters.updateUserModel === undefined) {
+            throw new runtime.RequiredError('updateUserModel','Required parameter requestParameters.updateUserModel was null or undefined when calling updateUser.');
         }
 
         const queryParameters: any = {};
@@ -161,7 +162,7 @@ export class UserApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.loginUserModel,
+            body: requestParameters.updateUserModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;

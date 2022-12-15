@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateLessonModel,
   IdLessonModel,
   LessonModel,
   QuestionModel,
@@ -37,7 +38,7 @@ export interface GetLessonQuestionsRequest {
 
 export interface RegisterLessonRequest {
     authorizationToken: string;
-    lessonModel: LessonModel;
+    createLessonModel: CreateLessonModel;
 }
 
 export interface UpdateLessonRequest {
@@ -169,8 +170,8 @@ export class LessonApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling registerLesson.');
         }
 
-        if (requestParameters.lessonModel === null || requestParameters.lessonModel === undefined) {
-            throw new runtime.RequiredError('lessonModel','Required parameter requestParameters.lessonModel was null or undefined when calling registerLesson.');
+        if (requestParameters.createLessonModel === null || requestParameters.createLessonModel === undefined) {
+            throw new runtime.RequiredError('createLessonModel','Required parameter requestParameters.createLessonModel was null or undefined when calling registerLesson.');
         }
 
         const queryParameters: any = {};
@@ -188,7 +189,7 @@ export class LessonApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.lessonModel,
+            body: requestParameters.createLessonModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;

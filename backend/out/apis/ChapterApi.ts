@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   ChapterModel,
+  CreateChapterModel,
   IdChapterModel,
   LessonModel,
   UpdateChapterModel,
@@ -38,7 +39,7 @@ export interface GetChapterLessonsRequest {
 
 export interface RegisterChapterRequest {
     authorizationToken: string;
-    chapterModel: ChapterModel;
+    createChapterModel: CreateChapterModel;
 }
 
 export interface UpdateChapterRequest {
@@ -170,8 +171,8 @@ export class ChapterApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling registerChapter.');
         }
 
-        if (requestParameters.chapterModel === null || requestParameters.chapterModel === undefined) {
-            throw new runtime.RequiredError('chapterModel','Required parameter requestParameters.chapterModel was null or undefined when calling registerChapter.');
+        if (requestParameters.createChapterModel === null || requestParameters.createChapterModel === undefined) {
+            throw new runtime.RequiredError('createChapterModel','Required parameter requestParameters.createChapterModel was null or undefined when calling registerChapter.');
         }
 
         const queryParameters: any = {};
@@ -189,7 +190,7 @@ export class ChapterApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.chapterModel,
+            body: requestParameters.createChapterModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;

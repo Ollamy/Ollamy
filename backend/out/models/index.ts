@@ -11,6 +11,18 @@ export interface ChapterModel {
      * @type {string}
      * @memberof ChapterModel
      */
+    Id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChapterModel
+     */
+    SectionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChapterModel
+     */
     Title: string;
     /**
      * 
@@ -30,6 +42,18 @@ export interface CourseModel {
      * @type {string}
      * @memberof CourseModel
      */
+    Id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseModel
+     */
+    OwnerId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseModel
+     */
     Title: string;
     /**
      * 
@@ -37,6 +61,162 @@ export interface CourseModel {
      * @memberof CourseModel
      */
     Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateChapterModel
+ */
+export interface CreateChapterModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateChapterModel
+     */
+    SectionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateChapterModel
+     */
+    Title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateChapterModel
+     */
+    Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateCourseModel
+ */
+export interface CreateCourseModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseModel
+     */
+    Title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseModel
+     */
+    Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateLessonModel
+ */
+export interface CreateLessonModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLessonModel
+     */
+    ChapterId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLessonModel
+     */
+    Title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLessonModel
+     */
+    Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateQuestionModel
+ */
+export interface CreateQuestionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    LessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    Title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    Description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    Data: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateSectionModel
+ */
+export interface CreateSectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSectionModel
+     */
+    CourseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSectionModel
+     */
+    Title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSectionModel
+     */
+    Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateUserModel
+ */
+export interface CreateUserModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    Firstname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    Lastname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    Email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    Password: string;
 }
 /**
  * 
@@ -114,6 +294,18 @@ export interface LessonModel {
      * @type {string}
      * @memberof LessonModel
      */
+    Id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    ChapterId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonModel
+     */
     Title: string;
     /**
      * 
@@ -152,6 +344,18 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
+    Id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    LessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
     Title: string;
     /**
      * 
@@ -169,40 +373,21 @@ export interface QuestionModel {
 /**
  * 
  * @export
- * @interface RegisterUserModel
- */
-export interface RegisterUserModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterUserModel
-     */
-    Firstname: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterUserModel
-     */
-    Lastname: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterUserModel
-     */
-    Email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterUserModel
-     */
-    Password: string;
-}
-/**
- * 
- * @export
  * @interface SectionModel
  */
 export interface SectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof SectionModel
+     */
+    Id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SectionModel
+     */
+    CourseId: string;
     /**
      * 
      * @type {string}
@@ -321,4 +506,35 @@ export interface UpdateSectionModel {
      * @memberof UpdateSectionModel
      */
     Description: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateUserModel
+ */
+export interface UpdateUserModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    Firstname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    Lastname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    Email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    Password: string;
 }

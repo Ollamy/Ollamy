@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   CourseModel,
+  CreateCourseModel,
   IdCourseModel,
   SectionModel,
   UpdateCourseModel,
@@ -38,7 +39,7 @@ export interface GetCourseSectionsRequest {
 
 export interface PostCourseRequest {
     authorizationToken: string;
-    courseModel: CourseModel;
+    createCourseModel: CreateCourseModel;
 }
 
 export interface UpdateCourseRequest {
@@ -170,8 +171,8 @@ export class CourseApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling postCourse.');
         }
 
-        if (requestParameters.courseModel === null || requestParameters.courseModel === undefined) {
-            throw new runtime.RequiredError('courseModel','Required parameter requestParameters.courseModel was null or undefined when calling postCourse.');
+        if (requestParameters.createCourseModel === null || requestParameters.createCourseModel === undefined) {
+            throw new runtime.RequiredError('createCourseModel','Required parameter requestParameters.createCourseModel was null or undefined when calling postCourse.');
         }
 
         const queryParameters: any = {};
@@ -189,7 +190,7 @@ export class CourseApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.courseModel,
+            body: requestParameters.createCourseModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;

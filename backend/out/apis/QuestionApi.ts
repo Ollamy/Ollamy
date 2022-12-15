@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateQuestionModel,
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
@@ -32,7 +33,7 @@ export interface GetQuestionRequest {
 
 export interface RegisterQuestionRequest {
     authorizationToken: string;
-    questionModel: QuestionModel;
+    createQuestionModel: CreateQuestionModel;
 }
 
 export interface UpdateQuestionRequest {
@@ -128,8 +129,8 @@ export class QuestionApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling registerQuestion.');
         }
 
-        if (requestParameters.questionModel === null || requestParameters.questionModel === undefined) {
-            throw new runtime.RequiredError('questionModel','Required parameter requestParameters.questionModel was null or undefined when calling registerQuestion.');
+        if (requestParameters.createQuestionModel === null || requestParameters.createQuestionModel === undefined) {
+            throw new runtime.RequiredError('createQuestionModel','Required parameter requestParameters.createQuestionModel was null or undefined when calling registerQuestion.');
         }
 
         const queryParameters: any = {};
@@ -147,7 +148,7 @@ export class QuestionApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.questionModel,
+            body: requestParameters.createQuestionModel,
         }, initOverrides);
 
         return new runtime.TextApiResponse(response) as any;
