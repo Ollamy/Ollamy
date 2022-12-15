@@ -73,6 +73,8 @@ model UsertoCourse {
   permission_lesson  PermissionLesson[]  @default([])
   course_id          String              @db.Uuid
   user_id            String              @db.Uuid
+
+  @@unique([course_id, user_id])
 }
 
 model Course {
