@@ -20,7 +20,6 @@ export class LessonModel {
 }
 
 export class CreateLessonModel {
-
   @ApiProperty()
   @IsUUID()
   ChapterId: string;

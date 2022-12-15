@@ -15,7 +15,11 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateLessonModel, IdLessonModel, LessonModel } from 'lesson/lesson.dto';
+import {
+  CreateLessonModel,
+  IdLessonModel,
+  LessonModel,
+} from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { QuestionModel } from 'question/question.dto';

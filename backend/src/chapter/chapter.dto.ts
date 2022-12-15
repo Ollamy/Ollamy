@@ -20,7 +20,6 @@ export class ChapterModel {
 }
 
 export class CreateChapterModel {
-
   @ApiProperty()
   @IsUUID()
   SectionId: string;

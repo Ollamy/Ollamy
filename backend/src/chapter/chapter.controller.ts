@@ -19,7 +19,7 @@ import {
   ChapterModel,
   IdChapterModel,
   UpdateChapterModel,
-  CreateChapterModel
+  CreateChapterModel,
 } from 'chapter/chapter.dto';
 import { ChapterService } from 'chapter/chapter.service';
 import { LessonModel } from 'lesson/lesson.dto';

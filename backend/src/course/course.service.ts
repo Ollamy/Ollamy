@@ -4,7 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CourseModel, CreateCourseModel, IdCourseModel, UpdateCourseModel } from './course.dto';
+import {
+  CourseModel,
+  CreateCourseModel,
+  IdCourseModel,
+  UpdateCourseModel,
+} from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Prisma } from '@prisma/client';

@@ -24,7 +24,6 @@ export class QuestionModel {
 }
 
 export class CreateQuestionModel {
-
   @ApiProperty()
   @IsUUID()
   @IsOptional()
