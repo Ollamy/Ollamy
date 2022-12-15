@@ -3,29 +3,27 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import { Emptybar } from "src/Components/Lesson/LessonCard";
 import { Progress } from '../../Lesson/LessonCard';
+import closeIcon from './../../../../public/assets/Topbar/close.svg';
+import LifeCounter from "./lifeCounter";
 
-const TopBarLesson = (): JSX.Element => {
-  const handleClickEarth = useCallback(() => {
-      console.log("handleClickEarth")
-  }, []);
+interface TopBarLessonProps {
+  completion: number
+  lifeCount: number
+};
 
-  const handleClickChest = useCallback(() => {
-      console.log("handleClickChest")
-  }, []);
-
-  const handleClickProfile = useCallback(() => {
-    console.log("handleClickProfile")
+const TopBarLesson = ({ completion, lifeCount }: TopBarLessonProps): JSX.Element => {
+  const handlClose = useCallback(() => {
+    window.open('/course', '_self');
+    console.log("Close")
   }, []);
  
   return (
     <Container>
-      <CloseButton/>
-      <EmptyBarLesson >
-        <ProgressLesson percent={30} />
+      <Image src={closeIcon} alt={""} style={{height: "100%"}} onClick={handlClose}/>
+      <EmptyBarLesson>
+        <ProgressLesson percent={completion} />
       </EmptyBarLesson>
-      <LifeContainer>
-        4
-      </LifeContainer>
+      <LifeCounter lifeCount={lifeCount}/>
     </Container>
   );
 };
@@ -39,22 +37,6 @@ export const EmptyBarLesson = styled(Emptybar)`
   height: 8px;
 `;
 
-export const CloseButton = styled.div`
-  width: 25px;
-  height: 25px;
-  background: red;
-`;
-
-export const LifeContainer = styled.div`
-  color: #3D3D3D;
-  border-radius: 8px;
-  padding: 16px 20px;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
-    -1px -1px 4px rgba(0, 0, 0, 0.25);
-  background: #D9D9D9;
-`;
-
 export const Container = styled.div`
   display: flex;
   justify-content: space-between;
@@ -63,9 +45,9 @@ export const Container = styled.div`
   border-radius: 0px 0px 8px 8px;
   padding: 16px 20px;
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);;
-  background: #D9D9D9;
-  height: 70px;
+  box-shadow: 0px 4px 4px rgba(113, 112, 112, 0.25);;
+  background: white;
+  height: 9%;
 `;
 
 export default TopBarLesson;

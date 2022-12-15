@@ -6,7 +6,7 @@ const LessonMobile = ({ children }: PagesProps): JSX.Element => {
   return (
     <Container>
       {children}
-      <TopBarLesson/>
+      <TopBarLesson completion={30} lifeCount={5}/>
     </Container>
   );
 };
