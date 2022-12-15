@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { IdLessonModel, LessonModel, UpdateLessonModel } from './lesson.dto';
+import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
@@ -133,6 +134,39 @@ export class LessonService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not updated !');
+    }
+  }
+
+  async getLessonQuestions(LessonId: string): Promise<string> {
+    try {
+
+      const lessonQuestionsDb = await prisma.question.findMany({
+        where: {
+          lesson_id: LessonId
+        },
+      });
+
+      if (!lessonQuestionsDb) {
+        Logger.error('No questions for this course !');
+        throw new NotFoundException('No questions for this course !');
+      }
+
+      let questions : QuestionModel[] = Array();
+
+      lessonQuestionsDb.forEach((question) => {
+        questions.push({
+          Id: question.id,
+          LessonId: question.lesson_id,
+          Title: question.title,
+          Description: question.description,
+          Data: question.data
+        })
+      });
+
+      return JSON.stringify(questions);
+    } catch (error) {
+      Logger.error(error);
+      throw new NotFoundException('Lessons not found !');
     }
   }
 }

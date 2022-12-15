@@ -10,6 +10,7 @@ import {
   SectionModel,
   UpdateSectionModel,
 } from 'section/section.dto';
+import { ChapterModel } from 'chapter/chapter.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
@@ -137,6 +138,38 @@ export class SectionService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not updated !');
+    }
+  }
+
+  async getSectionChapters(SectionId: string): Promise<string> {
+    try {
+
+      const sectionChaptersDb = await prisma.chapter.findMany({
+        where: {
+          section_id: SectionId
+        },
+      });
+
+      if (!sectionChaptersDb) {
+        Logger.error('No chapters for this course !');
+        throw new NotFoundException('No chapters for this course !');
+      }
+
+      let chapters : ChapterModel[] = Array();
+
+      sectionChaptersDb.forEach((chapter) => {
+        chapters.push({
+          Id: chapter.id,
+          SectionId: chapter.section_id,
+          Title: chapter.title,
+          Description: chapter.description
+        })
+      });
+
+      return JSON.stringify(chapters);
+    } catch (error) {
+      Logger.error(error);
+      throw new NotFoundException('Chapters not found !');
     }
   }
 }

@@ -10,6 +10,7 @@ import {
   IdChapterModel,
   UpdateChapterModel,
 } from './chapter.dto';
+import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
@@ -137,6 +138,38 @@ export class ChapterService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not updated !');
+    }
+  }
+
+  async getChapterLessons(ChapterId: string): Promise<string> {
+    try {
+
+      const courseLessonsDb = await prisma.lesson.findMany({
+        where: {
+          chapter_id: ChapterId
+        },
+      });
+
+      if (!courseLessonsDb) {
+        Logger.error('No lessons for this course !');
+        throw new NotFoundException('No lessons for this course !');
+      }
+
+      let lessons : LessonModel[] = Array();
+
+      courseLessonsDb.forEach((lesson) => {
+        lessons.push({
+          Id: lesson.id,
+          ChapterId: lesson.chapter_id,
+          Title: lesson.title,
+          Description: lesson.description
+        })
+      });
+
+      return JSON.stringify(lessons);
+    } catch (error) {
+      Logger.error(error);
+      throw new NotFoundException('Lessons not found !');
     }
   }
 }

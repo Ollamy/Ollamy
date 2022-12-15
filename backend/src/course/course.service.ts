@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CourseModel, IdCourseModel, UpdateCourseModel } from './course.dto';
+import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import * as jwt from 'jsonwebtoken';
 import { Prisma } from '@prisma/client';
@@ -136,6 +137,38 @@ export class CourseService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not updated !');
+    }
+  }
+
+  async getCourseSections(CourseId: string): Promise<string> {
+    try {
+
+      const courseSectionsDb = await prisma.section.findMany({
+        where: {
+          course_id: CourseId
+        },
+      });
+
+      if (!courseSectionsDb) {
+        Logger.error('No sections for this course !');
+        throw new NotFoundException('No sections for this course !');
+      }
+
+      let sections : SectionModel[] = Array();
+
+      courseSectionsDb.forEach((section) => {
+        sections.push({
+          Id: section.id,
+          CourseId: section.course_id,
+          Title: section.title,
+          Description: section.description
+        })
+      });
+
+      return JSON.stringify(sections);
+    } catch (error) {
+      Logger.error(error);
+      throw new NotFoundException('Sections not found !');
     }
   }
 }

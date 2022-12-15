@@ -5,6 +5,7 @@ import {
   ApiForbiddenResponse,
   ApiHeader,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
@@ -15,6 +16,7 @@ import {
 import { UserService } from 'user/user.service';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags("User")
 @ApiForbiddenResponse({
   description: 'User does not have permission to execute this action',
 })

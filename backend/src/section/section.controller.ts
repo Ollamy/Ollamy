@@ -5,7 +5,7 @@ import {
   Headers,
   Put,
   Delete,
-  Query,
+  Param,
   Get,
 } from '@nestjs/common';
 import {
@@ -14,6 +14,7 @@ import {
   ApiHeader,
   ApiOkResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   IdSectionModel,
@@ -24,6 +25,7 @@ import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags("Section")
 @Controller('/section')
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
@@ -105,7 +107,7 @@ export class SectionController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getSection(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Headers('Authorization_token') token: string,
   ): Promise<string> {
     return this.sectionService.getSection(id, token);
@@ -141,9 +143,31 @@ export class SectionController {
   @LoggedMiddleware(true)
   @Put('/:id')
   async updateSection(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() body: UpdateSectionModel,
   ): Promise<string> {
     return this.sectionService.updateSection(id, body);
+  }
+
+  @ApiOkResponse({
+    description: "section's chapters",
+    type: String,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the section',
+    required: true,
+  })
+  @ApiHeader({
+    name: 'Authorization_token',
+    description: 'token',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Get('/chapters/:id')
+  async getSectionChapters(
+    @Param('id') id: string
+  ): Promise<string> {
+    return this.sectionService.getSectionChapters(id);
   }
 }

@@ -14,6 +14,7 @@ import {
   ApiHeader,
   ApiOkResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   IdQuestionModel,
@@ -24,6 +25,7 @@ import { QuestionService } from 'question/question.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags("Question")
 @Controller('/question')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}

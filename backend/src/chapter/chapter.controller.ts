@@ -3,7 +3,7 @@ import {
   Post,
   Body,
   Headers,
-  Query,
+  Param,
   Get,
   Put,
   Delete,
@@ -14,6 +14,7 @@ import {
   ApiOkResponse,
   ApiHeader,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import {
   ChapterModel,
@@ -24,6 +25,7 @@ import { ChapterService } from 'chapter/chapter.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags("Chapter")
 @Controller('/chapter')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
@@ -105,7 +107,7 @@ export class ChapterController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getChapter(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Headers('Authorization_token') token: string,
   ): Promise<string> {
     return this.chapterService.getChapter(id, token);
@@ -141,9 +143,31 @@ export class ChapterController {
   @LoggedMiddleware(true)
   @Put('/:id')
   async updateChapter(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() body: UpdateChapterModel,
   ): Promise<string> {
     return this.chapterService.updateChapter(id, body);
+  }
+
+  @ApiOkResponse({
+    description: "chapter's lessons",
+    type: String,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the chapter',
+    required: true,
+  })
+  @ApiHeader({
+    name: 'Authorization_token',
+    description: 'token',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Get('/lessons/:id')
+  async getChapterLessons(
+    @Param('id') id: string
+  ): Promise<string> {
+    return this.chapterService.getChapterLessons(id);
   }
 }
