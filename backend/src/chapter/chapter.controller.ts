@@ -22,10 +22,11 @@ import {
   UpdateChapterModel,
 } from 'chapter/chapter.dto';
 import { ChapterService } from 'chapter/chapter.service';
+import { LessonModel } from 'lesson/lesson.dto';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("Chapter")
+@ApiTags('Chapter')
 @Controller('/chapter')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
@@ -92,7 +93,7 @@ export class ChapterController {
 
   @ApiOkResponse({
     description: 'chapter content',
-    type: String,
+    type: ChapterModel,
   })
   @ApiParam({
     name: 'id',
@@ -109,7 +110,7 @@ export class ChapterController {
   async getChapter(
     @Param('id') id: string,
     @Headers('Authorization_token') token: string,
-  ): Promise<string> {
+  ): Promise<ChapterModel> {
     return this.chapterService.getChapter(id, token);
   }
 
@@ -151,7 +152,7 @@ export class ChapterController {
 
   @ApiOkResponse({
     description: "chapter's lessons",
-    type: String,
+    type: [LessonModel],
   })
   @ApiParam({
     name: 'id',
@@ -165,9 +166,7 @@ export class ChapterController {
   })
   @LoggedMiddleware(true)
   @Get('/lessons/:id')
-  async getChapterLessons(
-    @Param('id') id: string
-  ): Promise<string> {
+  async getChapterLessons(@Param('id') id: string): Promise<LessonModel[]> {
     return this.chapterService.getChapterLessons(id);
   }
 }

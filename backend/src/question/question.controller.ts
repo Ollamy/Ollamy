@@ -25,7 +25,7 @@ import { QuestionService } from 'question/question.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("Question")
+@ApiTags('Question')
 @Controller('/question')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
@@ -92,7 +92,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: String,
+    type: QuestionModel,
   })
   @ApiParam({
     name: 'id',
@@ -109,7 +109,7 @@ export class QuestionController {
   async getQuestion(
     @Query('id') id: string,
     @Headers('Authorization_token') token: string,
-  ): Promise<string> {
+  ): Promise<QuestionModel> {
     return this.questionService.getQuestion(id, token);
   }
 

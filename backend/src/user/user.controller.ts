@@ -16,7 +16,7 @@ import {
 import { UserService } from 'user/user.service';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("User")
+@ApiTags('User')
 @ApiForbiddenResponse({
   description: 'User does not have permission to execute this action',
 })

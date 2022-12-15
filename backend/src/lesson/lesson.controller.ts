@@ -19,9 +19,10 @@ import {
 import { IdLessonModel, LessonModel } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { QuestionModel } from 'question/question.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("Lesson")
+@ApiTags('Lesson')
 @Controller('/lesson')
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
@@ -88,7 +89,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson content response',
-    type: String,
+    type: LessonModel,
   })
   @ApiParam({
     name: 'id',
@@ -105,7 +106,7 @@ export class LessonController {
   async getLesson(
     @Param('id') id: string,
     @Headers('Authorization_token') token: string,
-  ): Promise<string> {
+  ): Promise<LessonModel> {
     return this.lessonService.getLesson(id, token);
   }
 
@@ -147,7 +148,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: "lesson's questions",
-    type: String,
+    type: [QuestionModel],
   })
   @ApiParam({
     name: 'id',
@@ -161,9 +162,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/questions/:id')
-  async getLessonQuestions(
-    @Param('id') id: string
-  ): Promise<string> {
+  async getLessonQuestions(@Param('id') id: string): Promise<QuestionModel[]> {
     return this.lessonService.getLessonQuestions(id);
   }
 }

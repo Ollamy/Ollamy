@@ -82,7 +82,7 @@ export class QuestionService {
     }
   }
 
-  async getQuestion(QuestionId: string, token: string): Promise<string> {
+  async getQuestion(QuestionId: string, token: string): Promise<QuestionModel> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -110,7 +110,7 @@ export class QuestionService {
         Data: questionDb.data,
       };
 
-      return JSON.stringify(question);
+      return question;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not found !');

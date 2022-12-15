@@ -7,6 +7,7 @@ import { SectionModule } from 'section/section.module';
 import { ChapterModule } from 'chapter/chapter.module';
 import { LessonModule } from 'lesson/lesson.module';
 import { QuestionModule } from 'question/question.module';
+import { MiddlewareGuard } from 'middleware/middleware.guard';
 
 @Module({
   imports: [
@@ -18,6 +19,13 @@ import { QuestionModule } from 'question/question.module';
     QuestionModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'APP_GUARD',
+      useExisting: true,
+      useClass: MiddlewareGuard,
+    },
+  ],
 })
 export class AppModule {}

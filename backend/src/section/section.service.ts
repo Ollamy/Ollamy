@@ -79,7 +79,7 @@ export class SectionService {
     }
   }
 
-  async getSection(SectionId: string, token: string): Promise<string> {
+  async getSection(SectionId: string, token: string): Promise<SectionModel> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -106,7 +106,7 @@ export class SectionService {
         Description: sectionDb.description,
       };
 
-      return JSON.stringify(section);
+      return section;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not found !');
@@ -141,12 +141,11 @@ export class SectionService {
     }
   }
 
-  async getSectionChapters(SectionId: string): Promise<string> {
+  async getSectionChapters(SectionId: string): Promise<ChapterModel[]> {
     try {
-
       const sectionChaptersDb = await prisma.chapter.findMany({
         where: {
-          section_id: SectionId
+          section_id: SectionId,
         },
       });
 
@@ -155,18 +154,18 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      let chapters : ChapterModel[] = Array();
+      const chapters: ChapterModel[] = [];
 
       sectionChaptersDb.forEach((chapter) => {
         chapters.push({
           Id: chapter.id,
           SectionId: chapter.section_id,
           Title: chapter.title,
-          Description: chapter.description
-        })
+          Description: chapter.description,
+        });
       });
 
-      return JSON.stringify(chapters);
+      return chapters;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Chapters not found !');

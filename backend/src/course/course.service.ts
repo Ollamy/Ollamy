@@ -75,7 +75,7 @@ export class CourseService {
     }
   }
 
-  async getCourse(CourseId: string, token: string): Promise<string> {
+  async getCourse(CourseId: string, token: string): Promise<CourseModel> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -105,7 +105,7 @@ export class CourseService {
         Description: courseDb.description,
       };
 
-      return JSON.stringify(course);
+      return course;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not deleted !');
@@ -140,12 +140,11 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<string> {
+  async getCourseSections(CourseId: string): Promise<SectionModel[]> {
     try {
-
       const courseSectionsDb = await prisma.section.findMany({
         where: {
-          course_id: CourseId
+          course_id: CourseId,
         },
       });
 
@@ -154,18 +153,18 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      let sections : SectionModel[] = Array();
+      const sections: SectionModel[] = [];
 
       courseSectionsDb.forEach((section) => {
         sections.push({
           Id: section.id,
           CourseId: section.course_id,
           Title: section.title,
-          Description: section.description
-        })
+          Description: section.description,
+        });
       });
 
-      return JSON.stringify(sections);
+      return sections;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');

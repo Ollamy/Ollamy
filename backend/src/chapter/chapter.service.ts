@@ -79,7 +79,7 @@ export class ChapterService {
     }
   }
 
-  async getChapter(ChapterId: string, token: string): Promise<string> {
+  async getChapter(ChapterId: string, token: string): Promise<ChapterModel> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -106,7 +106,7 @@ export class ChapterService {
         Description: chapterDb.description,
       };
 
-      return JSON.stringify(chapter);
+      return chapter;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Chapter not found !');
@@ -141,12 +141,11 @@ export class ChapterService {
     }
   }
 
-  async getChapterLessons(ChapterId: string): Promise<string> {
+  async getChapterLessons(ChapterId: string): Promise<LessonModel[]> {
     try {
-
       const courseLessonsDb = await prisma.lesson.findMany({
         where: {
-          chapter_id: ChapterId
+          chapter_id: ChapterId,
         },
       });
 
@@ -155,18 +154,18 @@ export class ChapterService {
         throw new NotFoundException('No lessons for this course !');
       }
 
-      let lessons : LessonModel[] = Array();
+      const lessons: LessonModel[] = [];
 
       courseLessonsDb.forEach((lesson) => {
         lessons.push({
           Id: lesson.id,
           ChapterId: lesson.chapter_id,
           Title: lesson.title,
-          Description: lesson.description
-        })
+          Description: lesson.description,
+        });
       });
 
-      return JSON.stringify(lessons);
+      return lessons;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');

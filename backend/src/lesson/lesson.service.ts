@@ -75,7 +75,7 @@ export class LessonService {
     }
   }
 
-  async getLesson(LessonId: string, token: string): Promise<string> {
+  async getLesson(LessonId: string, token: string): Promise<LessonModel> {
     const parsedJwt = jwt.decode(token);
 
     if (!parsedJwt) {
@@ -102,7 +102,7 @@ export class LessonService {
         Description: lessonDb.description,
       };
 
-      return JSON.stringify(lesson);
+      return lesson;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not found !');
@@ -137,12 +137,11 @@ export class LessonService {
     }
   }
 
-  async getLessonQuestions(LessonId: string): Promise<string> {
+  async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
-
       const lessonQuestionsDb = await prisma.question.findMany({
         where: {
-          lesson_id: LessonId
+          lesson_id: LessonId,
         },
       });
 
@@ -151,7 +150,7 @@ export class LessonService {
         throw new NotFoundException('No questions for this course !');
       }
 
-      let questions : QuestionModel[] = Array();
+      const questions: QuestionModel[] = [];
 
       lessonQuestionsDb.forEach((question) => {
         questions.push({
@@ -159,11 +158,11 @@ export class LessonService {
           LessonId: question.lesson_id,
           Title: question.title,
           Description: question.description,
-          Data: question.data
-        })
+          Data: question.data,
+        });
       });
 
-      return JSON.stringify(questions);
+      return questions;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');

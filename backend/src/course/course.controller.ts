@@ -6,7 +6,7 @@ import {
   Delete,
   Get,
   Put,
-  Param
+  Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -21,11 +21,12 @@ import {
   IdCourseModel,
   UpdateCourseModel,
 } from 'course/course.dto';
+import { SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("Course")
+@ApiTags('Course')
 @Controller('/course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
@@ -91,7 +92,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: 'course content response',
-    type: String,
+    type: CourseModel,
   })
   @ApiParam({
     name: 'id',
@@ -108,7 +109,7 @@ export class CourseController {
   async getCourse(
     @Param('id') id: string,
     @Headers('Authorization_token') token: string,
-  ): Promise<string> {
+  ): Promise<CourseModel> {
     return this.courseService.getCourse(id, token);
   }
 
@@ -150,7 +151,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: "course's sections",
-    type: String,
+    type: [SectionModel],
   })
   @ApiParam({
     name: 'id',
@@ -164,9 +165,7 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/sections/:id')
-  async getCourseSections(
-    @Param('id') id: string
-  ): Promise<string> {
+  async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
 }

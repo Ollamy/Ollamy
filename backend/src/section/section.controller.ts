@@ -23,9 +23,10 @@ import {
 } from 'section/section.dto';
 import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { ChapterModel } from 'chapter/chapter.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
-@ApiTags("Section")
+@ApiTags('Section')
 @Controller('/section')
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
@@ -92,7 +93,7 @@ export class SectionController {
 
   @ApiOkResponse({
     description: 'section content response',
-    type: String,
+    type: SectionModel,
   })
   @ApiParam({
     name: 'id',
@@ -109,7 +110,7 @@ export class SectionController {
   async getSection(
     @Param('id') id: string,
     @Headers('Authorization_token') token: string,
-  ): Promise<string> {
+  ): Promise<SectionModel> {
     return this.sectionService.getSection(id, token);
   }
 
@@ -151,7 +152,7 @@ export class SectionController {
 
   @ApiOkResponse({
     description: "section's chapters",
-    type: String,
+    type: [ChapterModel],
   })
   @ApiParam({
     name: 'id',
@@ -165,9 +166,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Get('/chapters/:id')
-  async getSectionChapters(
-    @Param('id') id: string
-  ): Promise<string> {
+  async getSectionChapters(@Param('id') id: string): Promise<ChapterModel[]> {
     return this.sectionService.getSectionChapters(id);
   }
 }
