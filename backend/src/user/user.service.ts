@@ -8,7 +8,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import {
-  RegisterUserModel,
+  CreateUserModel,
   LoginUserModel,
   UpdateUserModel,
   JwtUserModel,
@@ -53,7 +53,7 @@ export class UserService {
     return hash;
   }
 
-  async registerUser(userData: RegisterUserModel): Promise<string> {
+  async registerUser(userData: CreateUserModel): Promise<string> {
     if (
       userData.Firstname === '' ||
       userData.Lastname === '' ||

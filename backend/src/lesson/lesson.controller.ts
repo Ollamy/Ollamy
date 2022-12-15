@@ -15,7 +15,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { IdLessonModel, LessonModel } from 'lesson/lesson.dto';
+import { CreateLessonModel, IdLessonModel, LessonModel } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { QuestionModel } from 'question/question.dto';
@@ -36,7 +36,7 @@ export class LessonController {
     required: true,
   })
   @ApiBody({
-    type: LessonModel,
+    type: CreateLessonModel,
     description: 'user data model',
     examples: {
       a: {
@@ -44,13 +44,13 @@ export class LessonController {
           ChapterId: 'Chapter Id',
           Title: 'Lesson Title',
           Description: 'Lesson decsription',
-        } as LessonModel,
+        } as CreateLessonModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerLesson(@Body() body: LessonModel): Promise<string> {
+  async registerLesson(@Body() body: CreateLessonModel): Promise<string> {
     return this.lessonService.postLesson(body);
   }
 

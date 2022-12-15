@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 import {
   CourseModel,
+  CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
 } from 'course/course.dto';
@@ -41,21 +42,21 @@ export class CourseController {
     required: true,
   })
   @ApiBody({
-    type: CourseModel,
+    type: CreateCourseModel,
     description: 'user data model',
     examples: {
       a: {
         value: {
           Title: 'Course Title',
           Description: 'Course description',
-        } as CourseModel,
+        } as CreateCourseModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
   async postCourse(
-    @Body() body: CourseModel,
+    @Body() body: CreateCourseModel,
     @OllContext() ctx: any,
   ): Promise<string> {
     return this.courseService.postCourse(body, ctx);

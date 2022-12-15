@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
+  CreateQuestionModel,
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
@@ -14,7 +15,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(questionData: QuestionModel): Promise<string> {
+  async postQuestion(questionData: CreateQuestionModel): Promise<string> {
     try {
       const questionDb = await prisma.question.create({
         data: {

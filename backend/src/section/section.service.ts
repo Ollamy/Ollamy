@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
+  CreateSectionModel,
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
@@ -15,7 +16,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
-  async postSection(sectionData: SectionModel): Promise<string> {
+  async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
       const sectionDb = await prisma.section.create({
         data: {

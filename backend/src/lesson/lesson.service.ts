@@ -4,14 +4,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { IdLessonModel, LessonModel, UpdateLessonModel } from './lesson.dto';
+import { CreateLessonModel, IdLessonModel, LessonModel, UpdateLessonModel } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: LessonModel): Promise<string> {
+  async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
       const lessonDb = await prisma.lesson.create({
         data: {
