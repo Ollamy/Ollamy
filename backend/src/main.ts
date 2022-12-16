@@ -18,7 +18,7 @@ async function bootstrap() {
   writeFileSync('./swagger.json', JSON.stringify(document));
   console.log('SWAGGER CREATED!');
   app.enableCors({
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3000'],
     credentials: true,
   });
   app.useGlobalPipes(
