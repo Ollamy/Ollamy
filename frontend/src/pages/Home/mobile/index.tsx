@@ -3,11 +3,19 @@ import {PagesProps} from "src/pages/interface";
 import styled from "styled-components";
 import TopBar from '../../../Components/Topbar/navigation/index';
 import { useCallback } from 'react';
+import axios from 'axios';
 
 const HomeMobile = ({ children }: PagesProps): JSX.Element => {
-  const handleClickStartCourse = useCallback(() => {
-    window.open('/course', '_self');
-    console.log("handleClickStartCourse")
+  const handleClickStartCourse = useCallback(async () => {
+    const res = await axios.post(`http://localhost:3000/user/register/`, {
+      "Firstname": "n3ame",
+      "Lastname": "last3name",
+      "Email": "test133@test.test",
+      "Password": "12334",
+    });
+    console.log(res.data);
+    // window.open('/course', '_self');
+    // console.log("handleClickStartCourse")
   }, []);
 
   return (
