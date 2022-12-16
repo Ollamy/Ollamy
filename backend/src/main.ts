@@ -7,7 +7,6 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   const config = new DocumentBuilder()
     .setTitle('Ollamy API')
     .setDescription('So insane API')
@@ -17,7 +16,11 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   // save the swagger.json file
   writeFileSync('./swagger.json', JSON.stringify(document));
-
+  console.log('SWAGGER CREATED!');
+  app.enableCors({
+    origin: ['http://localhost:3001'],
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
