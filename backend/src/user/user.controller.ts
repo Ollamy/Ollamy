@@ -1,18 +1,26 @@
-import { Controller, Post, Body, Headers, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Put, Delete } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiForbiddenResponse,
   ApiHeader,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
+import { OllContext } from 'context/context.decorator';
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
-  RegisterUserModel,
+  CreateUserModel,
   LoginUserModel,
   UpdateUserModel,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
+@ApiTags('User')
+@ApiForbiddenResponse({
+  description: 'User does not have permission to execute this action',
+})
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -22,7 +30,7 @@ export class UserController {
     type: String,
   })
   @ApiBody({
-    type: RegisterUserModel,
+    type: CreateUserModel,
     description: 'user data model',
     examples: {
       template: {
@@ -31,12 +39,12 @@ export class UserController {
           Lastname: 'lastname',
           Email: 'test@test.test',
           Password: '1234',
-        } as RegisterUserModel,
+        } as CreateUserModel,
       },
     },
   })
   @Post('/register')
-  async registerUser(@Body() body: RegisterUserModel): Promise<string> {
+  async registerUser(@Body() body: CreateUserModel): Promise<string> {
     return this.userService.registerUser(body);
   }
 
@@ -71,7 +79,7 @@ export class UserController {
     required: true,
   })
   @ApiBody({
-    type: LoginUserModel,
+    type: UpdateUserModel,
     description: 'user data model',
     examples: {
       a: {
@@ -84,12 +92,13 @@ export class UserController {
       },
     },
   })
+  @LoggedMiddleware(true)
   @Put()
   async updateUser(
     @Body() body: UpdateUserModel,
-    @Headers('Authorization_token') token: string,
+    @OllContext() ctx: any,
   ): Promise<string> {
-    return this.userService.updateUser(body, token);
+    return this.userService.updateUser(body, ctx);
   }
 
   @ApiOkResponse({
@@ -101,10 +110,9 @@ export class UserController {
     description: 'token',
     required: true,
   })
+  @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(
-    @Headers('Authorization_token') token: string,
-  ): Promise<string> {
-    return this.userService.deleteUser(token);
+  async deleteUser(@OllContext() ctx: any): Promise<string> {
+    return this.userService.deleteUser(ctx);
   }
 }

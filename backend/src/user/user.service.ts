@@ -8,14 +8,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import {
-  RegisterUserModel,
+  CreateUserModel,
   LoginUserModel,
   UpdateUserModel,
   JwtUserModel,
 } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
-import { createHmac } from 'crypto';
+import * as pbkdf2 from 'pbkdf2';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -47,13 +47,28 @@ export class UserService {
   }
 
   private hashPassword(password: string): string {
-    const hash = createHmac('sha512', Buffer.from(SECRET_KEY))
-      .update(password)
-      .digest('hex');
+    const hash = pbkdf2
+      .pbkdf2Sync(
+        password,
+        SECRET_KEY,
+        this.randomIntByString(SECRET_KEY),
+        64,
+        'sha512',
+      )
+      .toString('base64');
     return hash;
   }
 
-  async registerUser(userData: RegisterUserModel): Promise<string> {
+  private randomIntByString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    hash = (hash % 900000) + 100000;
+    return hash;
+  }
+
+  async registerUser(userData: CreateUserModel): Promise<string> {
     if (
       userData.Firstname === '' ||
       userData.Lastname === '' ||
@@ -84,15 +99,13 @@ export class UserService {
         },
       });
 
-      const user: JwtUserModel = {
+      return this.createToken({
         Id: userDb.id,
         Email: userDb.email,
         Firstname: userDb.firstname,
         Lastname: userDb.lastname,
         Password: userDb.password,
-      };
-
-      return this.createToken(user);
+      } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -121,65 +134,71 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    const user: JwtUserModel = {
+    return this.createToken({
       Id: userDb.id,
       Email: userDb.email,
       Firstname: userDb.firstname,
       Lastname: userDb.lastname,
       Password: userDb.password,
-    };
-    return this.createToken(user);
+    } as JwtUserModel);
   }
 
-  async updateUser(userData: UpdateUserModel, token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
+  async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
+    try {
+      userData.Password = this.hashPassword(userData.Password);
+      const userDb = await prisma.user.update({
+        where: {
+          id: ctx.__user.id,
+        },
+        data: {
+          password: userData.Password,
+          email: userData.Email,
+          firstname: userData.Firstname,
+          lastname: userData.Lastname,
+        },
+      });
 
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
+      return this.createToken({
+        Id: userDb.id,
+        Email: userDb.email,
+        Firstname: userDb.firstname,
+        Lastname: userDb.lastname,
+        Password: userDb.password,
+      } as JwtUserModel);
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('Email already exists !');
+      } else {
+        throw new ConflictException('User not created !');
+      }
     }
-
-    const userDb = await prisma.user.update({
-      where: {
-        id: parsedJwt['id'],
-      },
-      data: {
-        password: userData.Password,
-        email: userData.Email,
-        firstname: userData.Firstname,
-        lastname: userData.Lastname,
-      },
-    });
-
-    const user: JwtUserModel = {
-      Id: userDb.id,
-      Email: userDb.email,
-      Firstname: userDb.firstname,
-      Lastname: userDb.lastname,
-      Password: userDb.password,
-    };
-    return this.createToken(user);
+    throw new ConflictException('User not updated !');
   }
 
-  async deleteUser(token: string): Promise<string> {
-    const parsedJwt = jwt.decode(token);
+  async deleteUser(ctx: any): Promise<string> {
+    try {
+      const userDb = await prisma.user.delete({
+        where: {
+          id: ctx.__user.id,
+        },
+      });
 
-    if (!parsedJwt) {
-      Logger.error('Token not valid !');
-      throw new BadRequestException('Token not valid !');
+      if (!userDb) {
+        Logger.error('User does not exists !');
+        throw new NotFoundException('User does not exists !');
+      }
+
+      return `User's ${ctx.__user.id} has been deleted.`;
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('User already removed !');
+      } else {
+        throw new ConflictException('User not created !');
+      }
     }
-
-    const userDb = await prisma.user.delete({
-      where: {
-        id: parsedJwt['id'],
-      },
-    });
-
-    if (!userDb) {
-      Logger.error('User does not exists !');
-      throw new NotFoundException('User does not exists !');
-    }
-
-    return `User's ${parsedJwt['id']} has been deleted.`;
+    // not reachable
+    throw new ConflictException('User not removed !');
   }
 }

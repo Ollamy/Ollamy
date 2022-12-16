@@ -1,28 +1,31 @@
-import {
-  Module,
-  NestModule,
-  MiddlewareConsumer,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from 'app.controller';
 import { AppService } from 'app.service';
 import { UserModule } from 'user/user.module';
-import { LoggingMiddleware } from 'middleware';
-import { UserController } from 'user/user.controller';
+import { CourseModule } from 'course/course.module';
+import { SectionModule } from 'section/section.module';
+import { ChapterModule } from 'chapter/chapter.module';
+import { LessonModule } from 'lesson/lesson.module';
+import { QuestionModule } from 'question/question.module';
+import { MiddlewareGuard } from 'middleware/middleware.guard';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    CourseModule,
+    SectionModule,
+    ChapterModule,
+    LessonModule,
+    QuestionModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: 'APP_GUARD',
+      useExisting: true,
+      useClass: MiddlewareGuard,
+    },
+  ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggingMiddleware)
-      .exclude(
-        { path: 'user/register', method: RequestMethod.POST },
-        { path: 'user/login', method: RequestMethod.POST },
-      )
-      .forRoutes(UserController);
-  }
-}
+export class AppModule {}

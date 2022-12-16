@@ -1,4 +1,10 @@
+apis/ChapterApi.ts
+apis/CourseApi.ts
 apis/DefaultApi.ts
+apis/LessonApi.ts
+apis/QuestionApi.ts
+apis/SectionApi.ts
+apis/UserApi.ts
 apis/index.ts
 index.ts
 models/index.ts

@@ -9,7 +9,45 @@ datasource db {
 
 enum Role {
   MEMBER
+  OWNER
   ADMIN
+}
+
+enum PermissionUser {
+  READ
+  WRITE
+  DELETE
+  PING
+  ADMIN
+}
+
+enum PermissionCourse {
+  READ
+  WRITE
+  DELETE
+  PING
+  ADMIN
+}
+
+enum PermissionSection {
+  READ
+  WRITE
+  DELETE
+  PING
+}
+
+enum PermissionChapter {
+  READ
+  WRITE
+  DELETE
+  PING
+}
+
+enum PermissionLesson {
+  READ
+  WRITE
+  DELETE
+  PING
 }
 
 model User {
@@ -24,38 +62,63 @@ model User {
 }
 
 model UsertoCourse {
-  id        String @id @default(uuid()) @db.Uuid
-  course    Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  course_id String @db.Uuid
-  user_id   String @db.Uuid
+  id                 String              @id @default(uuid()) @db.Uuid
+  course             Course              @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user               User                @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  role_user          Role                @default(MEMBER)
+  permission_user    PermissionUser[]    @default([])
+  permission_course  PermissionCourse[]  @default([])
+  permission_section PermissionSection[] @default([])
+  permission_chapter PermissionChapter[] @default([])
+  permission_lesson  PermissionLesson[]  @default([])
+  course_id          String              @db.Uuid
+  user_id            String              @db.Uuid
+
+  @@unique([course_id, user_id])
 }
 
 model Course {
-  id       String         @id @default(uuid()) @db.Uuid
-  section  Section[]
-  userlist UsertoCourse[]
-  user     User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
-  owner_id String         @db.Uuid
-  role      Role
+  id          String         @id @default(uuid()) @db.Uuid
+  section     Section[]
+  userlist    UsertoCourse[]
+  user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id    String         @db.Uuid
+  title       String
+  description String?
 }
 
 model Section {
-  id        String    @id @default(uuid()) @db.Uuid
-  course    Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  course_id String    @db.Uuid
-  Chapters  Chapter[]
+  id          String    @id @default(uuid()) @db.Uuid
+  course      Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id   String    @db.Uuid
+  title       String
+  description String?
+  Chapters    Chapter[]
 }
 
 model Chapter {
-  id         String   @id @default(uuid()) @db.Uuid
-  section    Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
-  section_id String   @db.Uuid
-  Lessons    Lesson[]
+  id          String   @id @default(uuid()) @db.Uuid
+  section     Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  section_id  String   @db.Uuid
+  title       String
+  description String?
+  Lessons     Lesson[]
 }
 
 model Lesson {
-  id         String  @id @default(uuid()) @db.Uuid
-  chapter    Chapter @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
-  chapter_id String  @db.Uuid
+  id          String     @id @default(uuid()) @db.Uuid
+  chapter     Chapter    @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
+  chapter_id  String     @db.Uuid
+  title       String
+  description String?
+  Questions   Question[]
+}
+
+model Question {
+  id          String @id @default(uuid()) @db.Uuid
+  Lesson      Lesson @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id   String @db.Uuid
+  title       String
+  description String?
+  data        String
 }

@@ -14,13 +14,6 @@
 
 
 import * as runtime from '../runtime';
-import type {
-  RegisterUserModel,
-} from '../models';
-
-export interface RegisterUserRequest {
-    registerUserModel: RegisterUserModel;
-}
 
 /**
  * 
@@ -48,37 +41,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async healthCheck(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.healthCheckRaw(initOverrides);
-    }
-
-    /**
-     */
-    async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        if (requestParameters.registerUserModel === null || requestParameters.registerUserModel === undefined) {
-            throw new runtime.RequiredError('registerUserModel','Required parameter requestParameters.registerUserModel was null or undefined when calling registerUser.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/user`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.registerUserModel,
-        }, initOverrides);
-
-        return new runtime.TextApiResponse(response) as any;
-    }
-
-    /**
-     */
-    async registerUser(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.registerUserRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
 }
