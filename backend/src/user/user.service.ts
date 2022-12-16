@@ -15,7 +15,7 @@ import {
 } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
-import { createHmac } from 'crypto';
+import * as pbkdf2 from 'pbkdf2';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -47,9 +47,24 @@ export class UserService {
   }
 
   private hashPassword(password: string): string {
-    const hash = createHmac('sha512', Buffer.from(SECRET_KEY))
-      .update(password)
-      .digest('hex');
+    const hash = pbkdf2
+      .pbkdf2Sync(
+        password,
+        SECRET_KEY,
+        this.randomIntByString(SECRET_KEY),
+        64,
+        'sha512',
+      )
+      .toString('base64');
+    return hash;
+  }
+
+  private randomIntByString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    hash = (hash % 900000) + 100000;
     return hash;
   }
 
