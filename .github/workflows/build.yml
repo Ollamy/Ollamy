@@ -1,10 +1,7 @@
 name: Build & Start Backend
 
 on:
-  pull_request:
-    branches:
-      - development
-      - main
+  push:
 
 jobs:
   build:
