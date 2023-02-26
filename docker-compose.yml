@@ -28,7 +28,7 @@ services:
       test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5s
       timeout: 30s
-      retries: 3
+      retries: 10
       start_period: 1.5s
 
   prismastudio:
