@@ -26,7 +26,7 @@ jobs:
 
       - name: Build backend container
         id: build
-        run: docker compose build backend
+        run: docker compose build backend database
 
       - name: Run backend container
         id: run
