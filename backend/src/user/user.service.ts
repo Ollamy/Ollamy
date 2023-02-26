@@ -65,7 +65,7 @@ export class UserService {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     hash = (hash % 900000) + 100000;
-    return hash;
+    return Math.abs(hash);
   }
 
   async registerUser(userData: CreateUserModel): Promise<string> {

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { AnswerType, QuestionType } from '@prisma/client';
 
 export class QuestionModel {
   @ApiProperty()
@@ -40,6 +41,14 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsString()
   Data: string;
+
+  @ApiProperty()
+  @IsString()
+  TypeAnswer: AnswerType;
+
+  @ApiProperty()
+  @IsString()
+  TypeQuestion: QuestionType;
 }
 
 export class IdQuestionModel {
@@ -68,4 +77,19 @@ export class UpdateQuestionModel {
   @IsString()
   @IsOptional()
   Data: string;
+}
+
+export class CreateAnswerModel {
+  @ApiProperty()
+  @IsString()
+  Value: string;
+
+  @ApiProperty()
+  @IsUUID()
+  QuestionId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  Point: number;
 }

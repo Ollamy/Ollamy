@@ -23,6 +23,8 @@ export class QuestionService {
           title: questionData.Title,
           description: questionData.Description,
           data: questionData.Data,
+          type_answer: questionData.TypeAnswer,
+          type_question: questionData.TypeQuestion,
         },
       });
 
