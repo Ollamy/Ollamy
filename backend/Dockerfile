@@ -2,7 +2,7 @@ FROM node:alpine3.16
 
 WORKDIR /app
 
-RUN apk add openjdk11
+RUN apk add openjdk11 curl bash
 
 COPY . .
 

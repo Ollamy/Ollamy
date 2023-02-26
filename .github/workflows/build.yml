@@ -30,18 +30,11 @@ jobs:
 
       - name: Run backend container
         id: run
-        run: docker compose up -d backend
+        run: docker compose up -d backend --wait
 
       - name: Building OpenAPI client generator
         id: build-openapi-client-generator
-        run: |
-          if [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ secrets.BACKEND_PORT }}/health) -eq 200 ]; then
-            docker compose exec backend yarn build:openapi-generator-cli
-          else
-            curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ secrets.BACKEND_PORT }}/health
-            echo "Backend is not running"
-            exit 0
-          fi
+        run: docker compose exec backend yarn build:openapi-generator-cli
 
       - name: Stop backend container
         id: stop
