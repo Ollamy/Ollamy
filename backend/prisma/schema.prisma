@@ -146,5 +146,5 @@ model Answer {
   Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
   question_id String   @db.Uuid
   value       String
-  points      Int
+  point       Int?
 }

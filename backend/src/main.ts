@@ -1,9 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
-import { BACKEND_PORT } from 'setup';
+import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
 import { writeFileSync } from 'fs';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+
+function buildSwagger(
+  app: INestApplication,
+  config: Omit<OpenAPIObject, 'paths'>,
+) {
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+  writeFileSync('./swagger.json', JSON.stringify(document));
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,15 +22,18 @@ async function bootstrap() {
     .setDescription('So insane API')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-  // save the swagger.json file
-  writeFileSync('./swagger.json', JSON.stringify(document));
-  console.log('SWAGGER CREATED!');
+
+  if (MODE === 'dev') {
+    app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
+    buildSwagger(app, config);
+    Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
+  }
+
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
     credentials: true,
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
@@ -30,6 +43,8 @@ async function bootstrap() {
       },
     }),
   );
+
   await app.listen(BACKEND_PORT);
 }
+
 bootstrap();

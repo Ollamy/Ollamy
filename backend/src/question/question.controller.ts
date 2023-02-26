@@ -21,6 +21,7 @@ import {
   QuestionModel,
   UpdateQuestionModel,
 } from 'question/question.dto';
+import { AnswerType, QuestionType } from '@prisma/client';
 import { QuestionService } from 'question/question.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
@@ -48,6 +49,9 @@ export class QuestionController {
           LessonId: 'Lesson Id',
           Title: 'Question Title',
           Description: 'Question decsription',
+          Data: 'Question data',
+          TypeAnswer: AnswerType.TEXT,
+          TypeQuestion: QuestionType.TEXT,
         } as CreateQuestionModel,
       },
     },
