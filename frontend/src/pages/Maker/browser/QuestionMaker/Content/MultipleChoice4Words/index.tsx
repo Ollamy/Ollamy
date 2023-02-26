@@ -14,9 +14,9 @@ const MultipleChoice4Words = (): JSX.Element => {
 
   const handleClickSubmit = useCallback(() => {
     if (question && goodAnswer && wrongAnswer1 && wrongAnswer2 && wrongAnswer3) {
-      alert('ok');
+      // alert('ok');
     } else {
-      alert('ERROR')
+      // alert('ERROR')
     }
   }, [question, goodAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3]);
 

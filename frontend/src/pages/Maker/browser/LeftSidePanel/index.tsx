@@ -15,7 +15,7 @@ const LeftSidePanel = ({ data, currentQuestion, setData, setCurrentQuestion }: L
   }, [setCurrentQuestion]);
 
   const createNewLesson = useCallback(() => {
-    alert('test')
+    // alert('test')
   }, []);
 
   const handleClickCreateNewQuestion = useCallback(() => {
