@@ -71,7 +71,7 @@ export class ChapterApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
-            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+            headerParameters['Authorization Token'] = String(requestParameters.authorizationToken);
         }
 
         const response = await this.request({
@@ -108,7 +108,7 @@ export class ChapterApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
-            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+            headerParameters['Authorization Token'] = String(requestParameters.authorizationToken);
         }
 
         const response = await this.request({
@@ -144,7 +144,7 @@ export class ChapterApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
-            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+            headerParameters['Authorization Token'] = String(requestParameters.authorizationToken);
         }
 
         const response = await this.request({
@@ -182,7 +182,7 @@ export class ChapterApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
-            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+            headerParameters['Authorization Token'] = String(requestParameters.authorizationToken);
         }
 
         const response = await this.request({
@@ -225,7 +225,7 @@ export class ChapterApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
-            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+            headerParameters['Authorization Token'] = String(requestParameters.authorizationToken);
         }
 
         const response = await this.request({

@@ -35,10 +35,10 @@ export class UserController {
     examples: {
       template: {
         value: {
-          Firstname: 'name',
-          Lastname: 'lastname',
-          Email: 'test@test.test',
-          Password: '1234',
+          firstname: 'name',
+          lastname: 'lastname',
+          email: 'test@test.test',
+          password: '1234',
         } as CreateUserModel,
       },
     },
@@ -56,10 +56,10 @@ export class UserController {
     type: LoginUserModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Email: 'test@test.test',
-          Password: '1234',
+          email: 'test@test.test',
+          password: '1234',
         } as LoginUserModel,
       },
     },
@@ -82,12 +82,12 @@ export class UserController {
     type: UpdateUserModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Firstname: 'name',
-          Lastname: 'lastname',
-          Email: 'test@test.test',
-          Password: '1234',
+          firstname: 'name',
+          lastname: 'lastname',
+          email: 'test@test.test',
+          password: '1234',
         } as UpdateUserModel,
       },
     },

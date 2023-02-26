@@ -19,12 +19,12 @@ export class QuestionService {
     try {
       const questionDb = await prisma.question.create({
         data: {
-          lesson_id: questionData.LessonId,
-          title: questionData.Title,
-          description: questionData.Description,
-          data: questionData.Data,
-          type_answer: questionData.TypeAnswer,
-          type_question: questionData.TypeQuestion,
+          lesson_id: questionData.lessonId,
+          title: questionData.title,
+          description: questionData.description,
+          data: questionData.data,
+          type_answer: questionData.typeAnswer,
+          type_question: questionData.typeQuestion,
         },
       });
 
@@ -43,7 +43,7 @@ export class QuestionService {
     try {
       const questionDb = await prisma.question.delete({
         where: {
-          id: questionData.Id,
+          id: questionData.id,
         },
       });
 
@@ -52,7 +52,7 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return `Question's ${questionData.Id} has been deleted.`;
+      return `Question's ${questionData.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -77,11 +77,11 @@ export class QuestionService {
       }
 
       return {
-        Id: questionDb.id,
-        LessonId: questionDb.lesson_id,
-        Title: questionDb.title,
-        Description: questionDb.description,
-        Data: questionDb.data,
+        id: questionDb.id,
+        lessonId: questionDb.lesson_id,
+        title: questionDb.title,
+        description: questionDb.description,
+        data: questionDb.data,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -99,10 +99,10 @@ export class QuestionService {
           id: QuestionId,
         },
         data: {
-          lesson_id: questionData.LessonId,
-          title: questionData.Title,
-          description: questionData.Description,
-          data: questionData.Data,
+          lesson_id: questionData.lessonId,
+          title: questionData.title,
+          description: questionData.description,
+          data: questionData.data,
         },
       });
 

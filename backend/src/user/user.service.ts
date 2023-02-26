@@ -23,10 +23,7 @@ export class UserService {
   private createToken(userData: JwtUserModel): string {
     const token = jwt.sign(
       {
-        id: userData.Id,
-        firstname: userData.Firstname,
-        lastname: userData.Lastname,
-        email: userData.Email,
+        id: userData.id,
       },
       SECRET_KEY,
       {
@@ -70,10 +67,10 @@ export class UserService {
 
   async registerUser(userData: CreateUserModel): Promise<string> {
     if (
-      userData.Firstname === '' ||
-      userData.Lastname === '' ||
-      !userData.Firstname ||
-      !userData.Lastname
+      userData.firstname === '' ||
+      userData.lastname === '' ||
+      !userData.firstname ||
+      !userData.lastname
     ) {
       Logger.error('Firstname or lastname not provided !');
       throw new UnprocessableEntityException(
@@ -81,30 +78,30 @@ export class UserService {
       );
     }
 
-    if (!this.validateEmail(userData.Email)) {
+    if (!this.validateEmail(userData.email)) {
       Logger.error('Email is not valid !');
       throw new UnprocessableEntityException('Email is not valid !');
     }
 
-    userData.Password = this.hashPassword(userData.Password);
+    userData.password = this.hashPassword(userData.password);
 
     try {
       const userDb = await prisma.user.create({
         data: {
-          password: userData.Password,
-          email: userData.Email,
-          firstname: userData.Firstname,
-          lastname: userData.Lastname,
+          password: userData.password,
+          email: userData.email,
+          firstname: userData.firstname,
+          lastname: userData.lastname,
           communities_id: [],
         },
       });
 
       return this.createToken({
-        Id: userDb.id,
-        Email: userDb.email,
-        Firstname: userDb.firstname,
-        Lastname: userDb.lastname,
-        Password: userDb.password,
+        id: userDb.id,
+        email: userDb.email,
+        firstname: userDb.firstname,
+        lastname: userDb.lastname,
+        password: userDb.password,
       } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
@@ -119,7 +116,7 @@ export class UserService {
   async loginUser(userData: LoginUserModel): Promise<string> {
     const userDb = await prisma.user.findUnique({
       where: {
-        email: userData.Email,
+        email: userData.email,
       },
     });
 
@@ -128,42 +125,42 @@ export class UserService {
       throw new NotFoundException('User does not exists !');
     }
 
-    userData.Password = this.hashPassword(userData.Password);
+    userData.password = this.hashPassword(userData.password);
 
-    if (userData.Password !== userDb.password) {
+    if (userData.password !== userDb.password) {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
     return this.createToken({
-      Id: userDb.id,
-      Email: userDb.email,
-      Firstname: userDb.firstname,
-      Lastname: userDb.lastname,
-      Password: userDb.password,
+      id: userDb.id,
+      email: userDb.email,
+      firstname: userDb.firstname,
+      lastname: userDb.lastname,
+      password: userDb.password,
     } as JwtUserModel);
   }
 
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
     try {
-      userData.Password = this.hashPassword(userData.Password);
+      userData.password = this.hashPassword(userData.password);
       const userDb = await prisma.user.update({
         where: {
           id: ctx.__user.id,
         },
         data: {
-          password: userData.Password,
-          email: userData.Email,
-          firstname: userData.Firstname,
-          lastname: userData.Lastname,
+          password: userData.password,
+          email: userData.email,
+          firstname: userData.firstname,
+          lastname: userData.lastname,
         },
       });
 
       return this.createToken({
-        Id: userDb.id,
-        Email: userDb.email,
-        Firstname: userDb.firstname,
-        Lastname: userDb.lastname,
-        Password: userDb.password,
+        id: userDb.id,
+        email: userDb.email,
+        firstname: userDb.firstname,
+        lastname: userDb.lastname,
+        password: userDb.password,
       } as JwtUserModel);
     } catch (error) {
       Logger.error(error);
@@ -173,7 +170,6 @@ export class UserService {
         throw new ConflictException('User not created !');
       }
     }
-    throw new ConflictException('User not updated !');
   }
 
   async deleteUser(ctx: any): Promise<string> {
@@ -198,7 +194,5 @@ export class UserService {
         throw new ConflictException('User not created !');
       }
     }
-    // not reachable
-    throw new ConflictException('User not removed !');
   }
 }
