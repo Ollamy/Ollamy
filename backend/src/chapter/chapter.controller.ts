@@ -36,7 +36,7 @@ export class ChapterController {
     type: String,
   })
   @ApiHeader({
-    name: 'Authorization Token',
+    name: 'Authorization_token',
     description: 'token',
     required: true,
   })
@@ -64,7 +64,7 @@ export class ChapterController {
     type: String,
   })
   @ApiHeader({
-    name: 'Authorization Token',
+    name: 'Authorization_token',
     description: 'token',
     required: true,
   })
@@ -95,7 +95,7 @@ export class ChapterController {
     required: true,
   })
   @ApiHeader({
-    name: 'Authorization Token',
+    name: 'Authorization_token',
     description: 'token',
     required: true,
   })
@@ -115,7 +115,7 @@ export class ChapterController {
     required: true,
   })
   @ApiHeader({
-    name: 'Authorization Token',
+    name: 'Authorization_token',
     description: 'token',
     required: true,
   })
@@ -151,7 +151,7 @@ export class ChapterController {
     required: true,
   })
   @ApiHeader({
-    name: 'Authorization Token',
+    name: 'Authorization_token',
     description: 'token',
     required: true,
   })
