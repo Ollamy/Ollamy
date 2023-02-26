@@ -1,13 +1,16 @@
 {
-  "name": "@ollamy/design-system",
+  "name": "@ollamy/utils",
   "version": "1.0.0",
   "packageManager": "yarn@3.4.1",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "dependencies": {
     "react": "18.2.0",
     "react-native": "0.71.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.28"
+  },
+  "peerDependencies": {
+    "@ollamy/utils": "*"
   }
 }

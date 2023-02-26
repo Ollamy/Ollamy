@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -15,8 +15,18 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "composite": true,
-    "moduleSuffixes": [".web", ".native", ".android", ".ios", ""]
-    },
-    "include": ["./*"],
+    "moduleSuffixes": [
+      ".web",
+      ""
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@ollamy/design-system/*": ["../util-design-system/*"],
+      "@ollamy/utils/*": ["../util-utils/*"]
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "references": [{ "path": "./tsconfig.node.json"}]
 }

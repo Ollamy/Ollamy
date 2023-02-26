@@ -18,18 +18,26 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "composite": true,
     "jsx": "react-jsx",
+    "composite": true,
     "moduleSuffixes": [
-      ".web",
       ".native",
       ".android",
       ".ios",
       ""
     ],
     "baseUrl": "./src",
+    "paths": {
+      "@ollamy/design-system/*": [
+        "../util-design-system/*"
+      ],
+      "@ollamy/utils/*": [
+        "../util-utils/*"
+      ]
+    }
   },
   "include": [
     "src"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }
