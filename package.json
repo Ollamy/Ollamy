@@ -1,14 +1,11 @@
 {
   "name": "ollamy",
-  "version": "1.0.0",
-  "repository": "git@github.com:Ollamy/Ollamy.git",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "lint": "yarn workspaces run lint",
-    "ci:lint": "yarn workspaces run ci:lint"
-  },
+  "packageManager": "yarn@3.4.1",
   "workspaces": [
-    "backend"
-  ]
+    "packages/frontend/*",
+    "packages/backend"
+  ],
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  }
 }
