@@ -5,91 +5,91 @@ import { AnswerType, QuestionType } from '@prisma/client';
 export class QuestionModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 
   @ApiProperty()
   @IsUUID()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
-  Data: string;
+  data: string;
 }
 
 export class CreateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
-  Data: string;
+  data: string;
 
   @ApiProperty()
   @IsString()
-  TypeAnswer: AnswerType;
+  typeAnswer: AnswerType;
 
   @ApiProperty()
   @IsString()
-  TypeQuestion: QuestionType;
+  typeQuestion: QuestionType;
 }
 
 export class IdQuestionModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 }
 
 export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Data: string;
+  data: string;
 }
 
 export class CreateAnswerModel {
   @ApiProperty()
   @IsString()
-  Value: string;
+  value: string;
 
   @ApiProperty()
   @IsUUID()
-  QuestionId: string;
+  questionId: string;
 
   @ApiProperty()
   @IsNumber()
   @IsOptional()
-  Point: number;
+  point: number;
 }

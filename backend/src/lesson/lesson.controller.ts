@@ -43,11 +43,11 @@ export class LessonController {
     type: CreateLessonModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          ChapterId: 'Chapter Id',
-          Title: 'Lesson Title',
-          Description: 'Lesson decsription',
+          chapterId: 'Chapter Id',
+          title: 'Lesson Title',
+          description: 'Lesson decsription',
         } as CreateLessonModel,
       },
     },
@@ -71,9 +71,9 @@ export class LessonController {
     type: IdLessonModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Id: 'id',
+          id: 'id',
         } as IdLessonModel,
       },
     },
@@ -122,11 +122,11 @@ export class LessonController {
     type: LessonModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          ChapterId: 'id',
-          Title: 'Lesson Title',
-          Description: 'Lesson decsription',
+          chapterId: 'id',
+          title: 'Lesson Title',
+          description: 'Lesson decsription',
         } as LessonModel,
       },
     },

@@ -37,7 +37,7 @@ export class PermissionGuard implements CanActivate {
       .__userToCourse[0] as UsertoCourse;
 
     if (!role) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User is not enrolled in this course');
     }
 
     if (!Method[method]) {
@@ -76,8 +76,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission type');
     }
-    // unreachable
-    return false;
   }
 
   equals(a: any, b: any): boolean {
@@ -102,8 +100,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 
   checkCourse(
@@ -119,8 +115,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 
   checkSection(
@@ -136,8 +130,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 
   checkChapter(
@@ -153,8 +145,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 
   checkLesson(
@@ -170,8 +160,6 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 
   checkUser(
@@ -187,7 +175,5 @@ export class PermissionGuard implements CanActivate {
       default:
         throw new Error('Invalid permission method');
     }
-    // unreachable
-    return false;
   }
 }

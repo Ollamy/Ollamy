@@ -44,11 +44,11 @@ export class SectionController {
     type: CreateSectionModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          CourseId: 'Course Id',
-          Title: 'Section Title',
-          Description: 'Section decsription',
+          courseId: 'Course Id',
+          title: 'Section Title',
+          description: 'Section decsription',
         } as CreateSectionModel,
       },
     },
@@ -72,9 +72,9 @@ export class SectionController {
     type: IdSectionModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Id: 'id',
+          id: 'id',
         } as IdSectionModel,
       },
     },
@@ -123,11 +123,11 @@ export class SectionController {
     type: UpdateSectionModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          CourseId: 'id',
-          Title: 'Section Title',
-          Description: 'Section decsription',
+          courseId: 'id',
+          title: 'Section Title',
+          description: 'Section decsription',
         } as UpdateSectionModel,
       },
     },

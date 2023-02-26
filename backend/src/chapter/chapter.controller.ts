@@ -44,11 +44,11 @@ export class ChapterController {
     type: CreateChapterModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          SectionId: 'Section Id',
-          Title: 'Chapter Title',
-          Description: 'Chapter description',
+          sectionId: 'Section Id',
+          title: 'Chapter Title',
+          description: 'Chapter description',
         } as CreateChapterModel,
       },
     },
@@ -72,9 +72,9 @@ export class ChapterController {
     type: IdChapterModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Id: 'id',
+          id: 'id',
         } as IdChapterModel,
       },
     },
@@ -123,11 +123,11 @@ export class ChapterController {
     type: UpdateChapterModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          SectionId: 'id',
-          Title: 'Chapter Title',
-          Description: 'Chapter description',
+          sectionId: 'id',
+          title: 'Chapter Title',
+          description: 'Chapter description',
         } as UpdateChapterModel,
       },
     },

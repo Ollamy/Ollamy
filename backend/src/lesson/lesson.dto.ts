@@ -4,54 +4,54 @@ import { IsOptional, IsString, IsUUID } from 'class-validator';
 export class LessonModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 
   @ApiProperty()
   @IsUUID()
-  ChapterId: string;
+  chapterId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 }
 
 export class CreateLessonModel {
   @ApiProperty()
   @IsUUID()
-  ChapterId: string;
+  chapterId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 }
 
 export class IdLessonModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 }
 
 export class UpdateLessonModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  ChapterId: string;
+  chapterId: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Description: string;
+  description: string;
 }
