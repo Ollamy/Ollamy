@@ -19,11 +19,7 @@ export class ChapterService {
   async postChapter(chapterData: CreateChapterModel): Promise<string> {
     try {
       const chapterDb = await prisma.chapter.create({
-        data: {
-          section_id: chapterData.sectionId,
-          title: chapterData.title,
-          description: chapterData.description,
-        },
+        data: chapterData,
       });
 
       if (!chapterDb) {
@@ -41,7 +37,7 @@ export class ChapterService {
     try {
       const chapterDb = await prisma.chapter.delete({
         where: {
-          id: chapterData.id,
+          ...chapterData,
         },
       });
 
@@ -55,9 +51,8 @@ export class ChapterService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Chapter already removed !');
-      } else {
-        throw new ConflictException('Chapter not created !');
       }
+      throw new ConflictException('Chapter not created !');
     }
   }
 
@@ -75,10 +70,7 @@ export class ChapterService {
       }
 
       return {
-        id: chapterDb.id,
-        sectionId: chapterDb.section_id,
-        title: chapterDb.title,
-        description: chapterDb.description,
+        ...chapterDb,
       } as ChapterModel;
     } catch (error) {
       Logger.error(error);
@@ -95,11 +87,7 @@ export class ChapterService {
         where: {
           id: ChapterId,
         },
-        data: {
-          section_id: chapterData.sectionId,
-          title: chapterData.title,
-          description: chapterData.description,
-        },
+        data: chapterData,
       });
 
       if (!chapterDb) {
@@ -129,10 +117,7 @@ export class ChapterService {
 
       return courseLessonsDb.map((lesson) => {
         return {
-          id: lesson.id,
-          chapterId: lesson.chapter_id,
-          title: lesson.title,
-          description: lesson.description,
+          ...lesson,
         };
       }) as LessonModel[];
     } catch (error) {

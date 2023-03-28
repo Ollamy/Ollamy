@@ -19,11 +19,7 @@ export class SectionService {
   async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
       const sectionDb = await prisma.section.create({
-        data: {
-          course_id: sectionData.courseId,
-          title: sectionData.title,
-          description: sectionData.description,
-        },
+        data: sectionData,
       });
 
       if (!sectionDb) {
@@ -41,7 +37,7 @@ export class SectionService {
     try {
       const sectionDb = await prisma.section.delete({
         where: {
-          id: sectionData.id,
+          ...sectionData,
         },
       });
 
@@ -55,9 +51,8 @@ export class SectionService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Section already removed !');
-      } else {
-        throw new ConflictException('Section not created !');
       }
+      throw new ConflictException('Section not created !');
     }
   }
 
@@ -95,11 +90,7 @@ export class SectionService {
         where: {
           id: SectionId,
         },
-        data: {
-          course_id: sectionData.courseId,
-          title: sectionData.title,
-          description: sectionData.description,
-        },
+        data: sectionData,
       });
 
       if (!sectionDb) {
@@ -129,10 +120,7 @@ export class SectionService {
 
       return sectionChaptersDb.map((lesson) => {
         return {
-          id: lesson.id,
-          sectionId: lesson.section_id,
-          title: lesson.title,
-          description: lesson.description,
+          ...lesson,
         };
       }) as ChapterModel[];
     } catch (error) {

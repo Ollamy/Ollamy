@@ -18,14 +18,7 @@ export class QuestionService {
   async postQuestion(questionData: CreateQuestionModel): Promise<string> {
     try {
       const questionDb = await prisma.question.create({
-        data: {
-          lesson_id: questionData.lessonId,
-          title: questionData.title,
-          description: questionData.description,
-          data: questionData.data,
-          type_answer: questionData.typeAnswer,
-          type_question: questionData.typeQuestion,
-        },
+        data: questionData,
       });
 
       if (!questionDb) {
@@ -43,7 +36,7 @@ export class QuestionService {
     try {
       const questionDb = await prisma.question.delete({
         where: {
-          id: questionData.id,
+          ...questionData,
         },
       });
 
@@ -57,9 +50,8 @@ export class QuestionService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Question already removed !');
-      } else {
-        throw new ConflictException('Question not created !');
       }
+      throw new ConflictException('Question not created !');
     }
   }
 
@@ -77,11 +69,7 @@ export class QuestionService {
       }
 
       return {
-        id: questionDb.id,
-        lessonId: questionDb.lesson_id,
-        title: questionDb.title,
-        description: questionDb.description,
-        data: questionDb.data,
+        ...questionDb,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -98,12 +86,7 @@ export class QuestionService {
         where: {
           id: QuestionId,
         },
-        data: {
-          lesson_id: questionData.lessonId,
-          title: questionData.title,
-          description: questionData.description,
-          data: questionData.data,
-        },
+        data: questionData,
       });
 
       if (!questionDb) {

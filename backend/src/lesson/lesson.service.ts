@@ -19,11 +19,7 @@ export class LessonService {
   async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
       const lessonDb = await prisma.lesson.create({
-        data: {
-          chapter_id: lessonData.chapterId,
-          title: lessonData.title,
-          description: lessonData.description,
-        },
+        data: lessonData,
       });
 
       if (!lessonDb) {
@@ -41,7 +37,7 @@ export class LessonService {
     try {
       const lessonDb = await prisma.lesson.delete({
         where: {
-          id: lessonData.id,
+          ...lessonData,
         },
       });
 
@@ -55,9 +51,8 @@ export class LessonService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Lesson already removed !');
-      } else {
-        throw new ConflictException('Lesson not created !');
       }
+      throw new ConflictException('Lesson not created !');
     }
   }
 
@@ -75,10 +70,7 @@ export class LessonService {
       }
 
       return {
-        id: lessonDb.id,
-        chapterId: lessonDb.chapter_id,
-        title: lessonDb.title,
-        description: lessonDb.description,
+        ...lessonDb,
       } as LessonModel;
     } catch (error) {
       Logger.error(error);
@@ -95,11 +87,7 @@ export class LessonService {
         where: {
           id: LessonId,
         },
-        data: {
-          chapter_id: lessonData.chapterId,
-          title: lessonData.title,
-          description: lessonData.description,
-        },
+        data: lessonData,
       });
 
       if (!lessonDb) {
@@ -129,11 +117,7 @@ export class LessonService {
 
       return lessonQuestionsDb.map((question) => {
         return {
-          id: question.id,
-          lessonId: question.lesson_id,
-          title: question.title,
-          description: question.description,
-          data: question.data,
+          ...question,
         };
       }) as QuestionModel[];
     } catch (error) {

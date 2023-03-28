@@ -3,27 +3,21 @@ import {
   Logger,
   ConflictException,
   Injectable,
-  UnprocessableEntityException,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import {
-  CreateUserModel,
-  LoginUserModel,
-  UpdateUserModel,
-  JwtUserModel,
-} from './user.dto';
+import { CreateUserModel, LoginUserModel, UpdateUserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  private createToken(userData: JwtUserModel): string {
+  private createToken(id: string): string {
     const token = jwt.sign(
       {
-        id: userData.id,
+        id,
       },
       SECRET_KEY,
       {
@@ -37,10 +31,6 @@ export class UserService {
     }
 
     return token;
-  }
-
-  private validateEmail(email: string) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   private hashPassword(password: string): string {
@@ -66,50 +56,23 @@ export class UserService {
   }
 
   async registerUser(userData: CreateUserModel): Promise<string> {
-    if (
-      userData.firstname === '' ||
-      userData.lastname === '' ||
-      !userData.firstname ||
-      !userData.lastname
-    ) {
-      Logger.error('Firstname or lastname not provided !');
-      throw new UnprocessableEntityException(
-        'Firstname or lastname not provided !',
-      );
-    }
-
-    if (!this.validateEmail(userData.email)) {
-      Logger.error('Email is not valid !');
-      throw new UnprocessableEntityException('Email is not valid !');
-    }
-
     userData.password = this.hashPassword(userData.password);
 
     try {
       const userDb = await prisma.user.create({
         data: {
-          password: userData.password,
-          email: userData.email,
-          firstname: userData.firstname,
-          lastname: userData.lastname,
+          ...userData,
           communities_id: [],
         },
       });
 
-      return this.createToken({
-        id: userDb.id,
-        email: userDb.email,
-        firstname: userDb.firstname,
-        lastname: userDb.lastname,
-        password: userDb.password,
-      } as JwtUserModel);
+      return this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof PrismaClientKnownRequestError) {
         throw new ConflictException('Email already exists !');
-      } else {
-        throw new ConflictException('User not created !');
       }
+      throw new ConflictException('User not created !');
     }
   }
 
@@ -131,13 +94,7 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    return this.createToken({
-      id: userDb.id,
-      email: userDb.email,
-      firstname: userDb.firstname,
-      lastname: userDb.lastname,
-      password: userDb.password,
-    } as JwtUserModel);
+    return this.createToken(userDb.id);
   }
 
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
@@ -147,28 +104,16 @@ export class UserService {
         where: {
           id: ctx.__user.id,
         },
-        data: {
-          password: userData.password,
-          email: userData.email,
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-        },
+        data: userData,
       });
 
-      return this.createToken({
-        id: userDb.id,
-        email: userDb.email,
-        firstname: userDb.firstname,
-        lastname: userDb.lastname,
-        password: userDb.password,
-      } as JwtUserModel);
+      return this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof PrismaClientKnownRequestError) {
         throw new ConflictException('Email already exists !');
-      } else {
-        throw new ConflictException('User not created !');
       }
+      throw new ConflictException('User not created !');
     }
   }
 
@@ -188,11 +133,10 @@ export class UserService {
       return `User's ${ctx.__user.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof PrismaClientKnownRequestError) {
         throw new ConflictException('User already removed !');
-      } else {
-        throw new ConflictException('User not created !');
       }
+      throw new ConflictException('User not created !');
     }
   }
 }

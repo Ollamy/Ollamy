@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  IsUUID,
+} from 'class-validator';
 
 export class UserModel {
   @ApiProperty()
@@ -38,6 +44,7 @@ export class CreateUserModel {
 
   @ApiProperty()
   @IsString()
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
   password: string;
 }
 
@@ -55,6 +62,7 @@ export class JwtUserModel {
   email: string;
 
   @IsString()
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
   password: string;
 }
 
@@ -65,6 +73,7 @@ export class LoginUserModel {
 
   @ApiProperty()
   @IsString()
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
   password: string;
 }
 

@@ -21,8 +21,7 @@ export class CourseService {
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
-          title: courseData.title,
-          description: courseData.description,
+          ...courseData,
         },
       });
 
@@ -41,7 +40,7 @@ export class CourseService {
     try {
       const courseDb = await prisma.course.delete({
         where: {
-          id: courseData.id,
+          ...courseData,
         },
       });
 
@@ -55,9 +54,8 @@ export class CourseService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Course already removed !');
-      } else {
-        throw new ConflictException('Course not created !');
       }
+      throw new ConflictException('Course not created !');
     }
   }
 
@@ -75,10 +73,7 @@ export class CourseService {
       }
 
       return {
-        id: courseDb.id,
-        ownerId: courseDb.owner_id,
-        title: courseDb.title,
-        description: courseDb.description,
+        ...courseDb,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
@@ -95,11 +90,7 @@ export class CourseService {
         where: {
           id: CourseId,
         },
-        data: {
-          owner_id: courseData.ownerId,
-          title: courseData.title,
-          description: courseData.description,
-        },
+        data: courseData,
       });
 
       if (!courseDb) {
@@ -129,10 +120,7 @@ export class CourseService {
 
       return courseSectionsDb.map((lesson) => {
         return {
-          id: lesson.id,
-          courseId: lesson.course_id,
-          title: lesson.title,
-          description: lesson.description,
+          ...lesson,
         };
       }) as SectionModel[];
     } catch (error) {
