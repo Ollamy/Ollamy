@@ -1,71 +1,95 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { AnswerType, QuestionType } from '@prisma/client';
 
 export class QuestionModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 
   @ApiProperty()
   @IsUUID()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
-  Data: string;
+  data: string;
 }
 
 export class CreateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
-  Data: string;
+  data: string;
+
+  @ApiProperty()
+  @IsString()
+  typeAnswer: AnswerType;
+
+  @ApiProperty()
+  @IsString()
+  typeQuestion: QuestionType;
 }
 
 export class IdQuestionModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 }
 
 export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  LessonId: string;
+  lessonId: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Title: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Description: string;
+  description: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Data: string;
+  data: string;
+}
+
+export class CreateAnswerModel {
+  @ApiProperty()
+  @IsString()
+  value: string;
+
+  @ApiProperty()
+  @IsUUID()
+  questionId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  point: number;
 }

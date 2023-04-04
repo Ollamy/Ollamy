@@ -114,11 +114,37 @@ model Lesson {
   Questions   Question[]
 }
 
+enum AnswerType {
+  TEXT
+  QUIZ
+  OTHER
+}
+
+enum QuestionType {
+  TEXT
+  VIDEO
+  IMAGE
+  AUDIO
+  OTHER
+}
+
 model Question {
-  id          String @id @default(uuid()) @db.Uuid
-  Lesson      Lesson @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
-  lesson_id   String @db.Uuid
-  title       String
-  description String?
-  data        String
+  id              String       @id @default(uuid()) @db.Uuid
+  Lesson          Lesson       @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id       String       @db.Uuid
+  title           String
+  type_answer     AnswerType
+  type_question   QuestionType
+  description     String?
+  data            String?
+  Answer          Answer[]
+  trust_answer_id String?      @db.Uuid
+}
+
+model Answer {
+  id          String   @id @default(uuid()) @db.Uuid
+  Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
+  question_id String   @db.Uuid
+  value       String
+  point       Int?
 }

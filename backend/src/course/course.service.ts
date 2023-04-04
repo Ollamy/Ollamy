@@ -21,8 +21,8 @@ export class CourseService {
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
-          title: courseData.Title,
-          description: courseData.Description,
+          title: courseData.title,
+          description: courseData.description,
         },
       });
 
@@ -41,7 +41,7 @@ export class CourseService {
     try {
       const courseDb = await prisma.course.delete({
         where: {
-          id: courseData.Id,
+          id: courseData.id,
         },
       });
 
@@ -50,7 +50,7 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return `Course's ${courseData.Id} has been deleted.`;
+      return `Course's ${courseData.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -75,10 +75,10 @@ export class CourseService {
       }
 
       return {
-        Id: courseDb.id,
-        OwnerId: courseDb.owner_id,
-        Title: courseDb.title,
-        Description: courseDb.description,
+        id: courseDb.id,
+        ownerId: courseDb.owner_id,
+        title: courseDb.title,
+        description: courseDb.description,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
@@ -96,9 +96,9 @@ export class CourseService {
           id: CourseId,
         },
         data: {
-          owner_id: courseData.OwnerId,
-          title: courseData.Title,
-          description: courseData.Description,
+          owner_id: courseData.ownerId,
+          title: courseData.title,
+          description: courseData.description,
         },
       });
 
@@ -129,10 +129,10 @@ export class CourseService {
 
       return courseSectionsDb.map((lesson) => {
         return {
-          Id: lesson.id,
-          CourseId: lesson.course_id,
-          Title: lesson.title,
-          Description: lesson.description,
+          id: lesson.id,
+          courseId: lesson.course_id,
+          title: lesson.title,
+          description: lesson.description,
         };
       }) as SectionModel[];
     } catch (error) {

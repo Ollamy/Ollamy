@@ -20,9 +20,9 @@ export class ChapterService {
     try {
       const chapterDb = await prisma.chapter.create({
         data: {
-          section_id: chapterData.SectionId,
-          title: chapterData.Title,
-          description: chapterData.Description,
+          section_id: chapterData.sectionId,
+          title: chapterData.title,
+          description: chapterData.description,
         },
       });
 
@@ -41,7 +41,7 @@ export class ChapterService {
     try {
       const chapterDb = await prisma.chapter.delete({
         where: {
-          id: chapterData.Id,
+          id: chapterData.id,
         },
       });
 
@@ -50,7 +50,7 @@ export class ChapterService {
         throw new NotFoundException('Chapter does not exists !');
       }
 
-      return `Chapter's ${chapterData.Id} has been deleted.`;
+      return `Chapter's ${chapterData.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -75,10 +75,10 @@ export class ChapterService {
       }
 
       return {
-        Id: chapterDb.id,
-        SectionId: chapterDb.section_id,
-        Title: chapterDb.title,
-        Description: chapterDb.description,
+        id: chapterDb.id,
+        sectionId: chapterDb.section_id,
+        title: chapterDb.title,
+        description: chapterDb.description,
       } as ChapterModel;
     } catch (error) {
       Logger.error(error);
@@ -96,9 +96,9 @@ export class ChapterService {
           id: ChapterId,
         },
         data: {
-          section_id: chapterData.SectionId,
-          title: chapterData.Title,
-          description: chapterData.Description,
+          section_id: chapterData.sectionId,
+          title: chapterData.title,
+          description: chapterData.description,
         },
       });
 
@@ -129,10 +129,10 @@ export class ChapterService {
 
       return courseLessonsDb.map((lesson) => {
         return {
-          Id: lesson.id,
-          ChapterId: lesson.chapter_id,
-          Title: lesson.title,
-          Description: lesson.description,
+          id: lesson.id,
+          chapterId: lesson.chapter_id,
+          title: lesson.title,
+          description: lesson.description,
         };
       }) as LessonModel[];
     } catch (error) {

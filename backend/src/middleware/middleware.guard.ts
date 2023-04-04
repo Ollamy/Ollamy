@@ -19,6 +19,7 @@ export class MiddlewareGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (!allow) {
       return true;
     }
@@ -29,7 +30,6 @@ export class MiddlewareGuard implements CanActivate {
     if (!token) {
       Logger.error('No token provided');
       throw new NotAcceptableException('No token provided');
-      return false;
     }
 
     try {
@@ -38,11 +38,12 @@ export class MiddlewareGuard implements CanActivate {
       if (!verify) {
         Logger.error('Invalid Token');
         throw new NotAcceptableException('Invalid Token');
-        return false;
       }
     } catch (error) {
-      Logger.error('Malformed Jwt');
-      throw new NotAcceptableException('Malformed Jwt');
+      Logger.error('Jwt not accepted, can be malformed, expired or invalid');
+      throw new NotAcceptableException(
+        'Jwt not accepted, can be malformed, expired or invalid',
+      );
     }
 
     const parsedJwt = jwt.decode(token);
@@ -53,9 +54,8 @@ export class MiddlewareGuard implements CanActivate {
     });
 
     if (!user) {
-      Logger.error('User does not exists !');
+      Logger.error('User does not exists for this token !');
       throw new NotAcceptableException('Invalid Token');
-      return false;
     }
 
     req.__user = await user;
@@ -67,9 +67,8 @@ export class MiddlewareGuard implements CanActivate {
     });
 
     if (!userToCourse) {
-      Logger.error('User does not exists !');
+      Logger.error('Cannot find course for this user !');
       throw new NotAcceptableException('Invalid Token');
-      return false;
     }
     req.__userToCourse = await userToCourse;
     return true;

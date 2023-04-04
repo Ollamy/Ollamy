@@ -26,11 +26,15 @@ jobs:
 
       - name: Build backend container
         id: build
-        run: docker compose build backend
+        run: docker compose build backend database
 
       - name: Run backend container
         id: run
         run: docker compose up -d backend
+
+      # - name: Building OpenAPI client generator
+      #   id: build-openapi-client-generator
+      #   run: docker compose exec backend yarn build:openapi-generator-cli
 
       - name: Stop backend container
         id: stop

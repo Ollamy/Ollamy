@@ -45,10 +45,10 @@ export class CourseController {
     type: CreateCourseModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Title: 'Course Title',
-          Description: 'Course description',
+          title: 'Course Title',
+          description: 'Course description',
         } as CreateCourseModel,
       },
     },
@@ -75,9 +75,9 @@ export class CourseController {
     type: IdCourseModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          Id: 'id',
+          id: 'id',
         } as IdCourseModel,
       },
     },
@@ -126,11 +126,11 @@ export class CourseController {
     type: UpdateCourseModel,
     description: 'user data model',
     examples: {
-      a: {
+      template: {
         value: {
-          OwnerId: 'id',
-          Title: 'Course Title',
-          Description: 'Course description',
+          ownerId: 'id',
+          title: 'Course Title',
+          description: 'Course description',
         } as UpdateCourseModel,
       },
     },

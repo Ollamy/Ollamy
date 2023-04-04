@@ -4,89 +4,89 @@ import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
 export class UserModel {
   @ApiProperty()
   @IsUUID()
-  Id: string;
+  id: string;
 
   @ApiProperty()
   @IsString()
-  Firstname: string;
+  firstname: string;
 
   @ApiProperty()
   @IsString()
-  Lastname: string;
+  lastname: string;
 
   @ApiProperty()
   @IsEmail()
-  Email: string;
+  email: string;
 
   @ApiProperty()
   @IsString()
-  Password: string;
+  password: string;
 }
 
 export class CreateUserModel {
   @ApiProperty()
   @IsString()
-  Firstname: string;
+  firstname: string;
 
   @ApiProperty()
   @IsString()
-  Lastname: string;
+  lastname: string;
 
   @ApiProperty()
   @IsEmail()
-  Email: string;
+  email: string;
 
   @ApiProperty()
   @IsString()
-  Password: string;
+  password: string;
 }
 
 export class JwtUserModel {
   @IsUUID()
-  Id: string;
+  id: string;
 
   @IsString()
-  Firstname: string;
+  firstname: string;
 
   @IsString()
-  Lastname: string;
+  lastname: string;
 
   @IsEmail()
-  Email: string;
+  email: string;
 
   @IsString()
-  Password: string;
+  password: string;
 }
 
 export class LoginUserModel {
   @ApiProperty()
   @IsEmail()
-  Email: string;
+  email: string;
 
   @ApiProperty()
   @IsString()
-  Password: string;
+  password: string;
 }
 
 export class UpdateUserModel {
   @IsUUID()
-  @IsOptional()
-  Id: string;
+  id: string;
 
   @ApiProperty()
   @IsOptional()
-  Firstname: string;
+  firstname: string;
 
   @ApiProperty()
   @IsOptional()
-  Lastname: string;
+  lastname: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsEmail()
-  Email: string;
+  email: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  Password: string;
+  password: string;
 }
