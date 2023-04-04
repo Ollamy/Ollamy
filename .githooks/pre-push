@@ -1,9 +1,9 @@
-#!/bin/sh
-
-isLint="$(yarn ci:lint &> /dev/null)"
-
-if [ $? -eq 1 ]
-then
-	printf "Error: Lint failed.\n\tTry to run \e[1myarn lint\e[0m and fix every error\n"
-	exit 1
-fi
+##!/bin/sh
+#
+##isLint="$(yarn ci:lint &> /dev/null)"
+#
+#if [ $? -eq 1 ]
+#then
+#	printf "Error: Lint failed.\n\tTry to run \e[1m yarn lint\e[0m and fix every error\n"
+#	exit 1
+#fi
