@@ -10,7 +10,7 @@ import { CreateUserModel, LoginUserModel, UpdateUserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { PrismaClientKnownRequestError } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -69,7 +69,7 @@ export class UserService {
       return this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Email already exists !');
       }
       throw new ConflictException('User not created !');
@@ -110,7 +110,7 @@ export class UserService {
       return this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Email already exists !');
       }
       throw new ConflictException('User not created !');
@@ -133,7 +133,7 @@ export class UserService {
       return `User's ${ctx.__user.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('User already removed !');
       }
       throw new ConflictException('User not created !');

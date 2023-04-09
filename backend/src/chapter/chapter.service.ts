@@ -12,13 +12,13 @@ import {
 } from './chapter.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Chapter, Lesson, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
   async postChapter(chapterData: CreateChapterModel): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.create({
+      const chapterDb: Chapter = await prisma.chapter.create({
         data: chapterData,
       });
 
@@ -35,7 +35,7 @@ export class ChapterService {
 
   async deleteChapter(chapterData: IdChapterModel): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.delete({
+      const chapterDb: Chapter = await prisma.chapter.delete({
         where: {
           ...chapterData,
         },
@@ -58,7 +58,7 @@ export class ChapterService {
 
   async getChapter(ChapterId: string): Promise<ChapterModel> {
     try {
-      const chapterDb = await prisma.chapter.findFirst({
+      const chapterDb: Chapter = await prisma.chapter.findFirst({
         where: {
           id: ChapterId,
         },
@@ -70,6 +70,7 @@ export class ChapterService {
       }
 
       return {
+        sectionId: chapterDb.section_id,
         ...chapterDb,
       } as ChapterModel;
     } catch (error) {
@@ -83,7 +84,7 @@ export class ChapterService {
     chapterData: UpdateChapterModel,
   ): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.update({
+      const chapterDb: Chapter = await prisma.chapter.update({
         where: {
           id: ChapterId,
         },
@@ -104,7 +105,7 @@ export class ChapterService {
 
   async getChapterLessons(ChapterId: string): Promise<LessonModel[]> {
     try {
-      const courseLessonsDb = await prisma.lesson.findMany({
+      const courseLessonsDb: Lesson[] = await prisma.lesson.findMany({
         where: {
           chapter_id: ChapterId,
         },
@@ -115,8 +116,9 @@ export class ChapterService {
         throw new NotFoundException('No lessons for this course !');
       }
 
-      return courseLessonsDb.map((lesson) => {
+      return courseLessonsDb.map((lesson: Lesson) => {
         return {
+          chapterId: lesson.chapter_id,
           ...lesson,
         };
       }) as LessonModel[];

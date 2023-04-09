@@ -11,13 +11,13 @@ import {
   UpdateQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question } from '@prisma/client';
 
 @Injectable()
 export class QuestionService {
   async postQuestion(questionData: CreateQuestionModel): Promise<string> {
     try {
-      const questionDb = await prisma.question.create({
+      const questionDb: Question = await prisma.question.create({
         data: questionData,
       });
 
@@ -34,7 +34,7 @@ export class QuestionService {
 
   async deleteQuestion(questionData: IdQuestionModel): Promise<string> {
     try {
-      const questionDb = await prisma.question.delete({
+      const questionDb: Question = await prisma.question.delete({
         where: {
           ...questionData,
         },
@@ -57,7 +57,7 @@ export class QuestionService {
 
   async getQuestion(QuestionId: string): Promise<QuestionModel> {
     try {
-      const questionDb = await prisma.question.findFirst({
+      const questionDb: Question = await prisma.question.findFirst({
         where: {
           id: QuestionId,
         },
@@ -69,6 +69,7 @@ export class QuestionService {
       }
 
       return {
+        lessonId: questionDb.lesson_id,
         ...questionDb,
       } as QuestionModel;
     } catch (error) {
@@ -82,7 +83,7 @@ export class QuestionService {
     questionData: UpdateQuestionModel,
   ): Promise<string> {
     try {
-      const questionDb = await prisma.question.update({
+      const questionDb: Question = await prisma.question.update({
         where: {
           id: QuestionId,
         },

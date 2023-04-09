@@ -12,7 +12,7 @@ import {
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Course, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class CourseService {
@@ -61,7 +61,7 @@ export class CourseService {
 
   async getCourse(CourseId: string): Promise<CourseModel> {
     try {
-      const courseDb = await prisma.course.findFirst({
+      const courseDb: Course = await prisma.course.findFirst({
         where: {
           id: CourseId,
         },
@@ -73,6 +73,7 @@ export class CourseService {
       }
 
       return {
+        ownerId: courseDb.owner_id,
         ...courseDb,
       } as CourseModel;
     } catch (error) {
@@ -86,7 +87,7 @@ export class CourseService {
     courseData: UpdateCourseModel,
   ): Promise<string> {
     try {
-      const courseDb = await prisma.course.update({
+      const courseDb: Course = await prisma.course.update({
         where: {
           id: CourseId,
         },
@@ -107,7 +108,7 @@ export class CourseService {
 
   async getCourseSections(CourseId: string): Promise<SectionModel[]> {
     try {
-      const courseSectionsDb = await prisma.section.findMany({
+      const courseSectionsDb: Section[] = await prisma.section.findMany({
         where: {
           course_id: CourseId,
         },
@@ -118,8 +119,9 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson) => {
+      return courseSectionsDb.map((lesson: Section) => {
         return {
+          courseId: lesson.course_id,
           ...lesson,
         };
       }) as SectionModel[];

@@ -12,13 +12,13 @@ import {
 } from 'section/section.dto';
 import { ChapterModel } from 'chapter/chapter.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Chapter, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
   async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
-      const sectionDb = await prisma.section.create({
+      const sectionDb: Section = await prisma.section.create({
         data: sectionData,
       });
 
@@ -35,7 +35,7 @@ export class SectionService {
 
   async deleteSection(sectionData: IdSectionModel): Promise<string> {
     try {
-      const sectionDb = await prisma.section.delete({
+      const sectionDb: Section = await prisma.section.delete({
         where: {
           ...sectionData,
         },
@@ -58,7 +58,7 @@ export class SectionService {
 
   async getSection(SectionId: string): Promise<SectionModel> {
     try {
-      const sectionDb = await prisma.section.findFirst({
+      const sectionDb: Section = await prisma.section.findFirst({
         where: {
           id: SectionId,
         },
@@ -107,7 +107,7 @@ export class SectionService {
 
   async getSectionChapters(SectionId: string): Promise<ChapterModel[]> {
     try {
-      const sectionChaptersDb = await prisma.chapter.findMany({
+      const sectionChaptersDb: Chapter[] = await prisma.chapter.findMany({
         where: {
           section_id: SectionId,
         },
@@ -118,9 +118,10 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      return sectionChaptersDb.map((lesson) => {
+      return sectionChaptersDb.map((lesson: Chapter) => {
         return {
-          ...lesson,
+          sectionId: lesson.section_id,
+          ...lesson
         };
       }) as ChapterModel[];
     } catch (error) {

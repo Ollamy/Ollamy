@@ -12,13 +12,13 @@ import {
 } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question, Lesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
   async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
-      const lessonDb = await prisma.lesson.create({
+      const lessonDb: Lesson = await prisma.lesson.create({
         data: lessonData,
       });
 
@@ -35,7 +35,7 @@ export class LessonService {
 
   async deleteLesson(lessonData: IdLessonModel): Promise<string> {
     try {
-      const lessonDb = await prisma.lesson.delete({
+      const lessonDb: Lesson = await prisma.lesson.delete({
         where: {
           ...lessonData,
         },
@@ -58,7 +58,7 @@ export class LessonService {
 
   async getLesson(LessonId: string): Promise<LessonModel> {
     try {
-      const lessonDb = await prisma.lesson.findFirst({
+      const lessonDb: Lesson = await prisma.lesson.findFirst({
         where: {
           id: LessonId,
         },
@@ -70,6 +70,7 @@ export class LessonService {
       }
 
       return {
+        chapterId: lessonDb.chapter_id,
         ...lessonDb,
       } as LessonModel;
     } catch (error) {
@@ -104,7 +105,7 @@ export class LessonService {
 
   async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
-      const lessonQuestionsDb = await prisma.question.findMany({
+      const lessonQuestionsDb: Question[] = await prisma.question.findMany({
         where: {
           lesson_id: LessonId,
         },
@@ -115,8 +116,9 @@ export class LessonService {
         throw new NotFoundException('No questions for this course !');
       }
 
-      return lessonQuestionsDb.map((question) => {
+      return lessonQuestionsDb.map((question: Question) => {
         return {
+          lessonId: question.lesson_id,
           ...question,
         };
       }) as QuestionModel[];
