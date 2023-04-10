@@ -56,29 +56,6 @@ export class CreateUserModel {
   password: string;
 }
 
-export class JwtUserModel {
-  @IsUUID()
-  id: string;
-
-  @IsString()
-  firstname: string;
-
-  @IsString()
-  lastname: string;
-
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 2,
-    minUppercase: 1,
-    minSymbols: 1,
-  })
-  password: string;
-}
-
 export class LoginUserModel {
   @ApiProperty()
   @IsEmail()
