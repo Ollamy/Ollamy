@@ -14,6 +14,7 @@ import { MIDDLEWARE_KEY } from './middleware.decorator';
 @Injectable()
 export class MiddlewareGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const allow = this.reflector.getAllAndOverride<boolean>(MIDDLEWARE_KEY, [
       context.getHandler(),
@@ -49,6 +50,7 @@ export class MiddlewareGuard implements CanActivate {
     const parsedJwt = jwt.decode(token);
     const user = prisma.user.findUnique({
       where: {
+        // eslint-disable-next-line
         id: parsedJwt['id'],
       },
     });

@@ -30,9 +30,9 @@ export class PermissionGuard implements CanActivate {
       return true;
     }
 
-    const type = params['type'];
-    const method = params['method'];
-    const requiredRoles = params['args'];
+    const type = params.type;
+    const method = params.method;
+    const requiredRoles = params.args;
     const role = context.switchToHttp().getRequest()
       .__userToCourse[0] as UsertoCourse;
 
