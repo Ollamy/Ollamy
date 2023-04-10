@@ -14,7 +14,6 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
-  UserModel,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -82,7 +81,7 @@ export class UserController {
   })
   @LoggedMiddleware(true)
   @Get()
-  async getUser(@OllContext() ctx: any,): Promise<GetUserModel> {
+  async getUser(@OllContext() ctx: any): Promise<GetUserModel> {
     return this.userService.getUser(ctx);
   }
 

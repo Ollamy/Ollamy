@@ -23,7 +23,7 @@ export class ChapterService {
           section_id: chapterData.sectionId,
           title: chapterData.title,
           description: chapterData.description,
-        }
+        },
       });
 
       if (!chapterDb) {

@@ -6,7 +6,12 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateUserModel, GetUserModel, LoginUserModel, UpdateUserModel, UserModel } from './user.dto';
+import {
+  CreateUserModel,
+  GetUserModel,
+  LoginUserModel,
+  UpdateUserModel,
+} from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
@@ -97,7 +102,7 @@ export class UserService {
     return this.createToken(userDb.id);
   }
 
-  async getUser(ctx:any): Promise<GetUserModel> {
+  async getUser(ctx: any): Promise<GetUserModel> {
     try {
       const userDb: User = await prisma.user.findUnique({
         where: {

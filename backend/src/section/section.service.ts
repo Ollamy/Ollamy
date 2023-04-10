@@ -19,11 +19,11 @@ export class SectionService {
   async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
       const sectionDb: Section = await prisma.section.create({
-        data:{
+        data: {
           course_id: sectionData.courseId,
           title: sectionData.title,
           description: sectionData.description,
-        }
+        },
       });
 
       if (!sectionDb) {
@@ -77,7 +77,7 @@ export class SectionService {
         courseId: sectionDb.course_id,
         description: sectionDb.description,
         id: sectionDb.id,
-        title: sectionDb.title
+        title: sectionDb.title,
       } as SectionModel;
     } catch (error) {
       Logger.error(error);

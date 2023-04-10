@@ -19,11 +19,11 @@ export class LessonService {
   async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
-        data:{
+        data: {
           chapter_id: lessonData.chapterId,
           title: lessonData.title,
           description: lessonData.description,
-        }
+        },
       });
 
       if (!lessonDb) {
