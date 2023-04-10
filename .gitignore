@@ -4,6 +4,8 @@ node_modules/
 .yarn
 .vscode
 .DS_Store
+**/.history
+**/.hipothesis
 npm-debug.log
 /build
 /coverage
