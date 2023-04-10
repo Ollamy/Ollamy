@@ -22,6 +22,16 @@ export class QuestionModel {
   @ApiProperty()
   @IsString()
   data: string;
+
+  @ApiProperty()
+  typeAnswer: AnswerType;
+
+  @ApiProperty()
+  typeQuestion: QuestionType;
+
+  @ApiProperty()
+  @IsUUID()
+  trustAnswerId: string;
 }
 
 export class CreateQuestionModel {

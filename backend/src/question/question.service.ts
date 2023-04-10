@@ -18,7 +18,13 @@ export class QuestionService {
   async postQuestion(questionData: CreateQuestionModel): Promise<string> {
     try {
       const questionDb: Question = await prisma.question.create({
-        data: questionData,
+        data: {
+          lesson_id: questionData.lessonId,
+          title: questionData.title,
+          description: questionData.description,
+          type_answer: questionData.typeAnswer,
+          type_question: questionData.typeQuestion,
+        },
       });
 
       if (!questionDb) {
@@ -32,11 +38,11 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(questionData: IdQuestionModel): Promise<string> {
+  async deleteQuestion(questionId: IdQuestionModel): Promise<string> {
     try {
       const questionDb: Question = await prisma.question.delete({
         where: {
-          ...questionData,
+          ...questionId,
         },
       });
 
@@ -45,7 +51,7 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return `Question's ${questionData.id} has been deleted.`;
+      return `Question's ${questionId.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -69,8 +75,13 @@ export class QuestionService {
       }
 
       return {
+        id: questionDb.id,
         lessonId: questionDb.lesson_id,
-        ...questionDb,
+        title: questionDb.title,
+        description: questionDb.description,
+        typeAnswer: questionDb.type_answer,
+        typeQuestion: questionDb.type_question,
+        trustAnswerId: questionDb.trust_answer_id,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);

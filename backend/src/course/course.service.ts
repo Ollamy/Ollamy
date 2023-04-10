@@ -36,11 +36,11 @@ export class CourseService {
     }
   }
 
-  async deleteCourse(courseData: IdCourseModel): Promise<string> {
+  async deleteCourse(courseId: IdCourseModel): Promise<string> {
     try {
       const courseDb = await prisma.course.delete({
         where: {
-          ...courseData,
+          ...courseId,
         },
       });
 
@@ -49,7 +49,7 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return `Course's ${courseData.id} has been deleted.`;
+      return `Course's ${courseId.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -42,7 +42,9 @@ export class CreateUserModel {
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Password must contain at least 8 characters, 2 numbers and 2 uppercase letters"
+  })
   @IsString()
   @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
   password: string;
@@ -98,4 +100,18 @@ export class UpdateUserModel {
   @IsString()
   @IsOptional()
   password: string;
+}
+
+export class GetUserModel {
+  @ApiProperty()
+  @IsString()
+  firstname: string;
+
+  @ApiProperty()
+  @IsString()
+  lastname: string;
+
+  @ApiProperty()
+  @IsEmail()
+  email: string;
 }

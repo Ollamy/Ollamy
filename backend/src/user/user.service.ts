@@ -6,16 +6,16 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateUserModel, LoginUserModel, UpdateUserModel } from './user.dto';
+import { CreateUserModel, GetUserModel, LoginUserModel, UpdateUserModel, UserModel } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   private createToken(id: string): string {
-    const token = jwt.sign(
+    const token: string = jwt.sign(
       {
         id,
       },
@@ -59,7 +59,7 @@ export class UserService {
     userData.password = this.hashPassword(userData.password);
 
     try {
-      const userDb = await prisma.user.create({
+      const userDb: User = await prisma.user.create({
         data: {
           ...userData,
           communities_id: [],
@@ -77,7 +77,7 @@ export class UserService {
   }
 
   async loginUser(userData: LoginUserModel): Promise<string> {
-    const userDb = await prisma.user.findUnique({
+    const userDb: User = await prisma.user.findUnique({
       where: {
         email: userData.email,
       },
@@ -97,10 +97,33 @@ export class UserService {
     return this.createToken(userDb.id);
   }
 
+  async getUser(ctx:any): Promise<GetUserModel> {
+    try {
+      const userDb: User = await prisma.user.findUnique({
+        where: {
+          id: ctx.__user.id,
+        },
+      });
+
+      if (!userDb) {
+        Logger.error('User does not exists !');
+        throw new NotFoundException('User does not exists !');
+      }
+      return {
+        firstname: userDb.firstname,
+        lastname: userDb.lastname,
+        email: userDb.email,
+      } as GetUserModel;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not found !');
+    }
+  }
+
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
     try {
       userData.password = this.hashPassword(userData.password);
-      const userDb = await prisma.user.update({
+      const userDb: User = await prisma.user.update({
         where: {
           id: ctx.__user.id,
         },

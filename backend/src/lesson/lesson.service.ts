@@ -19,7 +19,11 @@ export class LessonService {
   async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
-        data: lessonData,
+        data:{
+          chapter_id: lessonData.chapterId,
+          title: lessonData.title,
+          description: lessonData.description,
+        }
       });
 
       if (!lessonDb) {
@@ -118,8 +122,13 @@ export class LessonService {
 
       return lessonQuestionsDb.map((question: Question) => {
         return {
+          id: question.id,
           lessonId: question.lesson_id,
-          ...question,
+          title: question.title,
+          description: question.description,
+          typeAnswer: question.type_answer,
+          typeQuestion: question.type_question,
+          data: question.data,
         };
       }) as QuestionModel[];
     } catch (error) {

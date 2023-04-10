@@ -19,7 +19,11 @@ export class SectionService {
   async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
       const sectionDb: Section = await prisma.section.create({
-        data: sectionData,
+        data:{
+          course_id: sectionData.courseId,
+          title: sectionData.title,
+          description: sectionData.description,
+        }
       });
 
       if (!sectionDb) {
@@ -70,10 +74,10 @@ export class SectionService {
       }
 
       return {
-        id: sectionDb.id,
         courseId: sectionDb.course_id,
-        title: sectionDb.title,
         description: sectionDb.description,
+        id: sectionDb.id,
+        title: sectionDb.title
       } as SectionModel;
     } catch (error) {
       Logger.error(error);
@@ -121,7 +125,9 @@ export class SectionService {
       return sectionChaptersDb.map((lesson: Chapter) => {
         return {
           sectionId: lesson.section_id,
-          ...lesson
+          description: lesson.description,
+          id: lesson.id,
+          title: lesson.title,
         };
       }) as ChapterModel[];
     } catch (error) {
