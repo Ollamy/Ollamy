@@ -12,13 +12,13 @@ import {
 } from 'section/section.dto';
 import { ChapterModel } from 'chapter/chapter.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Chapter, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
   async postSection(sectionData: CreateSectionModel): Promise<string> {
     try {
-      const sectionDb = await prisma.section.create({
+      const sectionDb: Section = await prisma.section.create({
         data: {
           course_id: sectionData.courseId,
           title: sectionData.title,
@@ -39,9 +39,9 @@ export class SectionService {
 
   async deleteSection(sectionData: IdSectionModel): Promise<string> {
     try {
-      const sectionDb = await prisma.section.delete({
+      const sectionDb: Section = await prisma.section.delete({
         where: {
-          id: sectionData.id,
+          ...sectionData,
         },
       });
 
@@ -55,15 +55,14 @@ export class SectionService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Section already removed !');
-      } else {
-        throw new ConflictException('Section not created !');
       }
+      throw new ConflictException('Section not created !');
     }
   }
 
   async getSection(SectionId: string): Promise<SectionModel> {
     try {
-      const sectionDb = await prisma.section.findFirst({
+      const sectionDb: Section = await prisma.section.findFirst({
         where: {
           id: SectionId,
         },
@@ -75,10 +74,10 @@ export class SectionService {
       }
 
       return {
-        id: sectionDb.id,
         courseId: sectionDb.course_id,
-        title: sectionDb.title,
         description: sectionDb.description,
+        id: sectionDb.id,
+        title: sectionDb.title,
       } as SectionModel;
     } catch (error) {
       Logger.error(error);
@@ -95,11 +94,7 @@ export class SectionService {
         where: {
           id: SectionId,
         },
-        data: {
-          course_id: sectionData.courseId,
-          title: sectionData.title,
-          description: sectionData.description,
-        },
+        data: sectionData,
       });
 
       if (!sectionDb) {
@@ -116,7 +111,7 @@ export class SectionService {
 
   async getSectionChapters(SectionId: string): Promise<ChapterModel[]> {
     try {
-      const sectionChaptersDb = await prisma.chapter.findMany({
+      const sectionChaptersDb: Chapter[] = await prisma.chapter.findMany({
         where: {
           section_id: SectionId,
         },
@@ -127,12 +122,12 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      return sectionChaptersDb.map((lesson) => {
+      return sectionChaptersDb.map((lesson: Chapter) => {
         return {
-          id: lesson.id,
           sectionId: lesson.section_id,
-          title: lesson.title,
           description: lesson.description,
+          id: lesson.id,
+          title: lesson.title,
         };
       }) as ChapterModel[];
     } catch (error) {

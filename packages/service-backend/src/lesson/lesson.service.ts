@@ -12,13 +12,13 @@ import {
 } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question, Lesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
   async postLesson(lessonData: CreateLessonModel): Promise<string> {
     try {
-      const lessonDb = await prisma.lesson.create({
+      const lessonDb: Lesson = await prisma.lesson.create({
         data: {
           chapter_id: lessonData.chapterId,
           title: lessonData.title,
@@ -39,9 +39,9 @@ export class LessonService {
 
   async deleteLesson(lessonData: IdLessonModel): Promise<string> {
     try {
-      const lessonDb = await prisma.lesson.delete({
+      const lessonDb: Lesson = await prisma.lesson.delete({
         where: {
-          id: lessonData.id,
+          ...lessonData,
         },
       });
 
@@ -55,15 +55,14 @@ export class LessonService {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Lesson already removed !');
-      } else {
-        throw new ConflictException('Lesson not created !');
       }
+      throw new ConflictException('Lesson not created !');
     }
   }
 
   async getLesson(LessonId: string): Promise<LessonModel> {
     try {
-      const lessonDb = await prisma.lesson.findFirst({
+      const lessonDb: Lesson = await prisma.lesson.findFirst({
         where: {
           id: LessonId,
         },
@@ -75,10 +74,8 @@ export class LessonService {
       }
 
       return {
-        id: lessonDb.id,
         chapterId: lessonDb.chapter_id,
-        title: lessonDb.title,
-        description: lessonDb.description,
+        ...lessonDb,
       } as LessonModel;
     } catch (error) {
       Logger.error(error);
@@ -95,11 +92,7 @@ export class LessonService {
         where: {
           id: LessonId,
         },
-        data: {
-          chapter_id: lessonData.chapterId,
-          title: lessonData.title,
-          description: lessonData.description,
-        },
+        data: lessonData,
       });
 
       if (!lessonDb) {
@@ -116,7 +109,7 @@ export class LessonService {
 
   async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
-      const lessonQuestionsDb = await prisma.question.findMany({
+      const lessonQuestionsDb: Question[] = await prisma.question.findMany({
         where: {
           lesson_id: LessonId,
         },
@@ -127,12 +120,14 @@ export class LessonService {
         throw new NotFoundException('No questions for this course !');
       }
 
-      return lessonQuestionsDb.map((question) => {
+      return lessonQuestionsDb.map((question: Question) => {
         return {
           id: question.id,
           lessonId: question.lesson_id,
           title: question.title,
           description: question.description,
+          typeAnswer: question.type_answer,
+          typeQuestion: question.type_question,
           data: question.data,
         };
       }) as QuestionModel[];

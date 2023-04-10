@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  IsUUID,
+} from 'class-validator';
 
 export class UserModel {
   @ApiProperty()
@@ -36,25 +42,17 @@ export class CreateUserModel {
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
+  })
   @IsString()
-  password: string;
-}
-
-export class JwtUserModel {
-  @IsUUID()
-  id: string;
-
-  @IsString()
-  firstname: string;
-
-  @IsString()
-  lastname: string;
-
-  @IsEmail()
-  email: string;
-
-  @IsString()
+  @IsStrongPassword({
+    minLength: 8,
+    minNumbers: 2,
+    minUppercase: 1,
+    minSymbols: 1,
+  })
   password: string;
 }
 
@@ -65,6 +63,12 @@ export class LoginUserModel {
 
   @ApiProperty()
   @IsString()
+  @IsStrongPassword({
+    minLength: 8,
+    minNumbers: 2,
+    minUppercase: 1,
+    minSymbols: 1,
+  })
   password: string;
 }
 
@@ -88,5 +92,25 @@ export class UpdateUserModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  @IsStrongPassword({
+    minLength: 8,
+    minNumbers: 2,
+    minUppercase: 1,
+    minSymbols: 1,
+  })
   password: string;
+}
+
+export class GetUserModel {
+  @ApiProperty()
+  @IsString()
+  firstname: string;
+
+  @ApiProperty()
+  @IsString()
+  lastname: string;
+
+  @ApiProperty()
+  @IsEmail()
+  email: string;
 }

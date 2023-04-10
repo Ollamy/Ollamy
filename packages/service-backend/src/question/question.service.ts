@@ -11,18 +11,17 @@ import {
   UpdateQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question } from '@prisma/client';
 
 @Injectable()
 export class QuestionService {
   async postQuestion(questionData: CreateQuestionModel): Promise<string> {
     try {
-      const questionDb = await prisma.question.create({
+      const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
           title: questionData.title,
           description: questionData.description,
-          data: questionData.data,
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
         },
@@ -39,11 +38,11 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(questionData: IdQuestionModel): Promise<string> {
+  async deleteQuestion(questionId: IdQuestionModel): Promise<string> {
     try {
-      const questionDb = await prisma.question.delete({
+      const questionDb: Question = await prisma.question.delete({
         where: {
-          id: questionData.id,
+          ...questionId,
         },
       });
 
@@ -52,20 +51,19 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return `Question's ${questionData.id} has been deleted.`;
+      return `Question's ${questionId.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Question already removed !');
-      } else {
-        throw new ConflictException('Question not created !');
       }
+      throw new ConflictException('Question not created !');
     }
   }
 
   async getQuestion(QuestionId: string): Promise<QuestionModel> {
     try {
-      const questionDb = await prisma.question.findFirst({
+      const questionDb: Question = await prisma.question.findFirst({
         where: {
           id: QuestionId,
         },
@@ -81,7 +79,9 @@ export class QuestionService {
         lessonId: questionDb.lesson_id,
         title: questionDb.title,
         description: questionDb.description,
-        data: questionDb.data,
+        typeAnswer: questionDb.type_answer,
+        typeQuestion: questionDb.type_question,
+        trustAnswerId: questionDb.trust_answer_id,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -94,16 +94,11 @@ export class QuestionService {
     questionData: UpdateQuestionModel,
   ): Promise<string> {
     try {
-      const questionDb = await prisma.question.update({
+      const questionDb: Question = await prisma.question.update({
         where: {
           id: QuestionId,
         },
-        data: {
-          lesson_id: questionData.lessonId,
-          title: questionData.title,
-          description: questionData.description,
-          data: questionData.data,
-        },
+        data: questionData,
       });
 
       if (!questionDb) {

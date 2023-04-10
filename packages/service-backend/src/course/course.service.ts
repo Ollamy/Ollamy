@@ -12,7 +12,7 @@ import {
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Course, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class CourseService {
@@ -21,8 +21,7 @@ export class CourseService {
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
-          title: courseData.title,
-          description: courseData.description,
+          ...courseData,
         },
       });
 
@@ -37,11 +36,11 @@ export class CourseService {
     }
   }
 
-  async deleteCourse(courseData: IdCourseModel): Promise<string> {
+  async deleteCourse(courseId: IdCourseModel): Promise<string> {
     try {
       const courseDb = await prisma.course.delete({
         where: {
-          id: courseData.id,
+          ...courseId,
         },
       });
 
@@ -50,20 +49,19 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return `Course's ${courseData.id} has been deleted.`;
+      return `Course's ${courseId.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Course already removed !');
-      } else {
-        throw new ConflictException('Course not created !');
       }
+      throw new ConflictException('Course not created !');
     }
   }
 
   async getCourse(CourseId: string): Promise<CourseModel> {
     try {
-      const courseDb = await prisma.course.findFirst({
+      const courseDb: Course = await prisma.course.findFirst({
         where: {
           id: CourseId,
         },
@@ -75,10 +73,8 @@ export class CourseService {
       }
 
       return {
-        id: courseDb.id,
         ownerId: courseDb.owner_id,
-        title: courseDb.title,
-        description: courseDb.description,
+        ...courseDb,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
@@ -91,15 +87,11 @@ export class CourseService {
     courseData: UpdateCourseModel,
   ): Promise<string> {
     try {
-      const courseDb = await prisma.course.update({
+      const courseDb: Course = await prisma.course.update({
         where: {
           id: CourseId,
         },
-        data: {
-          owner_id: courseData.ownerId,
-          title: courseData.title,
-          description: courseData.description,
-        },
+        data: courseData,
       });
 
       if (!courseDb) {
@@ -116,7 +108,7 @@ export class CourseService {
 
   async getCourseSections(CourseId: string): Promise<SectionModel[]> {
     try {
-      const courseSectionsDb = await prisma.section.findMany({
+      const courseSectionsDb: Section[] = await prisma.section.findMany({
         where: {
           course_id: CourseId,
         },
@@ -127,12 +119,10 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson) => {
+      return courseSectionsDb.map((lesson: Section) => {
         return {
-          id: lesson.id,
           courseId: lesson.course_id,
-          title: lesson.title,
-          description: lesson.description,
+          ...lesson,
         };
       }) as SectionModel[];
     } catch (error) {

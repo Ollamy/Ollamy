@@ -12,13 +12,13 @@ import {
 } from './chapter.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import { Prisma } from '@prisma/client';
+import { Chapter, Lesson, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ChapterService {
   async postChapter(chapterData: CreateChapterModel): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.create({
+      const chapterDb: Chapter = await prisma.chapter.create({
         data: {
           section_id: chapterData.sectionId,
           title: chapterData.title,
@@ -37,11 +37,11 @@ export class ChapterService {
     }
   }
 
-  async deleteChapter(chapterData: IdChapterModel): Promise<string> {
+  async deleteChapter(chapterId: IdChapterModel): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.delete({
+      const chapterDb: Chapter = await prisma.chapter.delete({
         where: {
-          id: chapterData.id,
+          ...chapterId,
         },
       });
 
@@ -50,20 +50,19 @@ export class ChapterService {
         throw new NotFoundException('Chapter does not exists !');
       }
 
-      return `Chapter's ${chapterData.id} has been deleted.`;
+      return `Chapter's ${chapterId.id} has been deleted.`;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Chapter already removed !');
-      } else {
-        throw new ConflictException('Chapter not created !');
       }
+      throw new ConflictException('Chapter not created !');
     }
   }
 
   async getChapter(ChapterId: string): Promise<ChapterModel> {
     try {
-      const chapterDb = await prisma.chapter.findFirst({
+      const chapterDb: Chapter = await prisma.chapter.findFirst({
         where: {
           id: ChapterId,
         },
@@ -75,10 +74,8 @@ export class ChapterService {
       }
 
       return {
-        id: chapterDb.id,
         sectionId: chapterDb.section_id,
-        title: chapterDb.title,
-        description: chapterDb.description,
+        ...chapterDb,
       } as ChapterModel;
     } catch (error) {
       Logger.error(error);
@@ -91,15 +88,11 @@ export class ChapterService {
     chapterData: UpdateChapterModel,
   ): Promise<string> {
     try {
-      const chapterDb = await prisma.chapter.update({
+      const chapterDb: Chapter = await prisma.chapter.update({
         where: {
           id: ChapterId,
         },
-        data: {
-          section_id: chapterData.sectionId,
-          title: chapterData.title,
-          description: chapterData.description,
-        },
+        data: chapterData,
       });
 
       if (!chapterDb) {
@@ -116,7 +109,7 @@ export class ChapterService {
 
   async getChapterLessons(ChapterId: string): Promise<LessonModel[]> {
     try {
-      const courseLessonsDb = await prisma.lesson.findMany({
+      const courseLessonsDb: Lesson[] = await prisma.lesson.findMany({
         where: {
           chapter_id: ChapterId,
         },
@@ -127,7 +120,7 @@ export class ChapterService {
         throw new NotFoundException('No lessons for this course !');
       }
 
-      return courseLessonsDb.map((lesson) => {
+      return courseLessonsDb.map((lesson: Lesson) => {
         return {
           id: lesson.id,
           chapterId: lesson.chapter_id,

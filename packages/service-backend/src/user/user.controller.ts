@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Put, Delete, Get } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -11,6 +11,7 @@ import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   CreateUserModel,
+  GetUserModel,
   LoginUserModel,
   UpdateUserModel,
 } from 'user/user.dto';
@@ -38,7 +39,7 @@ export class UserController {
           firstname: 'name',
           lastname: 'lastname',
           email: 'test@test.test',
-          password: '1234',
+          password: '1234aaBB@',
         } as CreateUserModel,
       },
     },
@@ -59,7 +60,7 @@ export class UserController {
       template: {
         value: {
           email: 'test@test.test',
-          password: '1234',
+          password: '1234aaBB@',
         } as LoginUserModel,
       },
     },
@@ -67,6 +68,21 @@ export class UserController {
   @Post('/login')
   async loginUser(@Body() body: LoginUserModel): Promise<string> {
     return this.userService.loginUser(body);
+  }
+
+  @ApiHeader({
+    name: 'Authorization_token',
+    description: 'token',
+    required: true,
+  })
+  @ApiOkResponse({
+    description: "user's data",
+    type: GetUserModel,
+  })
+  @LoggedMiddleware(true)
+  @Get()
+  async getUser(@OllContext() ctx: any): Promise<GetUserModel> {
+    return this.userService.getUser(ctx);
   }
 
   @ApiOkResponse({
