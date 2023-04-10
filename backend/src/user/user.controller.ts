@@ -40,7 +40,7 @@ export class UserController {
           firstname: 'name',
           lastname: 'lastname',
           email: 'test@test.test',
-          password: '1234aaBB',
+          password: '1234aaBB@',
         } as CreateUserModel,
       },
     },
@@ -61,7 +61,7 @@ export class UserController {
       template: {
         value: {
           email: 'test@test.test',
-          password: '1234aaBB',
+          password: '1234aaBB@',
         } as LoginUserModel,
       },
     },

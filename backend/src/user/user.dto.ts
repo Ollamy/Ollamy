@@ -46,7 +46,7 @@ export class CreateUserModel {
     description: "Password must contain at least 8 characters, 2 numbers and 2 uppercase letters"
   })
   @IsString()
-  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 1, minSymbols: 1 })
   password: string;
 }
 
@@ -64,7 +64,7 @@ export class JwtUserModel {
   email: string;
 
   @IsString()
-  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 1, minSymbols: 1 })
   password: string;
 }
 
@@ -75,7 +75,7 @@ export class LoginUserModel {
 
   @ApiProperty()
   @IsString()
-  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 2 })
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 1, minSymbols: 1 })
   password: string;
 }
 
@@ -99,6 +99,7 @@ export class UpdateUserModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  @IsStrongPassword({ minLength: 8, minNumbers: 2, minUppercase: 1, minSymbols: 1 })
   password: string;
 }
 
