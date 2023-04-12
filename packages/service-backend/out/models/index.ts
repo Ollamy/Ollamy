@@ -224,11 +224,36 @@ export interface CreateUserModel {
      */
     email: string;
     /**
-     * 
+     * Password must contain at least 8 characters, 2 numbers and 2 uppercase letters
      * @type {string}
      * @memberof CreateUserModel
      */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserModel
+ */
+export interface GetUserModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserModel
+     */
+    firstname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserModel
+     */
+    lastname: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserModel
+     */
+    email: string;
 }
 /**
  * 
@@ -381,6 +406,24 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    typeAnswer: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    typeQuestion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    trustAnswerId: string;
 }
 /**
  * 

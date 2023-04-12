@@ -16,11 +16,16 @@
 import * as runtime from '../runtime';
 import type {
   CreateUserModel,
+  GetUserModel,
   LoginUserModel,
   UpdateUserModel,
 } from '../models';
 
 export interface DeleteUserRequest {
+    authorizationToken: string;
+}
+
+export interface GetUserRequest {
     authorizationToken: string;
 }
 
@@ -71,6 +76,38 @@ export class UserApi extends runtime.BaseAPI {
      */
     async deleteUser(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.deleteUserRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getUserRaw(requestParameters: GetUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetUserModel>> {
+        if (requestParameters.authorizationToken === null || requestParameters.authorizationToken === undefined) {
+            throw new runtime.RequiredError('authorizationToken','Required parameter requestParameters.authorizationToken was null or undefined when calling getUser.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters.authorizationToken !== undefined && requestParameters.authorizationToken !== null) {
+            headerParameters['Authorization_token'] = String(requestParameters.authorizationToken);
+        }
+
+        const response = await this.request({
+            path: `/user`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     */
+    async getUser(requestParameters: GetUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+        const response = await this.getUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
