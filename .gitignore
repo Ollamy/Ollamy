@@ -6,10 +6,11 @@ node_modules/
 .vscode
 .DS_Store
 **/.history
-**/.hipothesis
+**/.hypothesis/
 npm-debug.log
 /build
 /coverage
+**/tsconfig.build.tsbuildinfo
 
 /.pnp
 .pnp.js
