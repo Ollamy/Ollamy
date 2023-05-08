@@ -1,0 +1,51 @@
+parser: "@typescript-eslint/parser"
+
+parserOptions:
+  ecmaVersion: 6
+  project:
+    - ./packages/**/tsconfig.json
+    - ./tsconfig.json
+
+env:
+  browser: true
+
+extends:
+  - airbnb-typescript
+  - airbnb/hooks
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+  - plugin:storybook/recommended
+
+settings:
+  import/resolver:
+    typescript: {}
+
+plugins:
+  - import
+  - react
+  - react-hooks
+  - prettier
+
+ignorePatterns: ["vite.config.ts", "cypress.config.ts"]
+
+rules:
+  prettier/prettier: warn
+
+  react/react-in-jsx-scope: 0
+  react/no-unescaped-entities: 0
+  react/jsx-props-no-spreading: 0
+  react/require-default-props: 0
+  react/no-children-prop: 0
+
+  no-alert: 0
+  no-console: 0
+  no-param-reassign: [0, "error", { props: true, ignorePropertyModificationsFor: ["state"] }]
+  no-nested-ternary: 0
+
+  "@typescript-eslint/no-explicit-any": 0
+  "@typescript-eslint/no-use-before-define": 0
+  "@typescript-eslint/no-non-null-assertion": off
+  "@typescript-eslint/ban-ts-comment": off
+
+  import/no-extraneous-dependencies: ["error", { devDependencies: [".storybook/**", "src/stories/**"] }]
+  import/prefer-default-export: 0

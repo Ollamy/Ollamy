@@ -1,0 +1,17 @@
+FROM node:18.16.0
+
+WORKDIR /app
+
+COPY . .
+
+RUN rm -rf .yarn/* .yarnrc.yml node_modules/*
+
+RUN yarn set version stable && echo "\nnodeLinker: node-modules" >> .yarnrc.yml
+
+WORKDIR /app/packages/service-backend
+
+RUN yarn install
+
+RUN yarn prisma generate
+
+CMD [ "yarn", "start:dev" ]

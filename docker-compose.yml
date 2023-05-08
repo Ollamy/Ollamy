@@ -15,8 +15,10 @@ services:
       - db
 
   backend:
-    build: backend
     image: backend
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.backend
     restart: on-failure
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
@@ -24,6 +26,8 @@ services:
       - database
     networks:
       - db
+    volumes:
+      - backend-shared-volume:/app/packages/service-backend/
     healthcheck:
       test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5s
@@ -32,10 +36,8 @@ services:
       start_period: 1.5s
 
   prismastudio:
-    image: backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: backend_prisma_studio
+    build: backend
     command: yarn prisma studio
     restart: always
     ports:
@@ -47,3 +49,12 @@ services:
 
 networks:
   db:
+
+
+volumes:
+  backend-shared-volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./packages/service-backend/
