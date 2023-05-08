@@ -1,9 +1,7 @@
 node_modules/
 .envrc
 .idea
-.yarn/*
-!.yarn/releases
-!.yarn/install-state.gz
+**/.yarn/
 .yarnrc.yml
 .vscode
 .DS_Store
@@ -35,10 +33,6 @@ yarn-error.log*
 .settings/
 *.sublime-workspace
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .expo
 /dist
 /node_modules

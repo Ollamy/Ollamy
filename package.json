@@ -1,6 +1,6 @@
 {
   "name": "ollamy",
-  "packageManager": "yarn@3.5.0",
+  "packageManager": "yarn@3.5.1",
   "repository": "git@github.com:Ollamy/Ollamy.git",
   "version": "1.0.0",
   "license": "MIT",
