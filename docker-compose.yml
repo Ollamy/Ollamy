@@ -58,7 +58,3 @@ volumes:
       type: none
       o: bind
       device: ./packages/service-backend/
-
-## check dotenv previf for env var
-## yoel command for yarn (discord)
-## remove .yarn/ from github
