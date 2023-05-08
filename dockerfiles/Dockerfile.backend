@@ -4,10 +4,14 @@ WORKDIR /app
 
 COPY . .
 
+RUN rm -rf .yarn/* .yarnrc.yml node_modules/*
+
+RUN yarn set version stable && echo "\nnodeLinker: node-modules" >> .yarnrc.yml
+
 WORKDIR /app/packages/service-backend
 
-RUN yarn set version stable
+RUN yarn install
 
-RUN yarn install --immutable && yarn prisma generate
+RUN yarn prisma generate
 
 CMD [ "yarn", "start:dev" ]
