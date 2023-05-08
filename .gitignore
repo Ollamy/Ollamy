@@ -1,7 +1,9 @@
 node_modules/
 .envrc
 .idea
-.yarn
+.yarn/*
+!.yarn/releases
+!.yarn/install-state.gz
 .yarnrc.yml
 .vscode
 .DS_Store
