@@ -36,8 +36,5 @@
       ]
     }
   },
-  "include": [
-    "src"
-  ],
   "extends": "expo/tsconfig.base"
 }
