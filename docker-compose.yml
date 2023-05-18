@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  redisdb:
+    image: redis:7.2-rc2-alpine3.18
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+    networks:
+      - redisnetwork
   database:
     image: postgres:15.1-alpine
     restart: always
@@ -22,10 +30,13 @@ services:
     restart: on-failure
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
+    env_file: .env
     depends_on:
       - database
+      - redisdb
     networks:
       - db
+      - redisnetwork
     volumes:
       - backend-shared-volume:/app/packages/service-backend/
     healthcheck:
@@ -49,6 +60,7 @@ services:
 
 networks:
   db:
+  redisnetwork:
 
 
 volumes:
