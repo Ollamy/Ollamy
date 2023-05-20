@@ -4,9 +4,12 @@ services:
   redisdb:
     image: redis:7.2-rc2-alpine3.18
     restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
     networks:
       - redisnetwork
   database:
@@ -43,6 +46,8 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+      FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_PORT: ${FRONTEND_PORT}
     depends_on:
       - database
       - redisdb

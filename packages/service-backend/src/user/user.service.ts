@@ -16,9 +16,12 @@ import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
 import { Prisma, User } from '@prisma/client';
+import { RedisCacheService } from 'redis/redis.service';
 
 @Injectable()
 export class UserService {
+  private readonly redisClient: RedisCacheService = new RedisCacheService();
+
   private createToken(id: string): string {
     const token: string = jwt.sign(
       {
