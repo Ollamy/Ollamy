@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { createClient } from 'redis';
-import { REDIS_HOST, REDIS_PORT } from 'setup';
+import { RedisClientType, createClient } from 'redis';
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from 'setup';
 
 @Injectable()
 export class RedisCacheService {
-  private readonly redisClient: any;
+  private readonly redisClient: RedisClientType;
 
   constructor() {
     this.redisClient = createClient({
@@ -12,6 +12,7 @@ export class RedisCacheService {
     });
 
     this.redisClient.connect();
+    this.redisClient.auth({ username: 'default', password: REDIS_PASSWORD });
   }
 
   async set(key: string, value: string) {
