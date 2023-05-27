@@ -1,4 +1,3 @@
-import { Test } from '@nestjs/testing';
 import RedisCacheService from './redis.service';
 
 describe('run', () => {
