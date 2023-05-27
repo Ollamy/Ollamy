@@ -21,6 +21,7 @@ on:
   push:
     branches:
       - master
+      - development
 
 jobs:
   analyze:
