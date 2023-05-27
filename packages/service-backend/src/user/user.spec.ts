@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 
 describe('UserController', () => {
-  let userController: UserController;
   let userService: UserService;
 
   beforeEach(async () => {
@@ -21,7 +20,6 @@ describe('UserController', () => {
     }).compile();
 
     userService = moduleRef.get<UserService>(UserService);
-    userController = moduleRef.get<UserController>(UserController);
   });
 
   describe('registerUser', () => {
@@ -47,7 +45,6 @@ describe('UserController', () => {
 });
 
 describe('loginUser', () => {
-  let userController: UserController;
   let userService: UserService;
 
   beforeEach(async () => {
@@ -57,7 +54,6 @@ describe('loginUser', () => {
     }).compile();
 
     userService = moduleRef.get<UserService>(UserService);
-    userController = moduleRef.get<UserController>(UserController);
   });
 
   it('should handle login correctly', async () => {
@@ -136,7 +132,6 @@ describe('loginUser', () => {
 });
 
 describe('getUser', () => {
-  let userController: UserController;
   let userService: UserService;
 
   beforeEach(async () => {
@@ -146,7 +141,6 @@ describe('getUser', () => {
     }).compile();
 
     userService = moduleRef.get<UserService>(UserService);
-    userController = moduleRef.get<UserController>(UserController);
   });
 
   it('should return the user data', async () => {
