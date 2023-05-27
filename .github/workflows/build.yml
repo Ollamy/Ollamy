@@ -1,4 +1,4 @@
-name: Build & Start Backend
+name: Build, Start & Test Backend
 
 on:
   pull_request:
