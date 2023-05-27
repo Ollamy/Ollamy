@@ -20,7 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "build:openapi-generator-cli": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./swagger.json"
+    "build:openapi-generator-cli": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./swagger.json",
+    "prisma:generate": "yarn prisma generate",
+    "prisma:migrate": "yarn  prisma migrate dev"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.0",
@@ -42,6 +44,7 @@
     "env-variable": "^0.0.6",
     "jsonwebtoken": "^9.0.0",
     "pbkdf2": "^3.1.2",
+    "redis": "^4.6.6",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.1.2",
     "rxjs": "^7.8.0",
@@ -57,7 +60,7 @@
     "@types/supertest": "^2.0.12",
     "jest": "^29.4.3",
     "prettier": "^2.8.4",
-    "prisma": "4.13.0",
+    "prisma": "^4.14.1",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",

@@ -5,6 +5,7 @@ import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
 import { writeFileSync } from 'fs';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
+import RedisCacheService from 'redis/redis.service';
 
 function buildSwagger(
   app: INestApplication,
@@ -28,6 +29,9 @@ async function bootstrap() {
     buildSwagger(app, config);
     Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
   }
+
+  await RedisCacheService.connect();
+  Logger.debug('Redis Connected!');
 
   app.enableCors({
     origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],

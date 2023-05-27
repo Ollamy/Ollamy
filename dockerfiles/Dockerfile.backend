@@ -2,9 +2,7 @@ FROM node:18.16.0
 
 WORKDIR /app
 
-COPY . .
-
-RUN rm -rf .yarn/* .yarnrc.yml node_modules/*
+COPY ./packages/service-backend/package.json ./package.json ./yarn.lock ./
 
 RUN yarn set version stable && echo "\nnodeLinker: node-modules" >> .yarnrc.yml
 
@@ -12,6 +10,18 @@ WORKDIR /app/packages/service-backend
 
 RUN yarn install
 
+RUN yarn dlx prisma
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn install
+
+WORKDIR /app/packages/service-backend
+
 RUN yarn prisma generate
 
-CMD [ "yarn", "start:dev" ]
+RUN yarn build
+
+CMD yarn start:prod
