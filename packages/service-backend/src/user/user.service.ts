@@ -16,12 +16,10 @@ import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
 import { Prisma, User } from '@prisma/client';
-import { RedisCacheService } from 'redis/redis.service';
+import RedisCacheService from 'redis/redis.service';
 
 @Injectable()
 export class UserService {
-  private readonly redisClient: RedisCacheService = new RedisCacheService();
-
   private createToken(id: string): string {
     const token: string = jwt.sign(
       {
@@ -85,6 +83,9 @@ export class UserService {
   }
 
   async loginUser(userData: LoginUserModel): Promise<string> {
+    await RedisCacheService.run('set', 'test', 'elyes');
+    const value = await RedisCacheService.run('get', 'test');
+    Logger.warn(value);
     const userDb: User = await prisma.user.findUnique({
       where: {
         email: userData.email,
