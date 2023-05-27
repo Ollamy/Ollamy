@@ -47,7 +47,7 @@ jobs:
         run: docker compose up -d backend
 
       - name: Run backend tests
-        id: run
+        id: test
         run: docker compose exec -it backend yarn test
 
       # - name: Building OpenAPI client generator
