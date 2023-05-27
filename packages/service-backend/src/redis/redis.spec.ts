@@ -29,7 +29,6 @@ describe('run', () => {
 
     const result = await RedisCacheService.run('GET', 'key');
 
-    //   expect(mockConnect).toHaveBeenCalledTimes(1);
     expect(mockSendCommand).toHaveBeenCalledTimes(1);
     expect(mockSendCommand).toHaveBeenCalledWith(['GET', 'key']);
     expect(result).toBe(mockData);
