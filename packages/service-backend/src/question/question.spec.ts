@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
-import { Prisma, Question } from '@prisma/client';
+import { Question } from '@prisma/client';
 import prisma from 'client';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import {
   CreateQuestionModel,
   IdQuestionModel,

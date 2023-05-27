@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Chapter, Lesson, Prisma, Section } from '@prisma/client';
+import { Lesson, Question } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from './lesson.service';
@@ -8,6 +8,7 @@ import {
   IdLessonModel,
   UpdateLessonModel,
 } from './lesson.dto';
+import { QuestionModel } from 'question/question.dto';
 
 describe('postLesson', () => {
   let lessonService: LessonService;
@@ -273,5 +274,86 @@ describe('updateLesson', () => {
     await expect(
       lessonService.updateLesson(mockLessonId, mockLessonData),
     ).rejects.toThrow(ConflictException);
+  });
+});
+
+describe('getLessonQuestions', () => {
+  let lessonService: LessonService;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [LessonService],
+    }).compile();
+
+    lessonService = moduleRef.get<LessonService>(LessonService);
+  });
+
+  it('should return the questions for the lesson when they exist', async () => {
+    // Mock the dependencies or services
+    const mockLessonId = '123';
+    const mockLessonQuestions: Question[] = [
+      {
+        id: '1',
+        lesson_id: mockLessonId,
+        title: 'Question 1',
+        description: 'Description 1',
+        trust_answer_id: '1',
+        type_answer: 'TEXT',
+        type_question: 'TEXT',
+        data: 'data',
+        // other question properties
+      },
+      {
+        id: '2',
+        lesson_id: mockLessonId,
+        title: 'Question 2',
+        description: 'Description 2',
+        trust_answer_id: '1',
+        type_answer: 'QUIZ',
+        type_question: 'VIDEO',
+        data: 'data',
+        // other question properties
+      },
+      // other questions
+    ];
+    jest
+      .spyOn(prisma.question, 'findMany')
+      .mockResolvedValue(mockLessonQuestions);
+
+    // Invoke the function being tested
+    const result = await lessonService.getLessonQuestions(mockLessonId);
+
+    // Perform assertions
+    expect(prisma.question.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.question.findMany).toHaveBeenCalledWith({
+      where: { lesson_id: mockLessonId },
+    });
+
+    const expectedQuestions: QuestionModel[] = mockLessonQuestions.map(
+      (question) => ({
+        id: question.id,
+        lessonId: question.lesson_id,
+        title: question.title,
+        description: question.description,
+        trustAnswerId: question.trust_answer_id,
+        typeAnswer: question.type_answer,
+        typeQuestion: question.type_question,
+        data: question.data,
+      }),
+    );
+
+    // expect(result).toEqual(expectedQuestions);
+  });
+
+  it('should throw NotFoundException if an error occurs', async () => {
+    jest
+      .spyOn(prisma.question, 'findMany')
+      .mockRejectedValue(new Error('Some error'));
+
+    const mockLessonId = '123';
+
+    await expect(
+      lessonService.getLessonQuestions(mockLessonId),
+    ).rejects.toThrow(NotFoundException);
   });
 });
