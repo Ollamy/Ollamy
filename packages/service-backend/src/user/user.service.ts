@@ -83,9 +83,6 @@ export class UserService {
   }
 
   async loginUser(userData: LoginUserModel): Promise<string> {
-    await RedisCacheService.run('set', 'test', 'elyes');
-    const value = await RedisCacheService.run('get', 'test');
-    Logger.warn(value);
     const userDb: User = await prisma.user.findUnique({
       where: {
         email: userData.email,
