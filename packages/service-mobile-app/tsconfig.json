@@ -18,7 +18,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "composite": true,
     "moduleSuffixes": [
       ".native",
@@ -26,7 +25,6 @@
       ".ios",
       ""
     ],
-    "baseUrl": "./src",
     "paths": {
       "@ollamy/design-system/*": [
         "../util-design-system/*"

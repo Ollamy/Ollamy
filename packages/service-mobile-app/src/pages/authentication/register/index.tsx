@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterForm {
   email: string;
@@ -13,6 +14,7 @@ interface RegisterForm {
 
 const Register = () => {
   const insets = useSafeAreaInsets();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -110,7 +112,7 @@ const Register = () => {
       />
       <View style={styles.horizontalContainer}>
         <Text style={styles.text}>Already have an account ?</Text>
-        <Text style={styles.highlightText}>Log in</Text>
+        <Text onPress={() => navigate('login')} style={styles.highlightText}>Log in</Text>
       </View>
       <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
         <Text style={styles.buttonText}>Create account</Text>

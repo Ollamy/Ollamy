@@ -1,10 +1,10 @@
-import { Link } from '@react-navigation/native';
 import { FormControl } from 'native-base';
 import { Controller, useForm } from 'react-hook-form';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginForm {
   email: string;
@@ -13,6 +13,7 @@ interface LoginForm {
 
 const Login = () => {
   const insets = useSafeAreaInsets();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -78,12 +79,18 @@ const Login = () => {
         )}
       />
       <View style={styles.horizontalContainer}>
-        <Text style={styles.text}>Don't have an account ?</Text>
-        <Text style={styles.highlightText}>Register</Text>
+        <Text style={styles.text}>Forgot your password ?</Text>
+        <Text style={styles.highlightText}>Recover password</Text>
       </View>
       <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
         <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
+      <View style={styles.horizontalContainer}>
+        <Text style={styles.text}>Don't have an account ?</Text>
+        <Text onPress={() => navigate('/')} style={styles.highlightText}>
+          Register
+        </Text>
+      </View>
     </View>
   );
 };
