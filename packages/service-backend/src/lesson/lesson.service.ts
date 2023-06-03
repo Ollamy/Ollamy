@@ -20,7 +20,7 @@ export class LessonService {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
-          chapter_id: lessonData.chapterId,
+          chapter_id: lessonData.chapter_id,
           title: lessonData.title,
           description: lessonData.description,
         },
