@@ -13,10 +13,12 @@
     "@ollamy/utils": "*",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.26",
+    "axios": "^1.4.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.44.3",
     "react-router-dom": "^6.12.1",
     "sort-by": "^1.2.0",
     "styled-components": "^6.0.0-rc.3"
@@ -25,7 +27,6 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react-swc": "^3.0.0",
-    "react-hook-form": "^7.44.3",
     "vite": "^4.1.0"
   }
 }

@@ -19,7 +19,7 @@
     "baseUrl": "src",
     "paths": {
       "@ollamy/utils/*": ["../util-utils/*"],
-      "@ollamy/backend/*": ["./*"]
+      "@ollamy/backend/*": ["./*"],
     },
   },
   "include": [
