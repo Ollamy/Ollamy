@@ -16,10 +16,11 @@ import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
 import { Prisma, User } from '@prisma/client';
+import RedisCacheService from 'redis/redis.service';
 
 @Injectable()
 export class UserService {
-  private createToken(id: string): string {
+  createToken(id: string): string {
     const token: string = jwt.sign(
       {
         id,
@@ -38,7 +39,7 @@ export class UserService {
     return token;
   }
 
-  private hashPassword(password: string): string {
+  hashPassword(password: string): string {
     const hash = pbkdf2
       .pbkdf2Sync(
         password,
@@ -51,7 +52,7 @@ export class UserService {
     return hash;
   }
 
-  private randomIntByString(str: string): number {
+  randomIntByString(str: string): number {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);

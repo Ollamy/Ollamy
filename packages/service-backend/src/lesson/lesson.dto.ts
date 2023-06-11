@@ -22,7 +22,7 @@ export class LessonModel {
 export class CreateLessonModel {
   @ApiProperty()
   @IsUUID()
-  chapterId: string;
+  chapter_id: string;
 
   @ApiProperty()
   @IsString()

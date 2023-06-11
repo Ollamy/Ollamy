@@ -1,6 +1,20 @@
 version: '3.8'
 
 services:
+  redisdb:
+    image: redis:7.2-rc2-alpine3.18
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+    volumes:
+      - redis_data:/data
+    networks:
+      - redisnetwork
   database:
     image: postgres:15.1-alpine
     restart: always
@@ -19,13 +33,33 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/Dockerfile.backend
+      args:
+        MODE: ${MODE}
     restart: on-failure
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
+    environment:
+      BACKEND_PORT: ${BACKEND_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      PRISMA_STUDIO_PORT: ${PRISMA_STUDIO_PORT}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_USERNAME: ${REDIS_USERNAME}
+      FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_PORT: ${FRONTEND_PORT}
     depends_on:
       - database
+      - redisdb
     networks:
       - db
+      - redisnetwork
     volumes:
       - backend-shared-volume:/app/packages/service-backend/
     healthcheck:
@@ -49,9 +83,11 @@ services:
 
 networks:
   db:
+  redisnetwork:
 
 
 volumes:
+  redis_data:
   backend-shared-volume:
     driver: local
     driver_opts:

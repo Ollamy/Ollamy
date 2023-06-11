@@ -45,7 +45,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          chapterId: 'Chapter Id',
+          chapter_id: 'Chapter Id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as CreateLessonModel,
