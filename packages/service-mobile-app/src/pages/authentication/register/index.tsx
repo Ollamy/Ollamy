@@ -5,10 +5,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigate } from 'react-router-dom';
+import Toast from 'react-native-toast-message';
+import { Button } from 'react-native';
+import backendApi from '../../../client';
 
-interface RegisterForm {
+interface RegisterPayload {
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
+}
+
+interface RegisterForm extends RegisterPayload {
   confirmPassword: string;
 }
 
@@ -18,16 +26,25 @@ const Register = () => {
   const {
     handleSubmit,
     control,
-    setError,
     formState: { errors },
   } = useForm<RegisterForm>();
 
-  const onSubmit = (data: RegisterForm) => {
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Hello',
+      topOffset: 60,
+      text2: 'This is some something 👋',
+    });
+  };
+
+  const onSubmit = async (data: RegisterForm) => {
     console.log('data :', data);
-    if (data.password !== data.confirmPassword) {
-      setError('confirmPassword', {
-        type: 'different',
-      });
+    try {
+      const response = await backendApi.post('/user/register', data);
+      console.log('response', JSON.stringify(response, null, 2));
+    } catch (error) {
+      showToast();
     }
   };
 
@@ -81,7 +98,7 @@ const Register = () => {
               placeholder="Password"
             ></TextInput>
             {errors.password?.type === 'required' && (
-              <FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
+              <FormControl.ErrorMessage>{errors.password.message}</FormControl.ErrorMessage>
             )}
           </FormControl>
         )}
@@ -110,13 +127,17 @@ const Register = () => {
           </FormControl>
         )}
       />
+      <Button title="Show Toast" onPress={showToast} />
       <View style={styles.horizontalContainer}>
         <Text style={styles.text}>Already have an account ?</Text>
-        <Text onPress={() => navigate('login')} style={styles.highlightText}>Log in</Text>
+        <Text onPress={() => navigate('login')} style={styles.highlightText}>
+          Log in
+        </Text>
       </View>
       <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
+      <Toast />
     </View>
   );
 };
