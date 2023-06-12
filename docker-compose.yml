@@ -35,7 +35,7 @@ services:
       dockerfile: ./dockerfiles/Dockerfile.backend
       args:
         MODE: ${MODE}
-    restart: on-failure
+    restart: always
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
@@ -62,12 +62,12 @@ services:
       - redisnetwork
     volumes:
       - backend-shared-volume:/app/packages/service-backend/
-    healthcheck:
-      test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-      interval: 5s
-      timeout: 30s
-      retries: 10
-      start_period: 1.5s
+    # healthcheck:
+    #   test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+    #   interval: 5s
+    #   timeout: 30s
+    #   retries: 10
+    #   start_period: 1.5s
 
   prismastudio:
     image: backend_prisma_studio
