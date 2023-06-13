@@ -4,7 +4,10 @@ import { TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast, { ToastShowParams } from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
+import backendApi from '../../../client';
+import { AxiosError, AxiosResponse } from 'axios';
 
 interface LoginForm {
   email: string;
@@ -17,11 +20,39 @@ const Login = () => {
   const {
     handleSubmit,
     control,
-    setError,
     formState: { errors },
   } = useForm<LoginForm>();
 
-  const onSubmit = (data: LoginForm) => {};
+  const showToast = (body: ToastShowParams) => Toast.show(body);
+
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      const response = await backendApi.post('/user/login', {
+        email: data.email,
+        password: data.password,
+      });
+      showToast({
+        type: 'success',
+        topOffset: 92,
+        text1: 'Success',
+        text2: 'You have successfully logged in',
+      });
+    } catch (error) {
+      showToast({
+        type: 'error',
+        topOffset: 92,
+        text1:
+          ((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
+            ?.data.error ?? 'Something went wrong',
+        text2: [
+          ((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>).data
+            .message,
+        ]
+          .flat()
+          .join('\n'),
+      });
+    }
+  };
 
   return (
     <View
@@ -91,6 +122,7 @@ const Login = () => {
           Register
         </Text>
       </View>
+      <Toast />
     </View>
   );
 };

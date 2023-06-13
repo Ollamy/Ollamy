@@ -39,13 +39,6 @@ const Register = () => {
         email: data.email,
         password: data.password,
       });
-      console.log({
-        firstname: 'alex',
-        lastname: 'alex',
-        email: data.email,
-        password: data.password,
-      });
-      console.log('response', JSON.stringify(response, null, 2));
       showToast({
         type: 'success',
         topOffset: 92,
