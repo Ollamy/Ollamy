@@ -5,9 +5,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigate } from 'react-router-dom';
-import Toast from 'react-native-toast-message';
-import { Button } from 'react-native';
+import Toast, { ToastShowParams } from 'react-native-toast-message';
 import backendApi from '../../../client';
+import { AxiosError, AxiosResponse } from 'axios';
 
 interface RegisterPayload {
   firstname: string;
@@ -29,22 +29,43 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterForm>();
 
-  const showToast = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'Hello',
-      topOffset: 60,
-      text2: 'This is some something 👋',
-    });
-  };
+  const showToast = (body: ToastShowParams) => Toast.show(body);
 
   const onSubmit = async (data: RegisterForm) => {
-    console.log('data :', data);
     try {
-      const response = await backendApi.post('/user/register', data);
+      const response = await backendApi.post('/user/register', {
+        firstname: 'alex',
+        lastname: 'alex',
+        email: data.email,
+        password: data.password,
+      });
+      console.log({
+        firstname: 'alex',
+        lastname: 'alex',
+        email: data.email,
+        password: data.password,
+      });
       console.log('response', JSON.stringify(response, null, 2));
+      showToast({
+        type: 'success',
+        topOffset: 92,
+        text1: 'Success',
+        text2: 'Your account has been created successfully',
+      });
     } catch (error) {
-      showToast();
+      showToast({
+        type: 'error',
+        topOffset: 92,
+        text1:
+          ((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
+            ?.data.error ?? 'Something went wrong',
+        text2: [
+          ((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>).data
+            .message,
+        ]
+          .flat()
+          .join('\n'),
+      });
     }
   };
 
@@ -127,7 +148,6 @@ const Register = () => {
           </FormControl>
         )}
       />
-      <Button title="Show Toast" onPress={showToast} />
       <View style={styles.horizontalContainer}>
         <Text style={styles.text}>Already have an account ?</Text>
         <Text onPress={() => navigate('login')} style={styles.highlightText}>
