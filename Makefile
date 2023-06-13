@@ -1,6 +1,8 @@
 up:
-	sudo docker compose up backend
+	docker compose up backend
 
 build:
-	sudo docker compose up --build backend
+	docker compose up --build backend
 
+db_migrate:
+	docker compose run --rm backend sh -c 'npx prisma migrate dev && npx prisma generate'
