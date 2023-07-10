@@ -2,9 +2,7 @@ parser: "@typescript-eslint/parser"
 
 parserOptions:
   ecmaVersion: 6
-  project:
-    - ./packages/**/tsconfig.json
-    - ./tsconfig.json
+  project: tsconfig.json
 
 env:
   browser: true
@@ -25,8 +23,9 @@ plugins:
   - react
   - react-hooks
   - prettier
+  - simple-import-sort
 
-ignorePatterns: ["vite.config.ts", "cypress.config.ts", "dist/"]
+ignorePatterns: ["vite.config.ts", "cypress.config.ts"]
 
 rules:
   prettier/prettier: warn
@@ -39,13 +38,26 @@ rules:
 
   no-alert: 0
   no-console: 0
-  no-param-reassign: [0, "error", { props: true, ignorePropertyModificationsFor: ["state"] }]
+  no-param-reassign: ["error", { props: true, ignorePropertyModificationsFor: ["state"] }]
   no-nested-ternary: 0
 
-  "@typescript-eslint/no-explicit-any": 0
   "@typescript-eslint/no-use-before-define": 0
   "@typescript-eslint/no-non-null-assertion": off
   "@typescript-eslint/ban-ts-comment": off
 
-  import/no-extraneous-dependencies: ["error", { devDependencies: [".storybook/**", "src/stories/**"] }]
+  "simple-import-sort/imports": [
+    "warn", {
+      "groups": [
+        ["^react", "^@?\\w"],
+        # all folders in src
+        ["^(src)(/.*|$)"],
+        ["^\\u0000"],
+        ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+        ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+        ["^.+\\.?(css)$"]
+      ]
+    }
+  ]
+  "simple-import-sort/exports": 1
+
   import/prefer-default-export: 0
