@@ -45,14 +45,17 @@ jobs:
       - name: Run backend container
         id: run
         run: docker compose up -d backend
+      # - name: Building OpenAPI client generator
+      #   id: build-openapi-client-generator
+      #   run: docker compose exec backend yarn build:openapi-generator-cli
 
       - name: Run backend tests
         id: test
         run: docker-compose exec -it backend yarn test:cov:json
 
-      # - name: Building OpenAPI client generator
-      #   id: build-openapi-client-generator
-      #   run: docker compose exec backend yarn build:openapi-generator-cli
+      - name: Create test-reports directory
+        id: create-directory
+        run: mkdir -p test-reports
 
       - name: Copy coverage report to test-reports directory
         id: copy-coverage-report
