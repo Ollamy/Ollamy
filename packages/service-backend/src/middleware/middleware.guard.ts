@@ -10,6 +10,7 @@ import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import { Reflector } from '@nestjs/core';
 import { MIDDLEWARE_KEY } from './middleware.decorator';
+import SessionService from '../redis/session/session.service';
 
 @Injectable()
 export class MiddlewareGuard implements CanActivate {
@@ -26,32 +27,23 @@ export class MiddlewareGuard implements CanActivate {
     }
 
     const req = context.switchToHttp().getRequest();
-    const token: string = req.headers.authorization_token as string;
+    const token: string = req.cookies.session;
 
     if (!token) {
       Logger.error('No token provided');
       throw new NotAcceptableException('No token provided');
     }
 
-    try {
-      const verify = jwt.verify(token, SECRET_KEY);
+    const data = await SessionService.get(token);
 
-      if (!verify) {
-        Logger.error('Invalid Token');
-        throw new NotAcceptableException('Invalid Token');
-      }
-    } catch (error) {
-      Logger.error('Jwt not accepted, can be malformed, expired or invalid');
-      throw new NotAcceptableException(
-        'Jwt not accepted, can be malformed, expired or invalid',
-      );
+    if (!data) {
+      Logger.error('Invalid Token');
+      throw new NotAcceptableException('Invalid Token');
     }
 
-    const parsedJwt = jwt.decode(token);
     const user = prisma.user.findUnique({
       where: {
-        // eslint-disable-next-line
-        id: parsedJwt['id'],
+        id: data.id,
       },
     });
 

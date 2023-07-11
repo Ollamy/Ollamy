@@ -1,4 +1,3 @@
-import * as jwt from 'jsonwebtoken';
 import {
   Logger,
   ConflictException,
@@ -16,27 +15,34 @@ import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
 import { Prisma, User } from '@prisma/client';
-import RedisCacheService from 'redis/redis.service';
+import SessionService from 'redis/session/session.service';
 
 @Injectable()
 export class UserService {
-  createToken(id: string): string {
-    const token: string = jwt.sign(
-      {
-        id,
-      },
-      SECRET_KEY,
-      {
-        expiresIn: '2 weeks',
-      },
-    );
+  static generateSessionId(): string {
+    return pbkdf2
+      .pbkdf2Sync(
+        Math.random().toString(36).substring(2),
+        Math.random().toString(36).substring(2),
+        1000,
+        64,
+        'sha512',
+      )
+      .toString('hex');
+  }
 
-    if (!token) {
+  async createToken(id: string): Promise<string> {
+    const session: string = UserService.generateSessionId();
+    const res = await SessionService.set(session, {
+      id,
+    });
+
+    if (res !== 'OK') {
       Logger.error('Token not created !');
       throw new ConflictException('Token not created !');
     }
 
-    return token;
+    return session;
   }
 
   hashPassword(password: string): string {
@@ -72,7 +78,7 @@ export class UserService {
         },
       });
 
-      return this.createToken(userDb.id);
+      return await this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -136,7 +142,7 @@ export class UserService {
         data: userData,
       });
 
-      return this.createToken(userDb.id);
+      return await this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -35,11 +35,6 @@ export class SectionController {
     description: 'section create response',
     type: String,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @ApiBody({
     type: CreateSectionModel,
     description: 'user data model',
@@ -62,11 +57,6 @@ export class SectionController {
   @ApiOkResponse({
     description: 'section delete response',
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @ApiBody({
     type: IdSectionModel,
@@ -94,11 +84,6 @@ export class SectionController {
     description: 'Id of the section',
     required: true,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @LoggedMiddleware(true)
   @Get('/:id')
   async getSection(@Param('id') id: string): Promise<SectionModel> {
@@ -112,11 +97,6 @@ export class SectionController {
   @ApiParam({
     name: 'id',
     description: 'Id of the section',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @ApiBody({
@@ -148,11 +128,6 @@ export class SectionController {
   @ApiParam({
     name: 'id',
     description: 'Id of the section',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @LoggedMiddleware(true)

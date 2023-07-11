@@ -6,6 +6,7 @@ import { writeFileSync } from 'fs';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import RedisCacheService from 'redis/redis.service';
+import * as cookieParser from 'cookie-parser';
 
 function buildSwagger(
   app: INestApplication,
@@ -22,6 +23,7 @@ async function bootstrap() {
     .setTitle('Ollamy API')
     .setDescription('So insane API')
     .setVersion('1.0')
+    .addCookieAuth('session')
     .build();
 
   if (MODE === 'dev') {
@@ -37,7 +39,7 @@ async function bootstrap() {
     origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
     credentials: true,
   });
-
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
