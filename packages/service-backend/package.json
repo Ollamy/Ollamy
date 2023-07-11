@@ -18,6 +18,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:cov:json": "jest --coverage --json --outputFile=coverage/coverage.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:openapi-generator-cli": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./swagger.json",

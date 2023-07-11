@@ -54,6 +54,13 @@ jobs:
       #   id: build-openapi-client-generator
       #   run: docker compose exec backend yarn build:openapi-generator-cli
 
+      - name: Copy coverage report to test-reports directory
+        id: copy-coverage-report
+        run: docker cp "$(docker-compose ps -q backend)":/path/to/coverage/coverage.json test-reports/
+
+      - name: Print copied files
+        run: ls -lR test-reports
+
       - name: Stop backend container
         id: stop
         run: docker compose down
