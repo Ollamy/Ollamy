@@ -60,8 +60,6 @@ services:
     networks:
       - db
       - redisnetwork
-    volumes:
-      - backend-shared-volume:/app/packages/service-backend/
     healthcheck:
       test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
       interval: 5s
@@ -88,9 +86,3 @@ networks:
 
 volumes:
   redis_data:
-  backend-shared-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./packages/service-backend/
