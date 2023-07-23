@@ -9,4 +9,3 @@
 !*.js
 !.prettierrc
 !prisma/
-!.env*
