@@ -68,8 +68,6 @@ services:
         condition: service_healthy
     networks:
       - backend_nt
-    volumes:
-      - backend-shared-volume:/app/packages/service-backend/
     healthcheck:
       test: curl -s -f http://localhost:${BACKEND_PORT}/health
       interval: 2s
@@ -82,9 +80,3 @@ networks:
 
 volumes:
   redis_vlm:
-  backend-shared-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./packages/service-backend/
