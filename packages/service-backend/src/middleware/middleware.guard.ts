@@ -5,9 +5,7 @@ import {
   ExecutionContext,
   CanActivate,
 } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
 import prisma from 'client';
-import { SECRET_KEY } from 'setup';
 import { Reflector } from '@nestjs/core';
 import { MIDDLEWARE_KEY } from './middleware.decorator';
 import SessionService from '../redis/session/session.service';
@@ -41,7 +39,7 @@ export class MiddlewareGuard implements CanActivate {
       throw new NotAcceptableException('Invalid Token');
     }
 
-    const user = prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: data.id,
       },
@@ -52,9 +50,9 @@ export class MiddlewareGuard implements CanActivate {
       throw new NotAcceptableException('Invalid Token');
     }
 
-    req.__user = await user;
+    req.__user = user;
 
-    const userToCourse = prisma.usertoCourse.findMany({
+    const userToCourse = await prisma.usertoCourse.findMany({
       where: {
         user_id: req.__user.id,
       },
@@ -64,7 +62,7 @@ export class MiddlewareGuard implements CanActivate {
       Logger.error('Cannot find course for this user !');
       throw new NotAcceptableException('Invalid Token');
     }
-    req.__userToCourse = await userToCourse;
+    req.__userToCourse = userToCourse;
     return true;
   }
 }

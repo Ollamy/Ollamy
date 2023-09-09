@@ -1,10 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
 import { writeFileSync } from 'fs';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Logger } from '@nestjs/common';
+import {
+  Logger,
+  ClassSerializerInterceptor,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import RedisCacheService from 'redis/redis.service';
 import * as cookieParser from 'cookie-parser';
 
@@ -19,14 +23,15 @@ function buildSwagger(
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder()
-    .setTitle('Ollamy API')
-    .setDescription('So insane API')
-    .setVersion('1.0')
-    .addCookieAuth('session')
-    .build();
 
   if (MODE === 'dev') {
+    const config = new DocumentBuilder()
+      .setTitle('Ollamy API')
+      .setDescription('So insane API')
+      .setVersion('1.0')
+      .addCookieAuth('session')
+      .build();
+
     app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
     buildSwagger(app, config);
     Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
