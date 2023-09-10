@@ -38,6 +38,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v2
 
+      - name: Build Ollamy base
+        id: build-ollamy-base
+        run: cd dockerfiles/base && ./build.sh
+
       - name: Build backend container
         id: build
         run: docker compose build backend database

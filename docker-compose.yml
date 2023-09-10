@@ -1,10 +1,9 @@
 version: '3.8'
 
 services:
-  redisdb:
-    image: redis:7.2-rc2-alpine3.18
+  redis:
+    image: redis:7.0-alpine
     restart: always
-    command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     environment:
@@ -12,9 +11,16 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
     volumes:
-      - redis_data:/data
+      - redis_vlm:/data
     networks:
-      - redisnetwork
+      - backend_nt
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+
   database:
     image: postgres:15.1-alpine
     restart: always
@@ -26,16 +32,17 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
     networks:
-      - db
+      - backend_nt
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
 
   backend:
-    image: backend
-    build:
-      context: .
-      dockerfile: ./dockerfiles/Dockerfile.backend
-      args:
-        MODE: ${MODE}
-    restart: always
+    build: ./packages/service-backend
+    restart: on-failure
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
@@ -55,42 +62,21 @@ services:
       FRONTEND_URL: ${FRONTEND_URL}
       FRONTEND_PORT: ${FRONTEND_PORT}
     depends_on:
-      - database
-      - redisdb
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
-      - db
-      - redisnetwork
-    volumes:
-      - backend-shared-volume:/app/packages/service-backend/
-    # healthcheck:
-    #   test: curl -s -f http://localhost:${BACKEND_PORT}/health || /bin/bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
-    #   interval: 5s
-    #   timeout: 30s
-    #   retries: 10
-    #   start_period: 1.5s
+      - backend_nt
+    healthcheck:
+      test: curl -s -f http://localhost:${BACKEND_PORT}/health
+      interval: 2s
+      timeout: 30s
+      retries: 30
 
-  prismastudio:
-    image: backend_prisma_studio
-    build: backend
-    command: yarn prisma studio
-    restart: always
-    ports:
-      - ${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}
-    depends_on:
-      - backend
-    networks:
-      - db
 
 networks:
-  db:
-  redisnetwork:
-
+  backend_nt:
 
 volumes:
-  redis_data:
-  backend-shared-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./packages/service-backend/
+  redis_vlm:

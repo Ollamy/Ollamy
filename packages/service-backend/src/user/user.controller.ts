@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Put, Delete, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Put,
+  Delete,
+  Get,
+  Response,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -6,6 +14,7 @@ import {
   ApiHeader,
   ApiOkResponse,
   ApiTags,
+  ApiCookieAuth,
 } from '@nestjs/swagger';
 import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -16,6 +25,7 @@ import {
   UpdateUserModel,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
+import SessionService from 'redis/session/session.service';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -26,6 +36,7 @@ import { UserService } from 'user/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiCookieAuth()
   @ApiOkResponse({
     description: "user's token",
     type: String,
@@ -45,12 +56,18 @@ export class UserController {
     },
   })
   @Post('/register')
-  async registerUser(@Body() body: CreateUserModel): Promise<string> {
-    return this.userService.registerUser(body);
+  async registerUser(@Response() res, @Body() body: CreateUserModel) {
+    res.cookie('session', await this.userService.registerUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+    });
+
+    return res.send({ success: true });
   }
 
+  @ApiCookieAuth()
   @ApiOkResponse({
-    description: "user's token",
+    description: 'true',
     type: String,
   })
   @ApiBody({
@@ -66,15 +83,14 @@ export class UserController {
     },
   })
   @Post('/login')
-  async loginUser(@Body() body: LoginUserModel): Promise<string> {
-    return this.userService.loginUser(body);
+  async loginUser(@Response() res, @Body() body: LoginUserModel): Promise<any> {
+    res.cookie('session', await this.userService.loginUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+    });
+    return res.send({ success: true });
   }
 
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @ApiOkResponse({
     description: "user's data",
     type: GetUserModel,
@@ -85,14 +101,10 @@ export class UserController {
     return this.userService.getUser(ctx);
   }
 
+  @ApiCookieAuth()
   @ApiOkResponse({
     description: "user's token",
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @ApiBody({
     type: UpdateUserModel,
@@ -111,20 +123,21 @@ export class UserController {
   @LoggedMiddleware(true)
   @Put()
   async updateUser(
+    @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
-  ): Promise<string> {
-    return this.userService.updateUser(body, ctx);
+  ) {
+    res.cookie('session', this.userService.updateUser(body, ctx), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+    });
+
+    return res.send({ success: true });
   }
 
   @ApiOkResponse({
     description: 'Ok.',
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @LoggedMiddleware(true)
   @Delete()

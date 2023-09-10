@@ -35,11 +35,6 @@ export class ChapterController {
     description: 'chapter create response',
     type: String,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @ApiBody({
     type: CreateChapterModel,
     description: 'user data model',
@@ -62,11 +57,6 @@ export class ChapterController {
   @ApiOkResponse({
     description: 'chapter delete response',
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @ApiBody({
     type: IdChapterModel,
@@ -94,11 +84,6 @@ export class ChapterController {
     description: 'Id of the chapter',
     required: true,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @LoggedMiddleware(true)
   @Get('/:id')
   async getChapter(@Param('id') id: string): Promise<ChapterModel> {
@@ -112,11 +97,6 @@ export class ChapterController {
   @ApiParam({
     name: 'id',
     description: 'Id of the chapter',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @ApiBody({
@@ -148,11 +128,6 @@ export class ChapterController {
   @ApiParam({
     name: 'id',
     description: 'Id of the chapter',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @LoggedMiddleware(true)

@@ -36,11 +36,6 @@ export class CourseController {
     description: 'course create response',
     type: String,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @ApiBody({
     type: CreateCourseModel,
     description: 'user data model',
@@ -65,11 +60,6 @@ export class CourseController {
   @ApiOkResponse({
     description: 'course delete response',
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @ApiBody({
     type: IdCourseModel,
@@ -97,11 +87,6 @@ export class CourseController {
     description: 'Id of the course',
     required: true,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @LoggedMiddleware(true)
   @Get('/:id')
   async getCourse(@Param('id') id: string): Promise<CourseModel> {
@@ -115,11 +100,6 @@ export class CourseController {
   @ApiParam({
     name: 'id',
     description: 'Id of the course',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @ApiBody({
@@ -151,11 +131,6 @@ export class CourseController {
   @ApiParam({
     name: 'id',
     description: 'Id of the course',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @LoggedMiddleware(true)

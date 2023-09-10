@@ -35,11 +35,6 @@ export class QuestionController {
     description: 'question create response',
     type: String,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @ApiBody({
     type: CreateQuestionModel,
     description: 'user data model',
@@ -65,11 +60,6 @@ export class QuestionController {
   @ApiOkResponse({
     description: 'question delete response',
     type: String,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
   })
   @ApiBody({
     type: IdQuestionModel,
@@ -97,11 +87,6 @@ export class QuestionController {
     description: 'Id of the question',
     required: true,
   })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
-    required: true,
-  })
   @LoggedMiddleware(true)
   @Get('/:id')
   async getQuestion(@Query('id') id: string): Promise<QuestionModel> {
@@ -115,11 +100,6 @@ export class QuestionController {
   @ApiParam({
     name: 'id',
     description: 'Id of the question',
-    required: true,
-  })
-  @ApiHeader({
-    name: 'Authorization_token',
-    description: 'token',
     required: true,
   })
   @ApiBody({
