@@ -3,11 +3,9 @@ import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
 import { writeFileSync } from 'fs';
-import {
-  Logger,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import { Logger, INestApplication, ValidationPipe } from '@nestjs/common';
 import RedisCacheService from 'redis/redis.service';
 import * as cookieParser from 'cookie-parser';
 
@@ -21,7 +19,8 @@ function buildSwagger(
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(join(__dirname, '..', 'static'));
 
   if (MODE === 'dev') {
     const config = new DocumentBuilder()
