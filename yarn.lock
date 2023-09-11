@@ -10123,6 +10123,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-secure-store@npm:^12.3.1":
+  version: 12.5.0
+  resolution: "expo-secure-store@npm:12.5.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 8c360f73937ff878d7702798bf120a7b25e54b8ad5cbb75de19a388cda8359e9e94a8c6373771571a47860b66ad97f9704b0f92c39cfbd450f07e6f5d30639f4
+  languageName: node
+  linkType: hard
+
 "expo-status-bar@npm:~1.4.4":
   version: 1.4.4
   resolution: "expo-status-bar@npm:1.4.4"
@@ -16479,6 +16488,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-vector-icons@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "react-native-vector-icons@npm:10.0.0"
+  dependencies:
+    prop-types: ^15.7.2
+    yargs: ^16.1.1
+  bin:
+    fa-upgrade.sh: bin/fa-upgrade.sh
+    fa5-upgrade: bin/fa5-upgrade.sh
+    fa6-upgrade: bin/fa6-upgrade.sh
+    generate-icon: bin/generate-icon.js
+  checksum: c4e39deb5218b6ba047c378217bbc7f24c1db153d2171e42176703a775049ed24f2a140f35d962d215265032722a24cba8acc83397ef6e14bd300db470609bf5
+  languageName: node
+  linkType: hard
+
 "react-native-web@npm:~0.18.10":
   version: 0.18.12
   resolution: "react-native-web@npm:0.18.12"
@@ -17538,6 +17562,7 @@ __metadata:
     "@types/styled-components-react-native": ^5.2.1
     axios: ^1.4.0
     expo: ~48.0.4
+    expo-secure-store: ^12.3.1
     expo-status-bar: ~1.4.4
     native-base: ^3.4.28
     react: 18.2.0
@@ -17550,6 +17575,7 @@ __metadata:
     react-native-screens: ~3.20.0
     react-native-svg: 13.4.0
     react-native-toast-message: ^2.1.6
+    react-native-vector-icons: ^10.0.0
     react-native-web: ~0.18.10
     react-router-dom: ^6.11.2
     react-router-native: ^6.11.2
@@ -20077,7 +20103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^16.2.0":
+"yargs@npm:^16.1.1, yargs@npm:^16.2.0":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:

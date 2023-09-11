@@ -1,11 +1,10 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
 import { writeFileSync } from 'fs';
 import {
   Logger,
-  ClassSerializerInterceptor,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
@@ -41,10 +40,10 @@ async function bootstrap() {
   Logger.debug('Redis Connected!');
 
   app.enableCors({
-    // origin: "*", // For dev
+    // origin: [`http://localhost:19006`], // For dev Mobile
     origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
     credentials: true,
-    allowedHeaders: '*',
+    allowedHeaders: 'Content-Type',
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
   app.use(cookieParser());

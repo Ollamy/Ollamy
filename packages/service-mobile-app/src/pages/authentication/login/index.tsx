@@ -27,16 +27,17 @@ const Login = () => {
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      const response = await backendApi.post('/user/login', {
-        email: data.email,
-        password: data.password,
-      });
+      await backendApi.post(
+        '/user/login',
+        { email: data.email, password: data.password },
+      );
       showToast({
         type: 'success',
         topOffset: 92,
         text1: 'Success',
         text2: 'You have successfully logged in',
       });
+      navigate('/home');
     } catch (error) {
       showToast({
         type: 'error',
