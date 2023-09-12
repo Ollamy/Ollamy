@@ -8,7 +8,7 @@ import { Box } from 'native-base';
 import BottomBar from '../../components/bottomBar';
 import TopBar from '../../components/topBar';
 
-interface UserInfo {
+export interface UserInfo {
   firstname: string;
   lastname: string;
   email: string;

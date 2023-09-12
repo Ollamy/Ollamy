@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 @WebSocketGateway({ namespace: 'chat' })
 export class ChatGateway
@@ -35,7 +36,25 @@ export class ChatGateway
     payload: { sender: string; room: string; message: string },
   ) {
     this.logger.log(payload);
-    this.wss.to(payload.room).emit('chatToClient', payload);
+    this.wss.to(payload.room).emit('chatToClient', { ...payload, id: randomUUID() });
+  }
+
+  @SubscribeMessage('deleteChatToServer')
+  handleDeleteChatMessage(
+    client: Socket,
+    payload: { id: string, room: string},
+  ) {
+    this.logger.log(payload);
+    this.wss.to(payload.room).emit('deleteChatToClient', payload);
+  }
+
+  @SubscribeMessage('editChatToServer')
+  handleEditChatMessage(
+    client: Socket,
+    payload: { id: string, room: string, message: string},
+  ) {
+    this.logger.log(payload);
+    this.wss.to(payload.room).emit('editChatToClient', payload);
   }
 
   @SubscribeMessage('joinRoom')

@@ -10,11 +10,13 @@ import COMMUNITY from '../../../assets/icons/community.svg';
 // @ts-ignore
 import MEDAL from '../../../assets/icons/medal.svg';
 import { Box } from 'native-base';
+import { useNavigate } from 'react-router-native';
 
 const BottomBar = () => {
   const handlePress = () => {
     console.log('Button Pressed');
   };
+  const navigate = useNavigate();
 
   return (
     <Box style={styles.container}>
@@ -28,7 +30,7 @@ const BottomBar = () => {
           <Image style={{ height: '100%', width: '100%' }} source={EVENT}></Image>
         </Box>
       </CustomIconButton>
-      <CustomIconButton onPress={handlePress}>
+      <CustomIconButton onPress={() => navigate('/chat')}>
         <Box height="35px" width="35px">
           <Image style={{ height: '100%', width: '100%' }} source={COMMUNITY}></Image>
         </Box>

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '.';
 
-const AuthNavigator = () => {
+const HomeNavigator = () => {
   const Stack = createNativeStackNavigator();
 
   return (
@@ -11,4 +11,4 @@ const AuthNavigator = () => {
   );
 };
 
-export default AuthNavigator;
+export default HomeNavigator;

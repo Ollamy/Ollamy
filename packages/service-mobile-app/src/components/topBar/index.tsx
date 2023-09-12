@@ -9,8 +9,10 @@ import TRESOR from '../../../assets/icons/tresor.svg';
 import PROFILE from '../../../assets/icons/profile.svg';
 
 import { Box, View } from 'native-base';
+import { useNavigate } from 'react-router-native';
 
 const TopBar = () => {
+  const navigate = useNavigate();
   const handlePress = () => {
     // Handle button press here
     console.log('Button Pressed');
@@ -19,7 +21,7 @@ const TopBar = () => {
   return (
     <Box style={styles.container}>
       <Box style={styles.iconContainer}>
-        <CustomIconButton onPress={handlePress} style={{ padding: 5 }}>
+        <CustomIconButton onPress={() => navigate('/home')} style={{ padding: 5 }}>
           <Box height="30px" width="30px">
             <Image style={{ height: '100%', width: '100%' }} source={EARTH}></Image>
           </Box>
