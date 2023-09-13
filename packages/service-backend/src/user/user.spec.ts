@@ -74,7 +74,7 @@ describe('loginUser', () => {
 
     const mockCreateToken = jest
       .spyOn(userService, 'createToken')
-      .mockReturnValue('mockToken');
+      .mockResolvedValue('mockToken');
 
     // Invoke the function being tested
     const loginResult = await userService.loginUser({

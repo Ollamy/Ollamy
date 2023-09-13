@@ -51,14 +51,16 @@ enum PermissionLesson {
 }
 
 model User {
-  id             String         @id @default(uuid()) @db.Uuid
-  firstname      String
-  lastname       String
-  email          String         @unique
-  password       String
-  communities_id String[]       @db.Uuid
-  UsertoCourse   UsertoCourse[]
-  Course         Course[]
+  id              String            @id @default(uuid()) @db.Uuid
+  firstname       String
+  lastname        String
+  email           String            @unique
+  password        String
+  communities_id  String[]          @db.Uuid
+  UsertoCourse    UsertoCourse[]
+  Course          Course[]
+  Message         Message[]
+  UserDiscussions UserDiscussions[]
 }
 
 model UsertoCourse {
@@ -147,4 +149,34 @@ model Answer {
   question_id String   @db.Uuid
   value       String
   point       Int?
+}
+
+model Discussion {
+  id              String            @id @default(uuid()) @db.Uuid
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  title           String?
+  image_url       String?
+  Message         Message[]
+  UserDiscussions UserDiscussions[]
+}
+
+model Message {
+  id            String      @id @default(uuid()) @db.Uuid
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  discussion_id String      @db.Uuid
+  Discussion    Discussion? @relation(fields: [discussion_id], references: [id])
+  owner_id      String      @db.Uuid
+  user          User        @relation(references: [id], fields: [owner_id])
+  content       String
+}
+
+model UserDiscussions {
+  user          User       @relation(fields: [user_id], references: [id])
+  user_id       String     @db.Uuid
+  discussion    Discussion @relation(fields: [discussion_id], references: [id])
+  discussion_id String     @db.Uuid
+
+  @@id([user_id, discussion_id])
 }
