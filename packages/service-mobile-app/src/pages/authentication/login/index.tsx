@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError, AxiosResponse } from 'axios';
 import { FormControl } from 'native-base';
 
-import backendApi from 'src/client';
+import { useLoginMutation } from 'src/services/auth';
 
 interface LoginForm {
 	email: string;
@@ -23,15 +23,16 @@ const Login = () => {
 		control,
 		formState: { errors },
 	} = useForm<LoginForm>();
-
+	const [login, { isLoading }] = useLoginMutation();
 	const showToast = (body: ToastShowParams) => Toast.show(body);
 
 	const onSubmit = async (data: LoginForm) => {
 		try {
-			const response = await backendApi.post('/user/login', {
+			await login({
 				email: data.email,
 				password: data.password,
 			});
+
 			showToast({
 				type: 'success',
 				topOffset: 92,
@@ -82,7 +83,7 @@ const Login = () => {
 							inputMode="email"
 							style={styles.input}
 							placeholder="Email"
-						></TextInput>
+						/>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -103,7 +104,7 @@ const Login = () => {
 							inputMode="text"
 							style={styles.input}
 							placeholder="Password"
-						></TextInput>
+						/>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -114,9 +115,13 @@ const Login = () => {
 				<Text style={styles.text}>Forgot your password ?</Text>
 				<Text style={styles.highlightText}>Recover password</Text>
 			</View>
-			<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-				<Text style={styles.buttonText}>Log in</Text>
-			</TouchableOpacity>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
+					<Text style={styles.buttonText}>Log in</Text>
+				</TouchableOpacity>
+			)}
 			<View style={styles.horizontalContainer}>
 				<Text style={styles.text}>Don't have an account ?</Text>
 				<Text onPress={() => navigate('/')} style={styles.highlightText}>

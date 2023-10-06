@@ -14,6 +14,8 @@
     "@ollamy/design-system": "*",
     "@ollamy/utils": "*",
     "@react-navigation/native-stack": "^6.9.13",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@types/react-redux": "^7.1.26",
     "axios": "^1.4.0",
     "babel-plugin-module-resolve": "^1.5.0",
     "babel-plugin-module-resolver": "^5.0.0",
@@ -29,8 +31,10 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-toast-message": "^2.1.6",
+    "react-redux": "^8.1.2",
     "react-router-dom": "^6.11.2",
-    "react-router-native": "^6.11.2"
+    "react-router-native": "^6.11.2",
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -52,8 +56,7 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-storybook": "^0.6.12",
-    "prettier": "^2.6.2",
-    "typescript": "^5.1.6"
+    "prettier": "^2.6.2"
   },
   "private": true
 }

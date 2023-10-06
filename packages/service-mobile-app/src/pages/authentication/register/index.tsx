@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError, AxiosResponse } from 'axios';
 import { FormControl } from 'native-base';
 
-import backendApi from 'src/client';
+import { useRegisterMutation } from 'src/services/auth';
 
 interface RegisterPayload {
 	firstname: string;
@@ -29,12 +29,13 @@ const Register = () => {
 		control,
 		formState: { errors },
 	} = useForm<RegisterForm>();
+	const [register, { isLoading }] = useRegisterMutation();
 
 	const showToast = (body: ToastShowParams) => Toast.show(body);
 
 	const onSubmit = async (data: RegisterForm) => {
 		try {
-			const response = await backendApi.post('/user/register', {
+			await register({
 				firstname: 'alex',
 				lastname: 'alex',
 				email: data.email,
@@ -148,9 +149,13 @@ const Register = () => {
 					Log in
 				</Text>
 			</View>
-			<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-				<Text style={styles.buttonText}>Create account</Text>
-			</TouchableOpacity>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
+					<Text style={styles.buttonText}>Create account</Text>
+				</TouchableOpacity>
+			)}
 			<Toast />
 		</View>
 	);
