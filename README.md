@@ -12,6 +12,8 @@ Before starting the backend you need to install [docker](https://docs.docker.com
 To start our project using docker, you must be shure to have to corresponding .env file
 You can check the `.env.example` file to check the required variables
 
+Then you need to go to the `dockerfile/base` folder to build the base image, here is the [documentation](dockerfiles/base/README.md) of the image for more informations.
+
 When this is done, you can build the backend using this command:
 ```
 docker-compose build backend
