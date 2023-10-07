@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
@@ -16,7 +17,13 @@ type Inputs = {
   rePassword: string;
 };
 
+enum State {
+  PERSONALDATA,
+  CONFIDENTIALDATA,
+}
+
 export function Register(): React.ReactNode {
+  const [state, setState] = useState<State>(State.PERSONALDATA);
   const {
     register,
     handleSubmit,
@@ -61,13 +68,26 @@ export function Register(): React.ReactNode {
         >
           Register
         </h1>
-        <label htmlFor="email">Email</label>
-        <InputMaker register={{ ...register('email') }} />
-        <label htmlFor="password">Password</label>
-        <InputMaker register={{ ...register('password') }} />
-        <label htmlFor="ConfirmPassword">Confirm Password</label>
-        <InputMaker register={{ ...register('rePassword') }} />
-        <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)} />
+        {state === State.PERSONALDATA && (
+          <>
+            <label htmlFor="firstName">First name</label>
+            <InputMaker register={{ ...register('firstName') }} />
+            <label htmlFor="lastName">Last name</label>
+            <InputMaker register={{ ...register('lastName') }} />
+            <ButtonMaker textButton="Continue" onClick={() => setState(State.CONFIDENTIALDATA)} />
+          </>
+        )}
+        {state === State.CONFIDENTIALDATA && (
+          <>
+            <label htmlFor="email">Email</label>
+            <InputMaker register={{ ...register('email') }} />
+            <label htmlFor="password">Password</label>
+            <InputMaker register={{ ...register('password') }} />
+            <label htmlFor="ConfirmPassword">Confirm Password</label>
+            <InputMaker register={{ ...register('rePassword') }} />
+            <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)} />
+          </>
+        )}
         <p>
           Already have an account?
           <span style={{ color: '#876BF6', cursor: 'pointer' }} onClick={handleLoginClick}>
