@@ -1,12 +1,3 @@
-import { Controller, Post, Body, Put, Delete, Get } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiForbiddenResponse,
-  ApiHeader,
-  ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
 import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
@@ -16,6 +7,16 @@ import {
   UpdateUserModel,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
+
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiHeader,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
