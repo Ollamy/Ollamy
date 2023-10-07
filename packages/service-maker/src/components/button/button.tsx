@@ -5,6 +5,6 @@ interface ButtonMakerProps {
   onClick?: any;
 }
 
-export const ButtonMaker = ({ textButton, onClick }: ButtonMakerProps) => {
+export function ButtonMaker({ textButton, onClick }: ButtonMakerProps): JSX.Element {
   return <ButtonMakerStyled onClick={onClick}>{textButton}</ButtonMakerStyled>;
-};
+}

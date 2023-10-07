@@ -1,13 +1,20 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
-import { SideBarMaker } from '../components/sidebar/sidebar';
-import { InputMaker } from '../components/input/input';
-import { FormMaker } from '../components/form/form';
-import { ButtonMaker } from '../components/button/button';
-
 import image from '../assets/imageSideBar.png';
+import { ButtonMaker } from '../components/button/button';
+import { FormMaker } from '../components/form/form';
+import { InputMaker } from '../components/input/input';
+import { SideBarMaker } from '../components/sidebar/sidebar';
+
+type Inputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  rePassword: string;
+};
 
 export function Register(): React.ReactNode {
   const {
@@ -15,64 +22,59 @@ export function Register(): React.ReactNode {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<Inputs>();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Inputs): Promise<void> => {
     try {
-      const createdUser = await axios.post(`http://localhost:3000/user`, {
+      await axios.post(`http://localhost:3000/user`, {
         ...data,
-        firstName: 'toni',
-        lastName: 'da rodda',
       });
-      console.log(createdUser.data);
     } catch (err) {
-      console.log(err);
+      /* empty */
     }
   };
-  const handleLoginClick = () => {
+  const handleLoginClick = (): void => {
     window.location.href = 'login';
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: 'flex',
-          width: '100vw',
-          height: '100vh',
-          flexDirection: 'row',
-        }}
-      >
-        <SideBarMaker>
-          <img src={image} width="auto" height="auto" />
-        </SideBarMaker>
-        <FormMaker>
-          <h1
-            style={{
-              color: '#E6674F',
-              marginTop: '140px',
-              marginBottom: '60px',
-              fontWeight: 'bolder',
-              fontSize: '40px',
-            }}
-          >
-            Register
-          </h1>
-          <label htmlFor="email">Email</label>
-          <InputMaker register={{ ...register('email') }}></InputMaker>
-          <label htmlFor="password">Password</label>
-          <InputMaker register={{ ...register('password') }}></InputMaker>
-          <label htmlFor="ConfirmPassword">Confirm Password</label>
-          <InputMaker register={{ ...register('rePassword') }}></InputMaker>
-          <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)}></ButtonMaker>
-          <p>
-            Already have an account?{' '}
-            <span style={{ color: '#876BF6', cursor: 'pointer' }} onClick={handleLoginClick}>
-              Login
-            </span>{' '}
-          </p>
-        </FormMaker>
-      </div>
-    </>
+    <div
+      style={{
+        display: 'flex',
+        width: '100vw',
+        height: '100vh',
+        flexDirection: 'row',
+      }}
+    >
+      <SideBarMaker>
+        <img alt="logo Ollamy" src={image} width="auto" height="auto" />
+      </SideBarMaker>
+      <FormMaker>
+        <h1
+          style={{
+            color: '#E6674F',
+            marginTop: '140px',
+            marginBottom: '60px',
+            fontWeight: 'bolder',
+            fontSize: '40px',
+          }}
+        >
+          Register
+        </h1>
+        <label htmlFor="email">Email</label>
+        <InputMaker register={{ ...register('email') }} />
+        <label htmlFor="password">Password</label>
+        <InputMaker register={{ ...register('password') }} />
+        <label htmlFor="ConfirmPassword">Confirm Password</label>
+        <InputMaker register={{ ...register('rePassword') }} />
+        <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)} />
+        <p>
+          Already have an account?
+          <span style={{ color: '#876BF6', cursor: 'pointer' }} onClick={handleLoginClick}>
+            Login
+          </span>
+        </p>
+      </FormMaker>
+    </div>
   );
 }
