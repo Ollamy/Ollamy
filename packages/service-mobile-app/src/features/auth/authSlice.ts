@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from 'src/store';
 
-import { RootState } from 'src/store';
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface User {
 	first_name: string;
@@ -20,16 +20,14 @@ const slice = createSlice({
 	initialState,
 	reducers: {
 		logout: () => initialState,
-		login: () => {
-			return {
-				...initialState,
-				isAuthenticated: true,
-			};
-		},
+		login: () => ({
+			...initialState,
+			isAuthenticated: true,
+		}),
 	},
 });
 
 export const { logout } = slice.actions;
 export default slice.reducer;
 
-export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
+export const selectIsAuthenticated = (state: RootState): boolean => state.auth.isAuthenticated;

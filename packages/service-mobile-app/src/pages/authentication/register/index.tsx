@@ -1,13 +1,12 @@
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Toast, { ToastShowParams } from 'react-native-toast-message';
+import type { ToastShowParams } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
-import { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import { FormControl } from 'native-base';
-
 import { useRegisterMutation } from 'src/services/auth';
 
 interface RegisterPayload {
@@ -21,7 +20,7 @@ interface RegisterForm extends RegisterPayload {
 	confirmPassword: string;
 }
 
-const Register = () => {
+function Register(): JSX.Element {
 	const insets = useSafeAreaInsets();
 	const navigate = useNavigate();
 	const {
@@ -31,9 +30,9 @@ const Register = () => {
 	} = useForm<RegisterForm>();
 	const [register, { isLoading }] = useRegisterMutation();
 
-	const showToast = (body: ToastShowParams) => Toast.show(body);
+	const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-	const onSubmit = async (data: RegisterForm) => {
+	const onSubmit = async (data: RegisterForm): void => {
 		try {
 			await register({
 				firstname: 'alex',
@@ -165,7 +164,7 @@ const Register = () => {
 			<Toast />
 		</View>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	input: {

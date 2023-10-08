@@ -1,8 +1,9 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from 'pages/authentication/login';
 import Register from 'pages/authentication/register';
 
-const AuthNavigator = () => {
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+function AuthNavigator(): JSX.Element {
 	const Stack = createNativeStackNavigator();
 
 	return (
@@ -11,6 +12,6 @@ const AuthNavigator = () => {
 			<Stack.Screen name="login" component={Login} />
 		</Stack.Navigator>
 	);
-};
+}
 
 export default AuthNavigator;

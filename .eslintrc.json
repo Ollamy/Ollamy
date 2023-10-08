@@ -30,10 +30,8 @@
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
       "no-use-before-define": "off",
-      "@typescript-eslint/no-use-before-define": "error",
+      "@typescript-eslint/no-use-before-define": "off",
       // For function return value types, errors instead of warnings
-      "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
-      "@typescript-eslint/explicit-module-boundary-types": "error",
       "@typescript-eslint/consistent-type-imports": "error",
       // Avoid errors/warning and leave option to use either named or default exports
       "import/prefer-default-export": "off",

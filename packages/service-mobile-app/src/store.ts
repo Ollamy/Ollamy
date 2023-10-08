@@ -1,8 +1,10 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
-
+import type { TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import authSlice from 'src/features/auth/authSlice';
 import { api } from 'src/services/api';
+
+import type { ConfigureStoreOptions } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 
 export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
 	configureStore({

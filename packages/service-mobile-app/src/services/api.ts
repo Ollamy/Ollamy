@@ -1,12 +1,12 @@
-import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-
-import { RootState } from 'src/store';
+import type { RootState } from 'src/store';
 import { EnvVar } from 'src/utils/loadEnv';
+
+import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: EnvVar.backendUrl,
 	prepareHeaders: (headers, { getState }) => {
-		const token = (getState() as RootState).auth.token;
+		const { token } = (getState() as RootState).auth;
 		if (token) {
 			headers.set('authentication', `Bearer ${token}`);
 		}

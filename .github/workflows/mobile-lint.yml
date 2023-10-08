@@ -24,11 +24,11 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
-      
+
       - name: Install dependencies
         id: install
-        run: cd packages/service-mobile-app && yarn install
+        run: yarn install
 
       - name: Lint
         id: lint
-        run: cd packages/service-mobile-app && yarn lint
+        run: yarn lint packages/service-mobile-app/src
