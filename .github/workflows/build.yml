@@ -52,7 +52,7 @@ jobs:
 
       - name: Run backend tests
         id: test
-        run: docker-compose exec -it backend yarn test
+        run: docker compose exec -it backend yarn test --exit-code-from backend
 
       # - name: Building OpenAPI client generator
       #   id: build-openapi-client-generator
