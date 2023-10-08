@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     if: github.event.pull_request.draft != true
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: Docker
     env:
       BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
