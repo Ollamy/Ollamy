@@ -61,6 +61,7 @@ jobs:
 
       - name: list files
         working-directory: ./packages/service-backend
+        if: success() || failure()
         run: ls -la
 
       - name: Upload test results
