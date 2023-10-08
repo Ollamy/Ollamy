@@ -50,6 +50,10 @@ jobs:
         id: run
         run: docker compose up -d backend
 
+      - name: list files
+        id: ls
+        run: docker compose exec -it ls -la
+
       - name: Run backend tests
         id: test
         run: docker compose exec -it backend yarn test:ci
