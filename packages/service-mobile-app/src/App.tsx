@@ -7,7 +7,7 @@ import Login from 'src/pages/authentication/login';
 import Register from 'src/pages/authentication/register';
 import { store } from 'src/store';
 
-export default function App() {
+const App = () => {
 	return (
 		<NativeBaseProvider>
 			<SafeAreaProvider>
@@ -22,4 +22,6 @@ export default function App() {
 			</SafeAreaProvider>
 		</NativeBaseProvider>
 	);
-}
+};
+
+export default App;

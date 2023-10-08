@@ -47,12 +47,12 @@ export class CreateUserModel {
       'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
   })
   @IsString()
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 2,
-    minUppercase: 1,
-    minSymbols: 1,
-  })
+  // @IsStrongPassword({
+  //   minLength: 8,
+  //   minNumbers: 2,
+  //   minUppercase: 1,
+  //   minSymbols: 1,
+  // })
   password: string;
 }
 

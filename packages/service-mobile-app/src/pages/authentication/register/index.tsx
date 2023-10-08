@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast, { ToastShowParams } from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
@@ -52,11 +52,11 @@ const Register = () => {
 				type: 'error',
 				topOffset: 92,
 				text1:
-					((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
+					((error as AxiosError)?.response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
 						?.data.error ?? 'Something went wrong',
 				text2: [
-					((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>).data
-						.message,
+					((error as AxiosError)?.response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
+						?.data.message ?? '',
 				]
 					.flat()
 					.join('\n'),
@@ -84,14 +84,16 @@ const Register = () => {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.email}>
-						<TextInput
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							inputMode="email"
-							style={styles.input}
-							placeholder="Email"
-						></TextInput>
+						<GestureHandlerRootView>
+							<TextInput
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								inputMode="email"
+								style={styles.input}
+								placeholder="Email"
+							/>
+						</GestureHandlerRootView>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -104,15 +106,17 @@ const Register = () => {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.password}>
-						<TextInput
-							secureTextEntry
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							inputMode="text"
-							style={styles.input}
-							placeholder="Password"
-						></TextInput>
+						<GestureHandlerRootView>
+							<TextInput
+								secureTextEntry
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								inputMode="text"
+								style={styles.input}
+								placeholder="Password"
+							/>
+						</GestureHandlerRootView>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>{errors.password.message}</FormControl.ErrorMessage>
 						)}
@@ -125,15 +129,17 @@ const Register = () => {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.confirmPassword}>
-						<TextInput
-							secureTextEntry
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							inputMode="text"
-							style={styles.input}
-							placeholder="Confirm password"
-						></TextInput>
+						<GestureHandlerRootView>
+							<TextInput
+								secureTextEntry
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								inputMode="text"
+								style={styles.input}
+								placeholder="Confirm password"
+							/>
+						</GestureHandlerRootView>
 						{errors.confirmPassword?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}

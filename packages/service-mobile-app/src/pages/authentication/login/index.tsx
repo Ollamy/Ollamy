@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast, { ToastShowParams } from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +32,6 @@ const Login = () => {
 				email: data.email,
 				password: data.password,
 			});
-
 			showToast({
 				type: 'success',
 				topOffset: 92,
@@ -76,14 +75,16 @@ const Login = () => {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.email}>
-						<TextInput
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							inputMode="email"
-							style={styles.input}
-							placeholder="Email"
-						/>
+						<GestureHandlerRootView>
+							<TextInput
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								inputMode="email"
+								style={styles.input}
+								placeholder="Email"
+							/>
+						</GestureHandlerRootView>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -96,15 +97,17 @@ const Login = () => {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.password}>
-						<TextInput
-							secureTextEntry
-							value={value}
-							onChangeText={onChange}
-							onBlur={onBlur}
-							inputMode="text"
-							style={styles.input}
-							placeholder="Password"
-						/>
+						<GestureHandlerRootView>
+							<TextInput
+								secureTextEntry
+								value={value}
+								onChangeText={onChange}
+								onBlur={onBlur}
+								inputMode="text"
+								style={styles.input}
+								placeholder="Password"
+							/>
+						</GestureHandlerRootView>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}

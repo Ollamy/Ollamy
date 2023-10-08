@@ -10,6 +10,7 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
 			[api.reducerPath]: api.reducer,
 			auth: authSlice,
 		},
+		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 		...options,
 	});
 
