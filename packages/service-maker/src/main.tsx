@@ -1,23 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-
-
-import { Register } from './pages/Register';
-import { Login } from './pages/Login';
-import { Home } from './pages/Home';
 import { createGlobalStyle } from 'styled-components';
+
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <Register />,
   },
   {
-    path: '/register',
-    element: <Register />,
+    path: '/home',
+    element: <Home />,
   },
   {
     path: '/login',

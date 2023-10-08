@@ -1,6 +1,8 @@
-import { InputMakerInterface } from './input.interface';
+/* eslint-disable react/jsx-props-no-spreading */
+import type { InputMakerInterface } from './input.interface';
+
 import { MakerInputStyled } from './input.style';
 
-export const InputMaker = ({ margin, register }: InputMakerInterface) => {
-  return <MakerInputStyled margin={margin} {...register}></MakerInputStyled>;
-};
+export function InputMaker({ margin, register, type }: InputMakerInterface): React.ReactNode {
+  return <MakerInputStyled margin={margin} {...register} type={type} />;
+}

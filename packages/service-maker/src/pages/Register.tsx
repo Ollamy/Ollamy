@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -82,9 +84,9 @@ export function Register(): React.ReactNode {
             <label htmlFor="email">Email</label>
             <InputMaker register={{ ...register('email') }} />
             <label htmlFor="password">Password</label>
-            <InputMaker register={{ ...register('password') }} />
+            <InputMaker type="password" register={{ ...register('password') }} />
             <label htmlFor="ConfirmPassword">Confirm Password</label>
-            <InputMaker register={{ ...register('rePassword') }} />
+            <InputMaker type="password" register={{ ...register('rePassword') }} />
             <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)} />
           </>
         )}

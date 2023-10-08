@@ -6,4 +6,5 @@ export interface InputMakerInterface {
   padding?: string;
   margin?: string;
   register: any;
+  type?: string;
 }
