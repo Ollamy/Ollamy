@@ -71,8 +71,6 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
 
-      - run: yarn install
-
       - name: Install backend dependencies
         working-directory: ./packages/service-backend
         run: yarn install
