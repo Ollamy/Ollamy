@@ -32,6 +32,7 @@ jobs:
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
       FRONTEND_URL: "http://localhost:3000"
+      FRONTEND_PORT: "3000"
 
     steps:
 
