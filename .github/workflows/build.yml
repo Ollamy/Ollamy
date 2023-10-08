@@ -52,7 +52,7 @@ jobs:
 
       - name: list files
         id: ls
-        run: docker compose exec -it ls -la
+        run: docker compose exec -it backend ls -la
 
       - name: Run backend tests
         id: test
