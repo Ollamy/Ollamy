@@ -56,6 +56,10 @@ jobs:
 
       - name: Extract result file
         id: extract-result
+        run: docker-compose exec -it backend cat junit.xml
+
+      - name: Extract result file 2
+        id: extract-result-2
         run: docker-compose exec -it backend cat junit.xml > junit.xml
 
       - name: list files
