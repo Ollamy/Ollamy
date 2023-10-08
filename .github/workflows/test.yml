@@ -86,6 +86,6 @@ jobs:
             - **Passed:** ${{ steps.upload-test-results.outputs.passed }}
             - **Failed:** ${{ steps.upload-test-results.outputs.failed }}
             - **Skipped:** ${{ steps.upload-test-results.outputs.skipped }}
-            - **Time:** ${{ steps.upload-test-results.outputs.time }}
-            - **URL:** ${{ steps.upload-test-results.outputs.url }}
-            - **URL HTML:** ${{ steps.upload-test-results.outputs.url_html }}
+            - **Time:** ${{ steps.upload-test-results.outputs.time }} **ms**
+            - **URL:** <${{ steps.upload-test-results.outputs.url }}|View Run Results>
+            - **URL HTML:** <${{ steps.upload-test-results.outputs.url_html }}|View Test Results>
