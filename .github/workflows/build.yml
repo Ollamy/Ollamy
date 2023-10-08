@@ -58,6 +58,10 @@ jobs:
         id: extract-result
         run: docker-compose exec -it backend cat junit.xml > junit.xml
 
+      - name: list files
+        id: list-files
+        run: ls -la
+
       - name: Upload test results
         id: upload-test-results
         uses: dorny/test-reporter@v1
