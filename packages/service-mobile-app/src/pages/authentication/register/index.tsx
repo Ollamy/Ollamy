@@ -33,7 +33,7 @@ const Register = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      const response = await backendApi.post('/user/register', {
+      await backendApi.post('/user/register', {
         firstname: 'alex',
         lastname: 'alex',
         email: data.email,
