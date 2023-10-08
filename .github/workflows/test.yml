@@ -59,7 +59,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: cd packages/service-backend
-      - run: ls -la
+      - name: install dependencies
+        working-directory: ./packages/service-backend
+        run: ls -la
+
       # - run: yarn
       # - run: yarn test:ci
