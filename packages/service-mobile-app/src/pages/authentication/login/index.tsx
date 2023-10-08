@@ -27,7 +27,7 @@ const Login = () => {
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      const response = await backendApi.post('/user/login', {
+      await backendApi.post('/user/login', {
         email: data.email,
         password: data.password,
       });
