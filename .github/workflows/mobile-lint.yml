@@ -7,6 +7,9 @@ on:
       - reopened
       - synchronize
       - ready_for_review
+    paths:
+      - packages/service-mobile-app/**
+
   push:
     branches:
       - master
@@ -24,7 +27,7 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
-      
+
       - name: Install dependencies
         id: install
         run: cd packages/service-mobile-app && yarn install
