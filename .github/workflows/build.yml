@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     if: github.event.pull_request.draft != true
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: Docker
     env:
       BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
@@ -49,34 +49,6 @@ jobs:
       - name: Run backend container
         id: run
         run: docker compose up -d backend
-
-      - name: list files
-        id: ls
-        run: docker compose exec -it backend ls -la
-
-      - name: Run backend tests
-        id: test
-        run: docker compose exec -it backend yarn test:ci
-
-      - name: Extract result file
-        id: extract-result
-        run: docker compose exec -it backend cat junit.xml
-
-      - name: Extract result file 2
-        id: extract-result-2
-        run: docker compose exec -it backend cat junit.xml > junit.xml
-
-      - name: list files
-        id: list-files
-        run: ls -la
-
-      - name: Upload test results
-        id: upload-test-results
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: Backend Test Results
-          path: junit.xml
 
       - name: Stop backend container
         id: stop
