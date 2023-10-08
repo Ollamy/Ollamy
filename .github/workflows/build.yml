@@ -52,7 +52,7 @@ jobs:
 
       - name: Run backend tests
         id: test
-        run: docker compose exec -it backend yarn test:ci
+        run: docker-compose exec -it backend yarn test:ci
 
       - name: Extract result file
         id: extract-result
