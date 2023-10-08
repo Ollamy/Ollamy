@@ -1,12 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsDateString,
   IsOptional,
   IsString,
-  IsUUID,
   isString,
+  IsUUID,
 } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 
 export class DiscussionModel {
   @ApiProperty()
@@ -40,6 +41,7 @@ export class CreateDiscussionModel {
   @IsString()
   @IsOptional()
   imageUrl?: string;
+
   @ApiProperty()
   @IsArray()
   userIds: string[];
