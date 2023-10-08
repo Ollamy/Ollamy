@@ -56,7 +56,7 @@ jobs:
 
       - name: Extract result file
         id: extract-result
-        run: docker compose exec -it backend cat junit.xml > junit.xml
+        run: docker-compose exec -it backend cat junit.xml > junit.xml
 
       - name: Upload test results
         id: upload-test-results
