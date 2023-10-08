@@ -1,0 +1,133 @@
+{
+    "permission": [
+        {
+            "key": "USER_READ",
+            "description": "Can access the content of the user"
+        },
+        {
+            "key": "USER_WRITE",
+            "description": "Can write data for the user"
+        },
+        {
+            "key": "USER_DELETE",
+            "description": "Can delete a user from the course"
+        },
+        {
+            "key": "USER_PING",
+            "description": "Can check if a user exists for a course"
+        },
+        {
+            "key": "USER_ADMIN",
+            "description": "Can manage members in the course, like giving them more permissions, removing them from the course."
+        },
+        {
+            "key": "COURSE_READ",
+            "description": "Can access the content of the course"
+        },
+        {
+            "key": "COURSE_WRITE",
+            "description": "Can write content in the course"
+        },
+        {
+            "key": "COURSE_DELETE",
+            "description": "Can delete a course"
+        },
+        {
+            "key": "COURSE_PING",
+            "description": "Can check if a course exists"
+        },
+        {
+            "key": "COURSE_ADMIN",
+            "description": "Can manage members in the course, like giving them more permissions, removing them from the course."
+        },
+        {
+            "key": "SECTION_READ",
+            "description": "Can access the content of the section"
+        },
+        {
+            "key": "SECTION_WRITE",
+            "description": "Can write content in the section"
+        },
+        {
+            "key": "SECTION_DELETE",
+            "description": "Can delete a section"
+        },
+        {
+            "key": "SECTION_PING",
+            "description": "Can check if a section exists"
+        },
+        {
+            "key": "CHAPTER_READ",
+            "description": "Can access the content of the chapter"
+        },
+        {
+            "key": "CHAPTER_WRITE",
+            "description": "Can write content in the chapter"
+        },
+        {
+            "key": "CHAPTER_DELETE",
+            "description": "Can delete a chapter"
+        },
+        {
+            "key": "CHAPTER_PING",
+            "description": "Can check if a chapter exists"
+        },
+        {
+            "key": "LESSON_READ",
+            "description": "Can access the content of the lesson"
+        },
+        {
+            "key": "LESSON_WRITE",
+            "description": "Can write content in the lesson"
+        },
+        {
+            "key": "LESSON_DELETE",
+            "description": "Can delete a lesson"
+        },
+        {
+            "key": "LESSON_PING",
+            "description": "Can check if a lesson exists"
+        }
+    ],
+    "template": {
+        "OWNER": [
+            "USER_READ",
+            "USER_WRITE",
+            "USER_DELETE",
+            "USER_PING",
+            "USER_ADMIN",
+            "COURSE_READ",
+            "COURSE_WRITE",
+            "COURSE_DELETE",
+            "COURSE_PING",
+            "COURSE_ADMIN",
+            "SECTION_READ",
+            "SECTION_WRITE",
+            "SECTION_DELETE",
+            "SECTION_PING",
+            "CHAPTER_READ",
+            "CHAPTER_WRITE",
+            "CHAPTER_DELETE",
+            "CHAPTER_PING",
+            "LESSON_READ",
+            "LESSON_WRITE",
+            "LESSON_DELETE",
+            "LESSON_PING"
+        ],
+        "COURSE_ADMIN":[
+            "USER_READ",
+            "USER_ADMIN",
+            "COURSE_READ",
+            "SECTION_READ",
+            "CHAPTER_READ",
+            "LESSON_READ"
+        ],
+        "COURSE_MEMBER":[
+            "USER_READ",
+            "COURSE_READ",
+            "SECTION_READ",
+            "CHAPTER_READ",
+            "LESSON_READ"
+        ]
+    }
+}
