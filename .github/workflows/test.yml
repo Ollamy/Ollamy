@@ -22,7 +22,7 @@
       #     name: Backend Test Results
       #     path: junit.xml
 
-name: Build, Start and Stop Backend Container
+name: Test & report backend results
 
 on:
   pull_request:
@@ -59,6 +59,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: ls -la²
+      - run: ls -la
       # - run: yarn
       # - run: yarn test:ci
