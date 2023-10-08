@@ -52,11 +52,19 @@ jobs:
 
       - name: Run backend tests
         id: test
-        run: docker compose exec -it backend yarn test --exit-code-from backend
+        run: docker compose exec -it backend yarn test:ci
 
-      # - name: Building OpenAPI client generator
-      #   id: build-openapi-client-generator
-      #   run: docker compose exec backend yarn build:openapi-generator-cli
+      - name: Extract result file
+        id: extract-result
+        run: docker compose exec -it backend cat junit.xml > junit.xml
+
+      - name: Upload test results
+        id: upload-test-results
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Backend Test Results
+          path: junit.xml
 
       - name: Stop backend container
         id: stop
