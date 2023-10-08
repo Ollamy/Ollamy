@@ -7,8 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint": "eslint src/"
   },
   "dependencies": {
     "@ollamy/design-system": "*",
@@ -16,6 +15,7 @@
     "@react-navigation/native-stack": "^6.9.13",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-redux": "^7.1.26",
+    "@types/styled-components-react-native": "^5.2.1",
     "axios": "^1.4.0",
     "babel-plugin-module-resolve": "^1.5.0",
     "babel-plugin-module-resolver": "^5.0.0",
