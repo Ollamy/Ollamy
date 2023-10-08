@@ -76,17 +76,8 @@ jobs:
           path: junit.xml
           reporter: jest-junit
 
-      - name: Summary to PR
-        id: summary-to-pr
-        if: success() || failure()
-        uses: mshick/add-pr-comment@v2
+      - name: Summary Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          message: |
-            ## Test Results
-            - **Conclusion:** ${{ steps.upload-test-results.outputs.conclusion }}
-            - **Passed:** ${{ steps.upload-test-results.outputs.passed }}
-            - **Failed:** ${{ steps.upload-test-results.outputs.failed }}
-            - **Skipped:** ${{ steps.upload-test-results.outputs.skipped }}
-            - **Time:** ${{ steps.upload-test-results.outputs.time }}
-            - **URL:** ${{ steps.upload-test-results.outputs.url }}
-            - **URL HTML:** ${{ steps.upload-test-results.outputs.url_html }}
+          files: junit.xml
