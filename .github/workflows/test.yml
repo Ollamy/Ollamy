@@ -59,9 +59,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: install dependencies
-        working-directory: ./packages/service-backend
-        run: yarn
 
-      # - run: yarn
-      # - run: yarn test:ci
+      - name: Build Ollamy base
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
