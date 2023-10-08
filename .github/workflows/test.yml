@@ -56,11 +56,16 @@ jobs:
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
 
+    strategy:
+      matrix:
+        node-version: [19.8.1]
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build Ollamy base
-        uses: borales/actions-yarn@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          cmd: install
+          node-version: ${{ matrix.node-version }}
+
+      - run: yarn install
