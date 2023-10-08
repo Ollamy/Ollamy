@@ -52,15 +52,15 @@ jobs:
 
       - name: Run backend tests
         id: test
-        run: docker-compose exec -it backend yarn test:ci
+        run: docker compose exec -it backend yarn test:ci
 
       - name: Extract result file
         id: extract-result
-        run: docker-compose exec -it backend cat junit.xml
+        run: docker compose exec -it backend cat junit.xml
 
       - name: Extract result file 2
         id: extract-result-2
-        run: docker-compose exec -it backend cat junit.xml > junit.xml
+        run: docker compose exec -it backend cat junit.xml > junit.xml
 
       - name: list files
         id: list-files
