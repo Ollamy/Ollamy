@@ -72,3 +72,15 @@ jobs:
         run: npm install -g yarn
 
       - run: yarn install
+
+      - name: Install backend dependencies
+        working-directory: ./packages/service-backend
+        run: yarn install
+
+      - name: Install prisma dependencies
+        working-directory: ./packages/service-prisma
+        run: yarn prisma generate
+
+      - name: Run backend tests
+        working-directory: ./packages/service-backend
+        run: yarn test:ci
