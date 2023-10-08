@@ -62,7 +62,7 @@ To develop and test your app on iOS, you'll need Xcode, Apple's official Integra
 
 To develop and test on Android, you can use Android Studio, which provides an Android emulator. Follow these steps:
 
-1. **Download Android Studio**: Visit the official Android Studio website, download, and install the IDE.
+1. **Download Android Studio**: Visit the [official Android Studio website](https://developer.android.com/studio), download, and install the IDE.
 
 2. **Install Required Components**: During installation, make sure to select the option to install necessary components, including the Android SDK.
 
