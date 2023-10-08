@@ -117,7 +117,7 @@ describe('deleteChapter', () => {
     expect(prisma.chapter.delete).toHaveBeenCalledTimes(1);
     expect(prisma.chapter.delete).toHaveBeenCalledWith({
       where: {
-        id: '1223',
+        id: mockChapterId.id,
       },
     });
 
