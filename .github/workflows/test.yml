@@ -59,6 +59,10 @@ jobs:
         working-directory: ./packages/service-backend
         run: yarn test:ci
 
+      - name: list files
+        working-directory: ./packages/service-backend
+        run: ls -la
+
       - name: Upload test results
         id: upload-test-results
         uses: dorny/test-reporter@v1
