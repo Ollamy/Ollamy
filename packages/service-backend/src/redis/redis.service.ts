@@ -17,8 +17,8 @@ class RedisCacheService {
   }
 
   static async run(...args: any[]) {
-    if (!RedisCacheService.client) {
-      await RedisCacheService.client.connect();
+    if (RedisCacheService.client === null) {
+      await RedisCacheService.connect();
     }
 
     const data = await RedisCacheService.client.sendCommand(
