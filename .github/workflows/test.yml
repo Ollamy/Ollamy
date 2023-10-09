@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     if: github.event.pull_request.draft != true
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions: write-all
     environment: Docker
     env:
