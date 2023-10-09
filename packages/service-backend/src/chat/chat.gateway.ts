@@ -23,6 +23,9 @@ export class ChatGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
+    // @ts-ignore
+    // const rooms = Array.from(this.wss.adapter.rooms.keys());
+    // console.log(rooms.filter((name: string) => name.startsWith('ROOM-')));
     this.logger.log(`Client connected: ${client.id}`);
   }
 

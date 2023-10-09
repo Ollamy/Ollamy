@@ -34,7 +34,7 @@ const Chat = () => {
   }, [handleGetAuthenticatedServices]);
 
   socket.on('connect', () => {
-    socket.emit('joinRoom', 'general');
+    socket.emit('joinRoom', 'ROOM-general');
     console.log('connected');
   });
 
@@ -66,16 +66,16 @@ const Chat = () => {
 
   const sendMessage = () => {
     if (!editId) {
-      socket.emit('chatToServer', { sender: user.email, room: 'general', message: tempMessage });
+      socket.emit('chatToServer', { sender: user.email, room: 'ROOM-general', message: tempMessage });
     } else {
-      socket.emit('editChatToServer', { id: editId, room: 'general', message: tempMessage });
+      socket.emit('editChatToServer', { id: editId, room: 'ROOM-general', message: tempMessage });
       setEditId(undefined);
     }
     setTempMessage('');
   };
 
   const deleteMessage = (msgId: string) => {
-    socket.emit('deleteChatToServer', { id: msgId, room: 'general' });
+    socket.emit('deleteChatToServer', { id: msgId, room: 'ROOM-general' });
   };
 
   const editMessage = (msgId: string) => {
