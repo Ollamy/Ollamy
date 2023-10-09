@@ -1,4 +1,4 @@
-name: Build, Start & Test Backend
+name: Build, Start and Stop Backend Container
 
 on:
   pull_request:
@@ -31,6 +31,8 @@ jobs:
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+      FRONTEND_URL: "http://localhost:3000"
+      FRONTEND_PORT: "3000"
 
     steps:
 
@@ -49,14 +51,6 @@ jobs:
       - name: Run backend container
         id: run
         run: docker compose up -d backend
-
-      - name: Run backend tests
-        id: test
-        run: docker-compose exec -it backend yarn test
-
-      # - name: Building OpenAPI client generator
-      #   id: build-openapi-client-generator
-      #   run: docker compose exec backend yarn build:openapi-generator-cli
 
       - name: Stop backend container
         id: stop

@@ -7,6 +7,9 @@ on:
       - reopened
       - synchronize
       - ready_for_review
+    paths:
+      - packages/service-mobile-app/**
+
   push:
     branches:
       - master
