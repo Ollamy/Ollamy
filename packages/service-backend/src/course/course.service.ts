@@ -82,6 +82,25 @@ export class CourseService {
     }
   }
 
+  async getAllCourses(): Promise<CourseModel[]> {
+    try {
+      const coursesDb: Course[] = await prisma.course.findMany();
+
+      if (!coursesDb) {
+        Logger.error('Course does not exists !');
+        throw new ConflictException('Course does not exists !');
+      }
+  
+      return coursesDb.map((courseDb) => ({
+        ownerId: courseDb.owner_id,
+        ...courseDb,
+      })) as CourseModel[];
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Error retrieving courses !');
+    }
+  }
+
   async updateCourse(
     CourseId: string,
     courseData: UpdateCourseModel,

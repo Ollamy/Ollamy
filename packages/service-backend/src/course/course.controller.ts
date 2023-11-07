@@ -94,6 +94,16 @@ export class CourseController {
   }
 
   @ApiOkResponse({
+    description: 'get all courses',
+    type: CourseModel,
+  })
+  @LoggedMiddleware(true)
+  @Get()
+  async getAllCourses(): Promise<CourseModel[]> {
+    return this.courseService.getAllCourses();
+  }
+
+  @ApiOkResponse({
     description: 'course update response',
     type: String,
   })
