@@ -6,6 +6,11 @@ import { createGlobalStyle } from 'styled-components';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { Courses } from './pages/Courses';
+import { CreateCourse } from './pages/CreateCourse';
+import { Explore } from './pages/Explore';
+import { Dashboard } from './pages/Dashboard';
+import { Profile } from './pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +24,26 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/courses',
+    element: <Courses />,
+  },
+  {
+    path: '/create-course',
+    element: <CreateCourse />,
+  },
+  {
+    path: '/explore',
+    element: <Explore />,
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
   },
 ]);
 
