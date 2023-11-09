@@ -138,4 +138,14 @@ export class CourseController {
   async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
+
+  @ApiOkResponse({
+    description: 'get all courses',
+    type: CourseModel,
+  })
+  @LoggedMiddleware(true)
+  @Get()
+  async getAllCourses(): Promise<CourseModel[]> {
+    return this.courseService.getAllCourses();
+  }
 }
