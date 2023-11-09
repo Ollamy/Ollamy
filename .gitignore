@@ -11,7 +11,7 @@ npm-debug.log
 /build
 /coverage
 **/tsconfig.build.tsbuildinfo
-
+yarn.lock
 /.pnp
 .pnp.js
 .env

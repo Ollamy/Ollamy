@@ -1,0 +1,37 @@
+name: Lint - Mobile application
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths:
+      - packages/service-mobile-app/**
+
+  push:
+    branches:
+      - master
+      - development
+    paths:
+      - packages/service-mobile-app/**
+
+jobs:
+  build:
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        id: install
+        run: yarn install
+
+      - name: Lint
+        id: lint
+        run: yarn lint packages/service-mobile-app/src
