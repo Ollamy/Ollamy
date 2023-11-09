@@ -14,6 +14,7 @@ import CustomIconButton from '../buttons/customIconButton';
 
 function BottomBar() {
 	const handlePress = () => {
+		// eslint-disable-next-line no-console
 		console.log('Button Pressed');
 	};
 	const navigate = useNavigate();

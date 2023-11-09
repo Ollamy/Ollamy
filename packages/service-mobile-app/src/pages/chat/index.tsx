@@ -24,31 +24,25 @@ function Chat() {
 
 	socket.on('connect', () => {
 		socket.emit('joinRoom', 'ROOM-general');
+		// eslint-disable-next-line no-console
 		console.log('connected');
 	});
 
 	socket.on('connect_error', (err) => {
-		console.log(err instanceof Error);
+		// eslint-disable-next-line no-console
 		console.log(err.message);
 	});
 
 	socket.on('chatToClient', (msg: Messages) => {
 		setMessages([...messages, msg]);
-		console.log(msg);
 	});
 
 	socket.on('deleteChatToClient', ({ id }) => {
 		setMessages(messages.filter((msg) => msg.id !== id));
-		console.log(`Deleting ${id}`);
 	});
 
 	socket.on('editChatToClient', ({ id, message }) => {
 		setMessages(messages.map((msg) => (msg.id !== id ? msg : { ...msg, message })));
-		console.log(`Edit ${id}`);
-	});
-
-	socket.on('alertToClient', (msg) => {
-		console.log(msg);
 	});
 
 	if (!response?.data) return <Box />;

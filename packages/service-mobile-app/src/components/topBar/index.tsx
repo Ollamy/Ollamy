@@ -13,7 +13,7 @@ import CustomIconButton from '../buttons/customIconButton';
 function TopBar() {
 	const navigate = useNavigate();
 	const handlePress = () => {
-		// Handle button press here
+		// eslint-disable-next-line no-console
 		console.log('Button Pressed');
 	};
 
