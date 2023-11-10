@@ -32,11 +32,11 @@ function Register(): JSX.Element {
 
 	const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-	const onSubmit = async (data: RegisterForm): void => {
+	const onSubmit = async (data: RegisterForm) => {
 		try {
 			await register({
-				firstname: 'alex',
-				lastname: 'alex',
+				firstname: 'alexandre',
+				lastname: 'grare',
 				email: data.email,
 				password: data.password,
 			});
@@ -46,6 +46,7 @@ function Register(): JSX.Element {
 				text1: 'Success',
 				text2: 'Your account has been created successfully',
 			});
+			navigate('home');
 		} catch (error) {
 			showToast({
 				type: 'error',

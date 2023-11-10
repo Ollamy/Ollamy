@@ -63,12 +63,12 @@ export class LoginUserModel {
 
   @ApiProperty()
   @IsString()
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 2,
-    minUppercase: 1,
-    minSymbols: 1,
-  })
+  // @IsStrongPassword({
+  //   minLength: 8,
+  //   minNumbers: 2,
+  //   minUppercase: 1,
+  //   minSymbols: 1,
+  // })
   password: string;
 }
 

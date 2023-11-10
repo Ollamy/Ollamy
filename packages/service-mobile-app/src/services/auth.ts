@@ -30,14 +30,7 @@ export const authApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
-		getUser: build.query<unknown, void>({
-			query: () => ({
-				url: '/user',
-				method: 'GET',
-			}),
-			providesTags: ['User'],
-		}),
 	}),
 });
 
-export const { useGetUserQuery, useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation } = authApi;

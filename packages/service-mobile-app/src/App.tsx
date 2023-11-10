@@ -2,11 +2,15 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import { NativeBaseProvider } from 'native-base';
-import Login from 'src/pages/authentication/login';
-import Register from 'src/pages/authentication/register';
 import { store } from 'src/store';
 
-function App(): JSX.Element {
+import Login from './pages/authentication/login';
+import Register from './pages/authentication/register';
+import Chat from './pages/chat';
+import Home from './pages/home';
+import Profile from './pages/profile';
+
+function App() {
 	return (
 		<NativeBaseProvider>
 			<SafeAreaProvider>
@@ -15,6 +19,9 @@ function App(): JSX.Element {
 						<Routes>
 							<Route Component={Register} path="/" />
 							<Route Component={Login} path="/login" />
+							<Route Component={Home} path="/home" />
+							<Route Component={Profile} path="/profile" />
+							<Route Component={Chat} path="/chat" />
 						</Routes>
 					</Provider>
 				</NativeRouter>

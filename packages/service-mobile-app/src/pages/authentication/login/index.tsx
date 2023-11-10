@@ -17,6 +17,7 @@ interface LoginForm {
 function Login(): JSX.Element {
 	const insets = useSafeAreaInsets();
 	const navigate = useNavigate();
+
 	const {
 		handleSubmit,
 		control,
@@ -25,7 +26,7 @@ function Login(): JSX.Element {
 	const [login, { isLoading }] = useLoginMutation();
 	const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-	const onSubmit = async (data: LoginForm): void => {
+	const onSubmit = async (data: LoginForm) => {
 		try {
 			await login({
 				email: data.email,
@@ -37,6 +38,7 @@ function Login(): JSX.Element {
 				text1: 'Success',
 				text2: 'You have successfully logged in',
 			});
+			navigate('/home');
 		} catch (error) {
 			showToast({
 				type: 'error',

@@ -30,6 +30,8 @@
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
       "no-use-before-define": "off",
+      // Need to import image
+      "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-use-before-define": "off",
       // For function return value types, errors instead of warnings
       "@typescript-eslint/consistent-type-imports": "error",
