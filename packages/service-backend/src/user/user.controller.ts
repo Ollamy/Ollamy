@@ -144,4 +144,14 @@ export class UserController {
   async deleteUser(@OllContext() ctx: any): Promise<string> {
     return this.userService.deleteUser(ctx);
   }
+
+  @ApiOkResponse({
+    description: 'list the courses of a user',
+    type: String,
+  })
+  @LoggedMiddleware(true)
+  @Get('/courses')
+  async getUserCourses(@OllContext() ctx: any): Promise<string> {
+    return this.userService.getUserCourses(ctx);
+  }
 }

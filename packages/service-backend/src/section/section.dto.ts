@@ -55,3 +55,14 @@ export class UpdateSectionModel {
   @IsOptional()
   description: string;
 }
+
+
+export class addUserToCourseModel {
+  @ApiProperty()
+  @IsUUID()
+  courseId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  userId: string;
+}
