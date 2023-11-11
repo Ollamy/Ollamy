@@ -6,8 +6,8 @@ function SplashScreenNavigator() {
 	const Stack = createNativeStackNavigator();
 
 	return (
-		<Stack.Navigator initialRouteName="profile">
-			<Stack.Screen name="profile" component={SplashScreen} />
+		<Stack.Navigator initialRouteName="">
+			<Stack.Screen name="splashScreen" component={SplashScreen} />
 		</Stack.Navigator>
 	);
 }

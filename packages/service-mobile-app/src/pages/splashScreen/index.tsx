@@ -10,7 +10,7 @@ function SplashScreen() {
 	const imageScale = new Animated.Value(0.1);
 	const response = useGetUserQuery();
 
-	const t = useCallback(
+	const handleAnimationCallback = useCallback(
 		({ finished }: { finished: boolean }) => {
 			if (finished) {
 				if (response.isSuccess) {
@@ -27,7 +27,7 @@ function SplashScreen() {
 		toValue: 1,
 		duration: 1000,
 		useNativeDriver: true,
-	}).start(t);
+	}).start(handleAnimationCallback);
 
 	return (
 		<View style={styles.container}>
