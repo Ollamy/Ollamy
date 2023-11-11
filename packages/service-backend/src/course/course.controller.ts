@@ -153,7 +153,7 @@ export class CourseController {
   async addUserToCourse(
     @Param('id') id: string,
     @OllContext() ctx: any,
-  ): Promise<string> {
+  ): Promise<object> {
     return this.courseService.addUserToCourse(id, ctx.__user.id);
   }
 }

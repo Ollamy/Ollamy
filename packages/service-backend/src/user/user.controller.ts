@@ -151,7 +151,7 @@ export class UserController {
   })
   @LoggedMiddleware(true)
   @Get('/courses')
-  async getUserCourses(@OllContext() ctx: any): Promise<string> {
+  async getUserCourses(@OllContext() ctx: any): Promise<object> {
     return this.userService.getUserCourses(ctx);
   }
 }

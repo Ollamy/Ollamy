@@ -131,7 +131,7 @@ export class CourseService {
     }
   }
 
-  async addUserToCourse(courseId: string, userId: string): Promise<any> {
+  async addUserToCourse(courseId: string, userId: string): Promise<object> {
     try {
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {

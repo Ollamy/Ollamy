@@ -175,7 +175,7 @@ export class UserService {
     }
   }
 
-  async getUserCourses(ctx: any): Promise<any> {
+  async getUserCourses(ctx: any): Promise<object> {
     try {
       const userDb = await prisma.user.findUnique({
         where: {
@@ -205,8 +205,12 @@ export class UserService {
         },
       });
       return courses.map((course) => {
+        const isOwner = course.owner_id === ctx.__user.id;
         delete course.owner_id;
-        return course;
+        return {
+          ...course,
+          owner: isOwner,
+        };
       });
     } catch (error) {
       Logger.error(error);
