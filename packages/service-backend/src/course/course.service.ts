@@ -130,4 +130,24 @@ export class CourseService {
       throw new NotFoundException('Sections not found !');
     }
   }
+
+  async addUserToCourse(courseId: string, userId: string): Promise<object> {
+    try {
+      const userToCourseDb = await prisma.usertoCourse.create({
+        data: {
+          user_id: userId,
+          course_id: courseId,
+        },
+      });
+
+      if (!userToCourseDb) {
+        Logger.error('Failed to add user to course !');
+        throw new NotFoundException('Failed to add user to course !');
+      }
+      return { success: true };
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not added to course !');
+    }
+  }
 }
