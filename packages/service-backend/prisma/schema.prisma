@@ -63,20 +63,29 @@ model User {
   UserDiscussions UserDiscussions[]
 }
 
-model UsertoCourse {
-  id                 String              @id @default(uuid()) @db.Uuid
-  course             Course              @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user               User                @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  role_user          Role                @default(MEMBER)
-  permission_user    PermissionUser[]    @default([])
-  permission_course  PermissionCourse[]  @default([])
-  permission_section PermissionSection[] @default([])
-  permission_chapter PermissionChapter[] @default([])
-  permission_lesson  PermissionLesson[]  @default([])
-  course_id          String              @db.Uuid
-  user_id            String              @db.Uuid
+enum LessonStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
 
-  @@unique([course_id, user_id])
+model UsertoCourse {
+  id                   String              @id @default(uuid()) @db.Uuid
+  course               Course              @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user                 User                @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  role_user            Role                @default(MEMBER)
+  permission_user      PermissionUser[]    @default([])
+  permission_course    PermissionCourse[]  @default([])
+  permission_section   PermissionSection[] @default([])
+  permission_chapter   PermissionChapter[] @default([])
+  permission_lesson    PermissionLesson[]  @default([])
+  course_id            String              @db.Uuid
+  user_id              String              @db.Uuid
+  lesson_id            String              @db.Uuid
+  last_lesson_complete Lesson              @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  last_lesson_status   LessonStatus
+
+  @@unique([course_id, user_id, lesson_id])
 }
 
 model Course {
@@ -108,12 +117,13 @@ model Chapter {
 }
 
 model Lesson {
-  id          String     @id @default(uuid()) @db.Uuid
-  chapter     Chapter    @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
-  chapter_id  String     @db.Uuid
-  title       String
-  description String?
-  Questions   Question[]
+  id           String         @id @default(uuid()) @db.Uuid
+  chapter      Chapter        @relation(references: [id], fields: [chapter_id], onDelete: Cascade)
+  chapter_id   String         @db.Uuid
+  title        String
+  description  String?
+  Questions    Question[]
+  UsertoCourse UsertoCourse[]
 }
 
 enum AnswerType {
