@@ -7,12 +7,6 @@ import OLLAMY from '../../../assets/Ollamy.png';
 import BottomBar from '../../components/bottomBar';
 import TopBar from '../../components/topBar';
 
-export interface UserInfo {
-	firstname: string;
-	lastname: string;
-	email: string;
-}
-
 function Home() {
 	const response = useGetUserQuery();
 

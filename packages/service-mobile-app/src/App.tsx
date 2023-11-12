@@ -7,6 +7,7 @@ import { store } from 'src/store';
 import Login from './pages/authentication/login';
 import Register from './pages/authentication/register';
 import Chat from './pages/chat';
+import Course from './pages/course';
 import Home from './pages/home';
 import Profile from './pages/profile';
 import SplashScreen from './pages/splashScreen';
@@ -24,6 +25,7 @@ function App() {
 							<Route Component={Home} path="/home" />
 							<Route Component={Profile} path="/profile" />
 							<Route Component={Chat} path="/chat" />
+							<Route Component={Course} path="/course" />
 						</Routes>
 					</Provider>
 				</NativeRouter>

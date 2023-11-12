@@ -21,7 +21,7 @@ function BottomBar() {
 
 	return (
 		<Box style={styles.container}>
-			<CustomIconButton onPress={handlePress}>
+			<CustomIconButton onPress={() => navigate('/course')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={PROGRESS} />
 				</Box>
