@@ -17,6 +17,10 @@ export class CourseModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  picture: string;
 }
 
 export class CreateCourseModel {
@@ -27,6 +31,10 @@ export class CreateCourseModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  picture?: string;
 }
 
 export class IdCourseModel {
@@ -50,4 +58,8 @@ export class UpdateCourseModel {
   @IsString()
   @IsOptional()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  picture: string;
 }

@@ -10,6 +10,7 @@ import { QuestionModule } from 'question/question.module';
 import { MiddlewareGuard } from 'middleware/middleware.guard';
 import { AlertGateway } from './alert/alert.gateway';
 import { AlertController } from './alert/alert.controller';
+import { PictureModule } from './picture/picture.module';
 import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
@@ -20,6 +21,7 @@ import { ChatGateway } from './chat/chat.gateway';
     ChapterModule,
     LessonModule,
     QuestionModule,
+    PictureModule,
   ],
   controllers: [AppController, AlertController],
   providers: [

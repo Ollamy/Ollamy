@@ -87,6 +87,8 @@ model Course {
   owner_id    String         @db.Uuid
   title       String
   description String?
+  picture     Picture?       @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture_id  String?        @db.Uuid
 }
 
 model Section {
@@ -179,4 +181,10 @@ model UserDiscussions {
   discussion_id String     @db.Uuid
 
   @@id([user_id, discussion_id])
+}
+
+model Picture {
+  id      String   @id @default(uuid()) @db.Uuid
+  picture String
+  Course  Course[]
 }

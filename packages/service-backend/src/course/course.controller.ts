@@ -44,6 +44,7 @@ export class CourseController {
         value: {
           title: 'Course Title',
           description: 'Course description',
+          picture: 'Picture Data or Url',
         } as CreateCourseModel,
       },
     },
@@ -111,6 +112,7 @@ export class CourseController {
           ownerId: 'id',
           title: 'Course Title',
           description: 'Course description',
+          picture: 'Picture Data or Url',
         } as UpdateCourseModel,
       },
     },
