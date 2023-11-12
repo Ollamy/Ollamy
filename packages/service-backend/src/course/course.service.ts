@@ -13,6 +13,7 @@ import {
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Section } from '@prisma/client';
+import { PictureService } from '../picture/picture.service';
 
 @Injectable()
 export class CourseService {
@@ -21,7 +22,9 @@ export class CourseService {
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
-          ...courseData,
+          title: courseData.title,
+          description: courseData.description,
+          picture_id: await PictureService.postPicture(courseData.picture),
         },
       });
 
@@ -73,8 +76,11 @@ export class CourseService {
       }
 
       return {
+        id: courseDb.id,
         ownerId: courseDb.owner_id,
-        ...courseDb,
+        title: courseDb.title,
+        description: courseDb.description,
+        picture: await PictureService.getPicture(courseDb.picture_id),
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
@@ -91,7 +97,11 @@ export class CourseService {
         where: {
           id: CourseId,
         },
-        data: courseData,
+        data: {
+          title: courseData.title,
+          description: courseData.description,
+          picture_id: await PictureService.postPicture(courseData.picture),
+        },
       });
 
       if (!courseDb) {
