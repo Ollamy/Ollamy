@@ -140,4 +140,22 @@ export class CourseController {
   async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
+
+  @ApiOkResponse({
+    description: 'user added to course response',
+    type: String,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the course',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Post('/user/:id')
+  async addUserToCourse(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<object> {
+    return this.courseService.addUserToCourse(id, ctx.__user.id);
+  }
 }
