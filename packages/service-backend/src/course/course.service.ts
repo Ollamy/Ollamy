@@ -157,7 +157,7 @@ export class CourseService {
             some: {
               user_id: ctx.__user.id,
               role_user: {
-                not: 'ADMIN',
+                not: 'OWNER',
               }
             },
           },
