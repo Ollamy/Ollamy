@@ -3,22 +3,31 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
-import { Home } from './pages/Home';
+import HomePage from './pages/Home';
 import { Login } from './pages/Login';
+import ProfilePage from './pages/Profile';
 import { Register } from './pages/Register';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Register />,
+    element: <Login />,
   },
   {
-    path: '/home',
-    element: <Home />,
+    path: '/register',
+    element: <Register />,
   },
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/home',
+    element: <HomePage />,
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />,
   },
 ]);
 
