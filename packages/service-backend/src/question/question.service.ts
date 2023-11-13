@@ -112,4 +112,17 @@ export class QuestionService {
       throw new ConflictException('Question not updated !');
     }
   }
+
+  async getAllQuestions(): Promise<Question[]> {
+    try {
+      const questionsDb: Question[] = await prisma.question.findMany();
+
+      return questionsDb.map((questionDb) => ({
+        ...questionDb
+      })) as Question[];
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Error retrieving all questions!');
+    }
+  }
 }

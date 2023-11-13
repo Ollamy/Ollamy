@@ -21,7 +21,7 @@ import {
   QuestionModel,
   UpdateQuestionModel,
 } from 'question/question.dto';
-import { AnswerType, QuestionType } from '@prisma/client';
+import { AnswerType, QuestionType, Question } from '@prisma/client';
 import { QuestionService } from 'question/question.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
@@ -123,5 +123,15 @@ export class QuestionController {
     @Body() body: UpdateQuestionModel,
   ): Promise<string> {
     return this.questionService.updateQuestion(id, body);
+  }
+
+  @ApiOkResponse({
+    description: 'get courses owned by user',
+    type: [QuestionModel],
+  })
+  @LoggedMiddleware(true)
+  @Get()
+  async getAllQuestions(): Promise<Question[]> {
+    return this.questionService.getAllQuestions();
   }
 }
