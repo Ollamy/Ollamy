@@ -26,6 +26,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CourseModel } from '../course/course.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -143,5 +144,25 @@ export class UserController {
   @Delete()
   async deleteUser(@OllContext() ctx: any): Promise<string> {
     return this.userService.deleteUser(ctx);
+  }
+
+  @ApiOkResponse({
+    description: "get courses owned by user",
+    type: [CourseModel],
+  })
+  @LoggedMiddleware(true)
+  @Get('/owned')
+  async getCoursesOwnedByUser(@OllContext() ctx: any): Promise<CourseModel[]> {
+    return this.userService.getCoursesOwnedByUser(ctx);
+  }
+
+  @ApiOkResponse({
+    description: "get courses subscribed by user",
+    type: [CourseModel],
+  })
+  @LoggedMiddleware(true)
+  @Get('/subscribed')
+  async getCoursesSubscribedByUser(@OllContext() ctx: any): Promise<CourseModel[]> {
+    return this.userService.getCoursesSubscribedByUser(ctx);
   }
 }

@@ -14,8 +14,9 @@ import {
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, User } from '@prisma/client';
+import { Course, Prisma, User } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
+import { CourseModel } from '../course/course.dto';
 
 @Injectable()
 export class UserService {
@@ -172,6 +173,49 @@ export class UserService {
         throw new ConflictException('User already removed !');
       }
       throw new ConflictException('User not created !');
+    }
+  }
+
+  async getCoursesOwnedByUser(ctx: any): Promise<CourseModel[]> {
+    try {
+      const coursesDb: Course[] = await prisma.course.findMany({
+        where: {
+          owner_id: ctx.__user.id,
+        },
+      });
+
+      return coursesDb.map((courseDb) => ({
+        ownerId: courseDb.owner_id,
+        ...courseDb,
+      })) as CourseModel[];
+    } catch (error) {
+      // Handle errors
+      throw new Error('Error retrieving courses owned by user !');
+    }
+  }
+
+  async getCoursesSubscribedByUser(ctx: any): Promise<CourseModel[]> {
+    try {
+      const coursesDb: Course[] = await prisma.course.findMany({
+        where: {
+          userlist: {
+            some: {
+              user_id: ctx.__user.id,
+              role_user: {
+                not: 'OWNER',
+              }
+            },
+          },
+        },
+      });
+
+      return coursesDb.map((courseDb) => ({
+        ownerId: courseDb.owner_id,
+        ...courseDb,
+      })) as CourseModel[];
+    } catch (error) {
+      // Handle errors
+      throw new Error('Error retrieving courses subscribed by user !');
     }
   }
 }
