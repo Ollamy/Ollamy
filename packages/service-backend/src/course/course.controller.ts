@@ -44,6 +44,7 @@ export class CourseController {
         value: {
           title: 'Course Title',
           description: 'Course description',
+          picture: 'Picture Data or Url',
         } as CreateCourseModel,
       },
     },
@@ -111,6 +112,7 @@ export class CourseController {
           ownerId: 'id',
           title: 'Course Title',
           description: 'Course description',
+          picture: 'Picture Data or Url',
         } as UpdateCourseModel,
       },
     },
@@ -137,5 +139,23 @@ export class CourseController {
   @Get('/sections/:id')
   async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
     return this.courseService.getCourseSections(id);
+  }
+
+  @ApiOkResponse({
+    description: 'user added to course response',
+    type: String,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the course',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Post('/user/:id')
+  async addUserToCourse(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<object> {
+    return this.courseService.addUserToCourse(id, ctx.__user.id);
   }
 }

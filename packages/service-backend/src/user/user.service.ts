@@ -174,4 +174,50 @@ export class UserService {
       throw new ConflictException('User not created !');
     }
   }
+
+  async getUserCourses(ctx: any): Promise<object> {
+    try {
+      const userDb = await prisma.user.findUnique({
+        where: {
+          id: ctx.__user.id,
+        },
+        include: {
+          UsertoCourse: true,
+        },
+      });
+
+      if (!userDb) {
+        Logger.error('User does not exists !');
+        throw new NotFoundException('User does not exists !');
+      }
+
+      const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
+
+      if (courses_id.length === 0) {
+        return [];
+      }
+
+      const courses = await prisma.course.findMany({
+        where: {
+          id: {
+            in: courses_id,
+          },
+        },
+      });
+      return courses.map((course) => {
+        const isOwner = course.owner_id === ctx.__user.id;
+        delete course.owner_id;
+        return {
+          ...course,
+          owner: isOwner,
+        };
+      });
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('User already removed !');
+      }
+      throw new ConflictException('User not created !');
+    }
+  }
 }
