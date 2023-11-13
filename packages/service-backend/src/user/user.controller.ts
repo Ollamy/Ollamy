@@ -10,6 +10,12 @@ import {
 import { UserService } from 'user/user.service';
 
 import {
+  CreateLessonModel,
+  IdLessonModel,
+  LessonModel,
+} from 'lesson/lesson.dto';
+
+import {
   Body,
   Controller,
   Delete,
@@ -143,5 +149,15 @@ export class UserController {
   @Delete()
   async deleteUser(@OllContext() ctx: any): Promise<string> {
     return this.userService.deleteUser(ctx);
+  }
+
+  @ApiOkResponse({
+    description: 'get last user lesson',
+    type: LessonModel,
+  })
+  @LoggedMiddleware(true)
+  @Get('/last-lesson')
+  async getLastLesson(@OllContext() ctx: any): Promise<LessonModel> {
+    return this.userService.getLastLesson(ctx);
   }
 }

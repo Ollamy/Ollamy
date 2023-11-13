@@ -14,8 +14,9 @@ import {
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User, UsertoCourse } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
+import { LessonModel } from '../lesson/lesson.dto';
 
 @Injectable()
 export class UserService {
@@ -172,6 +173,28 @@ export class UserService {
         throw new ConflictException('User already removed !');
       }
       throw new ConflictException('User not created !');
+    }
+  }
+
+  async getLastLesson(ctx: any): Promise<LessonModel> {
+    try {
+      const lastLesson: UsertoCourse = await prisma.usertoCourse.findFirst({
+        where: {
+          user_id: ctx.__user.id,
+        },
+      });
+
+      if (!lastLesson) {
+        throw new Error('No completed lessons found for the user.');
+      }
+      const lesson = lastLesson;
+
+      return {
+      } as LessonModel;
+
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Could not get last user lesson !');
     }
   }
 }
