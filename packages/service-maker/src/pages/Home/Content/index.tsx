@@ -1,11 +1,6 @@
+import type { ChangeEvent, ReactElement } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  ReactElement,
-  useState,
-  useCallback,
-  ChangeEvent,
-  useEffect,
-} from "react";
 
 interface DashboardContentProps {}
 
@@ -21,7 +16,7 @@ const initialFormState: FormState = {
   color: "#E6674F",
 };
 
-const DashboardContent = ({}: DashboardContentProps): ReactElement => {
+function DashboardContent({}: DashboardContentProps): ReactElement {
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
@@ -59,7 +54,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
       setFormData(initialFormState);
       setIsMenuDisplayed(false);
     },
-    [currentColor, formData],
+    [currentColor, formData]
   );
 
   const handleReset = useCallback((e: any) => {
@@ -85,27 +80,27 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
                   onClick={handleChangeColor}
                   currentColor={colorsChoice[currentColor]}
                 >
-                  <Image src={"public/sparkles-outline.svg"} />
+                  <Image src="public/sparkles-outline.svg" />
                 </CourseColor>
               </CouseColorContainer>
               <Form onReset={handleReset} onSubmit={handleSubmit}>
                 <Input
                   required
-                  name={"title"}
+                  name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder={"Course Title"}
+                  placeholder="Course Title"
                 />
                 <Input
                   required
-                  name={"description"}
+                  name="description"
                   onChange={handleChange}
                   value={formData.description}
-                  placeholder={"Course Description"}
+                  placeholder="Course Description"
                 />
                 <ButtonContainer>
-                  <CancelButton type={"reset"}>Cancel</CancelButton>
-                  <CreateButton type={"submit"}>Create</CreateButton>
+                  <CancelButton type="reset">Cancel</CancelButton>
+                  <CreateButton type="submit">Create</CreateButton>
                 </ButtonContainer>
               </Form>
             </NewCourseMenu>
@@ -113,27 +108,25 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
         </AddButton>
       </CoursesTopBar>
       <CoursesContainer>
-        {coursesList.map((course, index) => {
-          return (
-            <CoursesBox key={`${course.title}-${index}`}>
-              <CourseLogo color={course.color} />
-              <TextContainer>
-                <CourseTitle>{course.title}</CourseTitle>
-                <CourseDescription>{course.description}</CourseDescription>
-              </TextContainer>
-              <EditImage
-                src={"public/create-outline.svg"}
-                onClick={() => {
-                  alert(`Try to access to ${course.title}`);
-                }}
-              />
-            </CoursesBox>
-          );
-        })}
+        {coursesList.map((course, index) => (
+          <CoursesBox key={`${course.title}-${index}`}>
+            <CourseLogo color={course.color} />
+            <TextContainer>
+              <CourseTitle>{course.title}</CourseTitle>
+              <CourseDescription>{course.description}</CourseDescription>
+            </TextContainer>
+            <EditImage
+              src="public/create-outline.svg"
+              onClick={() => {
+                alert(`Try to access to ${course.title}`);
+              }}
+            />
+          </CoursesBox>
+        ))}
       </CoursesContainer>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: block;
@@ -205,7 +198,6 @@ const NewCourseMenu = styled.div`
   box-shadow: 0 11.61887px 124.28px 0 rgba(37, 72, 153, 0.17);
 
   cursor: auto;
-  z-index: 100;
 `;
 
 const MenuTitle = styled.h2`
@@ -217,9 +209,7 @@ const MenuTitle = styled.h2`
   font-style: normal;
   font-size: 24px;
   line-height: 30px;
-  font-family:
-    Public Sans,
-    sans-serif;
+  font-family: Public Sans, sans-serif;
 `;
 
 const CouseColorContainer = styled.div`
@@ -273,9 +263,7 @@ const Input = styled.input`
   height: 40px;
 
   color: #757575;
-  font-family:
-    Public Sans,
-    sans-serif;
+  font-family: Public Sans, sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
@@ -302,9 +290,7 @@ const CancelButton = styled.button`
   background: #f5f7fb;
 
   color: rgba(21, 25, 32, 0.5);
-  font-family:
-    Work Sans,
-    sans-serif;
+  font-family: Work Sans, sans-serif;
   font-size: 18.482px;
   font-style: normal;
   font-weight: 600;
@@ -322,9 +308,7 @@ const CreateButton = styled.button`
 
   color: var(--white-white-100-high-emphasys, #fff);
   text-align: center;
-  font-family:
-    Work Sans,
-    sans-serif;
+  font-family: Work Sans, sans-serif;
   font-size: 18.482px;
   font-style: normal;
   font-weight: 600;
