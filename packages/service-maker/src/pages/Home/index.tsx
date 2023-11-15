@@ -1,16 +1,15 @@
-import TopBar from '../../components/TopBar';
-import styled from 'styled-components';
-import { ReactElement } from 'react';
+import type { ReactElement } from "react";
+import styled from "styled-components";
 
-interface HomePageProps {}
+import TopBar from "../../components/TopBar";
 
-const HomePage = ({}: HomePageProps): ReactElement => {
+function HomePage(): ReactElement {
   return (
     <Container>
-      <TopBar title={'Ollamy Maker'} />
+      <TopBar title="Ollamy Maker" />
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: block;

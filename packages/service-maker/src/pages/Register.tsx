@@ -2,19 +2,19 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-import image from '../assets/imageSideBar.png';
-import { ButtonMaker } from '../components/button/button';
-import { FormMaker } from '../components/form/form';
-import { InputMaker } from '../components/input/input';
-import { SideBarMaker } from '../components/sidebar/sidebar';
+import image from "../assets/imageSideBar.png";
+import { ButtonMaker } from "../components/button/button";
+import { FormMaker } from "../components/form/form";
+import { InputMaker } from "../components/input/input";
+import { SideBarMaker } from "../components/sidebar/sidebar";
+import api from "../services/api";
 
 type Inputs = {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   rePassword: string;
@@ -33,27 +33,28 @@ export function Register(): React.ReactNode {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
+  const { mutateAsync: registerMutation } = api.user.useRegister();
 
   const onSubmit = async (data: Inputs): Promise<void> => {
     try {
-      await axios.post(`http://localhost:3000/user`, {
-        ...data,
-      });
+      const { firstname, lastname, email, password } = data;
+      // @ts-ignore
+      await registerMutation({ firstname, lastname, email, password });
     } catch (err) {
       /* empty */
     }
   };
   const handleLoginClick = (): void => {
-    window.location.href = 'login';
+    window.location.href = "login";
   };
 
   return (
     <div
       style={{
-        display: 'flex',
-        width: '100vw',
-        height: '100vh',
-        flexDirection: 'row',
+        display: "flex",
+        width: "100vw",
+        height: "100vh",
+        flexDirection: "row",
       }}
     >
       <SideBarMaker>
@@ -62,11 +63,11 @@ export function Register(): React.ReactNode {
       <FormMaker>
         <h1
           style={{
-            color: '#E6674F',
-            marginTop: '140px',
-            marginBottom: '60px',
-            fontWeight: 'bolder',
-            fontSize: '40px',
+            color: "#E6674F",
+            marginTop: "140px",
+            marginBottom: "60px",
+            fontWeight: "bolder",
+            fontSize: "40px",
           }}
         >
           Register
@@ -74,26 +75,57 @@ export function Register(): React.ReactNode {
         {state === State.PERSONALDATA && (
           <>
             <label htmlFor="firstName">First name</label>
-            <InputMaker register={{ ...register('firstName') }} />
+            <InputMaker
+              register={{ ...register("firstname", { required: true }) }}
+            />
             <label htmlFor="lastName">Last name</label>
-            <InputMaker register={{ ...register('lastName') }} />
-            <ButtonMaker textButton="Continue" onClick={() => setState(State.CONFIDENTIALDATA)} />
+            <InputMaker
+              register={{ ...register("lastname", { required: true }) }}
+            />
+            <ButtonMaker
+              textButton="Continue"
+              onClick={() => setState(State.CONFIDENTIALDATA)}
+            />
           </>
         )}
         {state === State.CONFIDENTIALDATA && (
           <>
             <label htmlFor="email">Email</label>
-            <InputMaker register={{ ...register('email') }} />
+            <InputMaker
+              register={{ ...register("email", { required: true }) }}
+            />
             <label htmlFor="password">Password</label>
-            <InputMaker type="password" register={{ ...register('password') }} />
+            <InputMaker
+              type="password"
+              register={{ ...register("password", { required: true }) }}
+            />
             <label htmlFor="ConfirmPassword">Confirm Password</label>
-            <InputMaker type="password" register={{ ...register('rePassword') }} />
-            <ButtonMaker textButton="Register" onClick={handleSubmit(onSubmit)} />
+            <InputMaker
+              type="password"
+              errorMessage={errors.rePassword && errors.rePassword.message}
+              register={{
+                ...register("rePassword", {
+                  required: true,
+                  validate: (val: string) => {
+                    if (watch("password") !== val) {
+                      return "Your passwords do no match";
+                    }
+                  },
+                }),
+              }}
+            />
+            <ButtonMaker
+              textButton="Register"
+              onClick={handleSubmit(onSubmit)}
+            />
           </>
         )}
         <p>
-          Already have an account?
-          <span style={{ color: '#876BF6', cursor: 'pointer' }} onClick={handleLoginClick}>
+          Already have an account?{" "}
+          <span
+            style={{ color: "#876BF6", cursor: "pointer" }}
+            onClick={handleLoginClick}
+          >
             Login
           </span>
         </p>
