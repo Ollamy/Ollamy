@@ -1,5 +1,6 @@
 import type { UseQueryOptions } from "react-query";
 import { useMutation, useQuery } from "react-query";
+import { queryClient } from "main";
 
 import { GetUserModel, UserApi } from "../out";
 
@@ -15,4 +16,10 @@ export const userActions = {
     }),
   useRegister: () => useMutation(UserApi.registerUser),
   useLogin: () => useMutation(UserApi.loginUser),
+  useUpdate: () =>
+    useMutation(UserApi.updateUser, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_USER_KEY);
+      },
+    }),
 };
