@@ -1,21 +1,20 @@
 import type { UseQueryOptions } from "react-query";
 import { useMutation, useQuery } from "react-query";
-import axios from "axios";
+
+import { GetUserModel, UserApi } from "../out";
 
 export const GET_USER_KEY = "getUser";
 
 export const userActions = {
-  useUser: (config: UseQueryOptions<any>) =>
+  useUser: (config?: UseQueryOptions<GetUserModel>) =>
     useQuery({
       queryKey: GET_USER_KEY,
-      queryFn: () => axios.get("http://localhost:3000/user"),
+      queryFn: () => UserApi.getUser(),
       useErrorBoundary: false,
       notifyOnChangeProps: ["data", "error"],
       retry: false,
       ...config,
     }),
-  useRegister: () =>
-    useMutation((params) =>
-      axios.post("http://localhost:3000/user/register", params),
-    ),
+  useRegister: () => useMutation(UserApi.registerUser),
+  useLogin: () => useMutation(UserApi.loginUser),
 };

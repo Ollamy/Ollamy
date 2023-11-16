@@ -38,8 +38,10 @@ export function Register(): React.ReactNode {
   const onSubmit = async (data: Inputs): Promise<void> => {
     try {
       const { firstname, lastname, email, password } = data;
-      // @ts-ignore
-      await registerMutation({ firstname, lastname, email, password });
+      await registerMutation({
+        createUserModel: { firstname, lastname, email, password },
+      });
+      window.location.href = "/home";
     } catch (err) {
       /* empty */
     }

@@ -60,6 +60,8 @@ export class UserController {
     res.cookie('session', await this.userService.registerUser(body), {
       httpOnly: true,
       maxAge: SessionService.TTL,
+      sameSite: 'none' as const,
+      secure: true,
     });
 
     return res.send({ success: true });
@@ -87,6 +89,8 @@ export class UserController {
     res.cookie('session', await this.userService.loginUser(body), {
       httpOnly: true,
       maxAge: SessionService.TTL,
+      sameSite: 'none' as const,
+      secure: true,
     });
     return res.send({ success: true });
   }
@@ -130,6 +134,8 @@ export class UserController {
     res.cookie('session', this.userService.updateUser(body, ctx), {
       httpOnly: true,
       maxAge: SessionService.TTL,
+      sameSite: 'none' as const,
+      secure: true,
     });
 
     return res.send({ success: true });
