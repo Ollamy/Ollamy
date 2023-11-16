@@ -10,8 +10,6 @@ export const userActions = {
     useQuery({
       queryKey: GET_USER_KEY,
       queryFn: () => UserApi.getUser(),
-      useErrorBoundary: false,
-      notifyOnChangeProps: ["data", "error"],
       retry: false,
       ...config,
     }),
