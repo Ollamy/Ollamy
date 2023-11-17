@@ -7084,6 +7084,7 @@ __metadata:
     dotenv: ^16.3.1
     env-var: ^7.3.0
     env-variable: ^0.0.6
+    eslint: ^8.53.0
     jest: ^29.4.3
     jest-junit: ^16.0.0
     jsonwebtoken: ^9.0.0
@@ -9938,7 +9939,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.2.0, eslint@npm:^8.51.0":
+"eslint@npm:^8.2.0, eslint@npm:^8.51.0, eslint@npm:^8.53.0":
   version: 8.53.0
   resolution: "eslint@npm:8.53.0"
   dependencies:

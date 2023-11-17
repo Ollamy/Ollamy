@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "preview": "vite preview"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" -c ../../config/eslint/.eslintrc.json --fix",
+    "ci:lint": "eslint \"src/**/*.{ts,tsx}\" -c ../../config/eslint/.eslintrc.json --max-warnings=0",
+    "preview": "vite preview",
+    "client:generate": "./../../script/openapi/backend-client-generator.sh http://localhost:3000 src/services/api/out ./../../script/openapi/ollamy-openapi-generator-cli.jar"
   },
   "dependencies": {
     "@ollamy/design-system": "*",

@@ -29,7 +29,7 @@
   },
   "scripts": {
     "lint": "eslint",
-    "ci:lint": "yarn workspaces run ci:lint"
+    "ci:lint": "yarn workspaces foreach -vip --include '{maker,service-mobile-app,backend}'  run ci:lint"
   },
   "dependencies": {
     "deasync": "^0.1.29",

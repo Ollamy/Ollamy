@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint src/"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" -c ../../config/eslint/.eslintrc.json --fix",
+    "ci:lint": "eslint \"src/**/*.{ts,tsx}\" -c ../../config/eslint/.eslintrc.json --max-warnings=0"
   },
   "dependencies": {
     "@ollamy/design-system": "*",
