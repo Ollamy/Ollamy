@@ -50,7 +50,7 @@ jobs:
 
       - name: Run backend container
         id: run
-        run: docker compose up -d backend --exit-code-from backend
+        run: docker compose up --exit-code-from backend
 
       - name: Check OpenApi generation
         id: test
