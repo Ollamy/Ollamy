@@ -51,6 +51,9 @@ jobs:
         run: npm install -g yarn
 
       - name: Setup yarn version
+        run: yarn set version stable
+
+      - name: Setup yarn version
         run: yarn set version 3.6.0
 
       - name: Install backend dependencies
