@@ -50,7 +50,7 @@ jobs:
 
       - name: Run backend container
         id: run
-        run: docker compose up --wait -d backend
+        run: docker compose up -d backend
 
       - name: Check OpenApi generation
         id: test
