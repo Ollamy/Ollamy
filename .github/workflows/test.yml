@@ -48,13 +48,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install yarn
-        run: npm install -g yarn
-
-      - name: Setup yarn version
-        run: yarn set version stable
-
-      - name: Setup yarn version
-        run: yarn set version 3.6.0
+        run: npm install -g yarn@1.22.17
 
       - name: Install backend dependencies
         working-directory: ./packages/service-backend
