@@ -106,7 +106,7 @@ export class UserApi extends runtime.BaseAPI {
      */
     async loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.loginUserModel === null || requestParameters.loginUserModel === undefined) {
-            throw new runtime.RequiredError('loginUserModel','Required parameter requestParameters.loginUserModel was null or undefined when calling loginUser.');
+            throw new runtime.RequiredError('loginUserMsodel','Required parameter requestParameters.loginUserModel was null or undefined when calling loginUser.');
         }
 
         const queryParameters: any = {};

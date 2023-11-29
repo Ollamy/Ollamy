@@ -52,10 +52,6 @@ jobs:
         id: run
         run: docker compose up -d backend
 
-      # - name: Check heath
-      #   id: testhe
-      #   run: curl -s -f 'http://localhost:${{ secrets.BACKEND_PORT }}/health'
-
       - name: Check OpenApi generation
         id: test
         run: ./script/openapi/test-backend-client-generator-cli.sh http://localhost:${{ secrets.BACKEND_PORT }} packages/service-maker script/openapi
