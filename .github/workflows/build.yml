@@ -52,6 +52,11 @@ jobs:
         id: run
         run: docker compose up -d backend
 
+      - name: Check OpenApi generation
+        id: test
+        working-directory: ./script/openapi
+        run: ls && ./script/openapi/test-backend-client-generator-cli.sh http://localhost:3000 packages/service-maker script/openapi
+
       - name: Stop backend container
         id: stop
         run: docker compose down
