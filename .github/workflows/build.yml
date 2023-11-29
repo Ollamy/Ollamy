@@ -54,7 +54,7 @@ jobs:
 
       - name: Check OpenApi generation
         id: test
-        run: docker ps && ./script/openapi/test-backend-client-generator-cli.sh http://localhost:3000 packages/service-maker script/openapi
+        run: ./script/openapi/test-backend-client-generator-cli.sh http://localhost:${{ secrets.BACKEND_PORT }} packages/service-maker script/openapi
 
       - name: Stop backend container
         id: stop
