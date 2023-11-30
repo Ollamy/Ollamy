@@ -15,5 +15,5 @@ if [ $? -ne 0 ]; then
     echo "There is some diff in the openapi-client generation."
     exit 1
 else
-    echo "No diff, every think's ok"
+    echo "No diff, everything's ok"
 fi
