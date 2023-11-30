@@ -1,8 +1,31 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import type { InputMakerInterface } from './input.interface';
+import styled from "styled-components";
 
-import { MakerInputStyled } from './input.style';
+import type { InputMakerInterface } from "./input.interface";
 
-export function InputMaker({ margin, register, type }: InputMakerInterface): React.ReactNode {
-  return <MakerInputStyled margin={margin} {...register} type={type} />;
+import { MakerInputStyled } from "./input.style";
+
+export function InputMaker({
+  margin,
+  register,
+  type,
+  errorMessage,
+}: InputMakerInterface): React.ReactNode {
+  return (
+    <Container>
+      <MakerInputStyled margin={margin} {...register} type={type} />
+      {errorMessage && <ErrorContainer>{errorMessage}</ErrorContainer>}
+    </Container>
+  );
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+`;
+
+const ErrorContainer = styled.div`
+  color: red;
+`;

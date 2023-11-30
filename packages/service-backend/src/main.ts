@@ -1,13 +1,14 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
-import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
-import { writeFileSync } from 'fs';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
-import { Logger, INestApplication, ValidationPipe } from '@nestjs/common';
-import RedisCacheService from 'redis/redis.service';
 import * as cookieParser from 'cookie-parser';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
+import RedisCacheService from 'redis/redis.service';
+import { BACKEND_PORT, FRONTEND_PORT, FRONTEND_URL, MODE } from 'setup';
+
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
 function buildSwagger(
   app: INestApplication,

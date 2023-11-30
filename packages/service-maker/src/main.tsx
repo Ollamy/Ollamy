@@ -1,36 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
-import HomePage from './pages/Home';
-import { Login } from './pages/Login';
-import ProfilePage from './pages/Profile';
-import { Register } from './pages/Register';
+import HomePage from "./pages/Home";
+import { Login } from "./pages/Login";
+import ProfilePage from "./pages/Profile";
+import { Register } from "./pages/Register";
 
+// Router
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Login />,
   },
   {
-    path: '/register',
+    path: "/register",
     element: <Register />,
   },
   {
-    path: '/login',
+    path: "/login",
     element: <Login />,
   },
   {
-    path: '/home',
+    path: "/home",
     element: <HomePage />,
   },
   {
-    path: '/profile',
+    path: "/profile",
     element: <ProfilePage />,
   },
 ]);
 
+// React Query setup (use to query the backend)
+const queryCache = new QueryCache();
+const mutationCache = new MutationCache();
+export const queryClient = new QueryClient({
+  queryCache,
+  mutationCache,
+  defaultOptions: {
+    queries: {
+      notifyOnChangeProps: ["data", "error", "isError", "isLoading"],
+    },
+  },
+});
+
+// Style
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
@@ -50,9 +71,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+// EntryPoint of the app
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <GlobalStyle />
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 );
