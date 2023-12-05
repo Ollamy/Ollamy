@@ -32,7 +32,6 @@ describe('postLesson', () => {
       section_id: mockLessonData.section_id,
       title: mockLessonData.title,
       description: mockLessonData.description,
-      points: 1,
     };
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
 
@@ -100,7 +99,6 @@ describe('deleteLesson', () => {
       section_id: '1',
       title: 'title',
       description: 'desc',
-      points: 0,
     };
     jest.spyOn(prisma.lesson, 'delete').mockResolvedValue(mockDeletedLesson);
 
@@ -162,7 +160,6 @@ describe('getLesson', () => {
       section_id: '456',
       title: 'title',
       description: 'desc',
-      points: 1,
     };
     jest.spyOn(prisma.lesson, 'findFirst').mockResolvedValue(mockLesson);
 
@@ -227,7 +224,6 @@ describe('updateLesson', () => {
       id: mockLessonId,
       section_id: '456',
       ...mockLessonData,
-      points: 1,
     };
     jest.spyOn(prisma.lesson, 'update').mockResolvedValue(mockUpdatedLesson);
 
