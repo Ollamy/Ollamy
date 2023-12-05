@@ -325,14 +325,12 @@ describe('getSectionLessons', () => {
         section_id: mockSectionId,
         title: 'Lesson 1',
         description: 'Lesson 1 Description',
-        points: 1,
       },
       {
         id: '2',
         section_id: mockSectionId,
         title: 'Lesson 2',
         description: 'Lesson 2 Description',
-        points: 2,
       },
     ];
     jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
