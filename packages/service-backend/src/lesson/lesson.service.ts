@@ -7,12 +7,13 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
+  JoinLessonModel,
   LessonModel,
   UpdateLessonModel,
 } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
-import { Prisma, Question, Lesson } from '@prisma/client';
+import { Prisma, Question, Lesson, UsertoLesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
@@ -20,7 +21,7 @@ export class LessonService {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
-          chapter_id: lessonData.chapter_id,
+          section_id: lessonData.section_id,
           title: lessonData.title,
           description: lessonData.description,
         },
@@ -30,7 +31,7 @@ export class LessonService {
         Logger.error('Failed to create lesson !');
         throw new NotFoundException('Failed to create lesson !');
       }
-      return `Lesson created with id ${lessonDb.id}`;
+      return lessonDb.id;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not created !');
@@ -50,7 +51,7 @@ export class LessonService {
         throw new NotFoundException('Lesson does not exists !');
       }
 
-      return `Lesson's ${lessonData.id} has been deleted.`;
+      return lessonData.id;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -74,7 +75,7 @@ export class LessonService {
       }
 
       return {
-        chapterId: lessonDb.chapter_id,
+        sectionId: lessonDb.section_id,
         ...lessonDb,
       } as LessonModel;
     } catch (error) {
@@ -100,7 +101,7 @@ export class LessonService {
         throw new ConflictException('Lesson does not exists !');
       }
 
-      return `Lesson with id ${LessonId} has been updated`;
+      return LessonId;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not updated !');
@@ -128,12 +129,34 @@ export class LessonService {
           description: question.description,
           typeAnswer: question.type_answer,
           typeQuestion: question.type_question,
-          data: question.data,
         };
       }) as QuestionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');
+    }
+  }
+
+  async joinLesson(
+    lessonId: string,
+    joinData: JoinLessonModel,
+  ): Promise<string> {
+    try {
+      const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
+        data: {
+          user_id: joinData.userId,
+          lesson_id: lessonId,
+        },
+      });
+
+      if (!usertoLessonDb) {
+        Logger.error('Failed to create user lesson !');
+        throw new NotFoundException('Failed to create user lesson !');
+      }
+      return usertoLessonDb.id;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User Lesson not created !');
     }
   }
 }

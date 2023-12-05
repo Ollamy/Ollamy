@@ -1,57 +1,60 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class ChapterModel {
+export class AnswerModel {
   @ApiProperty()
   @IsUUID()
   id: string;
 
   @ApiProperty()
   @IsUUID()
-  sectionId: string;
+  questionId: string;
 
   @ApiProperty()
   @IsString()
-  title: string;
+  @IsOptional()
+  data?: string;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  @IsOptional()
+  picture?: string;
 }
 
-export class CreateChapterModel {
+export class CreateAnswerModel {
   @ApiProperty()
   @IsUUID()
-  sectionId: string;
+  questionId: string;
 
   @ApiProperty()
   @IsString()
-  title: string;
+  data: string;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  @IsOptional()
+  picture?: string;
 }
 
-export class IdChapterModel {
+export class IdAnswerModel {
   @ApiProperty()
   @IsUUID()
   id: string;
 }
 
-export class UpdateChapterModel {
+export class UpdateAnswerModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  sectionId: string;
+  questionId?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  title: string;
+  data?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  description: string;
+  picture?: string;
 }

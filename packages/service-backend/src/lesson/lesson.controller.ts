@@ -18,6 +18,7 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
+  JoinLessonModel,
   LessonModel,
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
@@ -40,7 +41,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          chapter_id: 'Chapter Id',
+          section_id: 'Section Id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as CreateLessonModel,
@@ -104,7 +105,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          chapterId: 'id',
+          sectionId: 'id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as LessonModel,
@@ -133,5 +134,29 @@ export class LessonController {
   @Get('/questions/:id')
   async getLessonQuestions(@Param('id') id: string): Promise<QuestionModel[]> {
     return this.lessonService.getLessonQuestions(id);
+  }
+
+  @ApiOkResponse({
+    description: 'lesson join response',
+    type: String,
+  })
+  @ApiBody({
+    type: JoinLessonModel,
+    description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          userId: 'User id',
+        } as JoinLessonModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Post('/:id/join')
+  async joinLesson(
+    @Param('id') id: string,
+    @Body() body: JoinLessonModel,
+  ): Promise<string> {
+    return this.lessonService.joinLesson(id, body);
   }
 }

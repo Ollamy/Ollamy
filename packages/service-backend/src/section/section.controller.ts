@@ -23,7 +23,7 @@ import {
 } from 'section/section.dto';
 import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { ChapterModel } from 'chapter/chapter.dto';
+import { LessonModel } from 'lesson/lesson.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Section')
@@ -122,8 +122,8 @@ export class SectionController {
   }
 
   @ApiOkResponse({
-    description: "section's chapters",
-    type: [ChapterModel],
+    description: "section's lessons",
+    type: [LessonModel],
   })
   @ApiParam({
     name: 'id',
@@ -131,8 +131,8 @@ export class SectionController {
     required: true,
   })
   @LoggedMiddleware(true)
-  @Get('/chapters/:id')
-  async getSectionChapters(@Param('id') id: string): Promise<ChapterModel[]> {
-    return this.sectionService.getSectionChapters(id);
+  @Get('/lessons/:id')
+  async getSectionLessons(@Param('id') id: string): Promise<LessonModel[]> {
+    return this.sectionService.getSectionLessons(id);
   }
 }

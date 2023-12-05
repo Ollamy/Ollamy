@@ -5,6 +5,7 @@ import * as runtime from '../runtime';
 import type {
   CreateLessonModel,
   IdLessonModel,
+  JoinLessonModel,
   LessonModel,
   QuestionModel,
 } from '../models/index';
@@ -19,6 +20,11 @@ export interface GetLessonRequest {
 
 export interface GetLessonQuestionsRequest {
     id: string;
+}
+
+export interface JoinLessonRequest {
+    id: string;
+    joinLessonModel: JoinLessonModel;
 }
 
 export interface RegisterLessonRequest {
@@ -120,6 +126,44 @@ export class LessonApi extends runtime.BaseAPI {
      */
     static getLessonQuestions(requestParameters: GetLessonQuestionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
         return localLessonApi.getLessonQuestionsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async joinLessonRaw(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinLesson.');
+        }
+
+        if (requestParameters.joinLessonModel === null || requestParameters.joinLessonModel === undefined) {
+            throw new runtime.RequiredError('joinLessonModel','Required parameter requestParameters.joinLessonModel was null or undefined when calling joinLesson.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/lesson/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.joinLessonModel,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
+    }
+
+    /**
+     */
+    static joinLesson(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        return localLessonApi.joinLessonRaw(requestParameters, initOverrides);
     }
 
     /**

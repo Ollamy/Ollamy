@@ -3,9 +3,9 @@
 
 import * as runtime from '../runtime';
 import type {
-  ChapterModel,
   CreateSectionModel,
   IdSectionModel,
+  LessonModel,
   SectionModel,
   UpdateSectionModel,
 } from '../models/index';
@@ -18,7 +18,7 @@ export interface GetSectionRequest {
     id: string;
 }
 
-export interface GetSectionChaptersRequest {
+export interface GetSectionLessonsRequest {
     id: string;
 }
 
@@ -98,9 +98,9 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getSectionChaptersRaw(requestParameters: GetSectionChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChapterModel>> {
+    async getSectionLessonsRaw(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSectionChapters.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSectionLessons.');
         }
 
         const queryParameters: any = {};
@@ -108,7 +108,7 @@ export class SectionApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/section/chapters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/section/lessons/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -119,8 +119,8 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getSectionChapters(requestParameters: GetSectionChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChapterModel>> {
-        return localSectionApi.getSectionChaptersRaw(requestParameters, initOverrides);
+    static getSectionLessons(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
+        return localSectionApi.getSectionLessonsRaw(requestParameters, initOverrides);
     }
 
     /**

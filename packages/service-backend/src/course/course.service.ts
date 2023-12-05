@@ -32,7 +32,7 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
-      return `Course created with id ${courseDb.id}`;
+      return courseDb.id;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not created !');
@@ -52,7 +52,7 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return `Course's ${courseId.id} has been deleted.`;
+      return courseId.id;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -109,7 +109,7 @@ export class CourseService {
         throw new ConflictException('Course does not exists !');
       }
 
-      return `Course with id ${CourseId} has been updated`;
+      return CourseId;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not updated !');

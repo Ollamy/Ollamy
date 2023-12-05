@@ -63,7 +63,7 @@ describe('postCourse', () => {
       },
     });
 
-    const expectedResponse = `Course created with id ${mockCourseDb.id}`;
+    const expectedResponse = mockCourseDb.id;
     expect(result).toEqual(expectedResponse);
   });
 
@@ -153,7 +153,7 @@ describe('deleteCourse', () => {
       },
     });
 
-    const expectedResponse = `Course's ${mockCourseId.id} has been deleted.`;
+    const expectedResponse = mockCourseId.id;
     expect(result).toEqual(expectedResponse);
   });
 
@@ -308,7 +308,7 @@ describe('updateCourse', () => {
       },
     });
 
-    const expectedMessage = `Course with id ${mockCourseId} has been updated`;
+    const expectedMessage = mockCourseId;
     expect(result).toEqual(expectedMessage);
   });
 

@@ -21,9 +21,10 @@ import {
   QuestionModel,
   UpdateQuestionModel,
 } from 'question/question.dto';
-import { AnswerType, QuestionType } from '@prisma/client';
+import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 import { QuestionService } from 'question/question.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { AnswerModel } from '../answer/answer.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -47,6 +48,8 @@ export class QuestionController {
           data: 'Question data',
           typeAnswer: AnswerType.TEXT,
           typeQuestion: QuestionType.TEXT,
+          picture: 'Question picture',
+          difficulty: QuestionDifficulty.BEGINNER,
         } as CreateQuestionModel,
       },
     },
@@ -112,6 +115,7 @@ export class QuestionController {
           title: 'Question Title',
           description: 'Question decsription',
           data: 'Data of the question',
+          trustAnswerId: 'id',
         } as UpdateQuestionModel,
       },
     },
@@ -123,5 +127,20 @@ export class QuestionController {
     @Body() body: UpdateQuestionModel,
   ): Promise<string> {
     return this.questionService.updateQuestion(id, body);
+  }
+
+  @ApiOkResponse({
+    description: 'question content response',
+    type: QuestionModel,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the question',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Get('/:id/answers')
+  async getQuestionAnswers(@Query('id') id: string): Promise<AnswerModel[]> {
+    return this.questionService.getQuestionAnswers(id);
   }
 }

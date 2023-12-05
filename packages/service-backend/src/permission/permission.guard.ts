@@ -10,7 +10,6 @@ import {
   PermissionUser,
   PermissionCourse,
   PermissionSection,
-  PermissionChapter,
   PermissionLesson,
   UsertoCourse,
 } from '@prisma/client';
@@ -58,12 +57,6 @@ export class PermissionGuard implements CanActivate {
           role,
           method,
           requiredRoles as PermissionSection[],
-        );
-      case PermissionType.CHAPTER:
-        return this.checkChapter(
-          role,
-          method,
-          requiredRoles as PermissionChapter[],
         );
       case PermissionType.LESSON:
         return this.checkLesson(
@@ -127,21 +120,6 @@ export class PermissionGuard implements CanActivate {
         return this.equals(role.permission_section, requiredRoles);
       case Method.ONE_OF:
         return role.permission_section.some((r) => requiredRoles.includes(r));
-      default:
-        throw new Error('Invalid permission method');
-    }
-  }
-
-  checkChapter(
-    role: UsertoCourse,
-    method: Method,
-    requiredRoles: PermissionChapter[],
-  ): boolean {
-    switch (method) {
-      case Method.ALL:
-        return this.equals(role.permission_chapter, requiredRoles);
-      case Method.ONE_OF:
-        return role.permission_chapter.some((r) => requiredRoles.includes(r));
       default:
         throw new Error('Invalid permission method');
     }

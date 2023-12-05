@@ -66,7 +66,7 @@ describe('DiscussionService', () => {
         }),
       );
 
-      const expectedResponse = `Discussion created with id ${mockDiscussionDb.id}`;
+      const expectedResponse = mockDiscussionDb.id;
       expect(result).toEqual(expectedResponse);
     });
 

@@ -17,6 +17,10 @@ export interface GetQuestionRequest {
     id: string;
 }
 
+export interface GetQuestionAnswersRequest {
+    id: string;
+}
+
 export interface RegisterQuestionRequest {
     createQuestionModel: CreateQuestionModel;
 }
@@ -89,6 +93,33 @@ export class QuestionApi extends runtime.BaseAPI {
      */
     static getQuestion(requestParameters: GetQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
         return localQuestionApi.getQuestionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestionAnswers.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/question/{id}/answers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+        return localQuestionApi.getQuestionAnswersRaw(requestParameters, initOverrides);
     }
 
     /**

@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-import { AnswerType, QuestionType } from '@prisma/client';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 
 export class QuestionModel {
   @ApiProperty()
@@ -20,10 +26,6 @@ export class QuestionModel {
   description: string;
 
   @ApiProperty()
-  @IsString()
-  data: string;
-
-  @ApiProperty()
   typeAnswer: AnswerType;
 
   @ApiProperty()
@@ -32,6 +34,16 @@ export class QuestionModel {
   @ApiProperty()
   @IsUUID()
   trustAnswerId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  pictureId?: string;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
 }
 
 export class CreateQuestionModel {
@@ -59,6 +71,16 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsString()
   typeQuestion: QuestionType;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  picture?: string;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
 }
 
 export class IdQuestionModel {
@@ -86,20 +108,20 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  data: string;
-}
-
-export class CreateAnswerModel {
-  @ApiProperty()
-  @IsString()
-  value: string;
-
-  @ApiProperty()
-  @IsUUID()
-  questionId: string;
+  picture?: string;
 
   @ApiProperty()
   @IsNumber()
   @IsOptional()
-  point: number;
+  points?: number;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  trustAnswerId: string;
 }

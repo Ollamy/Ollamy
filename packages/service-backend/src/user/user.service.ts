@@ -165,7 +165,7 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return `User's ${ctx.__user.id} has been deleted.`;
+      return ctx.__user.id;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

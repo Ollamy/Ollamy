@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './ChapterApi';
+export * from './AnswerApi';
 export * from './CourseApi';
 export * from './DefaultApi';
 export * from './LessonApi';

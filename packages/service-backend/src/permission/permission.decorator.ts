@@ -4,7 +4,6 @@ import {
   PermissionUser,
   PermissionCourse,
   PermissionSection,
-  PermissionChapter,
   PermissionLesson,
 } from '@prisma/client';
 
@@ -31,6 +30,5 @@ export const AllowUser = (
     | PermissionUser[]
     | PermissionCourse[]
     | PermissionSection[]
-    | PermissionChapter[]
     | PermissionLesson[]
 ) => SetMetadata(PERMISSION_KEY, { type, method, args });
