@@ -20,6 +20,7 @@ import {
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
+  QuestionIdResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 import { QuestionService } from 'question/question.service';
@@ -34,7 +35,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question create response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiBody({
     type: CreateQuestionModel,
@@ -56,13 +57,13 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerQuestion(@Body() body: CreateQuestionModel): Promise<string> {
+  async registerQuestion(@Body() body: CreateQuestionModel): Promise<QuestionIdResponse> {
     return this.questionService.postQuestion(body);
   }
 
   @ApiOkResponse({
     description: 'question delete response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiBody({
     type: IdQuestionModel,
@@ -77,7 +78,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteQuestion(@Body() body: IdQuestionModel): Promise<string> {
+  async deleteQuestion(@Body() body: IdQuestionModel): Promise<QuestionIdResponse> {
     return this.questionService.deleteQuestion(body);
   }
 
@@ -98,7 +99,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question update response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -125,7 +126,7 @@ export class QuestionController {
   async updateQuestion(
     @Query('id') id: string,
     @Body() body: UpdateQuestionModel,
-  ): Promise<string> {
+  ): Promise<QuestionIdResponse> {
     return this.questionService.updateQuestion(id, body);
   }
 

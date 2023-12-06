@@ -19,6 +19,7 @@ import {
   IdAnswerModel,
   AnswerModel,
   UpdateAnswerModel,
+  AnswerIdResponse,
 } from 'answer/answer.dto';
 import { AnswerService } from 'answer/answer.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -31,7 +32,7 @@ export class AnswerController {
 
   @ApiOkResponse({
     description: 'answer create response',
-    type: String,
+    type: AnswerIdResponse,
   })
   @ApiBody({
     type: CreateAnswerModel,
@@ -48,13 +49,13 @@ export class AnswerController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerAnswer(@Body() body: CreateAnswerModel): Promise<string> {
+  async registerAnswer(@Body() body: CreateAnswerModel): Promise<AnswerIdResponse> {
     return this.answerService.postAnswer(body);
   }
 
   @ApiOkResponse({
     description: 'answer delete response',
-    type: String,
+    type: AnswerIdResponse,
   })
   @ApiBody({
     type: IdAnswerModel,
@@ -69,7 +70,7 @@ export class AnswerController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteAnswer(@Body() body: IdAnswerModel): Promise<string> {
+  async deleteAnswer(@Body() body: IdAnswerModel): Promise<AnswerIdResponse> {
     return this.answerService.deleteAnswer(body);
   }
 
@@ -90,7 +91,7 @@ export class AnswerController {
 
   @ApiOkResponse({
     description: 'answer update response',
-    type: String,
+    type: AnswerIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -115,7 +116,7 @@ export class AnswerController {
   async updateAnswer(
     @Query('id') id: string,
     @Body() body: UpdateAnswerModel,
-  ): Promise<string> {
+  ): Promise<AnswerIdResponse> {
     return this.answerService.updateAnswer(id, body);
   }
 }

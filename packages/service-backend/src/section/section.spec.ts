@@ -47,7 +47,7 @@ describe('postSection', () => {
       },
     });
 
-    expect(result).toBe(mockSectionDb.id);
+    expect(result).toStrictEqual({id: mockSectionDb.id});
   });
 
   it('should throw NotFoundException if section creation fails', async () => {
@@ -117,7 +117,7 @@ describe('deleteSection', () => {
       },
     });
 
-    expect(result).toBe(mockSectionData.id);
+    expect(result).toStrictEqual({id: mockSectionData.id});
   });
 
   it('should throw NotFoundException if section does not exist', async () => {
@@ -270,7 +270,7 @@ describe('updateSection', () => {
       data: mockSectionData,
     });
 
-    expect(result).toBe(mockSectionId);
+    expect(result).toStrictEqual({id: mockSectionId});
   });
 
   it('should throw ConflictException if section does not exist', async () => {

@@ -58,3 +58,9 @@ export class UpdateAnswerModel {
   @IsOptional()
   picture?: string;
 }
+
+export class AnswerIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}

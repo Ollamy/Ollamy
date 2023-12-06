@@ -20,6 +20,7 @@ import {
   IdLessonModel,
   JoinLessonModel,
   LessonModel,
+  LessonIdResponse,
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -33,7 +34,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson create response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiBody({
     type: CreateLessonModel,
@@ -50,13 +51,13 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerLesson(@Body() body: CreateLessonModel): Promise<string> {
+  async registerLesson(@Body() body: CreateLessonModel): Promise<LessonIdResponse> {
     return this.lessonService.postLesson(body);
   }
 
   @ApiOkResponse({
     description: 'lesson delete response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiBody({
     type: IdLessonModel,
@@ -71,7 +72,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteLesson(@Body() body: IdLessonModel): Promise<string> {
+  async deleteLesson(@Body() body: IdLessonModel): Promise<LessonIdResponse> {
     return this.lessonService.deleteLesson(body);
   }
 
@@ -92,7 +93,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson update response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -117,7 +118,7 @@ export class LessonController {
   async updateLesson(
     @Param('id') id: string,
     @Body() body: LessonModel,
-  ): Promise<string> {
+  ): Promise<LessonIdResponse> {
     return this.lessonService.updateLesson(id, body);
   }
 
@@ -138,7 +139,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson join response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiBody({
     type: JoinLessonModel,
@@ -156,7 +157,7 @@ export class LessonController {
   async joinLesson(
     @Param('id') id: string,
     @Body() body: JoinLessonModel,
-  ): Promise<string> {
+  ): Promise<LessonIdResponse> {
     return this.lessonService.joinLesson(id, body);
   }
 }

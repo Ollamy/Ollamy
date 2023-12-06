@@ -9,6 +9,7 @@ import {
   IdAnswerModel,
   AnswerModel,
   UpdateAnswerModel,
+  AnswerIdResponse,
 } from './answer.dto';
 import prisma from 'client';
 import { Prisma, Answer } from '@prisma/client';
@@ -16,7 +17,7 @@ import { PictureService } from '../picture/picture.service';
 
 @Injectable()
 export class AnswerService {
-  async postAnswer(answerData: CreateAnswerModel): Promise<string> {
+  async postAnswer(answerData: CreateAnswerModel): Promise<AnswerIdResponse> {
     try {
       const answerDb: Answer = await prisma.answer.create({
         data: {
@@ -32,14 +33,14 @@ export class AnswerService {
         Logger.error('Failed to create answer !');
         throw new NotFoundException('Failed to create answer !');
       }
-      return answerDb.id;
+      return { id: answerDb.id } as AnswerIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Answer not created !');
     }
   }
 
-  async deleteAnswer(answerId: IdAnswerModel): Promise<string> {
+  async deleteAnswer(answerId: IdAnswerModel): Promise<AnswerIdResponse> {
     try {
       const answerDb: Answer = await prisma.answer.delete({
         where: {
@@ -52,7 +53,7 @@ export class AnswerService {
         throw new NotFoundException('Answer does not exists !');
       }
 
-      return answerId.id;
+      return { id: answerDb.id } as AnswerIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -91,7 +92,7 @@ export class AnswerService {
   async updateAnswer(
     AnswerId: string,
     answerData: UpdateAnswerModel,
-  ): Promise<string> {
+  ): Promise<AnswerIdResponse> {
     try {
       const answerDb: Answer = await prisma.answer.update({
         where: {
@@ -111,7 +112,7 @@ export class AnswerService {
         throw new ConflictException('Answer does not exists !');
       }
 
-      return AnswerId;
+      return { id: answerDb.id } as AnswerIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Answer not updated !');

@@ -9,6 +9,8 @@ import {
   CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
+  CourseIdResponse,
+  CourseTrueResponse,
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
@@ -17,7 +19,7 @@ import { PictureService } from '../picture/picture.service';
 
 @Injectable()
 export class CourseService {
-  async postCourse(courseData: CreateCourseModel, ctx: any): Promise<string> {
+  async postCourse(courseData: CreateCourseModel, ctx: any): Promise<CourseIdResponse> {
     try {
       const courseDb = await prisma.course.create({
         data: {
@@ -32,14 +34,14 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
-      return courseDb.id;
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not created !');
     }
   }
 
-  async deleteCourse(courseId: IdCourseModel): Promise<string> {
+  async deleteCourse(courseId: IdCourseModel): Promise<CourseIdResponse> {
     try {
       const courseDb = await prisma.course.delete({
         where: {
@@ -52,13 +54,13 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return courseId.id;
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Course already removed !');
       }
-      throw new ConflictException('Course not created !');
+      throw new ConflictException('Course not deleted !');
     }
   }
 
@@ -84,14 +86,14 @@ export class CourseService {
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Course not deleted !');
+      throw new ConflictException('Course does not exists !');
     }
   }
 
   async updateCourse(
     CourseId: string,
     courseData: UpdateCourseModel,
-  ): Promise<string> {
+  ): Promise<CourseIdResponse> {
     try {
       const courseDb: Course = await prisma.course.update({
         where: {
@@ -109,7 +111,7 @@ export class CourseService {
         throw new ConflictException('Course does not exists !');
       }
 
-      return CourseId;
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not updated !');
@@ -141,7 +143,7 @@ export class CourseService {
     }
   }
 
-  async addUserToCourse(courseId: string, userId: string): Promise<object> {
+  async addUserToCourse(courseId: string, userId: string): Promise<CourseTrueResponse> {
     try {
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {
@@ -154,7 +156,7 @@ export class CourseService {
         Logger.error('Failed to add user to course !');
         throw new NotFoundException('Failed to add user to course !');
       }
-      return { success: true };
+      return { success: true } as CourseTrueResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User not added to course !');

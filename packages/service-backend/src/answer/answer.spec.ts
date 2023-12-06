@@ -49,7 +49,7 @@ describe('postAnswer', () => {
       },
     });
 
-    expect(result).toBe(mockAnswerDb.id);
+    expect(result).toStrictEqual({id: mockAnswerDb.id});
   });
 
   it('should throw NotFoundException if answer creation fails', async () => {
@@ -118,7 +118,7 @@ describe('deleteAnswer', () => {
       },
     });
 
-    expect(result).toBe(mockAnswerId.id);
+    expect(result).toStrictEqual({id: mockAnswerId.id});
   });
 
   it('should throw NotFoundException if answer deletion fails', async () => {
@@ -260,7 +260,7 @@ describe('updateAnswer', () => {
       },
     });
 
-    expect(result).toBe(mockAnswerId);
+    expect(result).toStrictEqual({id: mockAnswerId});
   });
 
   it('should throw ConflictException if the answer does not exist', async () => {

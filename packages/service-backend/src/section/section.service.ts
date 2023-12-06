@@ -9,6 +9,7 @@ import {
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
+  SectionIdResponse,
 } from 'section/section.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
@@ -16,7 +17,7 @@ import { Lesson, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
-  async postSection(sectionData: CreateSectionModel): Promise<string> {
+  async postSection(sectionData: CreateSectionModel): Promise<SectionIdResponse> {
     try {
       const sectionDb: Section = await prisma.section.create({
         data: {
@@ -30,14 +31,14 @@ export class SectionService {
         Logger.error('Failed to create section !');
         throw new NotFoundException('Failed to create section !');
       }
-      return sectionDb.id;
+      return { id: sectionDb.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not created !');
     }
   }
 
-  async deleteSection(sectionData: IdSectionModel): Promise<string> {
+  async deleteSection(sectionData: IdSectionModel): Promise<SectionIdResponse> {
     try {
       const sectionDb: Section = await prisma.section.delete({
         where: {
@@ -50,7 +51,7 @@ export class SectionService {
         throw new NotFoundException('Section does not exists !');
       }
 
-      return sectionData.id;
+      return { id: sectionData.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -88,7 +89,7 @@ export class SectionService {
   async updateSection(
     SectionId: string,
     sectionData: UpdateSectionModel,
-  ): Promise<string> {
+  ): Promise<SectionIdResponse> {
     try {
       const sectionDb = await prisma.section.update({
         where: {
@@ -102,7 +103,7 @@ export class SectionService {
         throw new ConflictException('Section does not exists !');
       }
 
-      return SectionId;
+      return { id: sectionDb.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not updated !');

@@ -64,7 +64,7 @@ describe('postCourse', () => {
     });
 
     const expectedResponse = mockCourseDb.id;
-    expect(result).toEqual(expectedResponse);
+    expect(result).toStrictEqual({id : expectedResponse});
   });
 
   it('should throw NotFoundException if the course creation fails', async () => {
@@ -154,7 +154,7 @@ describe('deleteCourse', () => {
     });
 
     const expectedResponse = mockCourseId.id;
-    expect(result).toEqual(expectedResponse);
+    expect(result).toStrictEqual({ id: expectedResponse });
   });
 
   it('should throw NotFoundException if the course does not exist', async () => {
@@ -309,7 +309,7 @@ describe('updateCourse', () => {
     });
 
     const expectedMessage = mockCourseId;
-    expect(result).toEqual(expectedMessage);
+    expect(result).toStrictEqual({id: expectedMessage});
   });
 
   it('should throw ConflictException if the course does not exist', async () => {

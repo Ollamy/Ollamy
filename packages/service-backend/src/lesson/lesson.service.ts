@@ -10,6 +10,7 @@ import {
   JoinLessonModel,
   LessonModel,
   UpdateLessonModel,
+  LessonIdResponse,
 } from './lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 import prisma from 'client';
@@ -17,7 +18,7 @@ import { Prisma, Question, Lesson, UsertoLesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: CreateLessonModel): Promise<string> {
+  async postLesson(lessonData: CreateLessonModel): Promise<LessonIdResponse> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
@@ -31,14 +32,14 @@ export class LessonService {
         Logger.error('Failed to create lesson !');
         throw new NotFoundException('Failed to create lesson !');
       }
-      return lessonDb.id;
+      return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not created !');
     }
   }
 
-  async deleteLesson(lessonData: IdLessonModel): Promise<string> {
+  async deleteLesson(lessonData: IdLessonModel): Promise<LessonIdResponse> {
     try {
       const lessonDb: Lesson = await prisma.lesson.delete({
         where: {
@@ -51,7 +52,7 @@ export class LessonService {
         throw new NotFoundException('Lesson does not exists !');
       }
 
-      return lessonData.id;
+      return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -87,7 +88,7 @@ export class LessonService {
   async updateLesson(
     LessonId: string,
     lessonData: UpdateLessonModel,
-  ): Promise<string> {
+  ): Promise<LessonIdResponse> {
     try {
       const lessonDb = await prisma.lesson.update({
         where: {
@@ -101,7 +102,7 @@ export class LessonService {
         throw new ConflictException('Lesson does not exists !');
       }
 
-      return LessonId;
+      return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not updated !');
@@ -140,7 +141,7 @@ export class LessonService {
   async joinLesson(
     lessonId: string,
     joinData: JoinLessonModel,
-  ): Promise<string> {
+  ): Promise<LessonIdResponse> {
     try {
       const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
         data: {
@@ -153,7 +154,7 @@ export class LessonService {
         Logger.error('Failed to create user lesson !');
         throw new NotFoundException('Failed to create user lesson !');
       }
-      return usertoLessonDb.id;
+      return { id: usertoLessonDb.lesson_id} as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');

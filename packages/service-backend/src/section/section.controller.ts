@@ -20,6 +20,7 @@ import {
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
+  SectionIdResponse,
 } from 'section/section.dto';
 import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -33,7 +34,7 @@ export class SectionController {
 
   @ApiOkResponse({
     description: 'section create response',
-    type: String,
+    type: SectionIdResponse,
   })
   @ApiBody({
     type: CreateSectionModel,
@@ -50,13 +51,13 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerSection(@Body() body: CreateSectionModel): Promise<string> {
+  async registerSection(@Body() body: CreateSectionModel): Promise<SectionIdResponse> {
     return this.sectionService.postSection(body);
   }
 
   @ApiOkResponse({
     description: 'section delete response',
-    type: String,
+    type: SectionIdResponse,
   })
   @ApiBody({
     type: IdSectionModel,
@@ -71,7 +72,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteSection(@Body() body: IdSectionModel): Promise<string> {
+  async deleteSection(@Body() body: IdSectionModel): Promise<SectionIdResponse> {
     return this.sectionService.deleteSection(body);
   }
 
@@ -92,7 +93,7 @@ export class SectionController {
 
   @ApiOkResponse({
     description: 'section update response',
-    type: String,
+    type: SectionIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -117,7 +118,7 @@ export class SectionController {
   async updateSection(
     @Param('id') id: string,
     @Body() body: UpdateSectionModel,
-  ): Promise<string> {
+  ): Promise<SectionIdResponse> {
     return this.sectionService.updateSection(id, body);
   }
 

@@ -125,3 +125,9 @@ export class UpdateQuestionModel {
   @IsOptional()
   trustAnswerId: string;
 }
+
+export class QuestionIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}

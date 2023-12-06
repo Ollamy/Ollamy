@@ -9,6 +9,7 @@ import {
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
+  QuestionIdResponse,
 } from './question.dto';
 import prisma from 'client';
 import { Answer, Prisma, Question } from '@prisma/client';
@@ -17,7 +18,7 @@ import { AnswerModel } from '../answer/answer.dto';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(questionData: CreateQuestionModel): Promise<string> {
+  async postQuestion(questionData: CreateQuestionModel): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.create({
         data: {
@@ -34,14 +35,14 @@ export class QuestionService {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-      return questionDb.id;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not created !');
     }
   }
 
-  async deleteQuestion(questionId: IdQuestionModel): Promise<string> {
+  async deleteQuestion(questionId: IdQuestionModel): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.delete({
         where: {
@@ -54,7 +55,7 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return questionId.id;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -97,7 +98,7 @@ export class QuestionService {
   async updateQuestion(
     QuestionId: string,
     questionData: UpdateQuestionModel,
-  ): Promise<string> {
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.update({
         where: {
@@ -119,7 +120,7 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      return QuestionId;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not updated !');

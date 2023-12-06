@@ -44,7 +44,7 @@ describe('postLesson', () => {
       data: mockLessonData,
     });
 
-    expect(result).toBe(mockCreatedLesson.id);
+    expect(result).toStrictEqual({ id: mockCreatedLesson.id });
   });
 
   it('should throw ConflictException if the lesson is not created', async () => {
@@ -111,7 +111,7 @@ describe('deleteLesson', () => {
       where: mockLessonData,
     });
 
-    expect(result).toBe(mockLessonData.id);
+    expect(result).toStrictEqual({ id: mockLessonData.id});
   });
 
   it('should throw NotFoundException if the lesson does not exist', async () => {
@@ -240,7 +240,7 @@ describe('updateLesson', () => {
       data: mockLessonData,
     });
 
-    expect(result).toBe(mockLessonId);
+    expect(result).toStrictEqual({ id: mockLessonId });
   });
 
   it('should throw ConflictException if the lesson does not exist', async () => {

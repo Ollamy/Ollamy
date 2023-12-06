@@ -61,3 +61,9 @@ export class JoinLessonModel {
   @IsUUID()
   userId: string;
 }
+
+export class LessonIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}
