@@ -3,6 +3,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  AnswerIdResponse,
   AnswerModel,
   CreateAnswerModel,
   IdAnswerModel,
@@ -32,7 +33,7 @@ export class AnswerApi extends runtime.BaseAPI {
 
     /**
      */
-    async deleteAnswerRaw(requestParameters: DeleteAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async deleteAnswerRaw(requestParameters: DeleteAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         if (requestParameters.idAnswerModel === null || requestParameters.idAnswerModel === undefined) {
             throw new runtime.RequiredError('idAnswerModel','Required parameter requestParameters.idAnswerModel was null or undefined when calling deleteAnswer.');
         }
@@ -51,16 +52,12 @@ export class AnswerApi extends runtime.BaseAPI {
             body: requestParameters.idAnswerModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static deleteAnswer(requestParameters: DeleteAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static deleteAnswer(requestParameters: DeleteAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         return localAnswerApi.deleteAnswerRaw(requestParameters, initOverrides);
     }
 
@@ -93,7 +90,7 @@ export class AnswerApi extends runtime.BaseAPI {
 
     /**
      */
-    async registerAnswerRaw(requestParameters: RegisterAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async registerAnswerRaw(requestParameters: RegisterAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         if (requestParameters.createAnswerModel === null || requestParameters.createAnswerModel === undefined) {
             throw new runtime.RequiredError('createAnswerModel','Required parameter requestParameters.createAnswerModel was null or undefined when calling registerAnswer.');
         }
@@ -112,22 +109,18 @@ export class AnswerApi extends runtime.BaseAPI {
             body: requestParameters.createAnswerModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static registerAnswer(requestParameters: RegisterAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static registerAnswer(requestParameters: RegisterAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         return localAnswerApi.registerAnswerRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateAnswerRaw(requestParameters: UpdateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async updateAnswerRaw(requestParameters: UpdateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateAnswer.');
         }
@@ -150,16 +143,12 @@ export class AnswerApi extends runtime.BaseAPI {
             body: requestParameters.updateAnswerModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static updateAnswer(requestParameters: UpdateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static updateAnswer(requestParameters: UpdateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         return localAnswerApi.updateAnswerRaw(requestParameters, initOverrides);
     }
 

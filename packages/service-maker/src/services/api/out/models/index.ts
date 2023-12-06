@@ -3,6 +3,19 @@
 /**
  * 
  * @export
+ * @interface AnswerIdResponse
+ */
+export interface AnswerIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AnswerIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
  * @interface AnswerModel
  */
 export interface AnswerModel {
@@ -30,6 +43,19 @@ export interface AnswerModel {
      * @memberof AnswerModel
      */
     picture: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseIdResponse
+ */
+export interface CourseIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseIdResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -67,6 +93,19 @@ export interface CourseModel {
      * @memberof CourseModel
      */
     picture: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseTrueResponse
+ */
+export interface CourseTrueResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CourseTrueResponse
+     */
+    success: boolean;
 }
 /**
  * 
@@ -360,6 +399,19 @@ export interface JoinLessonModel {
 /**
  * 
  * @export
+ * @interface LessonIdResponse
+ */
+export interface LessonIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonModel
  */
 export interface LessonModel {
@@ -406,6 +458,19 @@ export interface LoginUserModel {
      * @memberof LoginUserModel
      */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface QuestionIdResponse
+ */
+export interface QuestionIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionIdResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -467,6 +532,19 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     difficulty: string;
+}
+/**
+ * 
+ * @export
+ * @interface SectionIdResponse
+ */
+export interface SectionIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SectionIdResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -659,4 +737,30 @@ export interface UpdateUserModel {
      * @memberof UpdateUserModel
      */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserIdResponse
+ */
+export interface UserIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserTrueResponse
+ */
+export interface UserTrueResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserTrueResponse
+     */
+    success: boolean;
 }
