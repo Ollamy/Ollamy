@@ -49,7 +49,7 @@ describe('postAnswer', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockAnswerDb.id});
+    expect(result).toStrictEqual({ id: mockAnswerDb.id });
   });
 
   it('should throw NotFoundException if answer creation fails', async () => {
@@ -118,7 +118,7 @@ describe('deleteAnswer', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockAnswerId.id});
+    expect(result).toStrictEqual({ id: mockAnswerId.id });
   });
 
   it('should throw NotFoundException if answer deletion fails', async () => {
@@ -172,7 +172,9 @@ describe('getAnswer', () => {
     jest.spyOn(prisma.answer, 'findFirst').mockResolvedValue(mockAnswerDb);
 
     // Invoke the function being tested
-    const result = await answerService.getAnswer(mockAnswerId);
+    const result = await answerService.getAnswer({
+      id: mockAnswerId,
+    } as IdAnswerModel);
 
     // Perform assertions
     expect(prisma.answer.findFirst).toHaveBeenCalledTimes(1);
@@ -194,9 +196,11 @@ describe('getAnswer', () => {
 
     const mockAnswerId = '123';
 
-    await expect(answerService.getAnswer(mockAnswerId)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      answerService.getAnswer({
+        id: mockAnswerId,
+      } as IdAnswerModel),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if an error occurs', async () => {
@@ -206,9 +210,11 @@ describe('getAnswer', () => {
 
     const mockAnswerId = '123';
 
-    await expect(answerService.getAnswer(mockAnswerId)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      answerService.getAnswer({
+        id: mockAnswerId,
+      } as IdAnswerModel),
+    ).rejects.toThrow(ConflictException);
   });
 });
 
@@ -243,7 +249,9 @@ describe('updateAnswer', () => {
 
     // Invoke the function being tested
     const result = await answerService.updateAnswer(
-      mockAnswerId,
+      {
+        id: mockAnswerId,
+      } as IdAnswerModel,
       mockAnswerData,
     );
 
@@ -260,7 +268,7 @@ describe('updateAnswer', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockAnswerId});
+    expect(result).toStrictEqual({ id: mockAnswerId });
   });
 
   it('should throw ConflictException if the answer does not exist', async () => {
@@ -274,7 +282,12 @@ describe('updateAnswer', () => {
     };
 
     await expect(
-      answerService.updateAnswer(mockAnswerId, mockAnswerData),
+      answerService.updateAnswer(
+        {
+          id: mockAnswerId,
+        } as IdAnswerModel,
+        mockAnswerData,
+      ),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -291,7 +304,12 @@ describe('updateAnswer', () => {
     };
 
     await expect(
-      answerService.updateAnswer(mockAnswerId, mockAnswerData),
+      answerService.updateAnswer(
+        {
+          id: mockAnswerId,
+        } as IdAnswerModel,
+        mockAnswerData,
+      ),
     ).rejects.toThrow(ConflictException);
   });
 });
