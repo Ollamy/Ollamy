@@ -3,7 +3,9 @@
 
 import * as runtime from '../runtime';
 import type {
+  CourseIdResponse,
   CourseModel,
+  CourseTrueResponse,
   CreateCourseModel,
   IdCourseModel,
   SectionModel,
@@ -41,7 +43,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async addUserToCourseRaw(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async addUserToCourseRaw(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling addUserToCourse.');
         }
@@ -57,22 +59,18 @@ export class CourseApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static addUserToCourse(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static addUserToCourse(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         return localCourseApi.addUserToCourseRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async deleteCourseRaw(requestParameters: DeleteCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async deleteCourseRaw(requestParameters: DeleteCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         if (requestParameters.idCourseModel === null || requestParameters.idCourseModel === undefined) {
             throw new runtime.RequiredError('idCourseModel','Required parameter requestParameters.idCourseModel was null or undefined when calling deleteCourse.');
         }
@@ -91,16 +89,12 @@ export class CourseApi extends runtime.BaseAPI {
             body: requestParameters.idCourseModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static deleteCourse(requestParameters: DeleteCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static deleteCourse(requestParameters: DeleteCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         return localCourseApi.deleteCourseRaw(requestParameters, initOverrides);
     }
 
@@ -160,7 +154,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async postCourseRaw(requestParameters: PostCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async postCourseRaw(requestParameters: PostCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         if (requestParameters.createCourseModel === null || requestParameters.createCourseModel === undefined) {
             throw new runtime.RequiredError('createCourseModel','Required parameter requestParameters.createCourseModel was null or undefined when calling postCourse.');
         }
@@ -179,22 +173,18 @@ export class CourseApi extends runtime.BaseAPI {
             body: requestParameters.createCourseModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static postCourse(requestParameters: PostCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static postCourse(requestParameters: PostCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         return localCourseApi.postCourseRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateCourseRaw(requestParameters: UpdateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async updateCourseRaw(requestParameters: UpdateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateCourse.');
         }
@@ -217,16 +207,12 @@ export class CourseApi extends runtime.BaseAPI {
             body: requestParameters.updateCourseModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static updateCourse(requestParameters: UpdateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static updateCourse(requestParameters: UpdateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         return localCourseApi.updateCourseRaw(requestParameters, initOverrides);
     }
 

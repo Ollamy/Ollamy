@@ -3,8 +3,8 @@ import {
   IsEmail,
   IsOptional,
   IsString,
-  IsStrongPassword,
   IsUUID,
+  IsBoolean,
 } from 'class-validator';
 
 export class UserModel {
@@ -47,12 +47,6 @@ export class CreateUserModel {
       'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
   })
   @IsString()
-  // @IsStrongPassword({
-  //   minLength: 8,
-  //   minNumbers: 2,
-  //   minUppercase: 1,
-  //   minSymbols: 1,
-  // })
   password: string;
 }
 
@@ -63,42 +57,27 @@ export class LoginUserModel {
 
   @ApiProperty()
   @IsString()
-  // @IsStrongPassword({
-  //   minLength: 8,
-  //   minNumbers: 2,
-  //   minUppercase: 1,
-  //   minSymbols: 1,
-  // })
   password: string;
 }
 
 export class UpdateUserModel {
-  @IsUUID()
-  id: string;
+  @ApiProperty()
+  @IsOptional()
+  firstname?: string;
 
   @ApiProperty()
   @IsOptional()
-  firstname: string;
-
-  @ApiProperty()
-  @IsOptional()
-  lastname: string;
+  lastname?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 2,
-    minUppercase: 1,
-    minSymbols: 1,
-  })
-  password: string;
+  password?: string;
 }
 
 export class GetUserModel {
@@ -113,4 +92,16 @@ export class GetUserModel {
   @ApiProperty()
   @IsEmail()
   email: string;
+}
+
+export class UserIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}
+
+export class UserTrueResponse {
+  @ApiProperty()
+  @IsBoolean()
+  success: boolean;
 }

@@ -20,6 +20,8 @@ import {
   CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
+  CourseTrueResponse,
+  CourseIdResponse,
 } from 'course/course.dto';
 import { SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -34,7 +36,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: 'course create response',
-    type: String,
+    type: CourseIdResponse,
   })
   @ApiBody({
     type: CreateCourseModel,
@@ -54,13 +56,13 @@ export class CourseController {
   async postCourse(
     @Body() body: CreateCourseModel,
     @OllContext() ctx: any,
-  ): Promise<string> {
+  ): Promise<CourseIdResponse> {
     return this.courseService.postCourse(body, ctx);
   }
 
   @ApiOkResponse({
     description: 'course delete response',
-    type: String,
+    type: CourseIdResponse,
   })
   @ApiBody({
     type: IdCourseModel,
@@ -75,7 +77,7 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteCourse(@Body() body: IdCourseModel): Promise<string> {
+  async deleteCourse(@Body() body: IdCourseModel): Promise<CourseIdResponse> {
     return this.courseService.deleteCourse(body);
   }
 
@@ -96,7 +98,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: 'course update response',
-    type: String,
+    type: CourseIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -122,7 +124,7 @@ export class CourseController {
   async updateCourse(
     @Param('id') id: string,
     @Body() body: UpdateCourseModel,
-  ): Promise<string> {
+  ): Promise<CourseIdResponse> {
     return this.courseService.updateCourse(id, body);
   }
 
@@ -143,7 +145,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: 'user added to course response',
-    type: String,
+    type: CourseTrueResponse,
   })
   @ApiParam({
     name: 'id',
@@ -155,7 +157,7 @@ export class CourseController {
   async addUserToCourse(
     @Param('id') id: string,
     @OllContext() ctx: any,
-  ): Promise<object> {
+  ): Promise<CourseTrueResponse> {
     return this.courseService.addUserToCourse(id, ctx.__user.id);
   }
 }

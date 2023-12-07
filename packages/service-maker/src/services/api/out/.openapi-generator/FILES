@@ -1,4 +1,4 @@
-apis/ChapterApi.ts
+apis/AnswerApi.ts
 apis/CourseApi.ts
 apis/DefaultApi.ts
 apis/LessonApi.ts

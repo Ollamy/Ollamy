@@ -18,7 +18,9 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
+  JoinLessonModel,
   LessonModel,
+  LessonIdResponse,
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -32,7 +34,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson create response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiBody({
     type: CreateLessonModel,
@@ -40,7 +42,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          chapter_id: 'Chapter Id',
+          section_id: 'Section Id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as CreateLessonModel,
@@ -49,13 +51,13 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerLesson(@Body() body: CreateLessonModel): Promise<string> {
+  async registerLesson(@Body() body: CreateLessonModel): Promise<LessonIdResponse> {
     return this.lessonService.postLesson(body);
   }
 
   @ApiOkResponse({
     description: 'lesson delete response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiBody({
     type: IdLessonModel,
@@ -70,7 +72,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteLesson(@Body() body: IdLessonModel): Promise<string> {
+  async deleteLesson(@Body() body: IdLessonModel): Promise<LessonIdResponse> {
     return this.lessonService.deleteLesson(body);
   }
 
@@ -91,7 +93,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: 'lesson update response',
-    type: String,
+    type: LessonIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -104,7 +106,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          chapterId: 'id',
+          sectionId: 'id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as LessonModel,
@@ -116,7 +118,7 @@ export class LessonController {
   async updateLesson(
     @Param('id') id: string,
     @Body() body: LessonModel,
-  ): Promise<string> {
+  ): Promise<LessonIdResponse> {
     return this.lessonService.updateLesson(id, body);
   }
 
@@ -133,5 +135,29 @@ export class LessonController {
   @Get('/questions/:id')
   async getLessonQuestions(@Param('id') id: string): Promise<QuestionModel[]> {
     return this.lessonService.getLessonQuestions(id);
+  }
+
+  @ApiOkResponse({
+    description: 'lesson join response',
+    type: LessonIdResponse,
+  })
+  @ApiBody({
+    type: JoinLessonModel,
+    description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          userId: 'User id',
+        } as JoinLessonModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Post('/:id/join')
+  async joinLesson(
+    @Param('id') id: string,
+    @Body() body: JoinLessonModel,
+  ): Promise<LessonIdResponse> {
+    return this.lessonService.joinLesson(id, body);
   }
 }
