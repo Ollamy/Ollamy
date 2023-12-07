@@ -63,21 +63,21 @@ export class LoginUserModel {
 export class UpdateUserModel {
   @ApiProperty()
   @IsOptional()
-  firstname: string;
+  firstname?: string;
 
   @ApiProperty()
   @IsOptional()
-  lastname: string;
+  lastname?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  password: string;
+  password?: string;
 }
 
 export class GetUserModel {

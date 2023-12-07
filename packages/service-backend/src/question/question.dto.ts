@@ -123,7 +123,7 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  trustAnswerId: string;
+  trustAnswerId?: string;
 }
 
 export class QuestionIdResponse {

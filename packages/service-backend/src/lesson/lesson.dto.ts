@@ -43,7 +43,7 @@ export class UpdateLessonModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  sectionId: string;
+  sectionId?: string;
 
   @ApiProperty()
   @IsString()

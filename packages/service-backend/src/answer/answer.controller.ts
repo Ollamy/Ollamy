@@ -49,7 +49,9 @@ export class AnswerController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerAnswer(@Body() body: CreateAnswerModel): Promise<AnswerIdResponse> {
+  async registerAnswer(
+    @Body() body: CreateAnswerModel,
+  ): Promise<AnswerIdResponse> {
     return this.answerService.postAnswer(body);
   }
 
@@ -86,7 +88,7 @@ export class AnswerController {
   @LoggedMiddleware(true)
   @Get('/:id')
   async getAnswer(@Query('id') id: string): Promise<AnswerModel> {
-    return this.answerService.getAnswer(id);
+    return this.answerService.getAnswer({ id: id } as IdAnswerModel);
   }
 
   @ApiOkResponse({
@@ -117,6 +119,6 @@ export class AnswerController {
     @Query('id') id: string,
     @Body() body: UpdateAnswerModel,
   ): Promise<AnswerIdResponse> {
-    return this.answerService.updateAnswer(id, body);
+    return this.answerService.updateAnswer({ id: id } as IdAnswerModel, body);
   }
 }

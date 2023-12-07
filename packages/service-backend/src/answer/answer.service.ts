@@ -63,11 +63,11 @@ export class AnswerService {
     }
   }
 
-  async getAnswer(AnswerId: string): Promise<AnswerModel> {
+  async getAnswer(answerId: IdAnswerModel): Promise<AnswerModel> {
     try {
       const answerDb: Answer = await prisma.answer.findFirst({
         where: {
-          id: AnswerId,
+          id: answerId.id,
         },
       });
 
@@ -90,13 +90,13 @@ export class AnswerService {
   }
 
   async updateAnswer(
-    AnswerId: string,
+    answerId: IdAnswerModel,
     answerData: UpdateAnswerModel,
   ): Promise<AnswerIdResponse> {
     try {
       const answerDb: Answer = await prisma.answer.update({
         where: {
-          id: AnswerId,
+          id: answerId.id,
         },
         data: {
           question_id: answerData.questionId,
