@@ -93,17 +93,17 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lessonId: string;
+  lessonId?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @ApiProperty()
   @IsString()
