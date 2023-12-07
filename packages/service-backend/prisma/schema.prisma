@@ -36,13 +36,6 @@ enum PermissionSection {
   PING
 }
 
-enum PermissionChapter {
-  READ
-  WRITE
-  DELETE
-  PING
-}
-
 enum PermissionLesson {
   READ
   WRITE
@@ -61,6 +54,7 @@ model User {
   Course          Course[]
   Message         Message[]
   UserDiscussions UserDiscussions[]
+  UsertoLesson    UsertoLesson[]
 }
 
 enum LessonStatus {
@@ -86,7 +80,6 @@ model UsertoCourse {
   permission_user    PermissionUser[]    @default([])
   permission_course  PermissionCourse[]  @default([])
   permission_section PermissionSection[] @default([])
-  permission_chapter PermissionChapter[] @default([])
   permission_lesson  PermissionLesson[]  @default([])
   course_id          String              @db.Uuid
   user_id            String              @db.Uuid
@@ -97,6 +90,26 @@ model UsertoCourse {
   @@unique([course_id, user_id, lessonId])
 }
 
+enum LessonStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model UsertoLesson {
+  id                String       @id @default(uuid()) @db.Uuid
+  lesson            Lesson       @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  user              User         @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  lesson_id         String       @db.Uuid
+  user_id           String       @db.Uuid
+  points            Int?
+  complete_lecture  Boolean      @default(false)
+  complete_question Boolean      @default(false)
+  status            LessonStatus @default(NOT_STARTED)
+
+  @@unique([lesson_id, user_id])
+}
+
 model Course {
   id          String         @id @default(uuid()) @db.Uuid
   section     Section[]
@@ -105,24 +118,17 @@ model Course {
   owner_id    String         @db.Uuid
   title       String
   description String?
+  picture     Picture?       @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture_id  String?        @db.Uuid
 }
 
 model Section {
-  id          String    @id @default(uuid()) @db.Uuid
-  course      Course    @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  course_id   String    @db.Uuid
-  title       String
-  description String?
-  Chapters    Chapter[]
-}
-
-model Chapter {
   id          String   @id @default(uuid()) @db.Uuid
-  section     Section  @relation(references: [id], fields: [section_id], onDelete: Cascade)
-  section_id  String   @db.Uuid
+  course      Course   @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id   String   @db.Uuid
   title       String
   description String?
-  Lessons     Lesson[]
+  Lesson      Lesson[]
 }
 
 model Lesson {
@@ -134,6 +140,9 @@ model Lesson {
   description  String?
   Questions    Question[]
   UsertoCourse UsertoCourse[]
+  section      Section        @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  section_id   String         @db.Uuid
+  Lecture      Lecture[]
   UsertoLesson UsertoLesson[]
 }
 
@@ -151,25 +160,43 @@ enum QuestionType {
   OTHER
 }
 
+enum QuestionDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  MASTER
+}
+
+model Lecture {
+  id        String @id @default(uuid()) @db.Uuid
+  Lesson    Lesson @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id String @db.Uuid
+  data      String
+}
+
 model Question {
-  id              String       @id @default(uuid()) @db.Uuid
-  Lesson          Lesson       @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
-  lesson_id       String       @db.Uuid
+  id              String              @id @default(uuid()) @db.Uuid
+  Lesson          Lesson              @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id       String              @db.Uuid
   title           String
   type_answer     AnswerType
   type_question   QuestionType
   description     String?
-  data            String?
   Answer          Answer[]
-  trust_answer_id String?      @db.Uuid
+  trust_answer_id String?             @db.Uuid
+  picture         Picture?            @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture_id      String?             @db.Uuid
+  points          Int?
+  difficulty      QuestionDifficulty?
 }
 
 model Answer {
   id          String   @id @default(uuid()) @db.Uuid
   Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
   question_id String   @db.Uuid
-  value       String
-  point       Int?
+  data        String?
+  picture     Picture? @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture_id  String?  @db.Uuid
 }
 
 model Discussion {
@@ -200,4 +227,12 @@ model UserDiscussions {
   discussion_id String     @db.Uuid
 
   @@id([user_id, discussion_id])
+}
+
+model Picture {
+  id       String     @id @default(uuid()) @db.Uuid
+  picture  String
+  Course   Course[]
+  Question Question[]
+  Answer   Answer[]
 }

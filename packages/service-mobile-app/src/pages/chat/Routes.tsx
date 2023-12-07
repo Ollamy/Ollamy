@@ -2,7 +2,7 @@ import Chat from 'pages/chat';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-function AuthNavigator() {
+function ChatNavigator() {
 	const Stack = createNativeStackNavigator();
 
 	return (
@@ -12,4 +12,4 @@ function AuthNavigator() {
 	);
 }
 
-export default AuthNavigator;
+export default ChatNavigator;

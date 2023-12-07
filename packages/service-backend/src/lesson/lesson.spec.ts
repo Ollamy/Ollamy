@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Lesson, Question } from '@prisma/client';
+import { Lesson, Question, QuestionDifficulty } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from './lesson.service';
@@ -23,13 +23,13 @@ describe('postLesson', () => {
   it('should return a success message when the lesson is created', async () => {
     // Mock the dependencies or services
     const mockLessonData: CreateLessonModel = {
-      chapter_id: '1',
+      section_id: '1',
       title: 'lesson',
       description: 'desc',
     };
     const mockCreatedLesson: Lesson = {
       id: '123',
-      chapter_id: mockLessonData.chapter_id,
+      section_id: mockLessonData.section_id,
       title: mockLessonData.title,
       description: mockLessonData.description,
     };
@@ -44,14 +44,14 @@ describe('postLesson', () => {
       data: mockLessonData,
     });
 
-    expect(result).toBe(`Lesson created with id ${mockCreatedLesson.id}`);
+    expect(result).toStrictEqual({ id: mockCreatedLesson.id });
   });
 
   it('should throw ConflictException if the lesson is not created', async () => {
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(null);
 
     const mockLessonData: CreateLessonModel = {
-      chapter_id: '1',
+      section_id: '1',
       title: 'lesson',
       description: 'desc',
     };
@@ -67,7 +67,7 @@ describe('postLesson', () => {
       .mockRejectedValue(new Error('Some error'));
 
     const mockLessonData: CreateLessonModel = {
-      chapter_id: '1',
+      section_id: '1',
       title: 'lesson',
       description: 'desc',
     };
@@ -96,7 +96,7 @@ describe('deleteLesson', () => {
     };
     const mockDeletedLesson: Lesson = {
       id: mockLessonData.id,
-      chapter_id: '1',
+      section_id: '1',
       title: 'title',
       description: 'desc',
     };
@@ -111,7 +111,7 @@ describe('deleteLesson', () => {
       where: mockLessonData,
     });
 
-    expect(result).toBe(`Lesson's ${mockLessonData.id} has been deleted.`);
+    expect(result).toStrictEqual({ id: mockLessonData.id});
   });
 
   it('should throw NotFoundException if the lesson does not exist', async () => {
@@ -157,7 +157,7 @@ describe('getLesson', () => {
     const mockLessonId = '123';
     const mockLesson: Lesson = {
       id: mockLessonId,
-      chapter_id: '456',
+      section_id: '456',
       title: 'title',
       description: 'desc',
     };
@@ -173,7 +173,7 @@ describe('getLesson', () => {
     });
 
     expect(result).toEqual({
-      chapterId: mockLesson.chapter_id,
+      sectionId: mockLesson.section_id,
       ...mockLesson,
     });
   });
@@ -218,13 +218,12 @@ describe('updateLesson', () => {
     const mockLessonData: UpdateLessonModel = {
       title: 'Updated Lesson Title',
       description: 'Updated Lesson Description',
-      chapterId: '1',
+      sectionId: '1',
     };
     const mockUpdatedLesson: Lesson = {
       id: mockLessonId,
-      chapter_id: '456',
+      section_id: '456',
       ...mockLessonData,
-      // other lesson properties
     };
     jest.spyOn(prisma.lesson, 'update').mockResolvedValue(mockUpdatedLesson);
 
@@ -241,7 +240,7 @@ describe('updateLesson', () => {
       data: mockLessonData,
     });
 
-    expect(result).toBe(`Lesson with id ${mockLessonId} has been updated`);
+    expect(result).toStrictEqual({ id: mockLessonId });
   });
 
   it('should throw ConflictException if the lesson does not exist', async () => {
@@ -251,7 +250,7 @@ describe('updateLesson', () => {
     const mockLessonData: UpdateLessonModel = {
       title: 'Updated Lesson Title',
       description: 'Updated Lesson Description',
-      chapterId: '1',
+      sectionId: '1',
     };
 
     await expect(
@@ -268,7 +267,7 @@ describe('updateLesson', () => {
     const mockLessonData: UpdateLessonModel = {
       title: 'Updated Lesson Title',
       description: 'Updated Lesson Description',
-      chapterId: '1',
+      sectionId: '1',
     };
 
     await expect(
@@ -300,7 +299,9 @@ describe('getLessonQuestions', () => {
         trust_answer_id: '1',
         type_answer: 'TEXT',
         type_question: 'TEXT',
-        data: 'data',
+        difficulty: QuestionDifficulty.BEGINNER,
+        picture_id: '1',
+        points: 1,
         // other question properties
       },
       {
@@ -311,7 +312,9 @@ describe('getLessonQuestions', () => {
         trust_answer_id: '1',
         type_answer: 'QUIZ',
         type_question: 'VIDEO',
-        data: 'data',
+        difficulty: QuestionDifficulty.ADVANCED,
+        picture_id: '2',
+        points: 2,
         // other question properties
       },
       // other questions
@@ -338,7 +341,9 @@ describe('getLessonQuestions', () => {
         trustAnswerId: question.trust_answer_id,
         typeAnswer: question.type_answer,
         typeQuestion: question.type_question,
-        data: question.data,
+        difficulty: question.difficulty,
+        picture_id: question.picture_id,
+        points: question.points,
       }),
     );
 

@@ -30,5 +30,9 @@
   "scripts": {
     "lint": "eslint",
     "ci:lint": "yarn workspaces run ci:lint"
+  },
+  "dependencies": {
+    "deasync": "^0.1.29",
+    "node-gyp": "^10.0.1"
   }
 }

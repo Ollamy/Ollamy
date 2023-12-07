@@ -46,7 +46,7 @@ function Register(): JSX.Element {
 				text1: 'Success',
 				text2: 'Your account has been created successfully',
 			});
-			navigate('home');
+			navigate('/home');
 		} catch (error) {
 			showToast({
 				type: 'error',
@@ -151,7 +151,7 @@ function Register(): JSX.Element {
 			/>
 			<View style={styles.horizontalContainer}>
 				<Text style={styles.text}>Already have an account ?</Text>
-				<Text onPress={() => navigate('login')} style={styles.highlightText}>
+				<Text onPress={() => navigate('/login')} style={styles.highlightText}>
 					Log in
 				</Text>
 			</View>

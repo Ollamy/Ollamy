@@ -6,6 +6,8 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserIdResponse,
+  UserTrueResponse,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -45,7 +47,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOkResponse({
     description: "user's token",
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: CreateUserModel,
@@ -74,7 +76,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOkResponse({
     description: 'true',
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: LoginUserModel,
@@ -143,11 +145,11 @@ export class UserController {
 
   @ApiOkResponse({
     description: 'Ok.',
-    type: String,
+    type: UserIdResponse,
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(@OllContext() ctx: any): Promise<string> {
+  async deleteUser(@OllContext() ctx: any): Promise<UserIdResponse> {
     return this.userService.deleteUser(ctx);
   }
 
@@ -159,5 +161,14 @@ export class UserController {
   @Get('/last-lesson')
   async getLastLesson(@OllContext() ctx: any): Promise<LessonModel> {
     return this.userService.getLastLesson(ctx);
+
+  @ApiOkResponse({
+    description: 'list the courses of a user',
+    type: String,
+  })
+  @LoggedMiddleware(true)
+  @Get('/courses')
+  async getUserCourses(@OllContext() ctx: any): Promise<object> {
+    return this.userService.getUserCourses(ctx);
   }
 }
