@@ -39,8 +39,8 @@ async function bootstrap() {
   Logger.debug('Redis Connected!');
 
   app.enableCors({
-    // origin: [`http://localhost:19006`], // For dev Mobile
-    origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
+    origin: [`http://localhost/19006`], // For dev Mobile
+    // origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
     credentials: true,
     allowedHeaders: 'Content-Type',
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],

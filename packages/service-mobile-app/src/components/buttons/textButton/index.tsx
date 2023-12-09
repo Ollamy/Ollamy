@@ -8,11 +8,13 @@ interface TextButtonProps {
 	title: string;
 	style?: StyleProp<ViewStyle>;
 	rightIconName?: string;
+	disabled?: boolean;
 }
 
-function TextButton({ onPress, title, style, rightIconName }: TextButtonProps) {
+function TextButton({ onPress, title, style, rightIconName, disabled }: TextButtonProps) {
 	return (
-		<TouchableOpacity onPress={onPress} style={style ?? styles.buttonContainer}>
+		// @ts-ignore
+		<TouchableOpacity onPress={onPress} style={{...(style ?? styles.buttonContainer), opacity: disabled ? 0.5 : 1}} disabled={disabled}>
 			<View />
 			<Text style={styles.buttonText}>{title}</Text>
 			{rightIconName ? <Icon name={rightIconName} style={{ fontSize: 24, color: 'white' }} /> : <View />}
