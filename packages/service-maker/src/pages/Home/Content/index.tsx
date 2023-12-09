@@ -205,6 +205,7 @@ const NewCourseMenu = styled.div`
   box-shadow: 0 11.61887px 124.28px 0 rgba(37, 72, 153, 0.17);
 
   cursor: auto;
+  z-index: 100;
 `;
 
 const MenuTitle = styled.h2`
