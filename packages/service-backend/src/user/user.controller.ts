@@ -18,6 +18,7 @@ import {
   Get,
   Post,
   Put,
+  Req,
   Response,
 } from '@nestjs/common';
 import {
@@ -58,12 +59,26 @@ export class UserController {
     },
   })
   @Post('/register')
-  async registerUser(@Response() res, @Body() body: CreateUserModel) {
-    res.cookie('session', await this.userService.registerUser(body), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
-
+  async registerUser(
+    @Req() request,
+    @Response() res,
+    @Body() body: CreateUserModel,
+  ) {
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      await this.userService.registerUser(body),
+      cookiesParams,
+    );
     return res.send({ success: true });
   }
 
@@ -85,11 +100,26 @@ export class UserController {
     },
   })
   @Post('/login')
-  async loginUser(@Response() res, @Body() body: LoginUserModel): Promise<any> {
-    res.cookie('session', await this.userService.loginUser(body), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
+  async loginUser(
+    @Req() request,
+    @Response() res,
+    @Body() body: LoginUserModel,
+  ): Promise<any> {
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      await this.userService.loginUser(body),
+      cookiesParams,
+    );
     return res.send({ success: true });
   }
 
@@ -125,14 +155,26 @@ export class UserController {
   @LoggedMiddleware(true)
   @Put()
   async updateUser(
+    @Req() request,
     @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
   ) {
-    res.cookie('session', this.userService.updateUser(body, ctx), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      this.userService.updateUser(body, ctx),
+      cookiesParams,
+    );
 
     return res.send({ success: true });
   }
