@@ -63,7 +63,7 @@ export class PictureService {
         throw new NotFoundException('Picture does not exists !');
       }
 
-      return `Picture's ${pictureId} has been deleted.`;
+      return pictureId;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -110,7 +110,7 @@ export class PictureService {
         throw new ConflictException('Picture does not exists !');
       }
 
-      return `Picture with id ${pictureId} has been updated`;
+      return pictureId;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Picture not updated !');

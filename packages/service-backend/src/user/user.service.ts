@@ -10,6 +10,7 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserIdResponse,
 } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
@@ -152,7 +153,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(ctx: any): Promise<string> {
+  async deleteUser(ctx: any): Promise<UserIdResponse> {
     try {
       const userDb = await prisma.user.delete({
         where: {
@@ -165,7 +166,7 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return `User's ${ctx.__user.id} has been deleted.`;
+      return { id: ctx.__user.id} as UserIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

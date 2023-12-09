@@ -1,14 +1,20 @@
-import TopBar from "../../components/TopBar";
 import styled from "styled-components";
-import { ReactElement } from "react";
 import DashboardContent from "./Content";
+import { ReactElement } from 'react';
+import TopBar from "../../components/TopBar";
+import api from "../../services/api";
 
-interface HomePageProps {}
+function HomePage(): ReactElement {
+  const { data } = api.user.useUser();
 
-const HomePage = ({}: HomePageProps): ReactElement => {
   return (
     <Container>
       <TopBar title={"Ollamy Maker"} />
+      {data && (
+        <span>
+          Hello {data.firstname} {data.lastname}
+        </span>
+      )}
       <DashboardContent />
     </Container>
   );

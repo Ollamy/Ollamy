@@ -6,6 +6,8 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserIdResponse,
+  UserTrueResponse,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -39,7 +41,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOkResponse({
     description: "user's token",
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: CreateUserModel,
@@ -68,7 +70,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOkResponse({
     description: 'true',
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: LoginUserModel,
@@ -137,11 +139,11 @@ export class UserController {
 
   @ApiOkResponse({
     description: 'Ok.',
-    type: String,
+    type: UserIdResponse,
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(@OllContext() ctx: any): Promise<string> {
+  async deleteUser(@OllContext() ctx: any): Promise<UserIdResponse> {
     return this.userService.deleteUser(ctx);
   }
 
