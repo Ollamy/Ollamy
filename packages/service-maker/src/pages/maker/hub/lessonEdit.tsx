@@ -36,6 +36,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   return (
     <Container>
       <EditBox>
+        <TitleContainer>Lesson</TitleContainer>
         <InputsContainer>
           <InputTextContainer>
             Title
@@ -85,7 +86,7 @@ const EditBox = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  padding: 48px 48px 16px 48px;
+  padding: 16px 48px 16px 48px;
   border-radius: 20px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -157,6 +158,11 @@ const ButtonContainer = styled.a`
   gap: 7px;
   width: 300px;
   height: 200px;
+`;
+
+const TitleContainer = styled.a`
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 export default LessonEdit;

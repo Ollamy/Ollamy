@@ -11,12 +11,13 @@ function SectionEdit(props: SectionEditProps): ReactElement {
   const { section } = props;
   const [title, setTitle] = useState(section.title);
   const [description, setDescription] = useState(section.description);
-  const isDirty = title !== section.title || description !== section.description;
+  const isDirty =
+    title !== section.title || description !== section.description;
 
   useEffect(() => {
-    setTitle(section.title)
-    setDescription(section.description)
-  }, [section])
+    setTitle(section.title);
+    setDescription(section.description);
+  }, [section]);
 
   const { mutateAsync: updateSectionMutation } = api.section.useUpdateSection();
   const onSubmit = async (): Promise<void> => {
@@ -32,6 +33,7 @@ function SectionEdit(props: SectionEditProps): ReactElement {
 
   return (
     <Container>
+      <TitleContainer>Section</TitleContainer>
       <InputsContainer>
         <InputTextContainer>
           Title
@@ -63,7 +65,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  padding: 48px 48px 16px 48px;
+  padding: 16px 48px 16px 48px;
   border-radius: 20px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -111,6 +113,11 @@ const UpdateButton = styled.button`
 
   cursor: pointer;
   align-self: end;
+`;
+
+const TitleContainer = styled.a`
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 export default SectionEdit;
