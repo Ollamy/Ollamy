@@ -1,6 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
@@ -84,7 +83,6 @@ function Register(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.email}>
-						<GestureHandlerRootView>
 							<TextInput
 								value={value}
 								onChangeText={onChange}
@@ -93,7 +91,6 @@ function Register(): JSX.Element {
 								style={styles.input}
 								placeholder="Email"
 							/>
-						</GestureHandlerRootView>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -106,7 +103,6 @@ function Register(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.password}>
-						<GestureHandlerRootView>
 							<TextInput
 								secureTextEntry
 								value={value}
@@ -116,7 +112,6 @@ function Register(): JSX.Element {
 								style={styles.input}
 								placeholder="Password"
 							/>
-						</GestureHandlerRootView>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>{errors.password.message}</FormControl.ErrorMessage>
 						)}
@@ -129,7 +124,6 @@ function Register(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.confirmPassword}>
-						<GestureHandlerRootView>
 							<TextInput
 								secureTextEntry
 								value={value}
@@ -139,7 +133,6 @@ function Register(): JSX.Element {
 								style={styles.input}
 								placeholder="Confirm password"
 							/>
-						</GestureHandlerRootView>
 						{errors.confirmPassword?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
