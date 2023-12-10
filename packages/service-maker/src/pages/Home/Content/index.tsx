@@ -7,6 +7,7 @@ import {
   useEffect,
 } from "react";
 import api from "../../../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardContentProps {}
 
@@ -23,6 +24,8 @@ const initialFormState: FormState = {
 };
 
 const DashboardContent = ({}: DashboardContentProps): ReactElement => {
+  const navigate = useNavigate();
+
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
@@ -134,7 +137,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
                 <EditImage
                   src={"public/create-outline.svg"}
                   onClick={() => {
-                    alert(`Try to access to ${course.title}`);
+                    navigate(`/course/${course.id}`);
                   }}
                 />
               </CoursesBox>
