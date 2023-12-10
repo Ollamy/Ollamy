@@ -14,7 +14,7 @@ export interface UserInfo {
 }
 
 function Home() {
-	const response = useGetUserQuery();
+	const { data: user } = useGetUserQuery();
 
 	return (
 		<>
@@ -24,7 +24,7 @@ function Home() {
 					<Image style={{ height: '100%', width: '100%' }} source={OLLAMY} />
 				</Box>
 				<Text style={styles.horizontalContainer}>Home</Text>
-				{response.data && <Text style={styles.horizontalContainer}>Welcome {response.data.firstname}</Text>}
+				{user && <Text style={styles.horizontalContainer}>Welcome {user.firstname}</Text>}
 			</View>
 			<BottomBar />
 		</>

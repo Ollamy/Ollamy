@@ -8,19 +8,19 @@ import OLLAMY from '../../../assets/Ollamy.png';
 function SplashScreen() {
 	const navigate = useNavigate();
 	const imageScale = new Animated.Value(0.1);
-	const response = useGetUserQuery();
+	const { isSuccess } = useGetUserQuery();
 
 	const handleAnimationCallback = useCallback(
 		({ finished }: { finished: boolean }) => {
 			if (finished) {
-				if (response.isSuccess) {
+				if (isSuccess) {
 					navigate('/home');
 				} else {
 					navigate('/register');
 				}
 			}
 		},
-		[navigate, response.isSuccess],
+		[navigate, isSuccess],
 	);
 
 	Animated.timing(imageScale, {

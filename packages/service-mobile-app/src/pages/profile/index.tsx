@@ -14,9 +14,9 @@ export interface UserInfo {
 }
 
 function Profile() {
-	const { data } = useGetUserQuery();
+	const { data: user } = useGetUserQuery();
 
-	if (!data) return <Box />;
+	if (!user) return <Box />;
 
 	return (
 		<>
@@ -27,9 +27,9 @@ function Profile() {
 						<Image style={{ height: '100%', width: '100%' }} source={PROFILE} />
 					</Box>
 					<Text style={styles.nameContainer}>
-						{data.firstname} {data.lastname}
+						{user.firstname} {user.lastname}
 					</Text>
-					<Text>{data.email}</Text>
+					<Text>{user.email}</Text>
 				</Box>
 			</View>
 			<BottomBar />

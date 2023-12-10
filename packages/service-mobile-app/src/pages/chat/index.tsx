@@ -20,7 +20,7 @@ function Chat() {
 	const [messages, setMessages] = useState<Messages[]>([]);
 	const [tempMessage, setTempMessage] = useState<string>('');
 	const [editId, setEditId] = useState<string>();
-	const response = useGetUserQuery();
+	const { data: user } = useGetUserQuery();
 
 	socket.on('connect', () => {
 		socket.emit('joinRoom', 'ROOM-general');
@@ -45,9 +45,7 @@ function Chat() {
 		setMessages(messages.map((msg) => (msg.id !== id ? msg : { ...msg, message })));
 	});
 
-	if (!response?.data) return <Box />;
-
-	const user = response.data;
+	if (!user) return <Box />;
 
 	const sendMessage = () => {
 		if (!editId) {
