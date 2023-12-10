@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { ReactElement, useEffect, useState } from "react";
 import api from "../../../services/api";
+import book from "../../../assets/book.png";
+import quiz from "../../../assets/quiz.png";
+
 import { LessonModel } from "services/api/out";
 
 interface LessonEditProps {
@@ -32,33 +35,52 @@ function LessonEdit(props: LessonEditProps): ReactElement {
 
   return (
     <Container>
-      <InputsContainer>
-        <InputTextContainer>
-          Title
-          <InputField
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </InputTextContainer>
-        <InputTextContainer>
-          Description
-          <TextArea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </InputTextContainer>
-      </InputsContainer>
-      {isDirty && (
-        <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>
-      )}
+      <EditBox>
+        <InputsContainer>
+          <InputTextContainer>
+            Title
+            <InputField
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </InputTextContainer>
+          <InputTextContainer>
+            Description
+            <TextArea
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </InputTextContainer>
+        </InputsContainer>
+        {isDirty && (
+          <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>
+        )}
+      </EditBox>
+      <SubContainer>
+        <ButtonContainer>
+          <img alt="logo book" src={book} width="124" height="105" />
+          Edit Lecture
+        </ButtonContainer>
+        <ButtonContainer>
+          <img alt="logo Quiz" src={quiz} width="100" height="100" />
+          Edit Quiz
+        </ButtonContainer>
+      </SubContainer>
     </Container>
   );
 }
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 80px;
+`;
+
+const EditBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -111,6 +133,30 @@ const UpdateButton = styled.button`
 
   cursor: pointer;
   align-self: end;
+`;
+
+const SubContainer = styled.a`
+  display: flex;
+  justify-content: space-around;
+
+  width: 100%;
+`;
+
+const ButtonContainer = styled.a`
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 32px;
+
+  gap: 7px;
+  width: 300px;
+  height: 200px;
 `;
 
 export default LessonEdit;
