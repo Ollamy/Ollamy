@@ -2,7 +2,6 @@ import CreateModal from "../../../../components/modal";
 import React, { useEffect, useState } from "react";
 import api from "../../../../services/api";
 import styled from "styled-components";
-import { LessonModel } from "../../../../services/api/out";
 import { useNavigate } from "react-router-dom";
 
 interface LessonListProps {
@@ -31,7 +30,9 @@ const LessonList = (props: LessonListProps) => {
     setTitle("");
   };
 
-  const [selectedLessonId, setSelectedLessonId] = useState<string | undefined>(lessonId);
+  const [selectedLessonId, setSelectedLessonId] = useState<string | undefined>(
+    lessonId,
+  );
   useEffect(() => {
     if (selectedLessonId) {
       if (sectionId)
@@ -39,6 +40,9 @@ const LessonList = (props: LessonListProps) => {
     }
   }, [selectedLessonId]);
 
+  useEffect(() => {
+    if (lessonId === undefined) setSelectedLessonId(undefined);
+  }, [lessonId]);
   const handleSubmit = async () => {
     try {
       if (title === "") throw Error("Title need to be define");

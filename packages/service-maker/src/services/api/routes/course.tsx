@@ -35,6 +35,14 @@ export const courseActions = {
   useCreateCourse: () =>
     useMutation(CourseApi.postCourse, {
       onSuccess: () => {
+        queryClient.invalidateQueries(GET_COURSE_KEY);
+        queryClient.invalidateQueries(GET_USER_COURSES_KEY);
+      },
+    }),
+  useUpdateCourse: () =>
+    useMutation(CourseApi.updateCourse, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_COURSE_KEY);
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),

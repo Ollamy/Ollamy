@@ -50,11 +50,10 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
     }
   };
 
-  useEffect(() => {
-    if (selectedSectionId) {
-      navigate(`/course/${course.id}/${selectedSectionId}`);
-    }
-  }, [selectedSectionId]);
+  const changeSection = (newSectionId: string | null) => {
+    setSelectedSectionId(newSectionId);
+    if (newSectionId) navigate(`/course/${course.id}/${newSectionId}`);
+  };
   return (
     <Container>
       <CreateModal
@@ -78,7 +77,9 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
       </CreateModal>
       <TopBoxContainer>
         {course.title}
-        <SettingButton>Settings</SettingButton>
+        <SettingButton onClick={() => navigate("/home")}>
+          Settings
+        </SettingButton>
         <SectionContainer>
           <AddSectionContainer>
             Section
@@ -94,11 +95,15 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
               })) ?? []
             }
             selectedOption={selectedSectionId}
-            setSelectedOption={setSelectedSectionId}
+            setSelectedOption={changeSection}
           />
         </SectionContainer>
       </TopBoxContainer>
-      <LessonList sectionId={selectedSectionId} courseId={course.id} lessonId={lessonId} />
+      <LessonList
+        sectionId={selectedSectionId}
+        courseId={course.id}
+        lessonId={lessonId}
+      />
     </Container>
   );
 }
