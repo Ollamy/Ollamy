@@ -19,7 +19,6 @@ export const userActions = {
     useQuery({
       queryKey: GET_USER_COURSES_KEY,
       queryFn: () => UserApi.getUserCourses(),
-      retry: false,
       ...config,
     }),
   useRegister: () => useMutation(UserApi.registerUser),

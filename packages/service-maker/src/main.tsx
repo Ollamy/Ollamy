@@ -41,6 +41,18 @@ const router = createBrowserRouter([
     path: "/course/:id",
     element: <MakerHubPage />,
   },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId/:lessonId",
+    element: <MakerHubPage />,
+  },
 ]);
 
 // React Query setup (use to query the backend)

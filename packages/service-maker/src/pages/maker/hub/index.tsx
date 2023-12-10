@@ -9,7 +9,7 @@ import SideBarMenu from "./sideBarMenu";
 function MakerHubPage(): ReactElement {
   const navigate = useNavigate();
 
-  let { id } = useParams();
+  let { id, sectionId, lessonId } = useParams();
   if (!id) {
     navigate("/home");
     return <></>;
@@ -28,7 +28,7 @@ function MakerHubPage(): ReactElement {
     <Container>
       <TopBar title={"Ollamy Maker"} />
       <Body>
-        <SideBarMenu course={course} />
+        <SideBarMenu course={course} sectionId={sectionId} lessonId={lessonId} />
       </Body>
     </Container>
   );

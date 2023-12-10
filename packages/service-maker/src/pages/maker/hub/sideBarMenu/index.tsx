@@ -1,23 +1,31 @@
 import styled from "styled-components";
-import { ReactElement, useState } from "react";
-import api from "../../../services/api";
+import { ReactElement, useEffect, useState } from "react";
+import api from "../../../../services/api";
 import { CourseModel } from "services/api/out";
-import CreateModal from "../../../components/modal";
-import Dropdown from "../../../components/dropdown";
+import CreateModal from "../../../../components/modal";
+import Dropdown from "../../../../components/dropdown";
+import LessonList from "./lessonList";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface SideBarMenuProps {
   course: CourseModel;
+  sectionId?: string;
+  lessonId?: string;
 }
 
 function SideBarMenu(props: SideBarMenuProps): ReactElement {
-  const { course } = props;
+  const navigate = useNavigate();
+
+  const { course, sectionId, lessonId } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
+    sectionId ?? null,
+  );
 
   const { data: courseSections } = api.course.useCourseSection({
     id: course.id,
@@ -42,6 +50,11 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
     }
   };
 
+  useEffect(() => {
+    if (selectedSectionId) {
+      navigate(`/course/${course.id}/${selectedSectionId}`);
+    }
+  }, [selectedSectionId]);
   return (
     <Container>
       <CreateModal
@@ -74,12 +87,18 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
             </AddSectionButton>
           </AddSectionContainer>
           <Dropdown
-            options={courseSections?.map((section) => section.title) ?? []}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
+            options={
+              courseSections?.map((section) => ({
+                label: section.title,
+                id: section.id,
+              })) ?? []
+            }
+            selectedOption={selectedSectionId}
+            setSelectedOption={setSelectedSectionId}
           />
         </SectionContainer>
       </TopBoxContainer>
+      <LessonList sectionId={selectedSectionId} courseId={course.id} lessonId={lessonId} />
     </Container>
   );
 }
@@ -164,5 +183,4 @@ const AddSectionContainer = styled.div`
 
   font-size: 14px;
 `;
-
 export default SideBarMenu;

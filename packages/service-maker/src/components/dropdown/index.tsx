@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 
 interface DropdownProps {
-  options: string[];
+  options: { id: string; label: string }[];
   selectedOption: string | null;
   setSelectedOption: (v: string | null) => void;
 }
@@ -19,13 +19,18 @@ const Dropdown = (props: DropdownProps) => {
   return (
     <DropdownContainer>
       <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-        {selectedOption ? selectedOption : "Select"}{" "}
+        {selectedOption
+          ? options.find((v) => v.id === selectedOption)?.label
+          : "Select"}{" "}
         <Chevron>{isOpen ? "▼" : "▲"}</Chevron>
       </DropdownButton>
-      <DropdownContent isOpen={isOpen}>
+      <DropdownContent isopen={isOpen}>
         {options.map((option, index) => (
-          <DropdownItem key={index} onClick={() => handleOptionClick(option)}>
-            {option}
+          <DropdownItem
+            key={index}
+            onClick={() => handleOptionClick(option.id)}
+          >
+            {option.label}
           </DropdownItem>
         ))}
       </DropdownContent>
@@ -55,8 +60,8 @@ const DropdownButton = styled.button`
   cursor: pointer;
 `;
 
-const DropdownContent = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+const DropdownContent = styled.div<{ isopen: boolean }>`
+  display: ${(props) => (props.isopen ? "block" : "none")};
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
