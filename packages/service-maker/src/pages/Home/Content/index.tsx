@@ -6,6 +6,7 @@ import {
   ChangeEvent,
   useEffect,
 } from "react";
+import api from "../../../services/api";
 
 interface DashboardContentProps {}
 
@@ -25,7 +26,9 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
-  const [coursesList, setCoursesList] = useState<FormState[]>([]);
+  const { data: coursesList } = api.user.useUserCourses();
+  const { mutateAsync: createCourseMutation } = api.course.useCreateCourse();
+
   const [formData, setFormData] = useState<FormState>(initialFormState);
 
   const colorsChoice = ["#E6674F", "#876BF6", "#F195A4"];
@@ -47,17 +50,23 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
   }, []);
 
   const handleSubmit = useCallback(
-    (e: any) => {
+    async (e: any) => {
       e.preventDefault();
 
-      setCoursesList((old) => [
-        { ...formData, color: colorsChoice[currentColor] },
-        ...old,
-      ]);
-
-      setCurrentColor(0);
-      setFormData(initialFormState);
-      setIsMenuDisplayed(false);
+      try {
+        await createCourseMutation({
+          createCourseModel: {
+            title: formData.title,
+            description: formData.description,
+            picture: formData.color,
+          },
+        });
+        setCurrentColor(0);
+        setFormData(initialFormState);
+        setIsMenuDisplayed(false);
+      } catch (err) {
+        // pop up error
+      }
     },
     [currentColor, formData],
   );
@@ -113,23 +122,24 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
         </AddButton>
       </CoursesTopBar>
       <CoursesContainer>
-        {coursesList.map((course, index) => {
-          return (
-            <CoursesBox key={`${course.title}-${index}`}>
-              <CourseLogo color={course.color} />
-              <TextContainer>
-                <CourseTitle>{course.title}</CourseTitle>
-                <CourseDescription>{course.description}</CourseDescription>
-              </TextContainer>
-              <EditImage
-                src={"public/create-outline.svg"}
-                onClick={() => {
-                  alert(`Try to access to ${course.title}`);
-                }}
-              />
-            </CoursesBox>
-          );
-        })}
+        {coursesList &&
+          coursesList.courses.map((course: any, index) => {
+            return (
+              <CoursesBox key={`${course.title}-${index}`}>
+                <CourseLogo color="#E6674F" />
+                <TextContainer>
+                  <CourseTitle>{course.title}</CourseTitle>
+                  <CourseDescription>{course.description}</CourseDescription>
+                </TextContainer>
+                <EditImage
+                  src={"public/create-outline.svg"}
+                  onClick={() => {
+                    alert(`Try to access to ${course.title}`);
+                  }}
+                />
+              </CoursesBox>
+            );
+          })}
       </CoursesContainer>
     </Container>
   );
