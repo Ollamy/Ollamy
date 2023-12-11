@@ -10,6 +10,7 @@ import {
   UpdateCourseModel,
 } from './course.dto';
 import { SectionModel } from '../section/section.dto';
+import { PictureService } from '../picture/picture.service';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -47,6 +48,7 @@ describe('postCourse', () => {
       picture_id: mockPictureDb.id,
     };
     jest.spyOn(prisma.course, 'create').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue({ id: '1' } as any);
     jest.spyOn(prisma.picture, 'create').mockResolvedValue(mockPictureDb);
 
     // Invoke the function being tested
