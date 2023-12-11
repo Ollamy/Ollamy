@@ -10,6 +10,8 @@ import Chat from './pages/chat';
 import Home from './pages/home';
 import Profile from './pages/profile';
 import SplashScreen from './pages/splashScreen';
+import CourseRouter from 'src/pages/courses/Routes';
+import AppSafeArea from 'src/components/safeArea/AppSafeArea';
 
 function App() {
 	return (
@@ -18,12 +20,15 @@ function App() {
 				<NativeRouter>
 					<Provider store={store}>
 						<Routes>
-							<Route Component={SplashScreen} path="/" />
-							<Route Component={Register} path="/register" />
-							<Route Component={Login} path="/login" />
-							<Route Component={Home} path="/home" />
-							<Route Component={Profile} path="/profile" />
-							<Route Component={Chat} path="/chat" />
+							<Route element={<AppSafeArea />}>
+								<Route Component={SplashScreen} path="/" />
+								<Route Component={Register} path="/register" />
+								<Route Component={Login} path="/login" />
+								<Route Component={Home} path="/home" />
+								<Route Component={CourseRouter} path="/course/*" />
+								<Route Component={Profile} path="/profile" />
+								<Route Component={Chat} path="/chat" />
+							</Route>
 						</Routes>
 					</Provider>
 				</NativeRouter>
