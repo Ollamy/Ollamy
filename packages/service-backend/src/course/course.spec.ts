@@ -10,7 +10,6 @@ import {
   UpdateCourseModel,
 } from './course.dto';
 import { SectionModel } from '../section/section.dto';
-import { PictureService } from '../picture/picture.service';
 
 describe('postCourse', () => {
   let courseService: CourseService;
