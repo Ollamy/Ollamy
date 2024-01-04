@@ -10,12 +10,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
 // eslint-disable-next-line import/no-cycle
-import { HomePage } from "./pages/Home";
+import { Login } from "./pages/Auth/Login";
+import { Register } from "./pages/Auth/Register";
+import { SettingPage } from "./pages/Course/Chapter/chapterSettings";
+import { FormationSetting } from "./pages/Course/courseSettings";
+import { ProfilePage } from "./pages/formatter/formatterSettings";
 // eslint-disable-next-line import/no-cycle
-import { Login } from "./pages/Login";
-import { ProfilePage } from "./pages/Profile";
-import { Register } from "./pages/Register";
-import { SettingPage } from "./pages/Setting";
+import { HomePage } from "./pages/Home";
 
 // Router
 const router = createBrowserRouter([
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/setting",
     element: <SettingPage />,
+  },
+  {
+    path: "/formation",
+    element: <FormationSetting />,
   },
 ]);
 
