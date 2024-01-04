@@ -9,10 +9,13 @@ import {
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
-import HomePage from "./pages/Home";
+// eslint-disable-next-line import/no-cycle
+import { HomePage } from "./pages/Home";
+// eslint-disable-next-line import/no-cycle
 import { Login } from "./pages/Login";
-import ProfilePage from "./pages/Profile";
+import { ProfilePage } from "./pages/Profile";
 import { Register } from "./pages/Register";
+import { SettingPage } from "./pages/Setting";
 
 // Router
 const router = createBrowserRouter([
@@ -36,6 +39,10 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <ProfilePage />,
   },
+  {
+    path: "/setting",
+    element: <SettingPage />,
+  },
 ]);
 
 // React Query setup (use to query the backend)
@@ -55,6 +62,10 @@ export const queryClient = new QueryClient({
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
+
+  * {
+    box-sizing: border-box;
+  }
 
   p, h1, h2, span, button {
     font-family: 'Poppins', sans-serif;
@@ -78,5 +89,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

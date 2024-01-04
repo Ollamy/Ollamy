@@ -1,24 +1,23 @@
+import type { ReactElement } from "react";
+import React from "react";
 import styled from "styled-components";
-import DashboardContent from "./Content";
-import { ReactElement } from 'react';
+
 import TopBar from "../../components/TopBar";
+// eslint-disable-next-line import/no-cycle
 import api from "../../services/api";
 
-function HomePage(): ReactElement {
+import DashboardContent from "./Content";
+
+export function HomePage(): ReactElement {
   const { data } = api.user.useUser();
 
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
-      {data && (
-        <span>
-          Hello {data.firstname} {data.lastname}
-        </span>
-      )}
+      <TopBar title="Ollamy Maker" />
       <DashboardContent />
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
@@ -30,5 +29,3 @@ const Container = styled.div`
 
   background: #f1f3f6;
 `;
-
-export default HomePage;

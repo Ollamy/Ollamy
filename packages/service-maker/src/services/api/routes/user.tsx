@@ -2,7 +2,8 @@ import type { UseQueryOptions } from "react-query";
 import { useMutation, useQuery } from "react-query";
 
 import { queryClient } from "../../../main";
-import { GetUserModel, UserApi } from "../out";
+import type { GetUserModel } from "../out";
+import { UserApi } from "../out";
 
 export const GET_USER_KEY = "getUser";
 

@@ -6,11 +6,12 @@ import flag from "../../assets/🦆 icon _flag_.svg";
 import people from "../../assets/🦆 icon _people_.svg";
 import pie from "../../assets/🦆 icon _pie chart_.svg";
 import profile from "../../assets/profile.png";
+import react from "../../assets/react.svg";
 import TopBar from "../../components/TopBar";
 
-interface ProfilePageProps {}
+interface SettingPageProps {}
 
-export function ProfilePage({}: ProfilePageProps): ReactElement {
+export function SettingPage({}: SettingPageProps): ReactElement {
   const [editMode, setEditMode] = useState(false);
   const [profilPercentage, setProfilePercentage] = useState<string>("45");
 
@@ -64,53 +65,8 @@ export function ProfilePage({}: ProfilePageProps): ReactElement {
             </NavOption>
           </NavLeftContainerNavigationProps>
         </NavLeftContainer>
-
         <RightContainerCourseSettings>
           <RightContainerTopCourseSettings>
-            <RightContainerSetting $width="1040px">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  flex: 1,
-                  gap: "8px",
-                }}
-              >
-                <Title>Your profile</Title>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    width: "100%",
-                    gap: "60px",
-                    flex: 1,
-                  }}
-                />
-              </div>
-            </RightContainerSetting>
-          </RightContainerTopCourseSettings>
-          <RightContainerTopCourseSettings>
-            <RightContainerSetting $width="400px">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  gap: "8px",
-                }}
-              >
-                <Title>Course picture</Title>
-                <img src={profile} alt="" height="180px" />
-                <UploadPictureButton>Upload picture</UploadPictureButton>
-              </div>
-            </RightContainerSetting>
             <RightContainerSetting $width="540px">
               <Title>Course setting</Title>
               <div
@@ -141,6 +97,76 @@ export function ProfilePage({}: ProfilePageProps): ReactElement {
                 <div>
                   <SubTitle>Price</SubTitle>
                   <InputCourse $width="200px" />
+                </div>
+              </div>
+            </RightContainerSetting>
+            <RightContainerSetting $width="400px">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  gap: "8px",
+                }}
+              >
+                <Title>Course picture</Title>
+                <img src={profile} alt="" height="180px" />
+                <UploadPictureButton>Upload picture</UploadPictureButton>
+              </div>
+            </RightContainerSetting>
+          </RightContainerTopCourseSettings>
+          <RightContainerTopCourseSettings>
+            <RightContainerSetting $width="1040px">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  flex: 1,
+                  gap: "8px",
+                }}
+              >
+                <Title>Chapter of the course</Title>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    width: "100%",
+                    gap: "60px",
+                    flex: 1,
+                  }}
+                >
+                  <CourseCard>
+                    <img src={react} alt="" height="100px" />
+                    <SubTitle>Price</SubTitle>
+                  </CourseCard>
+                  <CourseCard>
+                    <img src={react} alt="" height="100px" />
+                    <SubTitle>Price</SubTitle>
+                  </CourseCard>
+                  <CourseCard>
+                    <img src={react} alt="" height="100px" />
+                    <SubTitle>Price</SubTitle>
+                  </CourseCard>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "20px",
+                  }}
+                >
+                  <div>O</div>
+                  <div>O</div>
+                  <div>O</div>
                 </div>
               </div>
             </RightContainerSetting>
