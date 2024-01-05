@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import profile from "../../../assets/profile.png";

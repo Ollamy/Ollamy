@@ -1,8 +1,7 @@
+/* eslint-disable react/no-array-index-key */
 import type { ChangeEvent, ReactElement } from "react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
-
-interface DashboardContentProps {}
 
 interface FormState {
   title: string;
@@ -16,7 +15,7 @@ const initialFormState: FormState = {
   color: "#E6674F",
 };
 
-function DashboardContent({}: DashboardContentProps): ReactElement {
+function DashboardContent(): ReactElement {
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
