@@ -21,6 +21,7 @@ import {
   QuestionModel,
   UpdateQuestionModel,
   QuestionIdResponse,
+  UpdateQuestionOrderModel,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 import { QuestionService } from 'question/question.service';
@@ -51,13 +52,16 @@ export class QuestionController {
           typeQuestion: QuestionType.TEXT,
           picture: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
+          order: 0,
         } as CreateQuestionModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerQuestion(@Body() body: CreateQuestionModel): Promise<QuestionIdResponse> {
+  async registerQuestion(
+    @Body() body: CreateQuestionModel,
+  ): Promise<QuestionIdResponse> {
     return this.questionService.postQuestion(body);
   }
 
@@ -78,7 +82,9 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteQuestion(@Body() body: IdQuestionModel): Promise<QuestionIdResponse> {
+  async deleteQuestion(
+    @Body() body: IdQuestionModel,
+  ): Promise<QuestionIdResponse> {
     return this.questionService.deleteQuestion(body);
   }
 
@@ -128,6 +134,30 @@ export class QuestionController {
     @Body() body: UpdateQuestionModel,
   ): Promise<QuestionIdResponse> {
     return this.questionService.updateQuestion(id, body);
+  }
+
+  @ApiOkResponse({
+    description: 'Question order changed',
+    type: QuestionIdResponse,
+  })
+  @ApiBody({
+    type: UpdateQuestionOrderModel,
+    description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          origin: 'Origin id',
+          dest: 'Target id',
+        } as UpdateQuestionOrderModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Put()
+  async updateQuestionOrder(
+    @Body() body: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    return this.questionService.updateQuestionOrder(body);
   }
 
   @ApiOkResponse({

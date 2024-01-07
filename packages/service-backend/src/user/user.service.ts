@@ -166,7 +166,7 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return { id: ctx.__user.id} as UserIdResponse;
+      return { id: ctx.__user.id } as UserIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

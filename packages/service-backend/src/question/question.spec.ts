@@ -29,6 +29,7 @@ describe('postQuestion', () => {
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
       data: '',
+      order: 0,
     };
     const mockQuestionDb: Question = {
       id: '1',
@@ -41,6 +42,7 @@ describe('postQuestion', () => {
       trust_answer_id: '',
       picture_id: '1',
       points: 0,
+      order: 0,
     };
 
     jest.spyOn(PictureService, 'postPicture').mockResolvedValue('1');
@@ -61,7 +63,7 @@ describe('postQuestion', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockQuestionDb.id});
+    expect(result).toStrictEqual({ id: mockQuestionDb.id });
   });
 
   it('should throw NotFoundException if question creation fails', async () => {
@@ -74,6 +76,7 @@ describe('postQuestion', () => {
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
       data: 'test',
+      order: 0,
     };
 
     await expect(
@@ -93,6 +96,7 @@ describe('postQuestion', () => {
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
       data: 'test',
+      order: 0,
     };
 
     await expect(
@@ -128,6 +132,7 @@ describe('deleteQuestion', () => {
       picture_id: '',
       points: 0,
       difficulty: 'BEGINNER',
+      order: 0,
     };
     jest.spyOn(prisma.question, 'delete').mockResolvedValue(mockQuestionDb);
 
@@ -142,7 +147,7 @@ describe('deleteQuestion', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockQuestionId.id});
+    expect(result).toStrictEqual({ id: mockQuestionId.id });
   });
 
   it('should throw NotFoundException if question deletion fails', async () => {
@@ -197,6 +202,7 @@ describe('getQuestion', () => {
       picture_id: '1',
       points: 0,
       difficulty: 'BEGINNER',
+      order: 0,
     };
     jest.spyOn(PictureService, 'getPicture').mockResolvedValue('1');
     jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(mockQuestionDb);
@@ -281,6 +287,7 @@ describe('updateQuestion', () => {
       picture_id: '1',
       points: 0,
       difficulty: 'BEGINNER',
+      order: 0,
     };
     jest
       .spyOn(prisma.question, 'update')
@@ -309,7 +316,7 @@ describe('updateQuestion', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockQuestionId});
+    expect(result).toStrictEqual({ id: mockQuestionId });
   });
 
   it('should throw ConflictException if the question does not exist', async () => {
