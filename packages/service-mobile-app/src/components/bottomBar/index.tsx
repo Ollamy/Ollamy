@@ -21,12 +21,12 @@ function BottomBar() {
 
 	return (
 		<Box style={styles.container}>
-			<CustomIconButton onPress={handlePress}>
+			<CustomIconButton onPress={() => navigate('/home')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={PROGRESS} />
 				</Box>
 			</CustomIconButton>
-			<CustomIconButton onPress={handlePress}>
+			<CustomIconButton onPress={() => navigate('/course/join/7b1ea4b3-a262-4400-8bd2-0262487b07c5')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={EVENT} />
 				</Box>

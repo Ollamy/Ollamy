@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Box, FlatList, Text } from 'native-base';
 import { io } from 'socket.io-client';
-import { useGetUserQuery } from 'src/services/user';
+import { useGetUserQuery } from 'src/services/user/user';
 import { EnvVar } from 'src/utils/loadEnv';
 
 import IconButton from '../../components/buttons/iconButton';
@@ -67,7 +67,7 @@ function Chat() {
 
 	return (
 		<>
-			<TopBar />
+			{/* <TopBar /> */}
 			<View style={styles.body}>
 				<FlatList
 					data={messages}

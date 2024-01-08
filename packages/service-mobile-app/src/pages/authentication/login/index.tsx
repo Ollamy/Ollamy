@@ -6,7 +6,7 @@ import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
 import type { AxiosError, AxiosResponse } from 'axios';
 import { FormControl } from 'native-base';
-import { useLoginMutation } from 'src/services/auth';
+import { useLoginMutation } from 'src/services/auth/auth';
 
 interface LoginForm {
 	email: string;

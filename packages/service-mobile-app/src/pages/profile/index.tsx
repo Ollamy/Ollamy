@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from 'react-native';
 import { Box, Text } from 'native-base';
-import { useGetUserQuery } from 'src/services/user';
+import { useGetUserQuery } from 'src/services/user/user';
 
 // @ts-ignore
 import PROFILE from '../../../assets/icons/user-pp.png';
@@ -20,7 +20,7 @@ function Profile() {
 
 	return (
 		<>
-			<TopBar />
+			{/* <TopBar /> */}
 			<View style={styles.body}>
 				<Box style={styles.profileContainer}>
 					<Box height="100px" width="100px">
@@ -32,7 +32,6 @@ function Profile() {
 					<Text>{user.email}</Text>
 				</Box>
 			</View>
-			<BottomBar />
 		</>
 	);
 }

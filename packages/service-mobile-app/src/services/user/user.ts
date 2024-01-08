@@ -1,14 +1,9 @@
 import { api } from 'src/services/api';
-
-export interface GetUserRequest {
-	firstname: string;
-	lastname: string;
-	email: string;
-}
+import { GetUserResponse } from 'src/services/user/user.dto';
 
 export const userApi = api.injectEndpoints({
 	endpoints: (build) => ({
-		getUser: build.query<GetUserRequest, void>({
+		getUser: build.query<GetUserResponse, void>({
 			query: () => ({
 				url: '/user',
 				method: 'GET',

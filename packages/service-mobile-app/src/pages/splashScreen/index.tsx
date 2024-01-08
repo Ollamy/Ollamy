@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { useNavigate } from 'react-router-native';
-import { useGetUserQuery } from 'src/services/user';
+import { useGetUserQuery } from 'src/services/user/user';
 
 import OLLAMY from '../../../assets/Ollamy.png';
 
@@ -15,7 +15,9 @@ function SplashScreen() {
 			if (finished) {
 				if (isSuccess) {
 					navigate('/home');
+					console.log('logged in!')
 				} else {
+					console.log('not logged in')
 					navigate('/register');
 				}
 			}

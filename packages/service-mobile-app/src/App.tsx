@@ -1,7 +1,7 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { NativeRouter, Route, Routes } from 'react-router-native';
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, Text } from 'native-base';
 import { store } from 'src/store';
 
 import Login from './pages/authentication/login';
@@ -12,23 +12,27 @@ import Profile from './pages/profile';
 import SplashScreen from './pages/splashScreen';
 import CourseRouter from 'src/pages/courses/Routes';
 import AppSafeArea from 'src/components/safeArea/AppSafeArea';
+import customTheme from 'src/theme/theme';
 
 function App() {
 	return (
-		<NativeBaseProvider>
+		<NativeBaseProvider theme={customTheme}>
 			<SafeAreaProvider>
 				<NativeRouter>
 					<Provider store={store}>
 						<Routes>
-							<Route element={<AppSafeArea />}>
+							<Route element={<AppSafeArea />} errorElement={<Text>Error</Text>}>
 								<Route Component={SplashScreen} path="/" />
-								<Route Component={Register} path="/register" />
-								<Route Component={Login} path="/login" />
-								<Route Component={Home} path="/home" />
-								<Route Component={CourseRouter} path="/course/*" />
-								<Route Component={Profile} path="/profile" />
-								<Route Component={Chat} path="/chat" />
+								<Route Component={Home} path="home" />
+								<Route Component={CourseRouter} path="course/*" />
+								<Route Component={Profile} path="profile" />
+								<Route Component={Chat} path="chat" />
 							</Route>
+
+							<Route Component={Register} path="register" />
+							<Route Component={Login} path="login" />
+
+							<Route Component={() => <Text>404 Not Found.</Text>} path="*" />
 						</Routes>
 					</Provider>
 				</NativeRouter>
