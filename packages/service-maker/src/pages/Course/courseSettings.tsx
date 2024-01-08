@@ -3,9 +3,9 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import profile from "../../assets/profile.png";
+import { AnalyticComponent } from "../../components/analytics/analytic";
 import { CarrouselMaker } from "../../components/Carrousel/carrousel";
-import { CoursePicture } from "../../components/Course/Picture/course.picture";
-import { CourseSetting } from "../../components/Course/Setting/course.setting";
+import { IncomeComponent } from "../../components/Income/income";
 import { Navbar } from "../../components/Navbar/navbar";
 import TopBar from "../../components/TopBar";
 
@@ -22,17 +22,8 @@ export function FormationSetting(): ReactElement {
         <Navbar user="Alexandre garage" profilPercentage={profilPercentage} />
         <RightContainerCourseSettings>
           <RightContainerTopCourseSettings>
-            <CourseSetting
-              title="Course setting"
-              subTitleCourse="Course name"
-              subTitleInfo="Price"
-              subTitlePrice="Price"
-            />
-            <CoursePicture
-              title="Course picture"
-              width="400px"
-              height="340px"
-            />
+            <IncomeComponent title="Total incomes" />
+            <AnalyticComponent />
           </RightContainerTopCourseSettings>
           <CarrouselMaker
             title="All your courses"

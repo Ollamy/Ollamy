@@ -45,7 +45,9 @@ export const ContainerSpaceAroundElement = styled.div`
   flex: 1;
 `;
 
-export const BaseDiv = styled.div``;
+export const BaseDiv = styled.div`
+  color: #556080;
+`;
 
 export const CourseCard = styled.div`
   display: flex;

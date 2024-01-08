@@ -22,6 +22,7 @@ function DashboardContent(): ReactElement {
   const [coursesList, setCoursesList] = useState<FormState[]>([]);
   const [formData, setFormData] = useState<FormState>(initialFormState);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const colorsChoice = ["#E6674F", "#876BF6", "#F195A4"];
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,7 @@ function DashboardContent(): ReactElement {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOpenMenu = useCallback((e: any) => {
     if (e.currentTarget !== e.target) return;
 
@@ -38,9 +40,10 @@ function DashboardContent(): ReactElement {
 
   const handleChangeColor = useCallback(() => {
     setCurrentColor((old) => (old + 1) % colorsChoice.length);
-  }, []);
+  }, [colorsChoice.length]);
 
   const handleSubmit = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
       e.preventDefault();
 
@@ -53,9 +56,10 @@ function DashboardContent(): ReactElement {
       setFormData(initialFormState);
       setIsMenuDisplayed(false);
     },
-    [currentColor, formData]
+    [colorsChoice, currentColor, formData]
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleReset = useCallback((e: any) => {
     e.preventDefault();
 
@@ -66,7 +70,6 @@ function DashboardContent(): ReactElement {
 
   return (
     <Container>
-      <Title>DASHBOARD</Title>
       <CoursesTopBar>
         My courses
         <AddButton onClick={handleOpenMenu}>
@@ -117,6 +120,7 @@ function DashboardContent(): ReactElement {
             <EditImage
               src="public/create-outline.svg"
               onClick={() => {
+                // eslint-disable-next-line no-alert
                 alert(`Try to access to ${course.title}`);
               }}
             />
@@ -137,21 +141,13 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 
-const Title = styled.h2`
-  width: 100%;
-  color: white;
-  background: #e6674f;
-
-  padding: 8px;
-  box-sizing: border-box;
-`;
-
 const CoursesTopBar = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
 
   width: 100%;
-  height: 40px;
+  height: 100%;
 
   padding: 12px;
   box-sizing: border-box;

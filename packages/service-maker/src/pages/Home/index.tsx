@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import React from "react";
 import styled from "styled-components";
 
 import TopBar from "../../components/TopBar";
@@ -9,6 +8,7 @@ import api from "../../services/api";
 import DashboardContent from "./Content";
 
 export function HomePage(): ReactElement {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = api.user.useUser();
 
   return (
