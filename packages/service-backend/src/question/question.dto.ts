@@ -44,6 +44,10 @@ export class QuestionModel {
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class CreateQuestionModel {
@@ -81,6 +85,10 @@ export class CreateQuestionModel {
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class IdQuestionModel {
@@ -124,6 +132,16 @@ export class UpdateQuestionModel {
   @IsUUID()
   @IsOptional()
   trustAnswerId?: string;
+}
+
+export class UpdateQuestionOrderModel {
+  @ApiProperty()
+  @IsUUID()
+  origin?: string;
+
+  @ApiProperty()
+  @IsUUID()
+  dest?: string;
 }
 
 export class QuestionIdResponse {

@@ -37,7 +37,15 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
-      await this.addUserToCourse(courseDb.id, ctx.__user.id);
+
+      await prisma.usertoCourse.create({
+        data: {
+          user_id: ctx.__user.id,
+          course_id: courseDb.id,
+          role_user: 'OWNER',
+        },
+      });
+
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);

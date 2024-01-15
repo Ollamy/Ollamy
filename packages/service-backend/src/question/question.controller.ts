@@ -5,6 +5,7 @@ import {
   QuestionIdResponse,
   QuestionModel,
   UpdateQuestionModel,
+  UpdateQuestionOrderModel,
 } from 'question/question.dto';
 import { QuestionService } from 'question/question.service';
 
@@ -52,6 +53,7 @@ export class QuestionController {
           typeQuestion: QuestionType.TEXT,
           picture: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
+          order: 0,
         } as CreateQuestionModel,
       },
     },
@@ -133,6 +135,30 @@ export class QuestionController {
     @Body() body: UpdateQuestionModel,
   ): Promise<QuestionIdResponse> {
     return this.questionService.updateQuestion(id, body);
+  }
+
+  @ApiOkResponse({
+    description: 'Question order changed',
+    type: QuestionIdResponse,
+  })
+  @ApiBody({
+    type: UpdateQuestionOrderModel,
+    description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          origin: 'Origin id',
+          dest: 'Target id',
+        } as UpdateQuestionOrderModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Put()
+  async updateQuestionOrder(
+    @Body() body: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    return this.questionService.updateQuestionOrder(body);
   }
 
   @ApiOkResponse({

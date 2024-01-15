@@ -10,6 +10,7 @@ import {
   QuestionModel,
   UpdateQuestionModel,
   QuestionIdResponse,
+  UpdateQuestionOrderModel,
 } from './question.dto';
 import prisma from 'client';
 import { Answer, Prisma, Question } from '@prisma/client';
@@ -22,6 +23,28 @@ export class QuestionService {
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
+      const questionOrders: { order: number }[] =
+        await prisma.question.findMany({
+          where: {
+            lesson_id: questionData.lessonId,
+          },
+          select: {
+            order: true,
+          },
+        });
+
+      if (
+        questionOrders
+          .map((question) => question.order)
+          .includes(questionData.order)
+      ) {
+        Logger.error(
+          'Failed to create question (question order already exists) !',
+        );
+        throw new ConflictException(
+          'Failed to create question (question order already exists)!',
+        );
+      }
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -30,6 +53,7 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
+          order: questionData.order,
         },
       });
 
@@ -40,7 +64,7 @@ export class QuestionService {
       return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Question not created !');
+      throw new ConflictException(`Cant create Question : ${error.stack}!`);
     }
   }
 
@@ -72,6 +96,11 @@ export class QuestionService {
   async getQuestion(QuestionId: string): Promise<QuestionModel> {
     try {
       const questionDb: Question = await prisma.question.findFirst({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           id: QuestionId,
         },
@@ -92,6 +121,7 @@ export class QuestionService {
         trustAnswerId: questionDb.trust_answer_id,
         pictureId: await PictureService.getPicture(questionDb.picture_id),
         difficulty: questionDb.difficulty,
+        order: questionDb.order,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -129,6 +159,50 @@ export class QuestionService {
       Logger.error(error);
       throw new ConflictException('Question not updated !');
     }
+  }
+
+  async updateQuestionOrder(
+    questionData: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    const questions: Question[] = await prisma.question.findMany({
+      where: {
+        id: { in: [questionData.origin, questionData.dest] },
+      },
+    });
+
+    if (!questions || questions.length !== 2) {
+      Logger.error('Questions does not exists !');
+      throw new ConflictException('Questions does not exists !');
+    }
+
+    const updatedOrigin = await prisma.question.update({
+      where: {
+        id: questions[0].id,
+      },
+      data: {
+        order: questions[1].order,
+      },
+    });
+
+    const updatedDest = await prisma.question.update({
+      where: {
+        id: questions[1].id,
+      },
+      data: {
+        order: questions[0].order,
+      },
+    });
+
+    return {
+      origin: {
+        id: updatedOrigin.id,
+        order: updatedOrigin.order,
+      },
+      dest: {
+        id: updatedDest.id,
+        order: updatedDest.order,
+      },
+    };
   }
 
   async getQuestionAnswers(QuestionId: string): Promise<AnswerModel[]> {

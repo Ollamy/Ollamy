@@ -166,6 +166,7 @@ model Question {
   picture_id      String?             @db.Uuid
   points          Int?
   difficulty      QuestionDifficulty?
+  order           Int
 }
 
 model Answer {
