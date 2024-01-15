@@ -15,9 +15,7 @@ function SplashScreen() {
 			if (finished) {
 				if (isSuccess) {
 					navigate('/home');
-					console.log('logged in!')
 				} else {
-					console.log('not logged in')
 					navigate('/register');
 				}
 			}

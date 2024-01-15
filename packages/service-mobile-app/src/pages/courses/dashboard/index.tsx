@@ -1,42 +1,51 @@
 import { ArrowBackIcon, Box, Button, Heading, Icon, ScrollView, Text, VStack } from 'native-base';
-import { useNavigate } from 'react-router-native';
+import { useNavigate, useParams } from 'react-router-native';
+import LessonListItem from 'src/components/LessonListItem';
+import { LessonStatus } from 'src/components/VerticalProgressBar';
 
 export interface CourseSection {
 	id: string;
 	title: string;
-	completed: boolean;
+	status: LessonStatus;
+	image: string;
 }
 
 const SECTION_DATA: CourseSection[] = [
 	{
-		id: '1',
+		id: 'f075c4f6-8f84-4986-9f6b-ddd81955e1ef2',
 		title: 'Introduction',
-		completed: true,
+		status: LessonStatus.COMPLETED,
+		image: '',
 	},
 	{
-		id: '2',
+		id: 'a88daaea-ddf5-4a8f-8e67-b2701002650f3',
 		title: 'Getting Started',
-		completed: true,
+		status: LessonStatus.COMPLETED,
+		image: '',
 	},
 	{
-		id: '3',
+		id: '18fadcbf-bbe0-4caf-85f1-10836ab93c514',
 		title: 'The Basics',
-		completed: true,
+		status: LessonStatus.IN_PROGRESS,
+		image: '',
 	},
 	{
-		id: '4',
+		id: 'a099102d-d19b-4aee-a117-f6496a3355115',
 		title: 'Advanced Concepts',
-		completed: false,
+		status: LessonStatus.NOT_STARTED,
+		image: '',
 	},
 	{
-		id: '5',
+		id: '7afe4fd2-efdf-48c2-9726-d505171a97c22',
 		title: 'Final Exam',
-		completed: false,
+		status: LessonStatus.NOT_STARTED,
+		image: '',
 	},
 ];
 
 const CourseDashboard = (): JSX.Element => {
 	const navigate = useNavigate();
+	const { id } = useParams();
 	const indexToAlignSelf = (index: number) => {
 		return index % 4 === 0 ? 'flex-start' : index % 4 === 1 || index % 4 === 3 ? 'center' : 'flex-end';
 	};
@@ -54,21 +63,10 @@ const CourseDashboard = (): JSX.Element => {
 				Go back
 			</Button>
 			<Heading size="lg">Learn React in 10 minutes</Heading>
-			<ScrollView>
-				<VStack space={24} mt={4}>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<VStack mt={4}>
 					{SECTION_DATA.map((section, idx) => (
-						<Box
-							key={section.id}
-							alignSelf={indexToAlignSelf(idx)}
-							borderWidth={1}
-							borderRadius={8}
-							background={section.completed ? 'green.100' : 'amber.100'}
-							borderColor={section.completed ? 'green.700' : 'amber.700'}
-							p="6"
-						>
-							<Heading size="sm">{section.title}</Heading>
-							<Text>{section.completed ? 'Completed' : 'Incomplete'}</Text>
-						</Box>
+						<LessonListItem key={section.id} itemName='Section' index={idx} lesson={section} onPress={() => navigate(`/course/${id}/section/${section.id}`)} />
 					))}
 				</VStack>
 			</ScrollView>

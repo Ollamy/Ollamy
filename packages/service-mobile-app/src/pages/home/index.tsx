@@ -6,14 +6,14 @@ import CourseRowButton from 'src/components/buttons/CourseRowButton';
 
 const COURSE_DATA: CourseInfo[] = [
 	{
-		id: '1',
+		id: 'a099102d-d19b-4aee-a117-f6496a335515',
 		title: 'Learn React in 10 minutes',
 		picture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1150px-React-icon.svg.png',
 		progress: 0.58,
 		color: '#E4F2FF',
 	},
 	{
-		id: '2',
+		id: 'c7c0c869-d620-4209-95f9-a9e5dd201501',
 		title: 'Typescript in 8 minutes',
 		picture:
 			'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png',
