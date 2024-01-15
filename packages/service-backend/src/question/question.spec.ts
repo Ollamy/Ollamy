@@ -21,14 +21,13 @@ describe('postQuestion', () => {
     questionService = moduleRef.get<QuestionService>(QuestionService);
   });
   it('should create a question and return the ID', async () => {
-    // Mock the dependencies or services
     const mockQuestionData: CreateQuestionModel = {
       lessonId: '88b0629f-ff7a-4960-92b4-f0537b807384',
       title: 'Question Title',
       description: 'Question Description',
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
-      data: '',
+      data: 'value',
       order: 0,
     };
     const mockQuestionDb: Question = {
@@ -39,19 +38,17 @@ describe('postQuestion', () => {
       type_answer: mockQuestionData.typeAnswer,
       type_question: mockQuestionData.typeQuestion,
       difficulty: mockQuestionData.difficulty,
-      trust_answer_id: '',
+      trust_answer_id: '1',
       picture_id: '1',
       points: 0,
-      order: 0,
+      order: mockQuestionData.order,
     };
 
     jest.spyOn(PictureService, 'postPicture').mockResolvedValue('1');
     jest.spyOn(prisma.question, 'create').mockResolvedValue(mockQuestionDb);
 
-    // Invoke the function being tested
     const result = await questionService.postQuestion(mockQuestionData);
 
-    // Perform assertions
     expect(prisma.question.create).toHaveBeenCalledTimes(1);
     expect(prisma.question.create).toHaveBeenCalledWith({
       data: {
