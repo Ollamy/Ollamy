@@ -1,10 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsOptional,
   IsString,
   IsUUID,
   IsBoolean,
+  IsArray,
+  ValidateNested,
 } from 'class-validator';
 
 export class UserModel {
@@ -104,4 +107,34 @@ export class UserTrueResponse {
   @ApiProperty()
   @IsBoolean()
   success: boolean;
+}
+
+
+export class UserCourses {
+  @ApiProperty()
+  @IsUUID()
+  id: string
+
+  @ApiProperty()
+  @IsString()
+  title: string
+
+  @ApiProperty()
+  @IsString()
+  description: string
+
+  @ApiProperty()
+  @IsUUID()
+  picture_id: string
+
+  @ApiProperty()
+  owner: boolean
+}
+
+export class UserCoursesResponse {
+  @ApiProperty()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UserCourses)
+  courses: UserCourses[]
 }

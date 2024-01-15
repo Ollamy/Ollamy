@@ -94,7 +94,10 @@ export class LessonService {
         where: {
           id: LessonId,
         },
-        data: lessonData,
+        data: {
+          title: lessonData.title,
+          description: lessonData.description,
+        },
       });
 
       if (!lessonDb) {

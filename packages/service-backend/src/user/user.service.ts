@@ -10,6 +10,7 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
   UserIdResponse,
 } from './user.dto';
 import prisma from 'client';
@@ -176,7 +177,7 @@ export class UserService {
     }
   }
 
-  async getUserCourses(ctx: any): Promise<object> {
+  async getUserCourses(ctx: any): Promise<UserCoursesResponse> {
     try {
       const userDb = await prisma.user.findUnique({
         where: {
@@ -195,7 +196,7 @@ export class UserService {
       const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
 
       if (courses_id.length === 0) {
-        return [];
+        return { courses: [] };
       }
 
       const courses = await prisma.course.findMany({
@@ -205,14 +206,16 @@ export class UserService {
           },
         },
       });
-      return courses.map((course) => {
-        const isOwner = course.owner_id === ctx.__user.id;
-        delete course.owner_id;
-        return {
-          ...course,
-          owner: isOwner,
-        };
-      });
+      return {
+        courses: courses.map((course) => {
+          const isOwner = course.owner_id === ctx.__user.id;
+          delete course.owner_id;
+          return {
+            ...course,
+            owner: isOwner,
+          };
+        }),
+      };
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
