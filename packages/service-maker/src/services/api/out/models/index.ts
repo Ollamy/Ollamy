@@ -808,3 +808,53 @@ export interface UserTrueResponse {
      */
     success: boolean;
 }
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerModel
+ */
+export interface ValidateAnswerModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    answerId: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerResponse
+ */
+export interface ValidateAnswerResponse {
+    /**
+     * Boolean if the answer is true or false
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    success: boolean;
+    /**
+     * true answer id
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    answer: string;
+    /**
+     * Boolean if it is the last question or not
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    end: boolean;
+    /**
+     * Id of the next question if it is not the last one
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    nextQuestionId: string;
+}
