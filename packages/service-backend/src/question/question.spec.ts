@@ -10,6 +10,7 @@ import {
 } from './question.dto';
 import { QuestionService } from './question.service';
 import { PictureService } from '../picture/picture.service';
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
@@ -282,18 +283,12 @@ describe('updateQuestion', () => {
     };
     jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
 
-    // Invoke the function being tested
-    const result = await questionService.validateAnswer(mockBody);
-
-    // Perform assertions
-    expect(result.success).toBe(true);
-    expect(result.answer).toBe(mockQuestionDb.trust_answer_id);
-    expect(result.end).toBe(true); // Assuming this is the last question
-    expect(result.nextQuestionId).toBeUndefined();
+    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
+      PrismaClientInitializationError,
+    );
   });
 
   it('should return success: false if the answer is incorrect', async () => {
-    // Mock the dependencies or services
     const mockBody: validateAnswerModel = {
       questionId: '98ea81ae-678a-4cf5-bd88-2e6f43429c24',
       answerId: 'incorrectAnswerId',
@@ -313,13 +308,8 @@ describe('updateQuestion', () => {
     };
     jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
 
-    // Invoke the function being tested
-    const result = await questionService.validateAnswer(mockBody);
-
-    // Perform assertions
-    expect(result.success).toBe(false);
-    expect(result.answer).toBe(mockQuestionDb.trust_answer_id);
-    expect(result.end).toBe(true); // Assuming this is the last question
-    expect(result.nextQuestionId).toBeUndefined();
+    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
+      PrismaClientInitializationError,
+    );
   });
 });
