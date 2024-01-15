@@ -34,6 +34,7 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
+      await this.addUserToCourse(courseDb.id, ctx.__user.id);
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);

@@ -218,7 +218,6 @@ describe('updateLesson', () => {
     const mockLessonData: UpdateLessonModel = {
       title: 'Updated Lesson Title',
       description: 'Updated Lesson Description',
-      sectionId: '1',
     };
     const mockUpdatedLesson: Lesson = {
       id: mockLessonId,

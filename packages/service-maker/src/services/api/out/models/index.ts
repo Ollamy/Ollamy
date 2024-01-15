@@ -741,6 +741,19 @@ export interface UpdateUserModel {
 /**
  * 
  * @export
+ * @interface UserCoursesResponse
+ */
+export interface UserCoursesResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserCoursesResponse
+     */
+    courses: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UserIdResponse
  */
 export interface UserIdResponse {

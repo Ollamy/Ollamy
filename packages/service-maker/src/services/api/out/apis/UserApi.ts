@@ -7,6 +7,7 @@ import type {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
   UserIdResponse,
   UserTrueResponse,
 } from '../models/index';
@@ -75,7 +76,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserCoursesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async getUserCoursesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCoursesResponse> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -87,16 +88,12 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static getUserCourses(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static getUserCourses(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCoursesResponse> {
         return localUserApi.getUserCoursesRaw(initOverrides);
     }
 
