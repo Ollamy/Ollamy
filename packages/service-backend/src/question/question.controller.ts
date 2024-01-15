@@ -1,29 +1,32 @@
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
-  Controller,
-  Post,
+  CreateQuestionModel,
+  IdQuestionModel,
+  QuestionIdResponse,
+  QuestionModel,
+  UpdateQuestionModel,
+} from 'question/question.dto';
+import { QuestionService } from 'question/question.service';
+
+import { AnswerModel } from '../answer/answer.dto';
+
+import {
   Body,
-  Put,
+  Controller,
   Delete,
-  Query,
   Get,
+  Post,
+  Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiHeader,
   ApiOkResponse,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  CreateQuestionModel,
-  IdQuestionModel,
-  QuestionModel,
-  UpdateQuestionModel,
-} from 'question/question.dto';
-import { AnswerType, QuestionType, Question } from '@prisma/client';
-import { QuestionService } from 'question/question.service';
-import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { AnswerType, QuestionDifficulty, QuestionType } from '@prisma/client';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -33,7 +36,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question create response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiBody({
     type: CreateQuestionModel,
@@ -47,19 +50,23 @@ export class QuestionController {
           data: 'Question data',
           typeAnswer: AnswerType.TEXT,
           typeQuestion: QuestionType.TEXT,
+          picture: 'Question picture',
+          difficulty: QuestionDifficulty.BEGINNER,
         } as CreateQuestionModel,
       },
     },
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerQuestion(@Body() body: CreateQuestionModel): Promise<string> {
+  async registerQuestion(
+    @Body() body: CreateQuestionModel,
+  ): Promise<QuestionIdResponse> {
     return this.questionService.postQuestion(body);
   }
 
   @ApiOkResponse({
     description: 'question delete response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiBody({
     type: IdQuestionModel,
@@ -74,7 +81,9 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteQuestion(@Body() body: IdQuestionModel): Promise<string> {
+  async deleteQuestion(
+    @Body() body: IdQuestionModel,
+  ): Promise<QuestionIdResponse> {
     return this.questionService.deleteQuestion(body);
   }
 
@@ -95,7 +104,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question update response',
-    type: String,
+    type: QuestionIdResponse,
   })
   @ApiParam({
     name: 'id',
@@ -112,6 +121,7 @@ export class QuestionController {
           title: 'Question Title',
           description: 'Question decsription',
           data: 'Data of the question',
+          trustAnswerId: 'id',
         } as UpdateQuestionModel,
       },
     },
@@ -121,17 +131,22 @@ export class QuestionController {
   async updateQuestion(
     @Query('id') id: string,
     @Body() body: UpdateQuestionModel,
-  ): Promise<string> {
+  ): Promise<QuestionIdResponse> {
     return this.questionService.updateQuestion(id, body);
   }
 
   @ApiOkResponse({
-    description: 'get courses owned by user',
-    type: [QuestionModel],
+    description: 'question content response',
+    type: QuestionModel,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the question',
+    required: true,
   })
   @LoggedMiddleware(true)
-  @Get()
-  async getAllQuestions(): Promise<Question[]> {
-    return this.questionService.getAllQuestions();
+  @Get('/:id/answers')
+  async getQuestionAnswers(@Query('id') id: string): Promise<AnswerModel[]> {
+    return this.questionService.getQuestionAnswers(id);
   }
 }

@@ -9,13 +9,18 @@ import {
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
+  QuestionIdResponse,
 } from './question.dto';
 import prisma from 'client';
-import { Prisma, Question } from '@prisma/client';
+import { Answer, Prisma, Question } from '@prisma/client';
+import { PictureService } from '../picture/picture.service';
+import { AnswerModel } from '../answer/answer.dto';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(questionData: CreateQuestionModel): Promise<string> {
+  async postQuestion(
+    questionData: CreateQuestionModel,
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.create({
         data: {
@@ -24,6 +29,7 @@ export class QuestionService {
           description: questionData.description,
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
+          difficulty: questionData?.difficulty,
         },
       });
 
@@ -31,14 +37,16 @@ export class QuestionService {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-      return `Question created with id ${questionDb.id}`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not created !');
     }
   }
 
-  async deleteQuestion(questionId: IdQuestionModel): Promise<string> {
+  async deleteQuestion(
+    questionId: IdQuestionModel,
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.delete({
         where: {
@@ -51,7 +59,7 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return `Question's ${questionId.id} has been deleted.`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -82,6 +90,8 @@ export class QuestionService {
         typeAnswer: questionDb.type_answer,
         typeQuestion: questionDb.type_question,
         trustAnswerId: questionDb.trust_answer_id,
+        pictureId: await PictureService.getPicture(questionDb.picture_id),
+        difficulty: questionDb.difficulty,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -92,13 +102,21 @@ export class QuestionService {
   async updateQuestion(
     QuestionId: string,
     questionData: UpdateQuestionModel,
-  ): Promise<string> {
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.update({
         where: {
           id: QuestionId,
         },
-        data: questionData,
+        data: {
+          title: questionData.title,
+          description: questionData.description,
+          lesson_id: questionData.lessonId,
+          picture_id: await PictureService.postPicture(questionData.picture),
+          points: questionData.points,
+          difficulty: questionData?.difficulty,
+          trust_answer_id: questionData?.trustAnswerId,
+        },
       });
 
       if (!questionDb) {
@@ -106,23 +124,41 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      return `Question with id ${QuestionId} has been updated`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not updated !');
     }
   }
 
-  async getAllQuestions(): Promise<Question[]> {
+  async getQuestionAnswers(QuestionId: string): Promise<AnswerModel[]> {
     try {
-      const questionsDb: Question[] = await prisma.question.findMany();
+      const answersDb: Answer[] = await prisma.answer.findMany({
+        where: {
+          question_id: QuestionId,
+        },
+      });
 
-      return questionsDb.map((questionDb) => ({
-        ...questionDb
-      })) as Question[];
+      if (!answersDb) {
+        Logger.error('Answers does not exists !');
+        throw new ConflictException('Answers does not exists !');
+      }
+
+      const answerPromises = answersDb.map(
+        async (answer) =>
+          ({
+            id: answer.id,
+            questionId: answer.question_id,
+            data: answer.data,
+            picture: answer.picture_id
+              ? await PictureService.getPicture(answer.picture_id)
+              : undefined,
+          } as AnswerModel),
+      );
+      return await Promise.all(answerPromises);
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Error retrieving all questions!');
+      throw new ConflictException('Answers not found !');
     }
   }
 }

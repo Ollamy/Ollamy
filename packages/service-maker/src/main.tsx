@@ -1,27 +1,74 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
-import { Home } from './pages/Home';
-import { Login } from './pages/Login';
-import { Register } from './pages/Register';
+import HomePage from "./pages/Home";
+import { Login } from "./pages/Login";
+import ProfilePage from "./pages/Profile";
+import { Register } from "./pages/Register";
+import MakerHubPage from "./pages/maker/hub";
 
+// Router
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/register",
     element: <Register />,
   },
   {
-    path: '/home',
-    element: <Home />,
+    path: "/login",
+    element: <Login />,
   },
   {
-    path: '/login',
-    element: <Login />,
+    path: "/home",
+    element: <HomePage />,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
+  {
+    path: "/course/:id",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId/:lessonId",
+    element: <MakerHubPage />,
   },
 ]);
 
+// React Query setup (use to query the backend)
+const queryCache = new QueryCache();
+const mutationCache = new MutationCache();
+export const queryClient = new QueryClient({
+  queryCache,
+  mutationCache,
+  defaultOptions: {
+    queries: {
+      notifyOnChangeProps: ["data", "error", "isError", "isLoading"],
+    },
+  },
+});
+
+// Style
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
@@ -41,9 +88,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+// EntryPoint of the app
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <GlobalStyle />
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 );

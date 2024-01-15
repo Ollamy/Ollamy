@@ -6,6 +6,9 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
+  UserIdResponse,
+  UserTrueResponse,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -16,6 +19,7 @@ import {
   Get,
   Post,
   Put,
+  Req,
   Response,
 } from '@nestjs/common';
 import {
@@ -39,7 +43,7 @@ export class UserController {
   @ApiCookieAuth()
   @ApiOkResponse({
     description: "user's token",
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: CreateUserModel,
@@ -56,19 +60,33 @@ export class UserController {
     },
   })
   @Post('/register')
-  async registerUser(@Response() res, @Body() body: CreateUserModel) {
-    res.cookie('session', await this.userService.registerUser(body), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
-
+  async registerUser(
+    @Req() request,
+    @Response() res,
+    @Body() body: CreateUserModel,
+  ) {
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      await this.userService.registerUser(body),
+      cookiesParams,
+    );
     return res.send({ success: true });
   }
 
   @ApiCookieAuth()
   @ApiOkResponse({
     description: 'true',
-    type: String,
+    type: UserTrueResponse,
   })
   @ApiBody({
     type: LoginUserModel,
@@ -83,11 +101,26 @@ export class UserController {
     },
   })
   @Post('/login')
-  async loginUser(@Response() res, @Body() body: LoginUserModel): Promise<any> {
-    res.cookie('session', await this.userService.loginUser(body), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
+  async loginUser(
+    @Req() request,
+    @Response() res,
+    @Body() body: LoginUserModel,
+  ): Promise<any> {
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      await this.userService.loginUser(body),
+      cookiesParams,
+    );
     return res.send({ success: true });
   }
 
@@ -123,25 +156,47 @@ export class UserController {
   @LoggedMiddleware(true)
   @Put()
   async updateUser(
+    @Req() request,
     @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
   ) {
-    res.cookie('session', this.userService.updateUser(body, ctx), {
-      httpOnly: true,
-      maxAge: SessionService.TTL,
-    });
+    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
+    const cookiesParams =
+      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
+        ? { httpOnly: true, maxAge: SessionService.TTL }
+        : {
+            httpOnly: true,
+            maxAge: SessionService.TTL,
+            sameSite: 'none' as const,
+            secure: true,
+          };
+    res.cookie(
+      'session',
+      this.userService.updateUser(body, ctx),
+      cookiesParams,
+    );
 
     return res.send({ success: true });
   }
 
   @ApiOkResponse({
     description: 'Ok.',
-    type: String,
+    type: UserIdResponse,
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteUser(@OllContext() ctx: any): Promise<string> {
+  async deleteUser(@OllContext() ctx: any): Promise<UserIdResponse> {
     return this.userService.deleteUser(ctx);
+  }
+
+  @ApiOkResponse({
+    description: 'list the courses of a user',
+    type: UserCoursesResponse,
+  })
+  @LoggedMiddleware(true)
+  @Get('/courses')
+  async getUserCourses(@OllContext() ctx: any): Promise<UserCoursesResponse> {
+    return this.userService.getUserCourses(ctx);
   }
 }

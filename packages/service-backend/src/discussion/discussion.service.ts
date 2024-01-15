@@ -32,7 +32,7 @@ export class DiscussionService {
       discussionData.userIds.forEach(async (userId) => {
         await this.postUserDiscussion(userId, discussionDb.id);
       });
-      return `Discussion created with id ${discussionDb.id}`;
+      return discussionDb.id;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not created !');

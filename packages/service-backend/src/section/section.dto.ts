@@ -55,3 +55,9 @@ export class UpdateSectionModel {
   @IsOptional()
   description: string;
 }
+
+export class SectionIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}
