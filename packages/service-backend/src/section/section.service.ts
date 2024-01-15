@@ -9,14 +9,15 @@ import {
   IdSectionModel,
   SectionModel,
   UpdateSectionModel,
+  SectionIdResponse,
 } from 'section/section.dto';
-import { ChapterModel } from 'chapter/chapter.dto';
+import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import { Chapter, Prisma, Section } from '@prisma/client';
+import { Lesson, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
-  async postSection(sectionData: CreateSectionModel): Promise<string> {
+  async postSection(sectionData: CreateSectionModel): Promise<SectionIdResponse> {
     try {
       const sectionDb: Section = await prisma.section.create({
         data: {
@@ -30,14 +31,14 @@ export class SectionService {
         Logger.error('Failed to create section !');
         throw new NotFoundException('Failed to create section !');
       }
-      return `Section created with id ${sectionDb.id}`;
+      return { id: sectionDb.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not created !');
     }
   }
 
-  async deleteSection(sectionData: IdSectionModel): Promise<string> {
+  async deleteSection(sectionData: IdSectionModel): Promise<SectionIdResponse> {
     try {
       const sectionDb: Section = await prisma.section.delete({
         where: {
@@ -50,7 +51,7 @@ export class SectionService {
         throw new NotFoundException('Section does not exists !');
       }
 
-      return `Section's ${sectionData.id} has been deleted.`;
+      return { id: sectionData.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -88,13 +89,17 @@ export class SectionService {
   async updateSection(
     SectionId: string,
     sectionData: UpdateSectionModel,
-  ): Promise<string> {
+  ): Promise<SectionIdResponse> {
     try {
       const sectionDb = await prisma.section.update({
         where: {
           id: SectionId,
         },
-        data: sectionData,
+        data: {
+          course_id: sectionData.courseId,
+          title: sectionData.title,
+          description: sectionData.description,
+        },
       });
 
       if (!sectionDb) {
@@ -102,37 +107,37 @@ export class SectionService {
         throw new ConflictException('Section does not exists !');
       }
 
-      return `Section with id ${SectionId} has been updated`;
+      return { id: sectionDb.id } as SectionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Section not updated !');
     }
   }
 
-  async getSectionChapters(SectionId: string): Promise<ChapterModel[]> {
+  async getSectionLessons(SectionId: string): Promise<LessonModel[]> {
     try {
-      const sectionChaptersDb: Chapter[] = await prisma.chapter.findMany({
+      const sectionLessonsDb: Lesson[] = await prisma.lesson.findMany({
         where: {
           section_id: SectionId,
         },
       });
 
-      if (!sectionChaptersDb) {
+      if (!sectionLessonsDb) {
         Logger.error('No chapters for this course !');
         throw new NotFoundException('No chapters for this course !');
       }
 
-      return sectionChaptersDb.map((lesson: Chapter) => {
+      return sectionLessonsDb.map((lesson: Lesson) => {
         return {
           sectionId: lesson.section_id,
           description: lesson.description,
           id: lesson.id,
           title: lesson.title,
         };
-      }) as ChapterModel[];
+      }) as LessonModel[];
     } catch (error) {
       Logger.error(error);
-      throw new NotFoundException('Chapters not found !');
+      throw new NotFoundException('Lessons not found !');
     }
   }
 }

@@ -5,7 +5,7 @@ import {
   IdSectionModel,
   UpdateSectionModel,
 } from './section.dto';
-import { Chapter, Prisma, Section } from '@prisma/client';
+import { Lesson, Prisma, Section } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
@@ -47,7 +47,7 @@ describe('postSection', () => {
       },
     });
 
-    expect(result).toBe(`Section created with id ${mockSectionDb.id}`);
+    expect(result).toStrictEqual({id: mockSectionDb.id});
   });
 
   it('should throw NotFoundException if section creation fails', async () => {
@@ -117,7 +117,7 @@ describe('deleteSection', () => {
       },
     });
 
-    expect(result).toBe(`Section's ${mockSectionData.id} has been deleted.`);
+    expect(result).toStrictEqual({id: mockSectionData.id});
   });
 
   it('should throw NotFoundException if section does not exist', async () => {
@@ -267,10 +267,14 @@ describe('updateSection', () => {
       where: {
         id: mockSectionId,
       },
-      data: mockSectionData,
+      data: {
+        title: 'Updated Section Title',
+        description: 'Updated Section Description',
+        course_id: '456',
+      },
     });
 
-    expect(result).toBe(`Section with id ${mockSectionId} has been updated`);
+    expect(result).toStrictEqual({id: mockSectionId});
   });
 
   it('should throw ConflictException if section does not exist', async () => {
@@ -306,7 +310,7 @@ describe('updateSection', () => {
   });
 });
 
-describe('getSectionChapters', () => {
+describe('getSectionLessons', () => {
   let sectionService: SectionService;
 
   beforeEach(async () => {
@@ -316,38 +320,38 @@ describe('getSectionChapters', () => {
 
     sectionService = moduleRef.get<SectionService>(SectionService);
   });
-  it('should return an array of chapters when they exist', async () => {
+  it('should return an array of lessons when they exist', async () => {
     // Mock the dependencies or services
     const mockSectionId = '123';
-    const mockChapterDb: Chapter[] = [
+    const mockLessonDb: Lesson[] = [
       {
         id: '1',
         section_id: mockSectionId,
-        title: 'Chapter 1',
-        description: 'Chapter 1 Description',
+        title: 'Lesson 1',
+        description: 'Lesson 1 Description',
       },
       {
         id: '2',
         section_id: mockSectionId,
-        title: 'Chapter 2',
-        description: 'Chapter 2 Description',
+        title: 'Lesson 2',
+        description: 'Lesson 2 Description',
       },
     ];
-    jest.spyOn(prisma.chapter, 'findMany').mockResolvedValue(mockChapterDb);
+    jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSectionChapters(mockSectionId);
+    const result = await sectionService.getSectionLessons(mockSectionId);
 
     // Perform assertions
-    expect(prisma.chapter.findMany).toHaveBeenCalledTimes(1);
-    expect(prisma.chapter.findMany).toHaveBeenCalledWith({
+    expect(prisma.lesson.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.lesson.findMany).toHaveBeenCalledWith({
       where: {
         section_id: mockSectionId,
       },
     });
 
     expect(result).toEqual(
-      mockChapterDb.map((lesson: Chapter) => ({
+      mockLessonDb.map((lesson: Lesson) => ({
         sectionId: lesson.section_id,
         description: lesson.description,
         id: lesson.id,
@@ -358,13 +362,13 @@ describe('getSectionChapters', () => {
 
   it('should throw NotFoundException if an error occurs', async () => {
     jest
-      .spyOn(prisma.chapter, 'findMany')
+      .spyOn(prisma.lesson, 'findMany')
       .mockRejectedValue(new Error('Some error'));
 
     const mockSectionId = '123';
 
     await expect(
-      sectionService.getSectionChapters(mockSectionId),
+      sectionService.getSectionLessons(mockSectionId),
     ).rejects.toThrow(NotFoundException);
   });
 });

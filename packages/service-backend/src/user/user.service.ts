@@ -10,6 +10,8 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
+  UserIdResponse,
 } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
@@ -152,7 +154,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(ctx: any): Promise<string> {
+  async deleteUser(ctx: any): Promise<UserIdResponse> {
     try {
       const userDb = await prisma.user.delete({
         where: {
@@ -165,7 +167,7 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return `User's ${ctx.__user.id} has been deleted.`;
+      return { id: ctx.__user.id } as UserIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -175,7 +177,7 @@ export class UserService {
     }
   }
 
-  async getUserCourses(ctx: any): Promise<object> {
+  async getUserCourses(ctx: any): Promise<UserCoursesResponse> {
     try {
       const userDb = await prisma.user.findUnique({
         where: {
@@ -194,7 +196,7 @@ export class UserService {
       const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
 
       if (courses_id.length === 0) {
-        return [];
+        return { courses: [] };
       }
 
       const courses = await prisma.course.findMany({
@@ -204,14 +206,16 @@ export class UserService {
           },
         },
       });
-      return courses.map((course) => {
-        const isOwner = course.owner_id === ctx.__user.id;
-        delete course.owner_id;
-        return {
-          ...course,
-          owner: isOwner,
-        };
-      });
+      return {
+        courses: courses.map((course) => {
+          const isOwner = course.owner_id === ctx.__user.id;
+          delete course.owner_id;
+          return {
+            ...course,
+            owner: isOwner,
+          };
+        }),
+      };
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
