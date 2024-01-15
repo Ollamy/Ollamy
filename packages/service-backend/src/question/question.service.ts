@@ -22,44 +22,50 @@ export class QuestionService {
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
-    const questionOrders: { order: number }[] = await prisma.question.findMany({
-      where: {
-        lesson_id: questionData.lessonId,
-      },
-      select: {
-        order: true,
-      },
-    });
+    try {
+      const questionOrders: { order: number }[] =
+        await prisma.question.findMany({
+          where: {
+            lesson_id: questionData.lessonId,
+          },
+          select: {
+            order: true,
+          },
+        });
 
-    if (
-      questionOrders
-        .map((question) => question.order)
-        .includes(questionData.order)
-    ) {
-      Logger.error(
-        'Failed to create question (question order already exists) !',
-      );
-      throw new ConflictException(
-        'Failed to create question (question order already exists)!',
-      );
-    }
-    const questionDb: Question = await prisma.question.create({
-      data: {
-        lesson_id: questionData.lessonId,
-        title: questionData.title,
-        description: questionData.description,
-        type_answer: questionData.typeAnswer,
-        type_question: questionData.typeQuestion,
-        difficulty: questionData?.difficulty,
-        order: questionData.order,
-      },
-    });
+      if (
+        questionOrders
+          .map((question) => question.order)
+          .includes(questionData.order)
+      ) {
+        Logger.error(
+          'Failed to create question (question order already exists) !',
+        );
+        throw new ConflictException(
+          'Failed to create question (question order already exists)!',
+        );
+      }
+      const questionDb: Question = await prisma.question.create({
+        data: {
+          lesson_id: questionData.lessonId,
+          title: questionData.title,
+          description: questionData.description,
+          type_answer: questionData.typeAnswer,
+          type_question: questionData.typeQuestion,
+          difficulty: questionData?.difficulty,
+          order: questionData.order,
+        },
+      });
 
-    if (!questionDb) {
-      Logger.error('Failed to create question !');
-      throw new NotFoundException('Failed to create question !');
+      if (!questionDb) {
+        Logger.error('Failed to create question !');
+        throw new NotFoundException('Failed to create question !');
+      }
+      return { id: questionDb.id } as QuestionIdResponse;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Cant create Question !');
     }
-    return { id: questionDb.id } as QuestionIdResponse;
   }
 
   async deleteQuestion(

@@ -23,7 +23,7 @@ describe('postQuestion', () => {
   it('should create a question and return the ID', async () => {
     // Mock the dependencies or services
     const mockQuestionData: CreateQuestionModel = {
-      lessonId: '123',
+      lessonId: '88b0629f-ff7a-4960-92b4-f0537b807384',
       title: 'Question Title',
       description: 'Question Description',
       typeAnswer: 'TEXT',
@@ -60,6 +60,8 @@ describe('postQuestion', () => {
         description: mockQuestionData.description,
         type_answer: mockQuestionData.typeAnswer,
         type_question: mockQuestionData.typeQuestion,
+        order: mockQuestionData.order,
+        difficulty: mockQuestionData.difficulty,
       },
     });
 
@@ -213,6 +215,11 @@ describe('getQuestion', () => {
     // Perform assertions
     expect(prisma.question.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.question.findFirst).toHaveBeenCalledWith({
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
       where: {
         id: mockQuestionId,
       },
@@ -228,6 +235,7 @@ describe('getQuestion', () => {
       trustAnswerId: mockQuestionDb.trust_answer_id,
       difficulty: mockQuestionDb.difficulty,
       pictureId: mockQuestionDb.picture_id,
+      order: mockQuestionDb.order,
     });
   });
 
