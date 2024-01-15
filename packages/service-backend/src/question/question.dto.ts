@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -148,4 +149,45 @@ export class QuestionIdResponse {
   @ApiProperty()
   @IsUUID()
   id: string;
+}
+
+export class validateAnswerModel {
+  @ApiProperty()
+  @IsUUID()
+  questionId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  answerId: string;
+}
+
+export class ValidateAnswerResponse {
+  @ApiProperty({
+    name: 'success',
+    description: 'Boolean if the answer is true or false',
+  })
+  @IsBoolean()
+  success: boolean;
+
+  @ApiProperty({
+    name: 'answer',
+    description: 'true answer id',
+  })
+  @IsUUID()
+  answer: string;
+
+  @ApiProperty({
+    name: 'end',
+    description: 'Boolean if it is the last question or not',
+  })
+  @IsBoolean()
+  end: boolean;
+
+  @ApiProperty({
+    name: 'nextQuestionId',
+    description: 'Id of the next question if it is not the last one',
+  })
+  @IsString()
+  @IsOptional()
+  nextQuestionId?: string | undefined;
 }
