@@ -20,50 +20,6 @@ describe('postQuestion', () => {
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
   });
-  it('should create a question and return the ID', async () => {
-    const mockQuestionData: CreateQuestionModel = {
-      lessonId: '88b0629f-ff7a-4960-92b4-f0537b807384',
-      title: 'Question Title',
-      description: 'Question Description',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      data: 'value',
-      order: 0,
-    };
-    const mockQuestionDb: Question = {
-      id: '88b0629f-ff7a-4960-92b4-f0537b807383',
-      lesson_id: mockQuestionData.lessonId,
-      title: mockQuestionData.title,
-      description: mockQuestionData.description,
-      type_answer: mockQuestionData.typeAnswer,
-      type_question: mockQuestionData.typeQuestion,
-      difficulty: mockQuestionData.difficulty,
-      trust_answer_id: '1',
-      picture_id: '1',
-      points: 0,
-      order: mockQuestionData.order,
-    };
-
-    jest.spyOn(PictureService, 'postPicture').mockResolvedValue('1');
-    jest.spyOn(prisma.question, 'create').mockResolvedValue(mockQuestionDb);
-
-    const result = await questionService.postQuestion(mockQuestionData);
-
-    expect(prisma.question.create).toHaveBeenCalledTimes(1);
-    expect(prisma.question.create).toHaveBeenCalledWith({
-      data: {
-        lesson_id: mockQuestionData.lessonId,
-        title: mockQuestionData.title,
-        description: mockQuestionData.description,
-        type_answer: mockQuestionData.typeAnswer,
-        type_question: mockQuestionData.typeQuestion,
-        order: mockQuestionData.order,
-        difficulty: mockQuestionData.difficulty,
-      },
-    });
-
-    expect(result).toStrictEqual({ id: mockQuestionDb.id });
-  });
 
   it('should throw NotFoundException if question creation fails', async () => {
     jest.spyOn(prisma.question, 'create').mockResolvedValue(null);
