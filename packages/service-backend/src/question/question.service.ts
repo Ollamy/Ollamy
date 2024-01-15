@@ -64,7 +64,7 @@ export class QuestionService {
       return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Cant create Question !');
+      throw new ConflictException(`Cant create Question : ${error.stack}!`);
     }
   }
 
