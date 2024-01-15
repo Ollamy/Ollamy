@@ -236,6 +236,12 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    order: number;
 }
 /**
  * 
@@ -532,6 +538,12 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof QuestionModel
+     */
+    order: number;
 }
 /**
  * 
@@ -681,6 +693,25 @@ export interface UpdateQuestionModel {
      * @memberof UpdateQuestionModel
      */
     trustAnswerId: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateQuestionOrderModel
+ */
+export interface UpdateQuestionOrderModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    origin: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    dest: string;
 }
 /**
  * 

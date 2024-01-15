@@ -59,7 +59,7 @@ const LessonList = (props: LessonListProps) => {
   return (
     <>
       <CreateModal
-        title="Create New Section"
+        title="Create New Lesson"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onSubmit={handleSubmit}
