@@ -9,6 +9,8 @@ import type {
   QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
+  ValidateAnswerModel,
+  ValidateAnswerResponse,
 } from '../models/index';
 
 export interface DeleteQuestionRequest {
@@ -34,6 +36,10 @@ export interface UpdateQuestionRequest {
 
 export interface UpdateQuestionOrderRequest {
     updateQuestionOrderModel: UpdateQuestionOrderModel;
+}
+
+export interface ValidateAnswerRequest {
+    validateAnswerModel: ValidateAnswerModel;
 }
 
 /**
@@ -216,6 +222,36 @@ export class QuestionApi extends runtime.BaseAPI {
      */
     static updateQuestionOrder(requestParameters: UpdateQuestionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         return localQuestionApi.updateQuestionOrderRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async validateAnswerRaw(requestParameters: ValidateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateAnswerResponse> {
+        if (requestParameters.validateAnswerModel === null || requestParameters.validateAnswerModel === undefined) {
+            throw new runtime.RequiredError('validateAnswerModel','Required parameter requestParameters.validateAnswerModel was null or undefined when calling validateAnswer.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/question/validate`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.validateAnswerModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static validateAnswer(requestParameters: ValidateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateAnswerResponse> {
+        return localQuestionApi.validateAnswerRaw(requestParameters, initOverrides);
     }
 
 }
