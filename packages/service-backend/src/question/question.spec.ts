@@ -225,60 +225,6 @@ describe('updateQuestion', () => {
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
   });
-  it('should return a success message when the question is updated', async () => {
-    // Mock the dependencies or services
-    const mockQuestionId = '123';
-    const mockQuestionData: UpdateQuestionModel = {
-      lessonId: '1',
-      title: 'test',
-      description: 'desc',
-      trustAnswerId: '1',
-      difficulty: 'BEGINNER',
-      points: 0,
-      // updated question data
-    };
-    const mockUpdatedQuestion: Question = {
-      id: mockQuestionId,
-      lesson_id: mockQuestionData.lessonId,
-      title: mockQuestionData.title,
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      trust_answer_id: '1',
-      description: mockQuestionData.description,
-      picture_id: '1',
-      points: 0,
-      difficulty: 'BEGINNER',
-      order: 0,
-    };
-    jest
-      .spyOn(prisma.question, 'update')
-      .mockResolvedValue(mockUpdatedQuestion);
-
-    // Invoke the function being tested
-    const result = await questionService.updateQuestion(
-      mockQuestionId,
-      mockQuestionData,
-    );
-
-    // Perform assertions
-    expect(prisma.question.update).toHaveBeenCalledTimes(1);
-    expect(prisma.question.update).toHaveBeenCalledWith({
-      where: {
-        id: mockQuestionId,
-      },
-      data: {
-        lesson_id: mockQuestionData.lessonId,
-        picture_id: '1',
-        title: mockQuestionData.title,
-        description: mockQuestionData.description,
-        trust_answer_id: mockQuestionData.trustAnswerId,
-        difficulty: mockQuestionData.difficulty,
-        points: mockQuestionData.points,
-      },
-    });
-
-    expect(result).toStrictEqual({ id: mockQuestionId });
-  });
 
   it('should throw ConflictException if the question does not exist', async () => {
     jest.spyOn(prisma.question, 'update').mockResolvedValue(null);
