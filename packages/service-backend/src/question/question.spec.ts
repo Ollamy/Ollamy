@@ -31,7 +31,7 @@ describe('postQuestion', () => {
       order: 0,
     };
     const mockQuestionDb: Question = {
-      id: '1',
+      id: '88b0629f-ff7a-4960-92b4-f0537b807383',
       lesson_id: mockQuestionData.lessonId,
       title: mockQuestionData.title,
       description: mockQuestionData.description,
