@@ -5,7 +5,7 @@ import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
 import type { AxiosError, AxiosResponse } from 'axios';
-import { FormControl } from 'native-base';
+import { Button, FormControl } from 'native-base';
 import { useLoginMutation } from 'src/services/auth/auth';
 
 interface LoginForm {
@@ -114,13 +114,9 @@ function Login(): JSX.Element {
 				<Text style={styles.text}>Forgot your password ?</Text>
 				<Text style={styles.highlightText}>Recover password</Text>
 			</View>
-			{isLoading ? (
-				<ActivityIndicator />
-			) : (
-				<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
+				<Button isLoading={isLoading} onPress={handleSubmit(onSubmit)} style={styles.button}>
 					<Text style={styles.buttonText}>Log in</Text>
-				</TouchableOpacity>
-			)}
+				</Button>
 			<View style={styles.horizontalContainer}>
 				<Text style={styles.text}>Don`t have an account ?</Text>
 				<Text onPress={() => navigate('/register')} style={styles.highlightText}>

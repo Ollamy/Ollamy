@@ -5,7 +5,7 @@ import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
 import type { AxiosError, AxiosResponse } from 'axios';
-import { FormControl } from 'native-base';
+import { Button, FormControl } from 'native-base';
 import { useRegisterMutation } from 'src/services/auth/auth';
 
 interface RegisterPayload {
@@ -142,19 +142,15 @@ function Register(): JSX.Element {
 					</FormControl>
 				)}
 			/>
+				<Button isLoading={isLoading} onPress={handleSubmit(onSubmit)} style={styles.button}>
+					<Text style={styles.buttonText}>Create account</Text>
+				</Button>
 			<View style={styles.horizontalContainer}>
 				<Text style={styles.text}>Already have an account ?</Text>
 				<Text onPress={() => navigate('/login')} style={styles.highlightText}>
 					Log in
 				</Text>
 			</View>
-			{isLoading ? (
-				<ActivityIndicator />
-			) : (
-				<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-					<Text style={styles.buttonText}>Create account</Text>
-				</TouchableOpacity>
-			)}
 			<Toast />
 		</View>
 	);

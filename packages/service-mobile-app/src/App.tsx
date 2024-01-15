@@ -11,7 +11,7 @@ import Home from './pages/home';
 import Profile from './pages/profile';
 import SplashScreen from './pages/splashScreen';
 import CourseRouter from 'src/pages/courses/Routes';
-import AppSafeArea from 'src/components/safeArea/AppSafeArea';
+import AppSafeArea from 'src/components/SafeArea/AppSafeArea';
 import customTheme from 'src/theme/theme';
 
 function App() {

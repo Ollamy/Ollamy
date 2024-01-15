@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { useGetUserQuery } from 'src/services/user/user';
 
-import OLLAMY from '../../../assets/Ollamy.png';
+import OLLAMY from 'assets/Ollamy.png';
 
 function SplashScreen() {
 	const navigate = useNavigate();

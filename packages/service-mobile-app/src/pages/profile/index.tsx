@@ -3,9 +3,9 @@ import { Box, Text } from 'native-base';
 import { useGetUserQuery } from 'src/services/user/user';
 
 // @ts-ignore
-import PROFILE from '../../../assets/icons/user-pp.png';
-import BottomBar from '../../components/bottomBar';
-import TopBar from '../../components/topBar';
+import PROFILE from 'assets/icons/user-pp.png';
+import BottomBar from '../../components/BottomBar';
+import TopBar from '../../components/TopBar';
 
 export interface UserInfo {
 	firstname: string;

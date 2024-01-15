@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-native';
 import { Box } from 'native-base';
 
 // @ts-ignore
-import COMMUNITY from '../../../assets/icons/community.png';
+import COMMUNITY from 'assets/icons/community.png';
 // @ts-ignore
-import EVENT from '../../../assets/icons/event.png';
+import EVENT from 'assets/icons/event.png';
 // @ts-ignore
-import MEDAL from '../../../assets/icons/medal.png';
+import MEDAL from 'assets/icons/medal.png';
 // @ts-ignore
-import PROGRESS from '../../../assets/icons/progress.png';
+import PROGRESS from 'assets/icons/progress.png';
 import CustomIconButton from '../buttons/customIconButton';
 
 function BottomBar() {

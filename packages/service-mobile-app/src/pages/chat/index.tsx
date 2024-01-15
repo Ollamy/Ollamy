@@ -6,7 +6,7 @@ import { useGetUserQuery } from 'src/services/user/user';
 import { EnvVar } from 'src/utils/loadEnv';
 
 import IconButton from '../../components/buttons/iconButton';
-import TopBar from '../../components/topBar';
+import TopBar from '../../components/TopBar';
 
 interface Messages {
 	sender: string;
