@@ -23,7 +23,7 @@ const CreateModal = ({
     <>
       <ModalWrapper isOpen={isOpen}>
         <ModalContent>
-          <ModalTitle>Create New Section</ModalTitle>
+          <ModalTitle>{modalTitle}</ModalTitle>
           <ModalBody>{children}</ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Cancel</Button>
