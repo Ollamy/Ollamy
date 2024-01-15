@@ -1,19 +1,42 @@
 import styled from "styled-components";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import TopBar from "../../components/TopBar";
 import Left from "./Left";
 import Content from "./Content";
 import Right from "./Right";
+import { useParams } from "react-router-dom";
+import { CreateQuestionModel } from "backend/src/question/question.dto";
+import api from "../../services/api";
+import { QuestionModel } from "services/api/out";
 
 // eslint-disable-next-line
 interface QuizEditorProps {}
 
 // eslint-disable-next-line
 const QuizEditor = ({}: QuizEditorProps): ReactElement => {
-  const [quizData, setQuizData] = useState([]);
+  const { mutateAsync: getQuestion } = api.lesson.useGetQuestion();
+
+  const [quizData, setQuizData] = useState<QuestionModel[] | []>([]);
   const [typeSelected, setTypeSelected] = useState<
     "single" | "multiple" | "free"
-  >("single");
+  >("free");
+
+  const [currentEditedQuestionId, setCurrentEditedQuestionId] = useState<
+    string | undefined
+  >(undefined);
+
+  const { lessonId } = useParams();
+
+  useEffect(() => {
+    if (!lessonId) return;
+
+    const getQ = async () => {
+      getQuestion({ id: lessonId }).then((r) => {
+        setQuizData(r);
+      });
+    };
+    getQ();
+  }, [getQuestion, lessonId]);
 
   const [doneStatus, setDoneStatus] = useState(false);
 
@@ -22,15 +45,22 @@ const QuizEditor = ({}: QuizEditorProps): ReactElement => {
       <TopBar title={"Ollamy Maker"} />
       <Body>
         <LeftPart>
-          <Left quizData={quizData} />
+          <Left
+            quizData={quizData}
+            setQuizData={setQuizData}
+            setCurrentEditedQuestionId={setCurrentEditedQuestionId}
+          />
         </LeftPart>
         <ContentPart>
-          <Content
-            setDoneStatus={setDoneStatus}
-            typeSelected={typeSelected}
-            doneStatus={doneStatus}
-            setQuizData={setQuizData}
-          />
+          {currentEditedQuestionId && (
+            <Content
+              setDoneStatus={setDoneStatus}
+              typeSelected={typeSelected}
+              doneStatus={doneStatus}
+              setQuizData={setQuizData}
+              currentEditedQuestionId={currentEditedQuestionId}
+            />
+          )}
         </ContentPart>
         <RightPart>
           <Right

@@ -83,8 +83,7 @@ export class Configuration {
 }
 
 export const DefaultConfig = new Configuration({
-  basePath:
-    "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000",
+  basePath: "http://localhost:3000",
   credentials: "include",
 });
 

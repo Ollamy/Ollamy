@@ -29,4 +29,11 @@ export const lessonActions = {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
     }),
+  useGetQuestion: () =>
+    useMutation(LessonApi.getLessonQuestions, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_LESSON_KEY);
+        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+      },
+    }),
 };

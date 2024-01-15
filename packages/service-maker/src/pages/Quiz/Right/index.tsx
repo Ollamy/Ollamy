@@ -34,12 +34,12 @@ const Right = ({
       <Body>
         <SubTitle>Type of question</SubTitle>
         <QuestionTypeParentContainer>
-          <QuestionTypeContainer
-            isSelected={typeSelected === "single"}
-            onClick={() => setTypeSelected("single")}
-          >
-            Single choice
-          </QuestionTypeContainer>
+          {/*<QuestionTypeContainer*/}
+          {/*  isSelected={typeSelected === "single"}*/}
+          {/*  onClick={() => setTypeSelected("single")}*/}
+          {/*>*/}
+          {/*  Single choice*/}
+          {/*</QuestionTypeContainer>*/}
           {/*<QuestionTypeContainer*/}
           {/*  isSelected={typeSelected === "multiple"}*/}
           {/*  onClick={() => setTypeSelected("multiple")}*/}

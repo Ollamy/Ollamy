@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { ReactElement, useCallback, useEffect, useState } from "react";
+import api from "../../../services/api";
+import { useParams } from "react-router-dom";
 
 // eslint-disable-next-line
 interface ContentProps {
@@ -7,6 +9,7 @@ interface ContentProps {
   setQuizData: any;
   typeSelected: "single" | "multiple" | "free";
   setDoneStatus: any;
+  currentEditedQuestionId: string;
 }
 
 const Content = ({
@@ -14,9 +17,26 @@ const Content = ({
   setQuizData,
   typeSelected,
   setDoneStatus,
+  currentEditedQuestionId,
 }: ContentProps): ReactElement => {
+  const { mutateAsync: getQuestion } = api.question.useGetQuestion();
+  const { mutateAsync: updateQuestion } = api.question.useUpdateQuestion();
+  const { mutateAsync: createAnswer } = api.answer.useCreateAnswer();
+
   const [questionValue, setQuestionValue] = useState("");
   const [answer, setAnswer] = useState("");
+
+  const { lessonId } = useParams();
+
+  useEffect(() => {
+    const getQ = async () => {
+      await getQuestion({ id: currentEditedQuestionId }).then((r) => {
+        console.log(r);
+      });
+    };
+
+    getQ();
+  }, [currentEditedQuestionId, getQuestion]);
 
   const handleChangeQuestionValue = useCallback((e) => {
     setQuestionValue(e.target.value);
@@ -27,11 +47,34 @@ const Content = ({
   }, []);
 
   useEffect(() => {
-    if (doneStatus) {
-      setQuizData((old) => [
-        ...old,
-        { question: questionValue, correct: answer },
-      ]);
+    if (doneStatus && lessonId) {
+      // setQuizData((old) => [
+      //   ...old,
+      //   { question: questionValue, correct: answer },
+      // ]);
+      const update = async () => {
+        await createAnswer({
+          createAnswerModel: {
+            questionId: currentEditedQuestionId,
+            data: answer,
+            picture: "",
+          },
+        }).then((r) => {
+          updateQuestion({
+            id: currentEditedQuestionId,
+            updateQuestionModel: {
+              lessonId,
+              title: questionValue,
+              description: "test",
+              difficulty: "BEGINNER",
+              picture: "",
+              points: 0,
+              trustAnswerId: r.id,
+            },
+          });
+        });
+      };
+      update();
       setDoneStatus(false);
     } else {
       setQuestionValue("");
