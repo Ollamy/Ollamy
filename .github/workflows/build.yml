@@ -45,7 +45,7 @@ jobs:
 
       - name: Build backend container
         id: build
-        run: docker compose build backend database redis
+        run: docker compose build backend
 
       - name: Run backend container
         id: run
