@@ -2,7 +2,7 @@
   "expo": {
     "scheme": "ollamy-app",
     "name": "Ollamy",
-    "slug": "Ollamy",
+    "slug": "ollamy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,8 +31,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "7f75731c-d52b-4400-838b-1c93f3d4a997"
+        "projectId": "969b5b48-a26a-4885-8aa8-767c139c4d18"
       }
-    }
+    },
+    "owner": "ollamy"
   }
 }
