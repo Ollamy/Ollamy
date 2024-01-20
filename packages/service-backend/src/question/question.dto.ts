@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-import { AnswerType, QuestionType } from '@prisma/client';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 
 export class QuestionModel {
   @ApiProperty()
@@ -20,10 +27,6 @@ export class QuestionModel {
   description: string;
 
   @ApiProperty()
-  @IsString()
-  data: string;
-
-  @ApiProperty()
   typeAnswer: AnswerType;
 
   @ApiProperty()
@@ -32,6 +35,20 @@ export class QuestionModel {
   @ApiProperty()
   @IsUUID()
   trustAnswerId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  pictureId?: string;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class CreateQuestionModel {
@@ -59,6 +76,20 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsString()
   typeQuestion: QuestionType;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  picture?: string;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class IdQuestionModel {
@@ -71,35 +102,92 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lessonId: string;
+  lessonId?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  data: string;
+  picture?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  points?: number;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  trustAnswerId?: string;
 }
 
-export class CreateAnswerModel {
+export class UpdateQuestionOrderModel {
   @ApiProperty()
-  @IsString()
-  value: string;
+  @IsUUID()
+  origin?: string;
 
+  @ApiProperty()
+  @IsUUID()
+  dest?: string;
+}
+
+export class QuestionIdResponse {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+}
+
+export class validateAnswerModel {
   @ApiProperty()
   @IsUUID()
   questionId: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsUUID()
+  answerId: string;
+}
+
+export class ValidateAnswerResponse {
+  @ApiProperty({
+    name: 'success',
+    description: 'Boolean if the answer is true or false',
+  })
+  @IsBoolean()
+  success: boolean;
+
+  @ApiProperty({
+    name: 'answer',
+    description: 'true answer id',
+  })
+  @IsUUID()
+  answer: string;
+
+  @ApiProperty({
+    name: 'end',
+    description: 'Boolean if it is the last question or not',
+  })
+  @IsBoolean()
+  end: boolean;
+
+  @ApiProperty({
+    name: 'nextQuestionId',
+    description: 'Id of the next question if it is not the last one',
+  })
+  @IsString()
   @IsOptional()
-  point: number;
+  nextQuestionId?: string | undefined;
 }

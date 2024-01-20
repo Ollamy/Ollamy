@@ -9,14 +9,44 @@ import {
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
+  QuestionIdResponse,
+  UpdateQuestionOrderModel,
+  validateAnswerModel,
+  ValidateAnswerResponse,
 } from './question.dto';
 import prisma from 'client';
-import { Prisma, Question } from '@prisma/client';
+import { Answer, Prisma, Question } from '@prisma/client';
+import { PictureService } from '../picture/picture.service';
+import { AnswerModel } from '../answer/answer.dto';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(questionData: CreateQuestionModel): Promise<string> {
+  async postQuestion(
+    questionData: CreateQuestionModel,
+  ): Promise<QuestionIdResponse> {
     try {
+      const questionOrders: { order: number }[] =
+        await prisma.question.findMany({
+          where: {
+            lesson_id: questionData.lessonId,
+          },
+          select: {
+            order: true,
+          },
+        });
+
+      if (
+        questionOrders
+          .map((question) => question.order)
+          .includes(questionData.order)
+      ) {
+        Logger.error(
+          'Failed to create question (question order already exists) !',
+        );
+        throw new ConflictException(
+          'Failed to create question (question order already exists)!',
+        );
+      }
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -24,6 +54,8 @@ export class QuestionService {
           description: questionData.description,
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
+          difficulty: questionData?.difficulty,
+          order: questionData.order,
         },
       });
 
@@ -31,14 +63,16 @@ export class QuestionService {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-      return `Question created with id ${questionDb.id}`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Question not created !');
+      throw new ConflictException(`Cant create Question : ${error.stack}!`);
     }
   }
 
-  async deleteQuestion(questionId: IdQuestionModel): Promise<string> {
+  async deleteQuestion(
+    questionId: IdQuestionModel,
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.delete({
         where: {
@@ -51,7 +85,7 @@ export class QuestionService {
         throw new NotFoundException('Question does not exists !');
       }
 
-      return `Question's ${questionId.id} has been deleted.`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -64,6 +98,11 @@ export class QuestionService {
   async getQuestion(QuestionId: string): Promise<QuestionModel> {
     try {
       const questionDb: Question = await prisma.question.findFirst({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           id: QuestionId,
         },
@@ -82,6 +121,11 @@ export class QuestionService {
         typeAnswer: questionDb.type_answer,
         typeQuestion: questionDb.type_question,
         trustAnswerId: questionDb.trust_answer_id,
+        pictureId: questionDb.picture_id
+          ? await PictureService.getPicture(questionDb.picture_id)
+          : undefined,
+        difficulty: questionDb.difficulty,
+        order: questionDb.order,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -92,13 +136,23 @@ export class QuestionService {
   async updateQuestion(
     QuestionId: string,
     questionData: UpdateQuestionModel,
-  ): Promise<string> {
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.update({
         where: {
           id: QuestionId,
         },
-        data: questionData,
+        data: {
+          title: questionData?.title,
+          description: questionData?.description,
+          lesson_id: questionData?.lessonId,
+          picture_id: questionData.picture
+            ? await PictureService.postPicture(questionData.picture)
+            : undefined,
+          points: questionData?.points,
+          difficulty: questionData?.difficulty,
+          trust_answer_id: questionData?.trustAnswerId,
+        },
       });
 
       if (!questionDb) {
@@ -106,10 +160,124 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      return `Question with id ${QuestionId} has been updated`;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not updated !');
     }
+  }
+
+  async updateQuestionOrder(
+    questionData: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    const questions: Question[] = await prisma.question.findMany({
+      where: {
+        id: { in: [questionData.origin, questionData.dest] },
+      },
+    });
+
+    if (!questions || questions.length !== 2) {
+      Logger.error('Questions does not exists !');
+      throw new ConflictException('Questions does not exists !');
+    }
+
+    const updatedOrigin = await prisma.question.update({
+      where: {
+        id: questions[0].id,
+      },
+      data: {
+        order: questions[1].order,
+      },
+    });
+
+    const updatedDest = await prisma.question.update({
+      where: {
+        id: questions[1].id,
+      },
+      data: {
+        order: questions[0].order,
+      },
+    });
+
+    return {
+      origin: {
+        id: updatedOrigin.id,
+        order: updatedOrigin.order,
+      },
+      dest: {
+        id: updatedDest.id,
+        order: updatedDest.order,
+      },
+    };
+  }
+
+  async getQuestionAnswers(QuestionId: string): Promise<AnswerModel[]> {
+    try {
+      const answersDb: Answer[] = await prisma.answer.findMany({
+        where: {
+          question_id: QuestionId,
+        },
+      });
+
+      if (!answersDb) {
+        Logger.error('Answers does not exists !');
+        throw new ConflictException('Answers does not exists !');
+      }
+
+      const answerPromises = answersDb.map(async (answer) => {
+        return {
+          id: answer.id,
+          questionId: answer.question_id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+        } as AnswerModel;
+      });
+
+      return await Promise.all(answerPromises);
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Answers not found !');
+    }
+  }
+
+  async validateAnswer(
+    body: validateAnswerModel,
+  ): Promise<ValidateAnswerResponse> {
+    const questionDb: Question = await prisma.question.findUnique({
+      where: {
+        id: body.questionId,
+      },
+    });
+
+    const lessonQuestions = await prisma.question.findMany({
+      where: {
+        lesson_id: questionDb.lesson_id,
+      },
+      select: {
+        order: true,
+        id: true,
+      },
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
+    });
+
+    const nextQuestion =
+      lessonQuestions[
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
+      ] ?? null;
+
+    return {
+      success: questionDb.trust_answer_id === body.answerId,
+      answer: questionDb.trust_answer_id,
+      end: !(nextQuestion !== null),
+      nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
+    };
   }
 }

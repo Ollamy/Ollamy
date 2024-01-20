@@ -1,4 +1,4 @@
-name: Build, Start & Test Backend
+name: Build, Start and Stop Backend Container
 
 on:
   pull_request:
@@ -31,12 +31,17 @@ jobs:
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+      FRONTEND_URL: "http://localhost:3000"
+      FRONTEND_PORT: "3000"
 
     steps:
-
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
+
+      - name: Build Ollamy base
+        id: build-ollamy-base
+        run: cd dockerfiles/base && ./build.sh
 
       - name: Build backend container
         id: build
@@ -44,10 +49,11 @@ jobs:
 
       - name: Run backend container
         id: run
-        run: docker compose up -d backend
-      # - name: Building OpenAPI client generator
-      #   id: build-openapi-client-generator
-      #   run: docker compose exec backend yarn build:openapi-generator-cli
+        run: docker compose up --wait -d backend
+
+      - name: Check OpenApi generation
+        id: check
+        run: ./script/openapi/test-backend-client-generator-cli.sh http://localhost:${{ secrets.BACKEND_PORT }} packages/service-maker script/openapi
 
       - name: Run backend tests
         id: test
@@ -60,9 +66,6 @@ jobs:
       - name: Copy coverage report to test-reports directory
         id: copy-coverage-report
         run: docker cp "$(docker-compose ps -q backend)":/app/packages/service-backend/coverage/coverage.json test-reports/
-
-      - name: Print copied files
-        run: ls -lR test-reports
 
       - name: Stop backend container
         id: stop

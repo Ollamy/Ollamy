@@ -9,19 +9,27 @@ import {
   CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
+  CourseIdResponse,
+  CourseTrueResponse,
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Section } from '@prisma/client';
+import { PictureService } from '../picture/picture.service';
 
 @Injectable()
 export class CourseService {
-  async postCourse(courseData: CreateCourseModel, ctx: any): Promise<string> {
+  async postCourse(
+    courseData: CreateCourseModel,
+    ctx: any,
+  ): Promise<CourseIdResponse> {
     try {
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
-          ...courseData,
+          title: courseData.title,
+          description: courseData.description,
+          picture_id: await PictureService.postPicture(courseData.picture),
         },
       });
 
@@ -29,14 +37,23 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
-      return `Course created with id ${courseDb.id}`;
+
+      await prisma.usertoCourse.create({
+        data: {
+          user_id: ctx.__user.id,
+          course_id: courseDb.id,
+          role_user: 'OWNER',
+        },
+      });
+
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not created !');
     }
   }
 
-  async deleteCourse(courseId: IdCourseModel): Promise<string> {
+  async deleteCourse(courseId: IdCourseModel): Promise<CourseIdResponse> {
     try {
       const courseDb = await prisma.course.delete({
         where: {
@@ -49,13 +66,13 @@ export class CourseService {
         throw new NotFoundException('Course does not exists !');
       }
 
-      return `Course's ${courseId.id} has been deleted.`;
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new ConflictException('Course already removed !');
       }
-      throw new ConflictException('Course not created !');
+      throw new ConflictException('Course not deleted !');
     }
   }
 
@@ -73,25 +90,32 @@ export class CourseService {
       }
 
       return {
+        id: courseDb.id,
         ownerId: courseDb.owner_id,
-        ...courseDb,
+        title: courseDb.title,
+        description: courseDb.description,
+        picture: await PictureService.getPicture(courseDb.picture_id),
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Course not deleted !');
+      throw new ConflictException('Course does not exists !');
     }
   }
 
   async updateCourse(
     CourseId: string,
     courseData: UpdateCourseModel,
-  ): Promise<string> {
+  ): Promise<CourseIdResponse> {
     try {
       const courseDb: Course = await prisma.course.update({
         where: {
           id: CourseId,
         },
-        data: courseData,
+        data: {
+          title: courseData.title,
+          description: courseData.description,
+          picture_id: await PictureService.postPicture(courseData.picture),
+        },
       });
 
       if (!courseDb) {
@@ -99,7 +123,7 @@ export class CourseService {
         throw new ConflictException('Course does not exists !');
       }
 
-      return `Course with id ${CourseId} has been updated`;
+      return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course not updated !');
@@ -128,6 +152,29 @@ export class CourseService {
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
+    }
+  }
+
+  async addUserToCourse(
+    courseId: string,
+    userId: string,
+  ): Promise<CourseTrueResponse> {
+    try {
+      const userToCourseDb = await prisma.usertoCourse.create({
+        data: {
+          user_id: userId,
+          course_id: courseId,
+        },
+      });
+
+      if (!userToCourseDb) {
+        Logger.error('Failed to add user to course !');
+        throw new NotFoundException('Failed to add user to course !');
+      }
+      return { success: true } as CourseTrueResponse;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not added to course !');
     }
   }
 }

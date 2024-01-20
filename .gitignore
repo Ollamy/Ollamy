@@ -11,7 +11,7 @@ npm-debug.log
 /build
 /coverage
 **/tsconfig.build.tsbuildinfo
-
+yarn.lock
 /.pnp
 .pnp.js
 .env
@@ -40,3 +40,8 @@ logs
 *.log
 pnpm-debug.log*
 lerna-debug.log*
+
+dockerfiles/base/*.yml
+dockerfiles/base/*.json
+dockerfiles/base/*.lock
+dockerfiles/base/packages

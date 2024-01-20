@@ -1,0 +1,74 @@
+{
+  // Base config - env
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  // Parser & parser options
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./packages/**/tsconfig.json"
+  },
+  // Configs used
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  // Plugins we will extend rules from
+  "plugins": ["react", "prettier", "@typescript-eslint", "react-hooks", "simple-import-sort"],
+  "rules": {
+      // Remove need to import React
+      "react/react-in-jsx-scope": "off",
+      // Necessary to get errors for incorrect formatting
+      "prettier/prettier": "error",
+      // Need to turn native rules off to enforce TS rules in following lines
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      "no-use-before-define": "off",
+      // Need to import image
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-use-before-define": "off",
+      // For function return value types, errors instead of warnings
+      "@typescript-eslint/consistent-type-imports": "error",
+      // Avoid errors/warning and leave option to use either named or default exports
+      "import/prefer-default-export": "off",
+      // Necessary to avoid errors on props already type-checked by TS
+      "react/prop-types": "off",
+      // Necessary to avoid errors on reassignement in reducers
+      "no-param-reassign":"off",
+      "react/require-default-props": "off",
+      // Checks hooks rules
+      "react-hooks/rules-of-hooks": "error",
+      // Checks dependency arrays
+      "react-hooks/exhaustive-deps": "warn",
+      // Props spreading for Icons using Image component as it Icons are not dynamic
+      "react/jsx-props-no-spreading": [
+        "error",
+        {
+          "exceptions": [
+            "BankPrimaryButton", "BankAccountCard", "TooltipV2", "ModalDrawerV2"
+          ]
+        }
+      ],
+      //Only allow console.error
+      "no-console": ["error", { "allow": ["error"] }],
+
+      "simple-import-sort/imports": ["error", {"groups": [
+        // Side effect imports.
+        ["^\\u0000", "^react", "^\\w"],
+        // Parent imports. Put `..` last.
+        ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+        // Other relative imports. Put same-folder imports and `.` last.
+        ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+        // Style components imports.
+        ["^.+\\.?(style)$"],
+        // Style imports.
+        ["^.+\\.?(css)$"]
+      ]}]
+    }
+}

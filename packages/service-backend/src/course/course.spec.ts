@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Course, Section } from '@prisma/client';
+import { Course, Picture, Section } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CourseService } from './course.service';
@@ -27,6 +27,7 @@ describe('postCourse', () => {
     const mockCourseData: CreateCourseModel = {
       title: 'title',
       description: 'desc',
+      picture: 'data',
     };
     const mockUserId = '123';
     const mockContext = {
@@ -34,13 +35,20 @@ describe('postCourse', () => {
         id: mockUserId,
       },
     };
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseDb: Course = {
       id: '1',
       owner_id: mockUserId,
       title: 'title',
       description: 'desc',
+      picture_id: mockPictureDb.id,
     };
     jest.spyOn(prisma.course, 'create').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue({ id: '1' } as any);
+    jest.spyOn(prisma.picture, 'create').mockResolvedValue(mockPictureDb);
 
     // Invoke the function being tested
     const result = await courseService.postCourse(mockCourseData, mockContext);
@@ -50,12 +58,14 @@ describe('postCourse', () => {
     expect(prisma.course.create).toHaveBeenCalledWith({
       data: {
         owner_id: mockUserId,
-        ...mockCourseData,
+        title: 'title',
+        description: 'desc',
+        picture_id: mockCourseDb.picture_id,
       },
     });
 
-    const expectedResponse = `Course created with id ${mockCourseDb.id}`;
-    expect(result).toEqual(expectedResponse);
+    const expectedResponse = mockCourseDb.id;
+    expect(result).toStrictEqual({id : expectedResponse});
   });
 
   it('should throw NotFoundException if the course creation fails', async () => {
@@ -64,6 +74,8 @@ describe('postCourse', () => {
     const mockCourseData: CreateCourseModel = {
       title: 'title',
       description: 'desc',
+      picture:
+        'https://cdn.iconscout.com/icon/free/png-256/free-typescript-1174965.png',
     };
     const mockUserId = '123';
     const mockContext = {
@@ -85,6 +97,8 @@ describe('postCourse', () => {
     const mockCourseData: CreateCourseModel = {
       title: 'title',
       description: 'desc',
+      picture:
+        'https://cdn.iconscout.com/icon/free/png-256/free-typescript-1174965.png',
     };
     const mockUserId = '123';
     const mockContext = {
@@ -115,13 +129,19 @@ describe('deleteCourse', () => {
     const mockCourseId: IdCourseModel = {
       id: '1',
     };
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseDb: Course = {
       id: mockCourseId.id,
       owner_id: '1',
       title: 'title',
       description: 'desc',
+      picture_id: mockPictureDb.id,
     };
     jest.spyOn(prisma.course, 'delete').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.picture, 'delete').mockResolvedValue(mockPictureDb);
 
     // Invoke the function being tested
     const result = await courseService.deleteCourse(mockCourseId);
@@ -134,8 +154,8 @@ describe('deleteCourse', () => {
       },
     });
 
-    const expectedResponse = `Course's ${mockCourseId.id} has been deleted.`;
-    expect(result).toEqual(expectedResponse);
+    const expectedResponse = mockCourseId.id;
+    expect(result).toStrictEqual({ id: expectedResponse });
   });
 
   it('should throw NotFoundException if the course does not exist', async () => {
@@ -179,13 +199,19 @@ describe('getCourse', () => {
   it('should retrieve a course and return the course model', async () => {
     // Mock the dependencies or services
     const mockCourseId = '1';
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseDb: Course = {
       id: mockCourseId,
       owner_id: '123',
       title: 'title',
       description: 'desc',
+      picture_id: mockPictureDb.id,
     };
     jest.spyOn(prisma.course, 'findFirst').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.picture, 'findFirst').mockResolvedValue(mockPictureDb);
 
     // Invoke the function being tested
     const result = await courseService.getCourse(mockCourseId);
@@ -199,8 +225,11 @@ describe('getCourse', () => {
     });
 
     const expectedCourseModel: CourseModel = {
+      id: mockCourseDb.id,
       ownerId: mockCourseDb.owner_id,
-      ...mockCourseDb,
+      picture: mockPictureDb.picture,
+      title: mockCourseDb.title,
+      description: mockCourseDb.description,
     };
     expect(result).toEqual(expectedCourseModel);
   });
@@ -241,18 +270,25 @@ describe('updateCourse', () => {
   it('should update a course and return a success message', async () => {
     // Mock the dependencies or services
     const mockCourseId = '1';
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
       title: 'title',
       description: 'desc',
+      picture: 'data',
     };
     const mockCourseDb: Course = {
       id: '1',
       owner_id: '123',
       title: 'title',
       description: 'desc',
+      picture_id: mockPictureDb.id,
     };
     jest.spyOn(prisma.course, 'update').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.picture, 'update').mockResolvedValue(mockPictureDb);
 
     // Invoke the function being tested
     const result = await courseService.updateCourse(
@@ -266,21 +302,30 @@ describe('updateCourse', () => {
       where: {
         id: mockCourseId,
       },
-      data: mockCourseData,
+      data: {
+        title: mockCourseData.title,
+        description: mockCourseData.description,
+        picture_id: mockPictureDb.id,
+      },
     });
 
-    const expectedMessage = `Course with id ${mockCourseId} has been updated`;
-    expect(result).toEqual(expectedMessage);
+    const expectedMessage = mockCourseId;
+    expect(result).toStrictEqual({id: expectedMessage});
   });
 
   it('should throw ConflictException if the course does not exist', async () => {
     jest.spyOn(prisma.course, 'update').mockResolvedValue(null);
 
     const mockCourseId = '1';
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
       title: 'tilte',
       description: 'desc',
+      picture: mockPictureDb.picture,
     };
 
     await expect(
@@ -294,10 +339,15 @@ describe('updateCourse', () => {
       .mockRejectedValue(new Error('Some error'));
 
     const mockCourseId = '1';
+    const mockPictureDb: Picture = {
+      id: '1',
+      picture: 'data',
+    };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
       title: 'title',
       description: 'desc',
+      picture: mockPictureDb.picture,
     };
 
     await expect(

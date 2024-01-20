@@ -1,7 +1,7 @@
 {
   "name": "@ollamy/utils",
   "version": "1.0.0",
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.0",
   "main": "index.ts",
   "dependencies": {
     "react": "18.2.0",

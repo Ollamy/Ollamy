@@ -1,11 +1,14 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
-import { BACKEND_PORT, FRONTEND_URL, FRONTEND_PORT, MODE } from 'setup';
+import * as cookieParser from 'cookie-parser';
 import { writeFileSync } from 'fs';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Logger } from '@nestjs/common';
+import { join } from 'path';
 import RedisCacheService from 'redis/redis.service';
+import { BACKEND_PORT, FRONTEND_PORT, FRONTEND_URL, MODE } from 'setup';
+
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
 function buildSwagger(
   app: INestApplication,
@@ -17,14 +20,17 @@ function buildSwagger(
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder()
-    .setTitle('Ollamy API')
-    .setDescription('So insane API')
-    .setVersion('1.0')
-    .build();
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(join(__dirname, '..', 'static'));
 
   if (MODE === 'dev') {
+    const config = new DocumentBuilder()
+      .setTitle('Ollamy API')
+      .setDescription('So insane API')
+      .setVersion('1.0')
+      .addCookieAuth('session')
+      .build();
+
     app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
     buildSwagger(app, config);
     Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
@@ -34,10 +40,13 @@ async function bootstrap() {
   Logger.debug('Redis Connected!');
 
   app.enableCors({
-    origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`],
+    // origin: [`http://localhost:19006`], // For dev Mobile
+    origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`, 'http://127.0.0.1:5173'],
     credentials: true,
+    allowedHeaders: 'Content-Type',
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
-
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,

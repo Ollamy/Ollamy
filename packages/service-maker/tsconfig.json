@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -22,7 +22,8 @@
     "baseUrl": "./src",
     "paths": {
       "@ollamy/design-system/*": ["../util-design-system/*"],
-      "@ollamy/utils/*": ["../util-utils/*"]
+      "@ollamy/utils/*": ["../util-utils/*"],
+      "@ollamy/backend/*": ["../service-backend/*"],
     }
   },
   "include": [

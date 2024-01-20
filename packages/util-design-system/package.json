@@ -2,7 +2,7 @@
   "name": "@ollamy/design-system",
   "version": "1.0.0",
   "main": "components/index.ts",
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.0",
   "dependencies": {
     "@types/styled-components": "^5.1.26",
     "@types/styled-components-react-native": "^5.2.1",

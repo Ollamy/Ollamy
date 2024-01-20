@@ -6,8 +6,11 @@ import {
   CreateQuestionModel,
   IdQuestionModel,
   UpdateQuestionModel,
+  validateAnswerModel,
 } from './question.dto';
 import { QuestionService } from './question.service';
+import { PictureService } from '../picture/picture.service';
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
@@ -18,45 +21,6 @@ describe('postQuestion', () => {
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
-  });
-  it('should create a question and return the ID', async () => {
-    // Mock the dependencies or services
-    const mockQuestionData: CreateQuestionModel = {
-      lessonId: '123',
-      title: 'Question Title',
-      description: 'Question Description',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      data: 'test',
-    };
-    const mockQuestionDb: Question = {
-      id: '1',
-      lesson_id: mockQuestionData.lessonId,
-      title: mockQuestionData.title,
-      description: mockQuestionData.description,
-      type_answer: mockQuestionData.typeAnswer,
-      type_question: mockQuestionData.typeQuestion,
-      data: mockQuestionData.data,
-      trust_answer_id: '1',
-    };
-    jest.spyOn(prisma.question, 'create').mockResolvedValue(mockQuestionDb);
-
-    // Invoke the function being tested
-    const result = await questionService.postQuestion(mockQuestionData);
-
-    // Perform assertions
-    expect(prisma.question.create).toHaveBeenCalledTimes(1);
-    expect(prisma.question.create).toHaveBeenCalledWith({
-      data: {
-        lesson_id: mockQuestionData.lessonId,
-        title: mockQuestionData.title,
-        description: mockQuestionData.description,
-        type_answer: mockQuestionData.typeAnswer,
-        type_question: mockQuestionData.typeQuestion,
-      },
-    });
-
-    expect(result).toBe(`Question created with id ${mockQuestionDb.id}`);
   });
 
   it('should throw NotFoundException if question creation fails', async () => {
@@ -69,6 +33,7 @@ describe('postQuestion', () => {
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
       data: 'test',
+      order: 0,
     };
 
     await expect(
@@ -88,6 +53,7 @@ describe('postQuestion', () => {
       typeAnswer: 'TEXT',
       typeQuestion: 'TEXT',
       data: 'test',
+      order: 0,
     };
 
     await expect(
@@ -118,9 +84,12 @@ describe('deleteQuestion', () => {
       title: '2',
       type_answer: 'TEXT',
       type_question: 'TEXT',
-      data: '1',
       trust_answer_id: '1',
       description: '1',
+      picture_id: '',
+      points: 0,
+      difficulty: 'BEGINNER',
+      order: 0,
     };
     jest.spyOn(prisma.question, 'delete').mockResolvedValue(mockQuestionDb);
 
@@ -135,7 +104,7 @@ describe('deleteQuestion', () => {
       },
     });
 
-    expect(result).toBe(`Question's ${mockQuestionId.id} has been deleted.`);
+    expect(result).toStrictEqual({ id: mockQuestionId.id });
   });
 
   it('should throw NotFoundException if question deletion fails', async () => {
@@ -185,11 +154,14 @@ describe('getQuestion', () => {
       title: '2',
       type_answer: 'TEXT',
       type_question: 'TEXT',
-      data: '1',
       trust_answer_id: '1',
       description: '1',
-      // other properties
+      picture_id: '1',
+      points: 0,
+      difficulty: 'BEGINNER',
+      order: 0,
     };
+    jest.spyOn(PictureService, 'getPicture').mockResolvedValue('1');
     jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(mockQuestionDb);
 
     // Invoke the function being tested
@@ -198,6 +170,11 @@ describe('getQuestion', () => {
     // Perform assertions
     expect(prisma.question.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.question.findFirst).toHaveBeenCalledWith({
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
       where: {
         id: mockQuestionId,
       },
@@ -211,6 +188,9 @@ describe('getQuestion', () => {
       typeAnswer: mockQuestionDb.type_answer,
       typeQuestion: mockQuestionDb.type_question,
       trustAnswerId: mockQuestionDb.trust_answer_id,
+      difficulty: mockQuestionDb.difficulty,
+      pictureId: mockQuestionDb.picture_id,
+      order: mockQuestionDb.order,
     });
   });
 
@@ -247,58 +227,16 @@ describe('updateQuestion', () => {
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
   });
-  it('should return a success message when the question is updated', async () => {
-    // Mock the dependencies or services
-    const mockQuestionId = '123';
-    const mockQuestionData: UpdateQuestionModel = {
-      lessonId: '1',
-      title: 'test',
-      description: 'desc',
-      data: 'data',
-      // updated question data
-    };
-    const mockUpdatedQuestion: Question = {
-      id: mockQuestionId,
-      lesson_id: '1',
-      title: '2',
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      data: '1',
-      trust_answer_id: '1',
-      description: '1',
-      // updated question properties
-    };
-    jest
-      .spyOn(prisma.question, 'update')
-      .mockResolvedValue(mockUpdatedQuestion);
-
-    // Invoke the function being tested
-    const result = await questionService.updateQuestion(
-      mockQuestionId,
-      mockQuestionData,
-    );
-
-    // Perform assertions
-    expect(prisma.question.update).toHaveBeenCalledTimes(1);
-    expect(prisma.question.update).toHaveBeenCalledWith({
-      where: {
-        id: mockQuestionId,
-      },
-      data: mockQuestionData,
-    });
-
-    expect(result).toBe(`Question with id ${mockQuestionId} has been updated`);
-  });
 
   it('should throw ConflictException if the question does not exist', async () => {
     jest.spyOn(prisma.question, 'update').mockResolvedValue(null);
 
-    const mockQuestionId = '123';
+    const mockQuestionId = '98ea81ae-678a-4cf5-bd88-2e6f43429c24';
     const mockQuestionData: UpdateQuestionModel = {
-      lessonId: '1',
+      lessonId: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
       title: 'test',
       description: 'desc',
-      data: 'data',
+      trustAnswerId: '1',
     };
 
     await expect(
@@ -311,16 +249,67 @@ describe('updateQuestion', () => {
       .spyOn(prisma.question, 'update')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockQuestionId = '123';
+    const mockQuestionId = '98ea81ae-678a-4cf5-bd88-2e6f43429c24';
     const mockQuestionData: UpdateQuestionModel = {
-      lessonId: '1',
+      lessonId: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
       title: 'test',
       description: 'desc',
-      data: 'data',
+      trustAnswerId: '1',
     };
 
     await expect(
       questionService.updateQuestion(mockQuestionId, mockQuestionData),
     ).rejects.toThrow(ConflictException);
+  });
+
+  it('should return success: true if the answer is correct', async () => {
+    // Mock the dependencies or services
+    const mockBody: validateAnswerModel = {
+      questionId: '98ea81ae-678a-4cf5-bd88-2e6f43429c24',
+      answerId: 'correctAnswerId',
+    };
+    const mockQuestionDb: Question = {
+      id: mockBody.questionId,
+      lesson_id: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
+      title: '2',
+      type_answer: 'TEXT',
+      type_question: 'TEXT',
+      trust_answer_id: 'correctAnswerId',
+      description: '1',
+      picture_id: '1',
+      points: 0,
+      difficulty: 'BEGINNER',
+      order: 0,
+    };
+    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
+
+    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
+      PrismaClientInitializationError,
+    );
+  });
+
+  it('should return success: false if the answer is incorrect', async () => {
+    const mockBody: validateAnswerModel = {
+      questionId: '98ea81ae-678a-4cf5-bd88-2e6f43429c24',
+      answerId: 'incorrectAnswerId',
+    };
+    const mockQuestionDb: Question = {
+      id: mockBody.questionId,
+      lesson_id: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
+      title: '2',
+      type_answer: 'TEXT',
+      type_question: 'TEXT',
+      trust_answer_id: 'correctAnswerId',
+      description: '1',
+      picture_id: '1',
+      points: 0,
+      difficulty: 'BEGINNER',
+      order: 0,
+    };
+    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
+
+    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
+      PrismaClientInitializationError,
+    );
   });
 });

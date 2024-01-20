@@ -1,4 +1,3 @@
-import * as jwt from 'jsonwebtoken';
 import {
   Logger,
   ConflictException,
@@ -11,32 +10,41 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
+  UserIdResponse,
 } from './user.dto';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
 import { Prisma, User } from '@prisma/client';
-import RedisCacheService from 'redis/redis.service';
+import SessionService from 'redis/session/session.service';
 
 @Injectable()
 export class UserService {
-  createToken(id: string): string {
-    const token: string = jwt.sign(
-      {
-        id,
-      },
-      SECRET_KEY,
-      {
-        expiresIn: '2 weeks',
-      },
-    );
+  static generateSessionId(): string {
+    return pbkdf2
+      .pbkdf2Sync(
+        Math.random().toString(36).substring(2),
+        Math.random().toString(36).substring(2),
+        1000,
+        64,
+        'sha512',
+      )
+      .toString('hex');
+  }
 
-    if (!token) {
+  async createToken(id: string): Promise<string> {
+    const session: string = UserService.generateSessionId();
+    const res = await SessionService.set(session, {
+      id,
+    });
+
+    if (res !== 'OK') {
       Logger.error('Token not created !');
       throw new ConflictException('Token not created !');
     }
 
-    return token;
+    return session;
   }
 
   hashPassword(password: string): string {
@@ -72,7 +80,7 @@ export class UserService {
         },
       });
 
-      return this.createToken(userDb.id);
+      return await this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -136,7 +144,7 @@ export class UserService {
         data: userData,
       });
 
-      return this.createToken(userDb.id);
+      return await this.createToken(userDb.id);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -146,7 +154,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(ctx: any): Promise<string> {
+  async deleteUser(ctx: any): Promise<UserIdResponse> {
     try {
       const userDb = await prisma.user.delete({
         where: {
@@ -159,7 +167,55 @@ export class UserService {
         throw new NotFoundException('User does not exists !');
       }
 
-      return `User's ${ctx.__user.id} has been deleted.`;
+      return { id: ctx.__user.id } as UserIdResponse;
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new ConflictException('User already removed !');
+      }
+      throw new ConflictException('User not created !');
+    }
+  }
+
+  async getUserCourses(ctx: any): Promise<UserCoursesResponse> {
+    try {
+      const userDb = await prisma.user.findUnique({
+        where: {
+          id: ctx.__user.id,
+        },
+        include: {
+          UsertoCourse: true,
+        },
+      });
+
+      if (!userDb) {
+        Logger.error('User does not exists !');
+        throw new NotFoundException('User does not exists !');
+      }
+
+      const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
+
+      if (courses_id.length === 0) {
+        return { courses: [] };
+      }
+
+      const courses = await prisma.course.findMany({
+        where: {
+          id: {
+            in: courses_id,
+          },
+        },
+      });
+      return {
+        courses: courses.map((course) => {
+          const isOwner = course.owner_id === ctx.__user.id;
+          delete course.owner_id;
+          return {
+            ...course,
+            owner: isOwner,
+          };
+        }),
+      };
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
