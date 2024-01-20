@@ -7,7 +7,7 @@ import TextButton from 'src/components/buttons/textButton';
 import TopBarContainer from 'src/components/topBarContainer';
 
 interface LectureProps {
-	courseId: string;
+	lessonId: string;
 	setLectureState: (v: boolean) => void;
 }
 const courseMock = {
@@ -17,7 +17,7 @@ const courseMock = {
 
 function Lecture(props: LectureProps) {
 	const navigate = useNavigate();
-	const { setLectureState, courseId } = props;
+	const { setLectureState, lessonId } = props;
 	// need to query course
 	const course = courseMock;
 

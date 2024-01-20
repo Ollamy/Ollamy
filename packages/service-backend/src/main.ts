@@ -41,7 +41,11 @@ async function bootstrap() {
 
   app.enableCors({
     // origin: [`http://localhost:19006`], // For dev Mobile
-    origin: [`${FRONTEND_URL}:${FRONTEND_PORT}`, 'http://127.0.0.1:5173'],
+    origin: [
+      `${FRONTEND_URL}:${FRONTEND_PORT}`,
+      'http://127.0.0.1:5173',
+      'http://localhost:19006',
+    ],
     credentials: true,
     allowedHeaders: 'Content-Type',
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],

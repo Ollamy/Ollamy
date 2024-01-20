@@ -1,35 +1,22 @@
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, View } from 'native-base';
+import { View } from 'native-base';
 
 import Lecture from './lecture';
+import Quiz from './quiz';
 
 function Course() {
-	const courseId = '';
+	const lessonId = 'cdcb1351-bd68-4b05-a69d-8ceb52effb31';
 	const [isLectureFinish, setIsLectureFinish] = useState(false);
 
 	return (
 		<View>
 			{!isLectureFinish ? (
-				<Lecture courseId={courseId} setLectureState={setIsLectureFinish} />
+				<Lecture lessonId={lessonId} setLectureState={setIsLectureFinish} />
 			) : (
-				<Text style={styles.horizontalContainer}>Quiz</Text>
+				<Quiz lessonId={lessonId} />
 			)}
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	body: {
-		flex: 1,
-		justifyContent: 'center',
-		gap: 24,
-		alignItems: 'center',
-	},
-	horizontalContainer: {
-		paddingTop: '50%',
-		alignSelf: 'center',
-	},
-});
 
 export default Course;

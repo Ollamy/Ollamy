@@ -1,12 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Box } from 'native-base';
 
 interface TopBarContainerProps {
 	children: JSX.Element;
+	style?: StyleProp<ViewStyle>;
 }
 
-function TopBarContainer({ children }: TopBarContainerProps) {
-	return <Box style={styles.container}>{children}</Box>;
+function TopBarContainer({ children, style }: TopBarContainerProps) {
+	return <Box style={[styles.container, style]}>{children}</Box>;
 }
 
 const styles = StyleSheet.create({
