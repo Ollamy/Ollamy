@@ -18,7 +18,7 @@ export class UpdateLectureModel {
 
   @ApiProperty({ description: 'Updated lecture data' })
   @IsString()
-  data: string;
+  data?: string;
 }
 
 export class IdLectureModel {
