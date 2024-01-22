@@ -6,6 +6,7 @@ import {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCoursesResponse,
   UserIdResponse,
   UserTrueResponse,
 } from 'user/user.dto';
@@ -191,11 +192,11 @@ export class UserController {
 
   @ApiOkResponse({
     description: 'list the courses of a user',
-    type: String,
+    type: UserCoursesResponse,
   })
   @LoggedMiddleware(true)
   @Get('/courses')
-  async getUserCourses(@OllContext() ctx: any): Promise<object> {
+  async getUserCourses(@OllContext() ctx: any): Promise<UserCoursesResponse> {
     return this.userService.getUserCourses(ctx);
   }
 }

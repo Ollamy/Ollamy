@@ -94,7 +94,10 @@ export class LessonService {
         where: {
           id: LessonId,
         },
-        data: lessonData,
+        data: {
+          title: lessonData.title,
+          description: lessonData.description,
+        },
       });
 
       if (!lessonDb) {
@@ -112,6 +115,11 @@ export class LessonService {
   async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
       const lessonQuestionsDb: Question[] = await prisma.question.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           lesson_id: LessonId,
         },
@@ -130,6 +138,7 @@ export class LessonService {
           description: question.description,
           typeAnswer: question.type_answer,
           typeQuestion: question.type_question,
+          order: question.order,
         };
       }) as QuestionModel[];
     } catch (error) {
@@ -154,7 +163,7 @@ export class LessonService {
         Logger.error('Failed to create user lesson !');
         throw new NotFoundException('Failed to create user lesson !');
       }
-      return { id: usertoLessonDb.lesson_id} as LessonIdResponse;
+      return { id: usertoLessonDb.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');
