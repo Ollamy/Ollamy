@@ -8,6 +8,6 @@ RUN yarn install
 
 COPY . .
 
-CMD yarn build
+RUN yarn build
 
 CMD yarn preview --port 5173 --host
