@@ -18,7 +18,7 @@ import { Prisma, Question, Lesson, UsertoLesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: CreateLessonModel): Promise<LessonIdResponse> {
+  async postLesson(lessonData: CreateLessonModel, ctx: any): Promise<LessonIdResponse> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
@@ -32,6 +32,14 @@ export class LessonService {
         Logger.error('Failed to create lesson !');
         throw new NotFoundException('Failed to create lesson !');
       }
+
+      await prisma.usertoLesson.create({
+        data: {
+          user_id: ctx.__user.id,
+          lesson_id: lessonDb.id,
+        },
+      });
+  
       return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
