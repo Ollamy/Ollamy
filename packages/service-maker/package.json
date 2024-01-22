@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "preview": "vite preview --port 5173",
+    "preview": "vite preview",
     "client:generate": "/bin/bash -c 'source .env && ./../../script/openapi/backend-client-generator.sh http://localhost:$BACKEND_PORT src/services/api/out ./../../script/openapi/ollamy-openapi-generator-cli.jar'"
   },
   "dependencies": {

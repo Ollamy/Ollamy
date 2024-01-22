@@ -10,4 +10,4 @@ COPY . .
 
 CMD yarn build
 
-CMD yarn preview --host
+CMD yarn preview --port 5173 --host
