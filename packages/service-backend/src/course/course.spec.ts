@@ -45,6 +45,8 @@ describe('postCourse', () => {
       title: 'title',
       description: 'desc',
       picture_id: mockPictureDb.id,
+      last_lesson_id: '2',
+      last_section_id: '3',
     };
     jest.spyOn(prisma.course, 'create').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue({ id: '1' } as any);
@@ -139,6 +141,8 @@ describe('deleteCourse', () => {
       title: 'title',
       description: 'desc',
       picture_id: mockPictureDb.id,
+      last_lesson_id: '2',
+      last_section_id: '3',
     };
     jest.spyOn(prisma.course, 'delete').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.picture, 'delete').mockResolvedValue(mockPictureDb);
@@ -209,6 +213,8 @@ describe('getCourse', () => {
       title: 'title',
       description: 'desc',
       picture_id: mockPictureDb.id,
+      last_lesson_id: '2',
+      last_section_id: '3',
     };
     jest.spyOn(prisma.course, 'findFirst').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.picture, 'findFirst').mockResolvedValue(mockPictureDb);
@@ -286,6 +292,8 @@ describe('updateCourse', () => {
       title: 'title',
       description: 'desc',
       picture_id: mockPictureDb.id,
+      last_lesson_id: '2',
+      last_section_id: '3',
     };
     jest.spyOn(prisma.course, 'update').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.picture, 'update').mockResolvedValue(mockPictureDb);
