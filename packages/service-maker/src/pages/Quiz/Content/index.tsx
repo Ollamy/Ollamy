@@ -20,6 +20,7 @@ const Content = ({
   currentEditedQuestionId,
 }: ContentProps): ReactElement => {
   const { mutateAsync: getQuestion } = api.question.useGetQuestion();
+  const { mutateAsync: getAnswer } = api.answer.useGetAnswer();
   const { mutateAsync: updateQuestion } = api.question.useUpdateQuestion();
   const { mutateAsync: createAnswer } = api.answer.useCreateAnswer();
 
@@ -32,6 +33,15 @@ const Content = ({
     const getQ = async () => {
       await getQuestion({ id: currentEditedQuestionId }).then((r) => {
         console.log(r);
+        setQuestionValue(r.title);
+        getAnswer({ id: r.trustAnswerId })
+          .then((rr) => {
+            console.log(rr);
+            setAnswer(rr.data);
+          })
+          .catch(() => {
+            setAnswer("");
+          });
       });
     };
 

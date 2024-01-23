@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import api from "../../../services/api";
 import book from "../../../assets/book.png";
 import quiz from "../../../assets/quiz.png";
 
 import { LessonModel } from "services/api/out";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface LessonEditProps {
   lesson: LessonModel;
@@ -15,6 +16,10 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   const [title, setTitle] = useState(lesson.title);
   const [description, setDescription] = useState(lesson.description);
   const isDirty = title !== lesson.title || description !== lesson.description;
+
+  let { id, sectionId, lessonId } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTitle(lesson.title);
@@ -32,6 +37,10 @@ function LessonEdit(props: LessonEditProps): ReactElement {
       /* empty */
     }
   };
+
+  const handleEdit = useCallback(() => {
+    navigate(`/quiz/${id}/${sectionId}/${lessonId}`);
+  }, [id, lessonId, navigate, sectionId]);
 
   return (
     <Container>
@@ -65,7 +74,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
           <img alt="logo book" src={book} width="124" height="105" />
           Edit Lecture
         </ButtonContainer>
-        <ButtonContainer>
+        <ButtonContainer onClick={handleEdit}>
           <img alt="logo Quiz" src={quiz} width="100" height="100" />
           Edit Quiz
         </ButtonContainer>
