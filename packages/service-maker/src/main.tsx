@@ -14,6 +14,7 @@ import { Login } from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import { Register } from "./pages/Register";
 import MakerHubPage from "./pages/maker/hub";
+import QuizEditor from "./pages/Quiz";
 
 // Router
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <HomePage />,
+  },
+  {
+    path: "/quiz/:id/:sectionId/:lessonId",
+    element: <QuizEditor />,
   },
   {
     path: "/profile",

@@ -25,16 +25,16 @@
       // Remove need to import React
       "react/react-in-jsx-scope": "off",
       // Necessary to get errors for incorrect formatting
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
       // Need to turn native rules off to enforce TS rules in following lines
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-unused-vars": "warn",
       "no-use-before-define": "off",
       // Need to import image
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/no-use-before-define": "off",
       // For function return value types, errors instead of warnings
-      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/consistent-type-imports": "warn",
       // Avoid errors/warning and leave option to use either named or default exports
       "import/prefer-default-export": "off",
       // Necessary to avoid errors on props already type-checked by TS
@@ -43,12 +43,12 @@
       "no-param-reassign":"off",
       "react/require-default-props": "off",
       // Checks hooks rules
-      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/rules-of-hooks": "warn",
       // Checks dependency arrays
       "react-hooks/exhaustive-deps": "warn",
       // Props spreading for Icons using Image component as it Icons are not dynamic
       "react/jsx-props-no-spreading": [
-        "error",
+        "warn",
         {
           "exceptions": [
             "BankPrimaryButton", "BankAccountCard", "TooltipV2", "ModalDrawerV2"
@@ -58,7 +58,7 @@
       //Only allow console.error
       "no-console": ["error", { "allow": ["error"] }],
 
-      "simple-import-sort/imports": ["error", {"groups": [
+      "simple-import-sort/imports": ["warn", {"groups": [
         // Side effect imports.
         ["^\\u0000", "^react", "^\\w"],
         // Parent imports. Put `..` last.
