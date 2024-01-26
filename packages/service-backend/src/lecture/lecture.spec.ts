@@ -160,7 +160,7 @@ describe('getLecture', () => {
       lesson_id: '123',
       data: '1',
     };
-    jest.spyOn(prisma.lecture, 'findFirst').mockResolvedValue(mockLectureDb);
+    jest.spyOn(prisma.lecture, 'findUnique').mockResolvedValue(mockLectureDb);
 
     // Invoke the function being tested
     const result = await lectureService.getLecture({
@@ -168,8 +168,8 @@ describe('getLecture', () => {
     } as IdLectureModel);
 
     // Perform assertions
-    expect(prisma.lecture.findFirst).toHaveBeenCalledTimes(1);
-    expect(prisma.lecture.findFirst).toHaveBeenCalledWith({
+    expect(prisma.lecture.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.lecture.findUnique).toHaveBeenCalledWith({
       where: {
         id: mockLectureId,
       },
@@ -182,7 +182,7 @@ describe('getLecture', () => {
   });
 
   it('should throw ConflictException if the lecture does not exist', async () => {
-    jest.spyOn(prisma.lecture, 'findFirst').mockResolvedValue(null);
+    jest.spyOn(prisma.lecture, 'findUnique').mockResolvedValue(null);
 
     const mockLectureId = '123';
 
@@ -195,7 +195,7 @@ describe('getLecture', () => {
 
   it('should throw ConflictException if an error occurs', async () => {
     jest
-      .spyOn(prisma.lecture, 'findFirst')
+      .spyOn(prisma.lecture, 'findUnique')
       .mockRejectedValue(new Error('Some error'));
 
     const mockLectureId = '123';
