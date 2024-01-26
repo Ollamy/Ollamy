@@ -5,6 +5,7 @@ import * as runtime from '../runtime';
 import type {
   CreateQuestionModel,
   IdQuestionModel,
+  QuestionIdResponse,
   QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
@@ -17,6 +18,10 @@ export interface DeleteQuestionRequest {
 }
 
 export interface GetQuestionRequest {
+    id: string;
+}
+
+export interface GetQuestionAnswersRequest {
     id: string;
 }
 
@@ -43,7 +48,7 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    async deleteQuestionRaw(requestParameters: DeleteQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async deleteQuestionRaw(requestParameters: DeleteQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         if (requestParameters.idQuestionModel === null || requestParameters.idQuestionModel === undefined) {
             throw new runtime.RequiredError('idQuestionModel','Required parameter requestParameters.idQuestionModel was null or undefined when calling deleteQuestion.');
         }
@@ -62,16 +67,12 @@ export class QuestionApi extends runtime.BaseAPI {
             body: requestParameters.idQuestionModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static deleteQuestion(requestParameters: DeleteQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static deleteQuestion(requestParameters: DeleteQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         return localQuestionApi.deleteQuestionRaw(requestParameters, initOverrides);
     }
 
@@ -104,7 +105,34 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    async registerQuestionRaw(requestParameters: RegisterQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestionAnswers.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/question/{id}/answers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+        return localQuestionApi.getQuestionAnswersRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async registerQuestionRaw(requestParameters: RegisterQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         if (requestParameters.createQuestionModel === null || requestParameters.createQuestionModel === undefined) {
             throw new runtime.RequiredError('createQuestionModel','Required parameter requestParameters.createQuestionModel was null or undefined when calling registerQuestion.');
         }
@@ -123,22 +151,18 @@ export class QuestionApi extends runtime.BaseAPI {
             body: requestParameters.createQuestionModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static registerQuestion(requestParameters: RegisterQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static registerQuestion(requestParameters: RegisterQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         return localQuestionApi.registerQuestionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateQuestionRaw(requestParameters: UpdateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async updateQuestionRaw(requestParameters: UpdateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateQuestion.');
         }
@@ -161,16 +185,12 @@ export class QuestionApi extends runtime.BaseAPI {
             body: requestParameters.updateQuestionModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static updateQuestion(requestParameters: UpdateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static updateQuestion(requestParameters: UpdateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
         return localQuestionApi.updateQuestionRaw(requestParameters, initOverrides);
     }
 
