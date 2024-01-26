@@ -29,28 +29,6 @@ export class DefaultApi extends runtime.BaseAPI {
         return localDefaultApi.healthCheckRaw(initOverrides);
     }
 
-    /**
-     */
-    async sendAlertToAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/alert`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-    }
-
-    /**
-     */
-    static sendAlertToAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        return localDefaultApi.sendAlertToAllRaw(initOverrides);
-    }
-
 }
 
 const localDefaultApi = new DefaultApi();

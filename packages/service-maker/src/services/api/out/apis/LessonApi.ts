@@ -5,8 +5,6 @@ import * as runtime from '../runtime';
 import type {
   CreateLessonModel,
   IdLessonModel,
-  JoinLessonModel,
-  LessonIdResponse,
   LessonModel,
   QuestionModel,
 } from '../models/index';
@@ -21,11 +19,6 @@ export interface GetLessonRequest {
 
 export interface GetLessonQuestionsRequest {
     id: string;
-}
-
-export interface JoinLessonRequest {
-    id: string;
-    joinLessonModel: JoinLessonModel;
 }
 
 export interface RegisterLessonRequest {
@@ -43,7 +36,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    async deleteLessonRaw(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    async deleteLessonRaw(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.idLessonModel === null || requestParameters.idLessonModel === undefined) {
             throw new runtime.RequiredError('idLessonModel','Required parameter requestParameters.idLessonModel was null or undefined when calling deleteLesson.');
         }
@@ -62,12 +55,16 @@ export class LessonApi extends runtime.BaseAPI {
             body: requestParameters.idLessonModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static deleteLesson(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    static deleteLesson(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localLessonApi.deleteLessonRaw(requestParameters, initOverrides);
     }
 
@@ -127,41 +124,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    async joinLessonRaw(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinLesson.');
-        }
-
-        if (requestParameters.joinLessonModel === null || requestParameters.joinLessonModel === undefined) {
-            throw new runtime.RequiredError('joinLessonModel','Required parameter requestParameters.joinLessonModel was null or undefined when calling joinLesson.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/lesson/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.joinLessonModel,
-        }, initOverrides);
-
-        return response.json();
-    }
-
-    /**
-     */
-    static joinLesson(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
-        return localLessonApi.joinLessonRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
-    async registerLessonRaw(requestParameters: RegisterLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    async registerLessonRaw(requestParameters: RegisterLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.createLessonModel === null || requestParameters.createLessonModel === undefined) {
             throw new runtime.RequiredError('createLessonModel','Required parameter requestParameters.createLessonModel was null or undefined when calling registerLesson.');
         }
@@ -180,18 +143,22 @@ export class LessonApi extends runtime.BaseAPI {
             body: requestParameters.createLessonModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static registerLesson(requestParameters: RegisterLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    static registerLesson(requestParameters: RegisterLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localLessonApi.registerLessonRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateLessonRaw(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    async updateLessonRaw(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateLesson.');
         }
@@ -214,12 +181,16 @@ export class LessonApi extends runtime.BaseAPI {
             body: requestParameters.lessonModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static updateLesson(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+    static updateLesson(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localLessonApi.updateLessonRaw(requestParameters, initOverrides);
     }
 

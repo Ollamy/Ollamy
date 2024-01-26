@@ -3,59 +3,33 @@
 /**
  * 
  * @export
- * @interface AnswerIdResponse
+ * @interface ChapterModel
  */
-export interface AnswerIdResponse {
+export interface ChapterModel {
     /**
      * 
      * @type {string}
-     * @memberof AnswerIdResponse
-     */
-    id: string;
-}
-/**
- * 
- * @export
- * @interface AnswerModel
- */
-export interface AnswerModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof AnswerModel
+     * @memberof ChapterModel
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof AnswerModel
+     * @memberof ChapterModel
      */
-    questionId: string;
+    sectionId: string;
     /**
      * 
      * @type {string}
-     * @memberof AnswerModel
+     * @memberof ChapterModel
      */
-    data: string;
+    title: string;
     /**
      * 
      * @type {string}
-     * @memberof AnswerModel
+     * @memberof ChapterModel
      */
-    picture: string;
-}
-/**
- * 
- * @export
- * @interface CourseIdResponse
- */
-export interface CourseIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseIdResponse
-     */
-    id: string;
+    description: string;
 }
 /**
  * 
@@ -87,50 +61,31 @@ export interface CourseModel {
      * @memberof CourseModel
      */
     description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    picture: string;
 }
 /**
  * 
  * @export
- * @interface CourseTrueResponse
+ * @interface CreateChapterModel
  */
-export interface CourseTrueResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof CourseTrueResponse
-     */
-    success: boolean;
-}
-/**
- * 
- * @export
- * @interface CreateAnswerModel
- */
-export interface CreateAnswerModel {
+export interface CreateChapterModel {
     /**
      * 
      * @type {string}
-     * @memberof CreateAnswerModel
+     * @memberof CreateChapterModel
      */
-    questionId: string;
+    sectionId: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateAnswerModel
+     * @memberof CreateChapterModel
      */
-    data: string;
+    title: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateAnswerModel
+     * @memberof CreateChapterModel
      */
-    picture: string;
+    description: string;
 }
 /**
  * 
@@ -150,12 +105,6 @@ export interface CreateCourseModel {
      * @memberof CreateCourseModel
      */
     description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateCourseModel
-     */
-    picture: string;
 }
 /**
  * 
@@ -168,7 +117,7 @@ export interface CreateLessonModel {
      * @type {string}
      * @memberof CreateLessonModel
      */
-    section_id: string;
+    chapter_id: string;
     /**
      * 
      * @type {string}
@@ -224,18 +173,6 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     typeQuestion: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    picture: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    difficulty: string;
 }
 /**
  * 
@@ -321,13 +258,13 @@ export interface GetUserModel {
 /**
  * 
  * @export
- * @interface IdAnswerModel
+ * @interface IdChapterModel
  */
-export interface IdAnswerModel {
+export interface IdChapterModel {
     /**
      * 
      * @type {string}
-     * @memberof IdAnswerModel
+     * @memberof IdChapterModel
      */
     id: string;
 }
@@ -386,32 +323,6 @@ export interface IdSectionModel {
 /**
  * 
  * @export
- * @interface JoinLessonModel
- */
-export interface JoinLessonModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinLessonModel
-     */
-    userId: string;
-}
-/**
- * 
- * @export
- * @interface LessonIdResponse
- */
-export interface LessonIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonIdResponse
-     */
-    id: string;
-}
-/**
- * 
- * @export
  * @interface LessonModel
  */
 export interface LessonModel {
@@ -426,7 +337,7 @@ export interface LessonModel {
      * @type {string}
      * @memberof LessonModel
      */
-    sectionId: string;
+    chapterId: string;
     /**
      * 
      * @type {string}
@@ -458,19 +369,6 @@ export interface LoginUserModel {
      * @memberof LoginUserModel
      */
     password: string;
-}
-/**
- * 
- * @export
- * @interface QuestionIdResponse
- */
-export interface QuestionIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof QuestionIdResponse
-     */
-    id: string;
 }
 /**
  * 
@@ -507,6 +405,12 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
     typeAnswer: string;
     /**
      * 
@@ -520,31 +424,6 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     trustAnswerId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof QuestionModel
-     */
-    pictureId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof QuestionModel
-     */
-    difficulty: string;
-}
-/**
- * 
- * @export
- * @interface SectionIdResponse
- */
-export interface SectionIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionIdResponse
-     */
-    id: string;
 }
 /**
  * 
@@ -580,27 +459,27 @@ export interface SectionModel {
 /**
  * 
  * @export
- * @interface UpdateAnswerModel
+ * @interface UpdateChapterModel
  */
-export interface UpdateAnswerModel {
+export interface UpdateChapterModel {
     /**
      * 
      * @type {string}
-     * @memberof UpdateAnswerModel
+     * @memberof UpdateChapterModel
      */
-    questionId: string;
+    sectionId: string;
     /**
      * 
      * @type {string}
-     * @memberof UpdateAnswerModel
+     * @memberof UpdateChapterModel
      */
-    data: string;
+    title: string;
     /**
      * 
      * @type {string}
-     * @memberof UpdateAnswerModel
+     * @memberof UpdateChapterModel
      */
-    picture: string;
+    description: string;
 }
 /**
  * 
@@ -626,12 +505,6 @@ export interface UpdateCourseModel {
      * @memberof UpdateCourseModel
      */
     description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateCourseModel
-     */
-    picture: string;
 }
 /**
  * 
@@ -662,25 +535,7 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    picture: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateQuestionModel
-     */
-    points: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    difficulty: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    trustAnswerId: string;
+    data: string;
 }
 /**
  * 
@@ -737,43 +592,4 @@ export interface UpdateUserModel {
      * @memberof UpdateUserModel
      */
     password: string;
-}
-/**
- * 
- * @export
- * @interface UserCoursesResponse
- */
-export interface UserCoursesResponse {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof UserCoursesResponse
-     */
-    courses: Array<string>;
-}
-/**
- * 
- * @export
- * @interface UserIdResponse
- */
-export interface UserIdResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof UserIdResponse
-     */
-    id: string;
-}
-/**
- * 
- * @export
- * @interface UserTrueResponse
- */
-export interface UserTrueResponse {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof UserTrueResponse
-     */
-    success: boolean;
 }

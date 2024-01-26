@@ -3,10 +3,9 @@
 
 import * as runtime from '../runtime';
 import type {
+  ChapterModel,
   CreateSectionModel,
   IdSectionModel,
-  LessonModel,
-  SectionIdResponse,
   SectionModel,
   UpdateSectionModel,
 } from '../models/index';
@@ -19,7 +18,7 @@ export interface GetSectionRequest {
     id: string;
 }
 
-export interface GetSectionLessonsRequest {
+export interface GetSectionChaptersRequest {
     id: string;
 }
 
@@ -38,7 +37,7 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async deleteSectionRaw(requestParameters: DeleteSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    async deleteSectionRaw(requestParameters: DeleteSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.idSectionModel === null || requestParameters.idSectionModel === undefined) {
             throw new runtime.RequiredError('idSectionModel','Required parameter requestParameters.idSectionModel was null or undefined when calling deleteSection.');
         }
@@ -57,12 +56,16 @@ export class SectionApi extends runtime.BaseAPI {
             body: requestParameters.idSectionModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static deleteSection(requestParameters: DeleteSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    static deleteSection(requestParameters: DeleteSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localSectionApi.deleteSectionRaw(requestParameters, initOverrides);
     }
 
@@ -95,9 +98,9 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getSectionLessonsRaw(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
+    async getSectionChaptersRaw(requestParameters: GetSectionChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChapterModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSectionLessons.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSectionChapters.');
         }
 
         const queryParameters: any = {};
@@ -105,7 +108,7 @@ export class SectionApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/section/lessons/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/section/chapters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -116,13 +119,13 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getSectionLessons(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
-        return localSectionApi.getSectionLessonsRaw(requestParameters, initOverrides);
+    static getSectionChapters(requestParameters: GetSectionChaptersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChapterModel>> {
+        return localSectionApi.getSectionChaptersRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async registerSectionRaw(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    async registerSectionRaw(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.createSectionModel === null || requestParameters.createSectionModel === undefined) {
             throw new runtime.RequiredError('createSectionModel','Required parameter requestParameters.createSectionModel was null or undefined when calling registerSection.');
         }
@@ -141,18 +144,22 @@ export class SectionApi extends runtime.BaseAPI {
             body: requestParameters.createSectionModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static registerSection(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    static registerSection(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localSectionApi.registerSectionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async updateSectionRaw(requestParameters: UpdateSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    async updateSectionRaw(requestParameters: UpdateSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateSection.');
         }
@@ -175,12 +182,16 @@ export class SectionApi extends runtime.BaseAPI {
             body: requestParameters.updateSectionModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static updateSection(requestParameters: UpdateSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    static updateSection(requestParameters: UpdateSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localSectionApi.updateSectionRaw(requestParameters, initOverrides);
     }
 

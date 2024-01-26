@@ -7,9 +7,6 @@ import type {
   GetUserModel,
   LoginUserModel,
   UpdateUserModel,
-  UserCoursesResponse,
-  UserIdResponse,
-  UserTrueResponse,
 } from '../models/index';
 
 export interface LoginUserRequest {
@@ -30,7 +27,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async deleteUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserIdResponse> {
+    async deleteUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -42,12 +39,16 @@ export class UserApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static deleteUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserIdResponse> {
+    static deleteUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localUserApi.deleteUserRaw(initOverrides);
     }
 
@@ -76,30 +77,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserCoursesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCoursesResponse> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/user/courses`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return response.json();
-    }
-
-    /**
-     */
-    static getUserCourses(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCoursesResponse> {
-        return localUserApi.getUserCoursesRaw(initOverrides);
-    }
-
-    /**
-     */
-    async loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
+    async loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.loginUserModel === null || requestParameters.loginUserModel === undefined) {
             throw new runtime.RequiredError('loginUserModel','Required parameter requestParameters.loginUserModel was null or undefined when calling loginUser.');
         }
@@ -118,18 +96,22 @@ export class UserApi extends runtime.BaseAPI {
             body: requestParameters.loginUserModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static loginUser(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
+    static loginUser(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localUserApi.loginUserRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
+    async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         if (requestParameters.createUserModel === null || requestParameters.createUserModel === undefined) {
             throw new runtime.RequiredError('createUserModel','Required parameter requestParameters.createUserModel was null or undefined when calling registerUser.');
         }
@@ -148,12 +130,16 @@ export class UserApi extends runtime.BaseAPI {
             body: requestParameters.createUserModel,
         }, initOverrides);
 
-        return response.json();
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return response.json();
+        } else {
+            return response.text();
+        }
     }
 
     /**
      */
-    static registerUser(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
+    static registerUser(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localUserApi.registerUserRaw(requestParameters, initOverrides);
     }
 
