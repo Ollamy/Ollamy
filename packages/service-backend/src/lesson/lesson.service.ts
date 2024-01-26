@@ -115,6 +115,11 @@ export class LessonService {
   async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
       const lessonQuestionsDb: Question[] = await prisma.question.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           lesson_id: LessonId,
         },
@@ -133,6 +138,7 @@ export class LessonService {
           description: question.description,
           typeAnswer: question.type_answer,
           typeQuestion: question.type_question,
+          order: question.order,
         };
       }) as QuestionModel[];
     } catch (error) {

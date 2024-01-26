@@ -6,6 +6,7 @@ import {
   Delete,
   Query,
   Get,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -87,7 +88,7 @@ export class AnswerController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getAnswer(@Query('id') id: string): Promise<AnswerModel> {
+  async getAnswer(@Param('id') id: string): Promise<AnswerModel> {
     return this.answerService.getAnswer({ id: id } as IdAnswerModel);
   }
 
@@ -116,7 +117,7 @@ export class AnswerController {
   @LoggedMiddleware(true)
   @Put('/:id')
   async updateAnswer(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() body: UpdateAnswerModel,
   ): Promise<AnswerIdResponse> {
     return this.answerService.updateAnswer({ id: id } as IdAnswerModel, body);
