@@ -96,7 +96,7 @@ export class CourseService {
         description: courseDb.description,
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
-          : '',
+          : undefined,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);

@@ -11,6 +11,8 @@ import {
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,
+  validateAnswerModel,
+  ValidateAnswerResponse,
 } from './question.dto';
 import prisma from 'client';
 import { Answer, Prisma, Question } from '@prisma/client';
@@ -119,7 +121,9 @@ export class QuestionService {
         typeAnswer: questionDb.type_answer,
         typeQuestion: questionDb.type_question,
         trustAnswerId: questionDb.trust_answer_id,
-        pictureId: await PictureService.getPicture(questionDb.picture_id),
+        pictureId: questionDb.picture_id
+          ? await PictureService.getPicture(questionDb.picture_id)
+          : undefined,
         difficulty: questionDb.difficulty,
         order: questionDb.order,
       } as QuestionModel;
@@ -139,11 +143,13 @@ export class QuestionService {
           id: QuestionId,
         },
         data: {
-          title: questionData.title,
-          description: questionData.description,
-          lesson_id: questionData.lessonId,
-          picture_id: await PictureService.postPicture(questionData.picture),
-          points: questionData.points,
+          title: questionData?.title,
+          description: questionData?.description,
+          lesson_id: questionData?.lessonId,
+          picture_id: questionData.picture
+            ? await PictureService.postPicture(questionData.picture)
+            : undefined,
+          points: questionData?.points,
           difficulty: questionData?.difficulty,
           trust_answer_id: questionData?.trustAnswerId,
         },
@@ -234,5 +240,44 @@ export class QuestionService {
       Logger.error(error);
       throw new ConflictException('Answers not found !');
     }
+  }
+
+  async validateAnswer(
+    body: validateAnswerModel,
+  ): Promise<ValidateAnswerResponse> {
+    const questionDb: Question = await prisma.question.findUnique({
+      where: {
+        id: body.questionId,
+      },
+    });
+
+    const lessonQuestions = await prisma.question.findMany({
+      where: {
+        lesson_id: questionDb.lesson_id,
+      },
+      select: {
+        order: true,
+        id: true,
+      },
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
+    });
+
+    const nextQuestion =
+      lessonQuestions[
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
+      ] ?? null;
+
+    return {
+      success: questionDb.trust_answer_id === body.answerId,
+      answer: questionDb.trust_answer_id,
+      end: !(nextQuestion !== null),
+      nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
+    };
   }
 }

@@ -19,6 +19,7 @@ import {
   Post,
   Put,
   Query,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -27,7 +28,20 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { AnswerType, QuestionDifficulty, QuestionType } from '@prisma/client';
+import {
+  CreateQuestionModel,
+  IdQuestionModel,
+  QuestionModel,
+  UpdateQuestionModel,
+  QuestionIdResponse,
+  UpdateQuestionOrderModel,
+  validateAnswerModel,
+  ValidateAnswerResponse,
+} from 'question/question.dto';
+import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
+import { QuestionService } from 'question/question.service';
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
+import { AnswerModel } from '../answer/answer.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -100,7 +114,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getQuestion(@Query('id') id: string): Promise<QuestionModel> {
+  async getQuestion(@Param('id') id: string): Promise<QuestionModel> {
     return this.questionService.getQuestion(id);
   }
 
@@ -131,7 +145,7 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Put('/:id')
   async updateQuestion(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() body: UpdateQuestionModel,
   ): Promise<QuestionIdResponse> {
     return this.questionService.updateQuestion(id, body);
@@ -172,7 +186,19 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/answers')
-  async getQuestionAnswers(@Query('id') id: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(@Param('id') id: string): Promise<AnswerModel[]> {
     return this.questionService.getQuestionAnswers(id);
+  }
+
+  @ApiOkResponse({
+    description: 'question content response',
+    type: ValidateAnswerResponse,
+  })
+  @LoggedMiddleware(true)
+  @Post('/validate')
+  async validateAnswer(
+    @Body() body: validateAnswerModel,
+  ): Promise<ValidateAnswerResponse> {
+    return this.questionService.validateAnswer(body);
   }
 }
