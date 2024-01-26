@@ -173,6 +173,24 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     typeQuestion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    picture: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    order: number;
 }
 /**
  * 
@@ -424,6 +442,37 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     trustAnswerId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    pictureId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof QuestionModel
+     */
+    order: number;
+}
+/**
+ * 
+ * @export
+ * @interface SectionIdResponse
+ */
+export interface SectionIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SectionIdResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -540,6 +589,25 @@ export interface UpdateQuestionModel {
 /**
  * 
  * @export
+ * @interface UpdateQuestionOrderModel
+ */
+export interface UpdateQuestionOrderModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    origin: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    dest: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateSectionModel
  */
 export interface UpdateSectionModel {
@@ -592,4 +660,93 @@ export interface UpdateUserModel {
      * @memberof UpdateUserModel
      */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserCoursesResponse
+ */
+export interface UserCoursesResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserCoursesResponse
+     */
+    courses: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface UserIdResponse
+ */
+export interface UserIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserTrueResponse
+ */
+export interface UserTrueResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserTrueResponse
+     */
+    success: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerModel
+ */
+export interface ValidateAnswerModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    answerId: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerResponse
+ */
+export interface ValidateAnswerResponse {
+    /**
+     * Boolean if the answer is true or false
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    success: boolean;
+    /**
+     * true answer id
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    answer: string;
+    /**
+     * Boolean if it is the last question or not
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    end: boolean;
+    /**
+     * Id of the next question if it is not the last one
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    nextQuestionId: string;
 }

@@ -19,7 +19,10 @@ import { PictureService } from '../picture/picture.service';
 
 @Injectable()
 export class CourseService {
-  async postCourse(courseData: CreateCourseModel, ctx: any): Promise<CourseIdResponse> {
+  async postCourse(
+    courseData: CreateCourseModel,
+    ctx: any,
+  ): Promise<CourseIdResponse> {
     try {
       const courseDb = await prisma.course.create({
         data: {
@@ -34,7 +37,15 @@ export class CourseService {
         Logger.error('Failed to create course !');
         throw new NotFoundException('Failed to create course !');
       }
-      await this.addUserToCourse(courseDb.id, ctx.__user.id);
+
+      await prisma.usertoCourse.create({
+        data: {
+          user_id: ctx.__user.id,
+          course_id: courseDb.id,
+          role_user: 'OWNER',
+        },
+      });
+
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
@@ -83,7 +94,9 @@ export class CourseService {
         ownerId: courseDb.owner_id,
         title: courseDb.title,
         description: courseDb.description,
-        picture: await PictureService.getPicture(courseDb.picture_id),
+        picture: courseDb.picture_id
+          ? await PictureService.getPicture(courseDb.picture_id)
+          : undefined,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
@@ -144,7 +157,10 @@ export class CourseService {
     }
   }
 
-  async addUserToCourse(courseId: string, userId: string): Promise<CourseTrueResponse> {
+  async addUserToCourse(
+    courseId: string,
+    userId: string,
+  ): Promise<CourseTrueResponse> {
     try {
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {

@@ -49,6 +49,7 @@ services:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
+      MAKER_PORT: ${MAKER_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PORT: ${POSTGRES_PORT}
@@ -75,6 +76,20 @@ services:
       interval: 2s
       timeout: 30s
       retries: 30
+
+  maker:
+    build: ./packages/service-maker
+    restart: on-failure
+    ports:
+      - ${MAKER_PORT}:${MAKER_PORT}
+    environment:
+      VITE_PUBLIC_BACKEND_URL: localhost:${BACKEND_PORT}
+      BACKEND_PORT: ${BACKEND_PORT}
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - backend_nt
 
 networks:
   backend_nt:

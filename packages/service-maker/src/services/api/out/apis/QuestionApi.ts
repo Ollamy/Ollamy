@@ -7,6 +7,9 @@ import type {
   IdQuestionModel,
   QuestionModel,
   UpdateQuestionModel,
+  UpdateQuestionOrderModel,
+  ValidateAnswerModel,
+  ValidateAnswerResponse,
 } from '../models/index';
 
 export interface DeleteQuestionRequest {
@@ -24,6 +27,14 @@ export interface RegisterQuestionRequest {
 export interface UpdateQuestionRequest {
     id: string;
     updateQuestionModel: UpdateQuestionModel;
+}
+
+export interface UpdateQuestionOrderRequest {
+    updateQuestionOrderModel: UpdateQuestionOrderModel;
+}
+
+export interface ValidateAnswerRequest {
+    validateAnswerModel: ValidateAnswerModel;
 }
 
 /**
@@ -161,6 +172,66 @@ export class QuestionApi extends runtime.BaseAPI {
      */
     static updateQuestion(requestParameters: UpdateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         return localQuestionApi.updateQuestionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async updateQuestionOrderRaw(requestParameters: UpdateQuestionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
+        if (requestParameters.updateQuestionOrderModel === null || requestParameters.updateQuestionOrderModel === undefined) {
+            throw new runtime.RequiredError('updateQuestionOrderModel','Required parameter requestParameters.updateQuestionOrderModel was null or undefined when calling updateQuestionOrder.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/question`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.updateQuestionOrderModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static updateQuestionOrder(requestParameters: UpdateQuestionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
+        return localQuestionApi.updateQuestionOrderRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async validateAnswerRaw(requestParameters: ValidateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateAnswerResponse> {
+        if (requestParameters.validateAnswerModel === null || requestParameters.validateAnswerModel === undefined) {
+            throw new runtime.RequiredError('validateAnswerModel','Required parameter requestParameters.validateAnswerModel was null or undefined when calling validateAnswer.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/question/validate`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.validateAnswerModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static validateAnswer(requestParameters: ValidateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateAnswerResponse> {
+        return localQuestionApi.validateAnswerRaw(requestParameters, initOverrides);
     }
 
 }
