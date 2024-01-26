@@ -21,6 +21,14 @@ export class CourseModel {
   @ApiProperty()
   @IsString()
   picture: string;
+
+  @ApiProperty()
+  @IsUUID()
+  lastLessonId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  lastSectionId: string;
 }
 
 export class CreateCourseModel {

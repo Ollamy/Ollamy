@@ -76,6 +76,35 @@ export class CourseService {
     }
   }
 
+  async getLastLessonId(user_id: string): Promise<string | null> {
+    const lastLesson = await prisma.usertoLesson.findFirst({
+      where: {
+        user_id: user_id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      select: {
+        lesson_id: true,
+      },
+    });
+
+    return lastLesson ? lastLesson.lesson_id : null;
+  }
+
+  async getSectionIdFromLastLesson(last_lesson_id: string): Promise<string | null> {
+    const lastLesson = await prisma.lesson.findUnique({
+      where: {
+        id: last_lesson_id,
+      },
+      select: {
+        section_id: true,
+      },
+    });
+  
+    return lastLesson ? lastLesson.section_id : null;
+  }
+  
   async getCourse(CourseId: string): Promise<CourseModel> {
     try {
       const courseDb: Course = await prisma.course.findFirst({
@@ -89,6 +118,9 @@ export class CourseService {
         throw new ConflictException('Course does not exists !');
       }
 
+      const lastLessonId = await this.getLastLessonId(courseDb.owner_id);
+      const lastSectionId = lastLessonId ? await this.getSectionIdFromLastLesson(lastLessonId) : null;
+
       return {
         id: courseDb.id,
         ownerId: courseDb.owner_id,
@@ -97,6 +129,8 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
+        lastLessonId: lastLessonId,
+        lastSectionId: lastSectionId,
       } as CourseModel;
     } catch (error) {
       Logger.error(error);
