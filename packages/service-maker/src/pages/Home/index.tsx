@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import DashboardContent from "./Content";
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from "react";
 import TopBar from "../../components/TopBar";
 import api from "../../services/api";
+import { DefaultApi } from "../../services/api/out";
 
 function HomePage(): ReactElement {
   const { data } = api.user.useUser();
+
+  useEffect(() => {
+    DefaultApi.healthCheck();
+  }, []);
 
   return (
     <Container>
@@ -18,7 +23,7 @@ function HomePage(): ReactElement {
       <DashboardContent />
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
