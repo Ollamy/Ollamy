@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Lesson, Question, QuestionDifficulty } from '@prisma/client';
+import { Lesson, Question, QuestionDifficulty, UsertoLesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from './lesson.service';
@@ -40,6 +40,7 @@ describe('postLesson', () => {
       },
     };
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
+    jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue({} as UsertoLesson);
 
     // Invoke the function being tested
     const result = await lessonService.postLesson(mockLessonData, mockContext);

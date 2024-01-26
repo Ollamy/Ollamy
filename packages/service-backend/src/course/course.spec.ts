@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Course, Picture, Section } from '@prisma/client';
+import { Course, Picture, Section, UsertoLesson, Lesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CourseService } from './course.service';
@@ -207,17 +207,25 @@ describe('getCourse', () => {
       id: '1',
       picture: 'data',
     };
+    const mockLastLessonDb = {
+      lesson_id: '2',
+    } as UsertoLesson;
+    const mockLastSectionDb = {
+      section_id: '3',
+    } as Lesson;
     const mockCourseDb: Course = {
       id: mockCourseId,
       owner_id: '123',
       title: 'title',
       description: 'desc',
       picture_id: mockPictureDb.id,
-      last_lesson_id: '2',
-      last_section_id: '3',
+      last_lesson_id: mockLastLessonDb.lesson_id,
+      last_section_id: mockLastSectionDb.section_id,
     };
     jest.spyOn(prisma.course, 'findFirst').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.picture, 'findFirst').mockResolvedValue(mockPictureDb);
+    jest.spyOn(prisma.usertoLesson, 'findFirst').mockResolvedValue(mockLastLessonDb);
+    jest.spyOn(prisma.lesson, 'findUnique').mockResolvedValue(mockLastSectionDb);
 
     // Invoke the function being tested
     const result = await courseService.getCourse(mockCourseId);
@@ -236,6 +244,8 @@ describe('getCourse', () => {
       picture: mockPictureDb.picture,
       title: mockCourseDb.title,
       description: mockCourseDb.description,
+      lastLessonId: mockLastLessonDb.lesson_id,
+      lastSectionId: mockLastSectionDb.section_id,
     };
     expect(result).toEqual(expectedCourseModel);
   });

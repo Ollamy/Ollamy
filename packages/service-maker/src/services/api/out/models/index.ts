@@ -93,6 +93,18 @@ export interface CourseModel {
      * @memberof CourseModel
      */
     picture: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseModel
+     */
+    lastLessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseModel
+     */
+    lastSectionId: string;
 }
 /**
  * 
