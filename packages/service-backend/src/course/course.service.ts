@@ -77,20 +77,17 @@ export class CourseService {
   }
 
   async getLastLessonId(user_id: string): Promise<string | null> {
-    const lastLesson = await prisma.usertoLesson
-      .findMany({
-        where: {
-          user_id: user_id,
-        },
-        orderBy: {
-          created_at: 'desc',
-        },
-        take: 1,
-        select: {
-          lesson_id: true,
-        },
-      })
-      .then((lessons) => lessons[0]);
+    const lastLesson = await prisma.usertoLesson.findFirst({
+      where: {
+        user_id: user_id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      select: {
+        lesson_id: true,
+      },
+    });
 
     return lastLesson ? lastLesson.lesson_id : null;
   }
