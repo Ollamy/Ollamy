@@ -12,6 +12,7 @@ import { AlertGateway } from './alert/alert.gateway';
 import { AlertController } from './alert/alert.controller';
 import { PictureModule } from './picture/picture.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { LectureModule } from './lecture/lecture.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ChatGateway } from './chat/chat.gateway';
     QuestionModule,
     AnswerModule,
     PictureModule,
+    LectureModule,
   ],
   controllers: [AppController, AlertController],
   providers: [
