@@ -51,7 +51,7 @@ export class LectureService {
 
     async getLecture(lectureId: IdLectureModel): Promise<LectureModel> {
         try {
-            const lectureDb = await prisma.lecture.findFirst({
+            const lectureDb = await prisma.lecture.findUnique({
                 where: {
                     id: lectureId.id,
                 },
