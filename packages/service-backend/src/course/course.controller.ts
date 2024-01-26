@@ -83,26 +83,6 @@ export class CourseController {
   }
 
   @ApiOkResponse({
-    description: "get courses owned by user",
-    type: [CourseModel],
-  })
-  @LoggedMiddleware(true)
-  @Get('/owned')
-  async getCoursesOwnedByUser(@OllContext() ctx: any): Promise<CourseModel[]> {
-    return this.courseService.getCoursesOwnedByUser(ctx);
-  }
-
-  @ApiOkResponse({
-    description: "get courses subscribed by user",
-    type: [CourseModel],
-  })
-  @LoggedMiddleware(true)
-  @Get('/subscribed')
-  async getCoursesSubscribedByUser(@OllContext() ctx: any): Promise<CourseModel[]> {
-    return this.courseService.getCoursesSubscribedByUser(ctx);
-  }
-
-  @ApiOkResponse({
     description: 'course content response',
     type: CourseModel,
   })
