@@ -101,10 +101,10 @@ export class CourseService {
         section_id: true,
       },
     });
-  
+
     return lastLesson ? lastLesson.section_id : null;
   }
-  
+
   async getCourse(CourseId: string): Promise<CourseModel> {
     try {
       const courseDb: Course = await prisma.course.findFirst({
@@ -179,12 +179,10 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => {
-        return {
-          courseId: lesson.course_id,
-          ...lesson,
-        };
-      }) as SectionModel[];
+      return courseSectionsDb.map((lesson: Section) => ({
+        courseId: lesson.course_id,
+        ...lesson,
+      })) as SectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
