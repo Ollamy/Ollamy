@@ -280,6 +280,12 @@ describe('getCourse', () => {
     jest.spyOn(prisma.course, 'findFirst').mockResolvedValue(null);
 
     const mockCourseId = '1';
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
 
     await expect(
       courseService.getCourse(mockCourseId, mockContext),
@@ -291,11 +297,18 @@ describe('getCourse', () => {
       .spyOn(prisma.course, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
+
     const mockCourseId = '1';
 
-    await expect(courseService.getCourse(mockCourseId)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      courseService.getCourse(mockCourseId, mockContext),
+    ).rejects.toThrow(ConflictException);
   });
 });
 
