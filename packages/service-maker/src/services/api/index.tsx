@@ -1,9 +1,9 @@
-import { courseActions } from "./routes/course";
-import { lessonActions } from "./routes/lesson";
-import { sectionActions } from "./routes/section";
-import { userActions } from "./routes/user";
-import { questionActions } from "./routes/question";
-import { answerActions } from "./routes/answer";
+import { courseActions } from 'src/services/api/routes/course';
+import { sectionActions } from 'src/services/api/routes/section';
+import { userActions } from 'src/services/api/routes/user';
+import { lessonActions } from 'src/services/api/routes/lesson';
+import { questionActions } from 'src/services/api/routes/question';
+import { answerActions } from 'src/services/api/routes/answer';
 
 const api = {
   user: userActions,

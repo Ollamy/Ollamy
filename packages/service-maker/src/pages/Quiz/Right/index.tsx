@@ -57,7 +57,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
 
-  box-shadow: -2px 4px 39.4px 0 rgba(0, 0, 0, 0.17);
+  box-shadow: -2px 4px 39px 0 rgba(0, 0, 0, 0.17);
 `;
 
 const Header = styled.div`

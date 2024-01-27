@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { ReactElement, useState } from 'react';
-import { CourseModel } from 'src/services/api/out';
 import api from 'src/services/api';
 import CreateModal from 'src/components/modal';
 import Dropdown from 'src/components/dropdown';
 import LessonList from 'src/pages/maker/hub/sideBarMenu/lessonList';
 import styled from 'styled-components';
+import { GetCourseRequest } from 'src/services/api/out';
 
 interface SideBarMenuProps {
-  course: CourseModel;
+  course: GetCourseRequest;
   sectionId?: string;
   lessonId?: string;
 }
