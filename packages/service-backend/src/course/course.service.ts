@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
-  CourseModel,
   CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
   CourseIdResponse,
   CourseTrueResponse,
+  GetCourseRequest,
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
@@ -76,11 +76,18 @@ export class CourseService {
     }
   }
 
-  async getCourse(CourseId: string): Promise<CourseModel> {
+  async getCourse(courseId: string, ctx: any): Promise<GetCourseRequest> {
     try {
       const courseDb: Course = await prisma.course.findFirst({
         where: {
-          id: CourseId,
+          id: courseId,
+        },
+      });
+
+      const userToCourse = await prisma.usertoCourse.findFirst({
+        where: {
+          user_id: ctx.__user.id,
+          course_id: courseId,
         },
       });
 
@@ -97,7 +104,9 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-      } as CourseModel;
+        lastLessonId: userToCourse?.last_lesson_id,
+        lastSectionId: userToCourse?.last_section_id,
+      };
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course does not exists !');
@@ -145,12 +154,10 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => {
-        return {
-          courseId: lesson.course_id,
-          ...lesson,
-        };
-      }) as SectionModel[];
+      return courseSectionsDb.map((lesson: Section) => ({
+        courseId: lesson.course_id,
+        ...lesson,
+      })) as SectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');

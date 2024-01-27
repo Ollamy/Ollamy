@@ -1,34 +1,37 @@
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
-  Controller,
-  Post,
+  CreateQuestionModel,
+  IdQuestionModel,
+  QuestionIdResponse,
+  QuestionModel,
+  UpdateQuestionModel,
+  UpdateQuestionOrderModel,
+} from 'question/question.dto';
+import { QuestionService } from 'question/question.service';
+
+import { AnswerModel } from '../answer/answer.dto';
+
+import {
   Body,
-  Put,
+  Controller,
   Delete,
   Get,
+  Post,
+  Put,
   Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiHeader,
   ApiOkResponse,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  CreateQuestionModel,
-  IdQuestionModel,
-  QuestionModel,
-  UpdateQuestionModel,
-  QuestionIdResponse,
-  UpdateQuestionOrderModel,
   validateAnswerModel,
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
-import { QuestionService } from 'question/question.service';
-import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { AnswerModel } from '../answer/answer.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')

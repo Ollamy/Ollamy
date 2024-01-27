@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Lesson, Question, QuestionDifficulty } from '@prisma/client';
+import { Lesson, Question, QuestionDifficulty, UsertoLesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from './lesson.service';
@@ -33,10 +33,17 @@ describe('postLesson', () => {
       title: mockLessonData.title,
       description: mockLessonData.description,
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
+    jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue({} as UsertoLesson);
 
     // Invoke the function being tested
-    const result = await lessonService.postLesson(mockLessonData);
+    const result = await lessonService.postLesson(mockLessonData, mockContext);
 
     // Perform assertions
     expect(prisma.lesson.create).toHaveBeenCalledTimes(1);
@@ -55,8 +62,14 @@ describe('postLesson', () => {
       title: 'lesson',
       description: 'desc',
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
 
-    await expect(lessonService.postLesson(mockLessonData)).rejects.toThrow(
+    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -71,8 +84,14 @@ describe('postLesson', () => {
       title: 'lesson',
       description: 'desc',
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
 
-    await expect(lessonService.postLesson(mockLessonData)).rejects.toThrow(
+    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
       ConflictException,
     );
   });
