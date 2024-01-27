@@ -1,23 +1,16 @@
-import styled from "styled-components";
-import { ReactElement, useCallback } from "react";
-import api from "../../../services/api";
-import { useParams } from "react-router-dom";
-import { CreateQuestionModel } from "backend/src/question/question.dto";
-import * as timers from "timers";
-import { QuestionModel } from "services/api/out";
+import styled from 'styled-components';
+import { ReactElement, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { QuestionModel } from 'src/services/api/out';
+import api from 'src/services/api';
 
-// eslint-disable-next-line
 interface LeftProps {
   quizData: QuestionModel[] | [];
   setQuizData: any;
   setCurrentEditedQuestionId: any;
 }
 
-const Left = ({
-  quizData,
-  setQuizData,
-  setCurrentEditedQuestionId,
-}: LeftProps): ReactElement => {
+const Left = ({ quizData, setQuizData, setCurrentEditedQuestionId }: LeftProps): ReactElement => {
   const { mutateAsync: createQuestion } = api.question.useCreateQuestion();
   const { mutateAsync: removeQuestion } = api.question.useRemoveQuestion();
   const { lessonId } = useParams();
@@ -30,12 +23,12 @@ const Left = ({
     const newData = {
       lessonId,
       title: `Question ${questionOrder}`,
-      description: "no description",
-      data: "test",
-      typeAnswer: "TEXT",
-      typeQuestion: "TEXT",
-      picture: "",
-      difficulty: "BEGINNER",
+      description: 'no description',
+      data: 'test',
+      typeAnswer: 'TEXT',
+      typeQuestion: 'TEXT',
+      picture: '',
+      difficulty: 'BEGINNER',
       order: questionOrder,
     };
 

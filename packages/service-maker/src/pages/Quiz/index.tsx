@@ -1,29 +1,23 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import TopBar from "../../components/TopBar";
-import Left from "./Left";
-import Content from "./Content";
-import Right from "./Right";
-import { useParams } from "react-router-dom";
-import { CreateQuestionModel } from "backend/src/question/question.dto";
-import api from "../../services/api";
-import { QuestionModel } from "services/api/out";
+import { ReactElement, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import api from 'src/services/api';
+import { QuestionModel } from 'src/services/api/out';
+import TopBar from 'src/components/TopBar';
+import Left from 'src/pages/Quiz/Left';
+import Content from 'src/pages/Quiz/Content';
+import Right from 'src/pages/Quiz/Right';
 
 // eslint-disable-next-line
 interface QuizEditorProps {}
 
-// eslint-disable-next-line
 const QuizEditor = ({}: QuizEditorProps): ReactElement => {
   const { mutateAsync: getQuestion } = api.lesson.useGetQuestion();
 
   const [quizData, setQuizData] = useState<QuestionModel[] | []>([]);
-  const [typeSelected, setTypeSelected] = useState<
-    "single" | "multiple" | "free"
-  >("free");
+  const [typeSelected, setTypeSelected] = useState<'single' | 'multiple' | 'free'>('free');
 
-  const [currentEditedQuestionId, setCurrentEditedQuestionId] = useState<
-    string | undefined
-  >(undefined);
+  const [currentEditedQuestionId, setCurrentEditedQuestionId] = useState<string | undefined>(undefined);
 
   const { lessonId } = useParams();
 
@@ -42,14 +36,10 @@ const QuizEditor = ({}: QuizEditorProps): ReactElement => {
 
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
+      <TopBar title={'Ollamy Maker'} />
       <Body>
         <LeftPart>
-          <Left
-            quizData={quizData}
-            setQuizData={setQuizData}
-            setCurrentEditedQuestionId={setCurrentEditedQuestionId}
-          />
+          <Left quizData={quizData} setQuizData={setQuizData} setCurrentEditedQuestionId={setCurrentEditedQuestionId} />
         </LeftPart>
         <ContentPart>
           {currentEditedQuestionId && (

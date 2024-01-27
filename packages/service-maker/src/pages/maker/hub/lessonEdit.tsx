@@ -1,11 +1,8 @@
-import styled from "styled-components";
-import { ReactElement, useCallback, useEffect, useState } from "react";
-import api from "../../../services/api";
-import book from "../../../assets/book.png";
-import quiz from "../../../assets/quiz.png";
-
-import { LessonModel } from "services/api/out";
-import { useNavigate, useParams } from "react-router-dom";
+import styled from 'styled-components';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { LessonModel } from 'src/services/api/out';
+import api from 'src/services/api';
 
 interface LessonEditProps {
   lesson: LessonModel;
@@ -17,7 +14,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   const [description, setDescription] = useState(lesson.description);
   const isDirty = title !== lesson.title || description !== lesson.description;
 
-  let { id, sectionId, lessonId } = useParams();
+  const { id, sectionId, lessonId } = useParams();
 
   const navigate = useNavigate();
 
@@ -49,33 +46,22 @@ function LessonEdit(props: LessonEditProps): ReactElement {
         <InputsContainer>
           <InputTextContainer>
             Title
-            <InputField
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            <InputField type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </InputTextContainer>
           <InputTextContainer>
             Description
-            <TextArea
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <TextArea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
           </InputTextContainer>
         </InputsContainer>
-        {isDirty && (
-          <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>
-        )}
+        {isDirty && <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>}
       </EditBox>
       <SubContainer>
         <ButtonContainer>
-          <img alt="logo book" src={book} width="124" height="105" />
+          <img alt="logo book" src={'assets/book.png'} width="124" height="105" />
           Edit Lecture
         </ButtonContainer>
         <ButtonContainer onClick={handleEdit}>
-          <img alt="logo Quiz" src={quiz} width="100" height="100" />
+          <img alt="logo Quiz" src={'assets/quiz.png'} width="100" height="100" />
           Edit Quiz
         </ButtonContainer>
       </SubContainer>
@@ -98,7 +84,7 @@ const EditBox = styled.div`
   padding: 16px 48px 16px 48px;
   border-radius: 20px;
   background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 `;
 
 const InputField = styled.input`
@@ -155,7 +141,7 @@ const SubContainer = styled.a`
 const ButtonContainer = styled.a`
   border-radius: 20px;
   background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
   display: flex;
   flex-direction: column;

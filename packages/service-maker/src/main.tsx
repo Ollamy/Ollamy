@@ -1,61 +1,55 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import {
-  MutationCache,
-  QueryCache,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
-
-import HomePage from "./pages/Home";
-import { Login } from "./pages/Login";
-import ProfilePage from "./pages/Profile";
-import { Register } from "./pages/Register";
-import MakerHubPage from "./pages/maker/hub";
-import QuizEditor from "./pages/Quiz";
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from 'react-query';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
+import ReactDOM from 'react-dom/client';
+import Login from 'src/pages/Login';
+import React from 'react';
+import Register from 'src/pages/Register';
+import HomePage from 'src/pages/Home';
+import QuizEditor from 'src/pages/Quiz';
+import ProfilePage from 'src/pages/Profile';
+import MakerHubPage from 'src/pages/maker/hub';
 
 // Router
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Login />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/home",
+    path: '/home',
     element: <HomePage />,
   },
   {
-    path: "/quiz/:id/:sectionId/:lessonId",
+    path: '/quiz/:id/:sectionId/:lessonId',
     element: <QuizEditor />,
   },
   {
-    path: "/profile",
+    path: '/profile',
     element: <ProfilePage />,
   },
   {
-    path: "/course/:id",
+    path: '/course/:id',
     element: <MakerHubPage />,
   },
   {
-    path: "/course/:id/:sectionId",
+    path: '/course/:id/:sectionId',
     element: <MakerHubPage />,
   },
   {
-    path: "/course/:id/:sectionId",
+    path: '/course/:id/:sectionId',
     element: <MakerHubPage />,
   },
   {
-    path: "/course/:id/:sectionId/:lessonId",
+    path: '/course/:id/:sectionId/:lessonId',
     element: <MakerHubPage />,
   },
 ]);
@@ -68,7 +62,7 @@ export const queryClient = new QueryClient({
   mutationCache,
   defaultOptions: {
     queries: {
-      notifyOnChangeProps: ["data", "error", "isError", "isLoading"],
+      notifyOnChangeProps: ['data', 'error', 'isError', 'isLoading'],
     },
   },
 });
@@ -94,7 +88,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 // EntryPoint of the app
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <GlobalStyle />
     <QueryClientProvider client={queryClient}>

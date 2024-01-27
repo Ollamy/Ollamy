@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import api from "../../../../services/api";
-import { CourseModel } from "services/api/out";
-import CreateModal from "../../../../components/modal";
-import Dropdown from "../../../../components/dropdown";
-import LessonList from "./lessonList";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { ReactElement, useState } from 'react';
+import { CourseModel } from 'src/services/api/out';
+import api from 'src/services/api';
+import CreateModal from 'src/components/modal';
+import Dropdown from 'src/components/dropdown';
+import LessonList from 'src/pages/maker/hub/sideBarMenu/lessonList';
+import styled from 'styled-components';
 
 interface SideBarMenuProps {
   course: CourseModel;
@@ -19,27 +19,25 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
   const { course, sectionId, lessonId } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
-  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    sectionId ?? null,
-  );
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(sectionId ?? null);
 
   const { data: courseSections } = api.course.useCourseSection({
     id: course.id,
   });
   const handleClose = async () => {
     setIsOpen(false);
-    setTitle("");
-    setDescription("");
+    setTitle('');
+    setDescription('');
   };
 
   const handleSubmit = async () => {
     try {
-      if (title === "" || description === "") {
-        throw Error("Title and description need to be define");
+      if (title === '' || description === '') {
+        throw Error('Title and description need to be define');
       }
       await createSectionMutation({
         createSectionModel: { courseId: course.id, title, description },
@@ -61,31 +59,17 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onSubmit={handleSubmit}
-        onClose={handleClose}
-      >
-        <InputField
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <TextArea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        onClose={handleClose}>
+        <InputField type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextArea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
       </CreateModal>
       <TopBoxContainer>
         {course.title}
-        <SettingButton onClick={() => navigate("/home")}>
-          Settings
-        </SettingButton>
+        <SettingButton onClick={() => navigate('/home')}>Settings</SettingButton>
         <SectionContainer>
           <AddSectionContainer>
             Section
-            <AddSectionButton onClick={() => setIsOpen(true)}>
-              +
-            </AddSectionButton>
+            <AddSectionButton onClick={() => setIsOpen(true)}>+</AddSectionButton>
           </AddSectionContainer>
           <Dropdown
             options={
@@ -99,11 +83,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
           />
         </SectionContainer>
       </TopBoxContainer>
-      <LessonList
-        sectionId={selectedSectionId}
-        courseId={course.id}
-        lessonId={lessonId}
-      />
+      <LessonList sectionId={selectedSectionId} courseId={course.id} lessonId={lessonId} />
     </Container>
   );
 }
@@ -122,7 +102,7 @@ const Container = styled.div`
   padding: 8px;
   box-sizing: border-box;
 
-  border-radius: 0px 12px 12px 0px;
+  border-radius: 0 12px 12px 0;
   border: 1px solid #c7c7c7;
 `;
 

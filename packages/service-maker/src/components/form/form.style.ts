@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { FormMakerInterface } from './form.interface';
+import { FormMakerInterface } from 'src/components/form/form.interface';
 
 export const FormMakerStyled = styled.div<FormMakerInterface>`
   display: flex;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 
 interface TopBarProps {
   title: string;
@@ -30,7 +30,7 @@ const Container = styled.div`
   background: rgba(255, 255, 255, 0.8);
   box-shadow:
     rgba(0, 0, 0, 0.15) 0 0.5px 0,
-    rgba(0, 0, 0, 0.05) 0px -0.5px 0px inset;
+    rgba(0, 0, 0, 0.05) 0 -0.5px 0 inset;
 `;
 
 const Title = styled.h3`
@@ -51,7 +51,7 @@ const ProfilePicture = styled.a`
   background: rgb(136, 106, 246);
   box-shadow:
     rgba(0, 0, 0, 0.15) 0 0.5px 0,
-    rgba(0, 0, 0, 0.05) 0px -0.5px 0px inset;
+    rgba(0, 0, 0, 0.05) 0 -0.5px 0 inset;
   background: linear-gradient(
     118deg,
     rgba(136, 106, 246, 1) 0%,

@@ -1,27 +1,20 @@
-import styled from "styled-components";
-import { ReactElement, useCallback } from "react";
+import styled from 'styled-components';
+import { ReactElement, useCallback } from 'react';
 
-// eslint-disable-next-line
 interface RightProps {
-  typeSelected: "single" | "multiple" | "free";
+  typeSelected: 'single' | 'multiple' | 'free';
   setTypeSelected: any;
   doneStatus: boolean;
   setDoneStatus: any;
   quizData: any;
 }
 
-const Right = ({
-  typeSelected,
-  setTypeSelected,
-  setDoneStatus,
-  doneStatus,
-  quizData,
-}: RightProps): ReactElement => {
+const Right = ({ typeSelected, setTypeSelected, setDoneStatus, doneStatus, quizData }: RightProps): ReactElement => {
   const handleClickDoneButton = useCallback(() => {
     if (doneStatus) return;
 
-    setDoneStatus((old) => !old);
-    setTypeSelected("single");
+    setDoneStatus((old: any) => !old);
+    setTypeSelected('single');
   }, [doneStatus, setDoneStatus, setTypeSelected]);
 
   return (
@@ -46,10 +39,7 @@ const Right = ({
           {/*>*/}
           {/*  Multiple choice*/}
           {/*</QuestionTypeContainer>*/}
-          <QuestionTypeContainer
-            isSelected={typeSelected === "free"}
-            onClick={() => setTypeSelected("free")}
-          >
+          <QuestionTypeContainer isSelected={typeSelected === 'free'} onClick={() => setTypeSelected('free')}>
             Input
           </QuestionTypeContainer>
         </QuestionTypeParentContainer>
@@ -134,8 +124,7 @@ const QuestionTypeContainer = styled.div<QuestionTypeContainerProps>`
 
   cursor: pointer;
 
-  border: ${({ isSelected }) =>
-    isSelected ? "1px solid #876bf6" : "1px solid #d9d9d9"};
+  border: ${({ isSelected }) => (isSelected ? '1px solid #876bf6' : '1px solid #d9d9d9')};
 
   :hover {
     border: 1px solid #876bf6;

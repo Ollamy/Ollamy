@@ -19,7 +19,7 @@
       ".web",
       ""
     ],
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
       "@ollamy/design-system/*": ["../util-design-system/*"],
       "@ollamy/utils/*": ["../util-utils/*"],

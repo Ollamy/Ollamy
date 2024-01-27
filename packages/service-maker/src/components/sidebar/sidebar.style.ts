@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { SideBarMakerInterface } from './sidebar.interface';
+import { SideBarMakerInterface } from 'src/components/sidebar/sidebar.interface';
 
 const SideBarBaseWidth = '40%';
 const SideBarBaseBackgroundColor = 'linear-gradient(90deg, #E6674F 0%, #EB9281 100%);';
