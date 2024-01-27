@@ -2,13 +2,13 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from 'rea
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import ReactDOM from 'react-dom/client';
-import Login from 'src/pages/Login';
 import React from 'react';
-import Register from 'src/pages/Register';
 import HomePage from 'src/pages/Home';
 import QuizEditor from 'src/pages/Quiz';
 import ProfilePage from 'src/pages/Profile';
 import MakerHubPage from 'src/pages/maker/hub';
+import Login from 'src/pages/Login';
+import Register from 'src/pages/Register';
 
 // Router
 const router = createBrowserRouter([
