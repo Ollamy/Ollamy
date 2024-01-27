@@ -208,10 +208,16 @@ export class UserService {
       });
       return {
         courses: courses.map((course) => {
+          const { last_lesson_id, last_section_id } = userDb.UsertoCourse.find(
+            (c) => c.course_id === course.id,
+          );
+
           const isOwner = course.owner_id === ctx.__user.id;
           delete course.owner_id;
           return {
             ...course,
+            last_lesson_id,
+            last_section_id,
             owner: isOwner,
           };
         }),
