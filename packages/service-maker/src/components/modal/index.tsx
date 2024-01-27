@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 interface CreateModalProps {
   title?: string;
@@ -12,13 +12,7 @@ interface CreateModalProps {
   children: any;
 }
 
-const CreateModal = ({
-  onClose,
-  onSubmit,
-  isOpen,
-  title: modalTitle,
-  children,
-}: CreateModalProps) => {
+const CreateModal = ({ onClose, onSubmit, isOpen, title: modalTitle, children }: CreateModalProps) => {
   return (
     <>
       <ModalWrapper isOpen={isOpen}>
@@ -36,7 +30,7 @@ const CreateModal = ({
 };
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
   position: fixed;
   top: 45%;
   left: 45%;
@@ -46,7 +40,7 @@ const ModalContent = styled.div`
   transform: translate(-50%, -50%);
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   padding: 20px;
 `;
 

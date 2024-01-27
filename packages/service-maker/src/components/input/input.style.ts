@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { InputMakerInterface } from './input.interface';
+import { InputMakerInterface } from 'src/components/input/input.interface';
 
 const BaseBorderInputColorMaker = '#876BF6';
 
@@ -10,5 +10,5 @@ export const MakerInputStyled = styled.input<InputMakerInterface>`
   border: 2px solid ${BaseBorderInputColorMaker};
   border-radius: 8px;
   box-shadow: 2px 2px 4px rgba(135, 107, 246, 0.5);
-  margin: ${(props) => (props.margin ? props.margin : '0px 0px 0px 0px')};
+  margin: ${(props) => (props.margin ? props.margin : '0 0 0 0')};
 `;

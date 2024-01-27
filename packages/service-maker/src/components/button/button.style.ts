@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
-
-import type { ButtonMakerInterface } from './button.interface';
+import { ButtonMakerInterface } from 'src/components/button/button.interface';
 
 const ButtonMakerBaseBackgroundColor = 'linear-gradient(180deg, #EA978B 0%, #EF644A 100%)';
 

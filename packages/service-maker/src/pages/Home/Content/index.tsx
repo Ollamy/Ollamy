@@ -1,15 +1,7 @@
-import styled from "styled-components";
-import {
-  ReactElement,
-  useState,
-  useCallback,
-  ChangeEvent,
-  useEffect,
-} from "react";
-import api from "../../../services/api";
-import { useNavigate } from "react-router-dom";
-
-interface DashboardContentProps {}
+import styled from 'styled-components';
+import { ReactElement, useState, useCallback, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from 'src/services/api';
 
 interface FormState {
   title: string;
@@ -18,12 +10,12 @@ interface FormState {
 }
 
 const initialFormState: FormState = {
-  title: "",
-  description: "",
-  color: "#E6674F",
+  title: '',
+  description: '',
+  color: '#E6674F',
 };
 
-const DashboardContent = ({}: DashboardContentProps): ReactElement => {
+const DashboardContent = (): ReactElement => {
   const navigate = useNavigate();
 
   const [currentColor, setCurrentColor] = useState(0);
@@ -34,7 +26,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
 
   const [formData, setFormData] = useState<FormState>(initialFormState);
 
-  const colorsChoice = ["#E6674F", "#876BF6", "#F195A4"];
+  const colorsChoice = ['#E6674F', '#876BF6', '#F195A4'];
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,7 +42,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
 
   const handleChangeColor = useCallback(() => {
     setCurrentColor((old) => (old + 1) % colorsChoice.length);
-  }, []);
+  }, [colorsChoice.length]);
 
   const handleSubmit = useCallback(
     async (e: any) => {
@@ -71,7 +63,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
         // pop up error
       }
     },
-    [currentColor, formData],
+    [createCourseMutation, formData.color, formData.description, formData.title],
   );
 
   const handleReset = useCallback((e: any) => {
@@ -93,31 +85,28 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
             <NewCourseMenu>
               <MenuTitle>Create New Course</MenuTitle>
               <CouseColorContainer>
-                <CourseColor
-                  onClick={handleChangeColor}
-                  currentColor={colorsChoice[currentColor]}
-                >
-                  <Image src={"public/sparkles-outline.svg"} />
+                <CourseColor onClick={handleChangeColor} currentColor={colorsChoice[currentColor]}>
+                  <Image src={'public/sparkles-outline.svg'} />
                 </CourseColor>
               </CouseColorContainer>
               <Form onReset={handleReset} onSubmit={handleSubmit}>
                 <Input
                   required
-                  name={"title"}
+                  name={'title'}
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder={"Course Title"}
+                  placeholder={'Course Title'}
                 />
                 <Input
                   required
-                  name={"description"}
+                  name={'description'}
                   onChange={handleChange}
                   value={formData.description}
-                  placeholder={"Course Description"}
+                  placeholder={'Course Description'}
                 />
                 <ButtonContainer>
-                  <CancelButton type={"reset"}>Cancel</CancelButton>
-                  <CreateButton type={"submit"}>Create</CreateButton>
+                  <CancelButton type={'reset'}>Cancel</CancelButton>
+                  <CreateButton type={'submit'}>Create</CreateButton>
                 </ButtonContainer>
               </Form>
             </NewCourseMenu>
@@ -135,7 +124,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
                   <CourseDescription>{course.description}</CourseDescription>
                 </TextContainer>
                 <EditImage
-                  src={"public/create-outline.svg"}
+                  src={'public/create-outline.svg'}
                   onClick={() => {
                     navigate(`/course/${course.id}`);
                   }}
@@ -213,9 +202,9 @@ const NewCourseMenu = styled.div`
   padding: 24px;
   box-sizing: border-box;
 
-  border-radius: 23.238px;
+  border-radius: 23px;
   background: #fff;
-  box-shadow: 0 11.61887px 124.28px 0 rgba(37, 72, 153, 0.17);
+  box-shadow: 0 12px 124px 0 rgba(37, 72, 153, 0.17);
 
   cursor: auto;
   z-index: 100;
@@ -318,10 +307,10 @@ const CancelButton = styled.button`
   font-family:
     Work Sans,
     sans-serif;
-  font-size: 18.482px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 31.683px; /* 171.429% */
+  line-height: 32px;
   cursor: pointer;
 `;
 
@@ -333,15 +322,15 @@ const CreateButton = styled.button`
   background: #5f65f6;
   border: none;
 
-  color: var(--white-white-100-high-emphasys, #fff);
+  color: #fff;
   text-align: center;
   font-family:
     Work Sans,
     sans-serif;
-  font-size: 18.482px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 31.683px; /* 171.429% */
+  line-height: 32px; /* 171.429% */
   cursor: pointer;
 `;
 

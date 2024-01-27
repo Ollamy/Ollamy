@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import api from "../../../services/api";
-import { SectionModel } from "services/api/out";
+import styled from 'styled-components';
+import { ReactElement, useEffect, useState } from 'react';
+import { SectionModel } from 'src/services/api/out';
+import api from 'src/services/api';
 
 interface SectionEditProps {
   section: SectionModel;
@@ -11,8 +11,7 @@ function SectionEdit(props: SectionEditProps): ReactElement {
   const { section } = props;
   const [title, setTitle] = useState(section.title);
   const [description, setDescription] = useState(section.description);
-  const isDirty =
-    title !== section.title || description !== section.description;
+  const isDirty = title !== section.title || description !== section.description;
 
   useEffect(() => {
     setTitle(section.title);
@@ -37,25 +36,14 @@ function SectionEdit(props: SectionEditProps): ReactElement {
       <InputsContainer>
         <InputTextContainer>
           Title
-          <InputField
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <InputField type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
         </InputTextContainer>
         <InputTextContainer>
           Description
-          <TextArea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <TextArea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
         </InputTextContainer>
       </InputsContainer>
-      {isDirty && (
-        <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>
-      )}
+      {isDirty && <UpdateButton onClick={() => onSubmit()}>Update</UpdateButton>}
     </Container>
   );
 }
@@ -68,7 +56,7 @@ const Container = styled.div`
   padding: 16px 48px 16px 48px;
   border-radius: 20px;
   background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 `;
 
 const InputField = styled.input`

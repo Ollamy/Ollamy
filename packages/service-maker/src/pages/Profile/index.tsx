@@ -1,10 +1,8 @@
 import { ReactElement, useCallback, useState, ChangeEvent } from 'react';
-import TopBar from '../../components/TopBar';
 import styled from 'styled-components';
+import TopBar from 'src/components/TopBar';
 
-interface ProfilePageProps {}
-
-const ProfilePage = ({}: ProfilePageProps): ReactElement => {
+const ProfilePage = (): ReactElement => {
   const [editMode, setEditMode] = useState(false);
 
   const [email, setEmail] = useState('nicolas.heude@epitech.eu');

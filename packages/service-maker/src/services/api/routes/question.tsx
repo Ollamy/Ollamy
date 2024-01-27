@@ -1,16 +1,12 @@
-import { UseQueryOptions, useMutation, useQuery } from "react-query";
+import { UseQueryOptions, useMutation, useQuery } from 'react-query';
+import { queryClient } from 'src/main';
+import { GetQuestionRequest, QuestionApi, QuestionModel } from 'src/services/api/out';
+import { GET_SECTION_LESSONS_KEY } from 'src/services/api/routes/section';
 
-import { queryClient } from "../../../main";
-import { GetQuestionRequest, QuestionApi, QuestionModel } from "../out";
-import { GET_SECTION_LESSONS_KEY } from "./section";
-
-const GET_LESSON_KEY = "getQuestion";
+const GET_LESSON_KEY = 'getQuestion';
 
 export const questionActions = {
-  useQuestion: (
-    requestParameters: GetQuestionRequest,
-    config?: UseQueryOptions<QuestionModel>,
-  ) =>
+  useQuestion: (requestParameters: GetQuestionRequest, config?: UseQueryOptions<QuestionModel>) =>
     useQuery({
       queryKey: [GET_LESSON_KEY, requestParameters.id],
       queryFn: () => QuestionApi.getQuestion(requestParameters),

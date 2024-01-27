@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import DashboardContent from "./Content";
-import { ReactElement, useEffect } from "react";
-import TopBar from "../../components/TopBar";
-import api from "../../services/api";
-import { DefaultApi } from "../../services/api/out";
+import styled from 'styled-components';
+import React, { ReactElement, useEffect } from 'react';
+import api from 'src/services/api';
+import { DefaultApi } from 'src/services/api/out';
+import TopBar from 'src/components/TopBar';
+import DashboardContent from 'src/pages/Home/Content';
 
 function HomePage(): ReactElement {
   const { data } = api.user.useUser();
@@ -14,7 +14,7 @@ function HomePage(): ReactElement {
 
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
+      <TopBar title={'Ollamy Maker'} />
       {data && (
         <span>
           Hello {data.firstname} {data.lastname}

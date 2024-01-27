@@ -1,13 +1,12 @@
-import styled from "styled-components";
-import { ReactElement, useCallback, useEffect, useState } from "react";
-import api from "../../../services/api";
-import { useParams } from "react-router-dom";
+import styled from 'styled-components';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import api from 'src/services/api';
+import { useParams } from 'react-router-dom';
 
-// eslint-disable-next-line
 interface ContentProps {
   doneStatus: boolean;
   setQuizData: any;
-  typeSelected: "single" | "multiple" | "free";
+  typeSelected: 'single' | 'multiple' | 'free';
   setDoneStatus: any;
   currentEditedQuestionId: string;
 }
@@ -24,8 +23,8 @@ const Content = ({
   const { mutateAsync: updateQuestion } = api.question.useUpdateQuestion();
   const { mutateAsync: createAnswer } = api.answer.useCreateAnswer();
 
-  const [questionValue, setQuestionValue] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [questionValue, setQuestionValue] = useState('');
+  const [answer, setAnswer] = useState('');
 
   const { lessonId } = useParams();
 
@@ -40,19 +39,20 @@ const Content = ({
             setAnswer(rr.data);
           })
           .catch(() => {
-            setAnswer("");
+            setAnswer('');
           });
       });
     };
 
     getQ();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentEditedQuestionId, getQuestion]);
 
-  const handleChangeQuestionValue = useCallback((e) => {
+  const handleChangeQuestionValue = useCallback((e: any) => {
     setQuestionValue(e.target.value);
   }, []);
 
-  const handleChangeAnswer = useCallback((e) => {
+  const handleChangeAnswer = useCallback((e: any) => {
     setAnswer(e.target.value);
   }, []);
 
@@ -67,7 +67,7 @@ const Content = ({
           createAnswerModel: {
             questionId: currentEditedQuestionId,
             data: answer,
-            picture: "",
+            picture: '',
           },
         }).then((r) => {
           updateQuestion({
@@ -75,9 +75,9 @@ const Content = ({
             updateQuestionModel: {
               lessonId,
               title: questionValue,
-              description: "test",
-              difficulty: "BEGINNER",
-              picture: "",
+              description: 'test',
+              difficulty: 'BEGINNER',
+              picture: '',
               points: 0,
               trustAnswerId: r.id,
             },
@@ -87,25 +87,22 @@ const Content = ({
       update();
       setDoneStatus(false);
     } else {
-      setQuestionValue("");
-      setAnswer("");
+      setQuestionValue('');
+      setAnswer('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doneStatus, setQuizData]);
 
   return (
     <Container>
       <InputQuestion
-        placeholder={"Write your question here..."}
+        placeholder={'Write your question here...'}
         value={questionValue}
         onChange={handleChangeQuestionValue}
       />
       <TitleCorrect>Correct Answer</TitleCorrect>
-      {typeSelected === "free" && (
-        <InputQuestion
-          value={answer}
-          onChange={handleChangeAnswer}
-          placeholder={"The expected response"}
-        />
+      {typeSelected === 'free' && (
+        <InputQuestion value={answer} onChange={handleChangeAnswer} placeholder={'The expected response'} />
       )}
     </Container>
   );
