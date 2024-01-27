@@ -1,5 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+// eslint-disable-next-line max-classes-per-file
 import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CourseModel {
   @ApiProperty()
@@ -21,14 +23,18 @@ export class CourseModel {
   @ApiProperty()
   @IsString()
   picture: string;
+}
+
+export class GetCourseRequest extends CourseModel {
+  @ApiProperty()
+  @IsUUID()
+  @IsOptional()
+  lastLessonId?: string;
 
   @ApiProperty()
   @IsUUID()
-  lastLessonId: string;
-
-  @ApiProperty()
-  @IsUUID()
-  lastSectionId: string;
+  @IsOptional()
+  lastSectionId?: string;
 }
 
 export class CreateCourseModel {

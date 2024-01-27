@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
-  CourseModel,
   CreateCourseModel,
   IdCourseModel,
   UpdateCourseModel,
   CourseIdResponse,
   CourseTrueResponse,
+  GetCourseRequest,
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
@@ -76,40 +76,18 @@ export class CourseService {
     }
   }
 
-  async getLastLessonId(user_id: string): Promise<string | null> {
-    const lastLesson = await prisma.usertoLesson.findFirst({
-      where: {
-        user_id: user_id,
-      },
-      orderBy: {
-        created_at: 'desc',
-      },
-      select: {
-        lesson_id: true,
-      },
-    });
-
-    return lastLesson ? lastLesson.lesson_id : null;
-  }
-
-  async getSectionIdFromLastLesson(last_lesson_id: string): Promise<string | null> {
-    const lastLesson = await prisma.lesson.findUnique({
-      where: {
-        id: last_lesson_id,
-      },
-      select: {
-        section_id: true,
-      },
-    });
-
-    return lastLesson ? lastLesson.section_id : null;
-  }
-
-  async getCourse(CourseId: string): Promise<CourseModel> {
+  async getCourse(courseId: string, ctx: any): Promise<GetCourseRequest> {
     try {
       const courseDb: Course = await prisma.course.findFirst({
         where: {
-          id: CourseId,
+          id: courseId,
+        },
+      });
+
+      const userToCourse = await prisma.usertoCourse.findFirst({
+        where: {
+          user_id: ctx.__user.id,
+          course_id: courseId,
         },
       });
 
@@ -117,9 +95,6 @@ export class CourseService {
         Logger.error('Course does not exists !');
         throw new ConflictException('Course does not exists !');
       }
-
-      const lastLessonId = await this.getLastLessonId(courseDb.owner_id);
-      const lastSectionId = lastLessonId ? await this.getSectionIdFromLastLesson(lastLessonId) : null;
 
       return {
         id: courseDb.id,
@@ -129,9 +104,9 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        lastLessonId: lastLessonId,
-        lastSectionId: lastSectionId,
-      } as CourseModel;
+        lastLessonId: userToCourse?.last_lesson_id,
+        lastSectionId: userToCourse?.last_section_id,
+      };
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course does not exists !');
