@@ -272,6 +272,8 @@ describe('getCourse', () => {
       picture: mockPictureDb.picture,
       title: mockCourseDb.title,
       description: mockCourseDb.description,
+      lastLessonId: '123',
+      lastSectionId: '456',
     };
     expect(result).toEqual(expectedCourseModel);
   });
