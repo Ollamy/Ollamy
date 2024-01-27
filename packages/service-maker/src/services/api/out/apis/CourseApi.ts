@@ -4,9 +4,9 @@
 import * as runtime from '../runtime';
 import type {
   CourseIdResponse,
-  CourseModel,
   CourseTrueResponse,
   CreateCourseModel,
+  GetCourseRequest,
   IdCourseModel,
   SectionModel,
   UpdateCourseModel,
@@ -20,7 +20,7 @@ export interface DeleteCourseRequest {
     idCourseModel: IdCourseModel;
 }
 
-export interface GetCourseRequest {
+export interface GetCourseOperationRequest {
     id: string;
 }
 
@@ -100,7 +100,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCourseRaw(requestParameters: GetCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseModel> {
+    async getCourseRaw(requestParameters: GetCourseOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCourseRequest> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCourse.');
         }
@@ -121,7 +121,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static getCourse(requestParameters: GetCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseModel> {
+    static getCourse(requestParameters: GetCourseOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCourseRequest> {
         return localCourseApi.getCourseRaw(requestParameters, initOverrides);
     }
 

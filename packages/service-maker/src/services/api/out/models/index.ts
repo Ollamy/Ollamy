@@ -60,55 +60,6 @@ export interface CourseIdResponse {
 /**
  * 
  * @export
- * @interface CourseModel
- */
-export interface CourseModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    ownerId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    picture: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    lastLessonId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    lastSectionId: string;
-}
-/**
- * 
- * @export
  * @interface CourseTrueResponse
  */
 export interface CourseTrueResponse {
@@ -329,6 +280,55 @@ export interface CreateUserModel {
      * @memberof CreateUserModel
      */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetCourseRequest
+ */
+export interface GetCourseRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    ownerId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    picture: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    lastLessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    lastSectionId: string;
 }
 /**
  * 
