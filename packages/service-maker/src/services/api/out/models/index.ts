@@ -60,43 +60,6 @@ export interface CourseIdResponse {
 /**
  * 
  * @export
- * @interface CourseModel
- */
-export interface CourseModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    ownerId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseModel
-     */
-    picture: string;
-}
-/**
- * 
- * @export
  * @interface CourseTrueResponse
  */
 export interface CourseTrueResponse {
@@ -156,6 +119,25 @@ export interface CreateCourseModel {
      * @memberof CreateCourseModel
      */
     picture: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateLectureModel
+ */
+export interface CreateLectureModel {
+    /**
+     * Lesson ID
+     * @type {string}
+     * @memberof CreateLectureModel
+     */
+    lessonId: string;
+    /**
+     * Lecture data
+     * @type {string}
+     * @memberof CreateLectureModel
+     */
+    data: string;
 }
 /**
  * 
@@ -236,6 +218,12 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    order: number;
 }
 /**
  * 
@@ -296,6 +284,55 @@ export interface CreateUserModel {
 /**
  * 
  * @export
+ * @interface GetCourseRequest
+ */
+export interface GetCourseRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    ownerId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    picture: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    lastLessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    lastSectionId: string;
+}
+/**
+ * 
+ * @export
  * @interface GetUserModel
  */
 export interface GetUserModel {
@@ -341,6 +378,19 @@ export interface IdCourseModel {
      * 
      * @type {string}
      * @memberof IdCourseModel
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface IdLectureModel
+ */
+export interface IdLectureModel {
+    /**
+     * ID of the lecture
+     * @type {string}
+     * @memberof IdLectureModel
      */
     id: string;
 }
@@ -395,6 +445,38 @@ export interface JoinLessonModel {
      * @memberof JoinLessonModel
      */
     userId: string;
+}
+/**
+ * 
+ * @export
+ * @interface LectureIdResponse
+ */
+export interface LectureIdResponse {
+    /**
+     * ID of the created/updated lecture
+     * @type {string}
+     * @memberof LectureIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface LectureModel
+ */
+export interface LectureModel {
+    /**
+     * Lesson ID
+     * @type {string}
+     * @memberof LectureModel
+     */
+    lessonId: string;
+    /**
+     * Lecture data
+     * @type {string}
+     * @memberof LectureModel
+     */
+    data: string;
 }
 /**
  * 
@@ -532,6 +614,12 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     difficulty: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof QuestionModel
+     */
+    order: number;
 }
 /**
  * 
@@ -636,6 +724,25 @@ export interface UpdateCourseModel {
 /**
  * 
  * @export
+ * @interface UpdateLectureModel
+ */
+export interface UpdateLectureModel {
+    /**
+     * Lesson ID
+     * @type {string}
+     * @memberof UpdateLectureModel
+     */
+    lessonId: string;
+    /**
+     * Updated lecture data
+     * @type {string}
+     * @memberof UpdateLectureModel
+     */
+    data: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateQuestionModel
  */
 export interface UpdateQuestionModel {
@@ -681,6 +788,25 @@ export interface UpdateQuestionModel {
      * @memberof UpdateQuestionModel
      */
     trustAnswerId: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateQuestionOrderModel
+ */
+export interface UpdateQuestionOrderModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    origin: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    dest: string;
 }
 /**
  * 
@@ -741,6 +867,19 @@ export interface UpdateUserModel {
 /**
  * 
  * @export
+ * @interface UserCoursesResponse
+ */
+export interface UserCoursesResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserCoursesResponse
+     */
+    courses: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UserIdResponse
  */
 export interface UserIdResponse {
@@ -763,4 +902,54 @@ export interface UserTrueResponse {
      * @memberof UserTrueResponse
      */
     success: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerModel
+ */
+export interface ValidateAnswerModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    answerId: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAnswerResponse
+ */
+export interface ValidateAnswerResponse {
+    /**
+     * Boolean if the answer is true or false
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    success: boolean;
+    /**
+     * true answer id
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    answer: string;
+    /**
+     * Boolean if it is the last question or not
+     * @type {boolean}
+     * @memberof ValidateAnswerResponse
+     */
+    end: boolean;
+    /**
+     * Id of the next question if it is not the last one
+     * @type {string}
+     * @memberof ValidateAnswerResponse
+     */
+    nextQuestionId: string;
 }

@@ -6,6 +6,7 @@ import {
   Get,
   Put,
   Param,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -22,6 +23,7 @@ import {
   UpdateCourseModel,
   CourseTrueResponse,
   CourseIdResponse,
+  GetCourseRequest,
 } from 'course/course.dto';
 import { SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -83,7 +85,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: 'course content response',
-    type: CourseModel,
+    type: GetCourseRequest,
   })
   @ApiParam({
     name: 'id',
@@ -92,8 +94,11 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getCourse(@Param('id') id: string): Promise<CourseModel> {
-    return this.courseService.getCourse(id);
+  async getCourse(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<CourseModel> {
+    return this.courseService.getCourse(id, ctx);
   }
 
   @ApiOkResponse({

@@ -267,7 +267,11 @@ describe('updateSection', () => {
       where: {
         id: mockSectionId,
       },
-      data: mockSectionData,
+      data: {
+        title: 'Updated Section Title',
+        description: 'Updated Section Description',
+        course_id: '456',
+      },
     });
 
     expect(result).toStrictEqual({id: mockSectionId});
