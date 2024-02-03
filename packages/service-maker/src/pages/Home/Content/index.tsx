@@ -1,8 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+// eslint-disable-next-line import/no-cycle
+import api from "../../../services/api";
 
 interface FormState {
   title: string;
@@ -16,7 +19,9 @@ const initialFormState: FormState = {
   color: "#E6674F",
 };
 
-const DashboardContent = (): ReactElement => {
+function DashboardContent(): ReactElement {
+  const navigate = useNavigate();
+
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
@@ -47,7 +52,7 @@ const DashboardContent = (): ReactElement => {
 
   const handleSubmit = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (e: any) => {
+    async (e: any) => {
       e.preventDefault();
 
       try {
@@ -65,7 +70,7 @@ const DashboardContent = (): ReactElement => {
         // pop up error
       }
     },
-    [colorsChoice, currentColor, formData]
+    [createCourseMutation, formData.color, formData.description, formData.title]
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -119,22 +124,22 @@ const DashboardContent = (): ReactElement => {
         </AddButton>
       </CoursesTopBar>
       <CoursesContainer>
-        {coursesList.map((course, index) => (
-          <CoursesBox key={`${course.title}-${index}`}>
-            <CourseLogo color={course.color} />
-            <TextContainer>
-              <CourseTitle>{course.title}</CourseTitle>
-              <CourseDescription>{course.description}</CourseDescription>
-            </TextContainer>
-            <EditImage
-              src="public/create-outline.svg"
-              onClick={() => {
-                // eslint-disable-next-line no-alert
-                alert(`Try to access to ${course.title}`);
-              }}
-            />
-          </CoursesBox>
-        ))}
+        {coursesList &&
+          coursesList.courses.map((course: any, index) => (
+            <CoursesBox key={`${course.title}-${index}`}>
+              <CourseLogo color="#E6674F" />
+              <TextContainer>
+                <CourseTitle>{course.title}</CourseTitle>
+                <CourseDescription>{course.description}</CourseDescription>
+              </TextContainer>
+              <EditImage
+                src="public/create-outline.svg"
+                onClick={() => {
+                  navigate(`/course/${course.id}`);
+                }}
+              />
+            </CoursesBox>
+          ))}
       </CoursesContainer>
     </Container>
   );

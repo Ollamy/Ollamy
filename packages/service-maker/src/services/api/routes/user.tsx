@@ -1,8 +1,9 @@
 import type { UseQueryOptions } from "react-query";
 import { useMutation, useQuery } from "react-query";
 
+// eslint-disable-next-line import/no-cycle
 import { queryClient } from "../../../main";
-import type { GetUserModel } from "../out";
+import type { GetUserModel, UserCoursesResponse } from "../out";
 import { UserApi } from "../out";
 
 export const GET_USER_KEY = "getUser";
