@@ -1,5 +1,5 @@
 import { api } from 'src/services/api';
-import { GetUserResponse } from 'src/services/user/user.dto';
+import { GetUserCoursesResponse, GetUserResponse } from 'src/services/user/user.dto';
 
 export const userApi = api.injectEndpoints({
 	endpoints: (build) => ({
@@ -10,7 +10,14 @@ export const userApi = api.injectEndpoints({
 			}),
 			providesTags: ['User'],
 		}),
+		getUserCourses: build.query<GetUserCoursesResponse, void>({
+			query: () => ({
+				url: '/user/courses',
+				method: 'GET',
+			}),
+			providesTags: ['Course'],
+		}),
 	}),
 });
 
-export const { useGetUserQuery } = userApi;
+export const { useGetUserQuery, useGetUserCoursesQuery } = userApi;

@@ -1,5 +1,5 @@
 import { Heading, Input, ScrollView, Text, VStack } from 'native-base';
-import { useGetUserQuery } from 'src/services/user/user';
+import { useGetUserCoursesQuery } from 'src/services/user/user';
 import { useMemo, useState } from 'react';
 import { CourseInfo } from 'src/services/course/course.dto';
 import CourseRowButton from 'src/components/buttons/CourseRowButton';
@@ -24,6 +24,8 @@ const COURSE_DATA: CourseInfo[] = [
 
 function Home() {
 	const [inputValue, setInputValue] = useState<string>('');
+
+	const { data, isFetching } = useGetUserCoursesQuery();
 
 	const filteredCourseData = useMemo(() => {
 		return COURSE_DATA.filter((c) => c.title.toLowerCase().includes(inputValue.toLowerCase()));

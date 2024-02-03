@@ -1,6 +1,6 @@
 import { ScrollView, VStack } from 'native-base';
 import { useParams } from 'react-router-native';
-import { LessonStatus, STATUS_COLORS } from 'src/components/VerticalProgressBar';
+import { LessonStatus } from 'src/components/VerticalProgressBar';
 import SectionHeader from 'src/components/SectionHeader';
 import LessonListItem from 'src/components/LessonListItem';
 
