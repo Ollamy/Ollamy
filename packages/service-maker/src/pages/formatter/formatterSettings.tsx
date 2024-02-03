@@ -38,7 +38,7 @@ export function ProfilePage(): ReactElement {
             />
             <RightContainerSetting $width="100%">
               <Title>Subcriptions</Title>
-              <Title>90,420</Title>
+              <Test>90,420</Test>
             </RightContainerSetting>
           </RightContainerTopCourseSettings>
         </RightContainerCourseSettings>
@@ -98,4 +98,15 @@ const Container = styled.div`
 const Title = styled.h2`
   margin: 0;
   color: #556080;
+`;
+
+const Test = styled.h2`
+  display: flex;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-top: 60px;
+  color: #556080;
+  height: 100%;
+  width: 100%;
 `;

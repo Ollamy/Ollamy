@@ -5,7 +5,7 @@ import type { InputMakerInterface } from "./input.interface";
 const BaseBorderInputColorMaker = "#876BF6";
 
 export const MakerInputStyled = styled.input<InputMakerInterface>`
-  padding: 12px;
+  padding: ${(props) => (props.padding ? props.padding : "12px")};
   height: 30px;
   width: 480px;
   border: 2px solid ${BaseBorderInputColorMaker};

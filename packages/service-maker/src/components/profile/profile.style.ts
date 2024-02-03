@@ -8,7 +8,6 @@ export const RightContainerSetting = styled.div<{ $width: string }>`
   width: ${(props) => props.$width};
   border-radius: 8px;
   height: 340px;
-  margin: 24px;
   padding: 12px;
   gap: 40px;
   background-color: #ffffff;

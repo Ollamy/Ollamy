@@ -62,10 +62,11 @@ export function Login(): React.ReactNode {
           Login
         </h1>
         <label htmlFor="email">Email</label>
-        <InputMaker register={{ ...register("email") }} />
+        <InputMaker register={{ ...register("email") }} padding="20px" />
         <label htmlFor="password">Password</label>
         <InputMaker
           type="password"
+          padding="20px"
           margin="0px 0px 20px 0px"
           register={{ ...register("password") }}
         />

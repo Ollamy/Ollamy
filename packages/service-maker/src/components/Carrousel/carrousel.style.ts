@@ -27,7 +27,6 @@ export const ContainerWidth = styled.div<{ $width: string }>`
 export const ContainerPlacement = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   flex: 1;

@@ -34,6 +34,7 @@ export const NewCourseButton = styled.button`
 `;
 
 export const UploadPictureButton = styled(NewCourseButton)`
+  margin-top: 10px;
   height: 3rem;
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 0.5rem;

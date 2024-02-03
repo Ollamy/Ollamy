@@ -78,10 +78,12 @@ export function Register(): React.ReactNode {
           <>
             <label htmlFor="firstName">First name</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("firstname", { required: true }) }}
             />
             <label htmlFor="lastName">Last name</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("lastname", { required: true }) }}
             />
             <ButtonMaker
@@ -94,20 +96,24 @@ export function Register(): React.ReactNode {
           <>
             <label htmlFor="email">Email</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("email", { required: true }) }}
             />
             <label htmlFor="password">Password</label>
             <InputMaker
               type="password"
+              padding="24px"
               register={{ ...register("password", { required: true }) }}
             />
             <label htmlFor="ConfirmPassword">Confirm Password</label>
             <InputMaker
               type="password"
+              padding="24px"
               errorMessage={errors.rePassword && errors.rePassword.message}
               register={{
                 ...register("rePassword", {
                   required: true,
+                  // eslint-disable-next-line consistent-return
                   validate: (val: string) => {
                     if (watch("password") !== val) {
                       return "Your passwords do no match";
