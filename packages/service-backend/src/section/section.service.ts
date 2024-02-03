@@ -95,7 +95,11 @@ export class SectionService {
         where: {
           id: SectionId,
         },
-        data: sectionData,
+        data: {
+          course_id: sectionData.courseId,
+          title: sectionData.title,
+          description: sectionData.description,
+        },
       });
 
       if (!sectionDb) {

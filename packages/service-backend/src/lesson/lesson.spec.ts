@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Lesson, Question, QuestionDifficulty } from '@prisma/client';
+import { Lesson, Question, QuestionDifficulty, UsertoLesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from './lesson.service';
@@ -33,10 +33,17 @@ describe('postLesson', () => {
       title: mockLessonData.title,
       description: mockLessonData.description,
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
+    jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue({} as UsertoLesson);
 
     // Invoke the function being tested
-    const result = await lessonService.postLesson(mockLessonData);
+    const result = await lessonService.postLesson(mockLessonData, mockContext);
 
     // Perform assertions
     expect(prisma.lesson.create).toHaveBeenCalledTimes(1);
@@ -55,8 +62,14 @@ describe('postLesson', () => {
       title: 'lesson',
       description: 'desc',
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
 
-    await expect(lessonService.postLesson(mockLessonData)).rejects.toThrow(
+    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -71,8 +84,14 @@ describe('postLesson', () => {
       title: 'lesson',
       description: 'desc',
     };
+    const mockUserId = '123';
+    const mockContext = {
+      __user: {
+        id: mockUserId,
+      },
+    };
 
-    await expect(lessonService.postLesson(mockLessonData)).rejects.toThrow(
+    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -111,7 +130,7 @@ describe('deleteLesson', () => {
       where: mockLessonData,
     });
 
-    expect(result).toStrictEqual({ id: mockLessonData.id});
+    expect(result).toStrictEqual({ id: mockLessonData.id });
   });
 
   it('should throw NotFoundException if the lesson does not exist', async () => {
@@ -218,7 +237,6 @@ describe('updateLesson', () => {
     const mockLessonData: UpdateLessonModel = {
       title: 'Updated Lesson Title',
       description: 'Updated Lesson Description',
-      sectionId: '1',
     };
     const mockUpdatedLesson: Lesson = {
       id: mockLessonId,
@@ -302,6 +320,7 @@ describe('getLessonQuestions', () => {
         difficulty: QuestionDifficulty.BEGINNER,
         picture_id: '1',
         points: 1,
+        order: 0,
         // other question properties
       },
       {
@@ -315,6 +334,7 @@ describe('getLessonQuestions', () => {
         difficulty: QuestionDifficulty.ADVANCED,
         picture_id: '2',
         points: 2,
+        order: 1,
         // other question properties
       },
       // other questions
@@ -329,6 +349,11 @@ describe('getLessonQuestions', () => {
     // Perform assertions
     expect(prisma.question.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.question.findMany).toHaveBeenCalledWith({
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
       where: { lesson_id: mockLessonId },
     });
 
@@ -344,6 +369,7 @@ describe('getLessonQuestions', () => {
         difficulty: question.difficulty,
         picture_id: question.picture_id,
         points: question.points,
+        order: question.order,
       }),
     );
 

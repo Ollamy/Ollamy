@@ -3,6 +3,7 @@ import type { ChangeEvent, ReactElement } from "react";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
+
 interface FormState {
   title: string;
   description: string;
@@ -15,11 +16,13 @@ const initialFormState: FormState = {
   color: "#E6674F",
 };
 
-function DashboardContent(): ReactElement {
+const DashboardContent = (): ReactElement => {
   const [currentColor, setCurrentColor] = useState(0);
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(false);
 
-  const [coursesList, setCoursesList] = useState<FormState[]>([]);
+  const { data: coursesList } = api.user.useUserCourses();
+  const { mutateAsync: createCourseMutation } = api.course.useCreateCourse();
+
   const [formData, setFormData] = useState<FormState>(initialFormState);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,14 +50,20 @@ function DashboardContent(): ReactElement {
     (e: any) => {
       e.preventDefault();
 
-      setCoursesList((old) => [
-        { ...formData, color: colorsChoice[currentColor] },
-        ...old,
-      ]);
-
-      setCurrentColor(0);
-      setFormData(initialFormState);
-      setIsMenuDisplayed(false);
+      try {
+        await createCourseMutation({
+          createCourseModel: {
+            title: formData.title,
+            description: formData.description,
+            picture: formData.color,
+          },
+        });
+        setCurrentColor(0);
+        setFormData(initialFormState);
+        setIsMenuDisplayed(false);
+      } catch (err) {
+        // pop up error
+      }
     },
     [colorsChoice, currentColor, formData]
   );

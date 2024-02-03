@@ -4,12 +4,17 @@ import styled from "styled-components";
 import TopBar from "../../components/TopBar";
 // eslint-disable-next-line import/no-cycle
 import api from "../../services/api";
+import { DefaultApi } from "../../services/api/out";
 
 import DashboardContent from "./Content";
 
 export function HomePage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = api.user.useUser();
+
+  useEffect(() => {
+    DefaultApi.healthCheck();
+  }, []);
 
   return (
     <Container>

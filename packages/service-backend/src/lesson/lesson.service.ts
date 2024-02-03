@@ -18,7 +18,7 @@ import { Prisma, Question, Lesson, UsertoLesson } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: CreateLessonModel): Promise<LessonIdResponse> {
+  async postLesson(lessonData: CreateLessonModel, ctx: any): Promise<LessonIdResponse> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
@@ -32,6 +32,14 @@ export class LessonService {
         Logger.error('Failed to create lesson !');
         throw new NotFoundException('Failed to create lesson !');
       }
+
+      await prisma.usertoLesson.create({
+        data: {
+          user_id: ctx.__user.id,
+          lesson_id: lessonDb.id,
+        },
+      });
+  
       return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
@@ -94,7 +102,10 @@ export class LessonService {
         where: {
           id: LessonId,
         },
-        data: lessonData,
+        data: {
+          title: lessonData.title,
+          description: lessonData.description,
+        },
       });
 
       if (!lessonDb) {
@@ -112,6 +123,11 @@ export class LessonService {
   async getLessonQuestions(LessonId: string): Promise<QuestionModel[]> {
     try {
       const lessonQuestionsDb: Question[] = await prisma.question.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           lesson_id: LessonId,
         },
@@ -130,6 +146,7 @@ export class LessonService {
           description: question.description,
           typeAnswer: question.type_answer,
           typeQuestion: question.type_question,
+          order: question.order,
         };
       }) as QuestionModel[];
     } catch (error) {
@@ -154,7 +171,7 @@ export class LessonService {
         Logger.error('Failed to create user lesson !');
         throw new NotFoundException('Failed to create user lesson !');
       }
-      return { id: usertoLessonDb.lesson_id} as LessonIdResponse;
+      return { id: usertoLessonDb.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');

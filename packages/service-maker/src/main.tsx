@@ -17,6 +17,8 @@ import { FormationSetting } from "./pages/Course/courseSettings";
 import { ProfilePage } from "./pages/formatter/formatterSettings";
 // eslint-disable-next-line import/no-cycle
 import { HomePage } from "./pages/Home";
+import MakerHubPage from "./pages/maker/hub";
+import QuizEditor from "./pages/Quiz";
 
 // Router
 const router = createBrowserRouter([
@@ -37,6 +39,10 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: "/quiz/:id/:sectionId/:lessonId",
+    element: <QuizEditor />,
+  },
+  {
     path: "/profile",
     element: <ProfilePage />,
   },
@@ -47,6 +53,22 @@ const router = createBrowserRouter([
   {
     path: "/formation",
     element: <FormationSetting />,
+  },
+  {
+    path: "/course/:id",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId",
+    element: <MakerHubPage />,
+  },
+  {
+    path: "/course/:id/:sectionId/:lessonId",
+    element: <MakerHubPage />,
   },
 ]);
 

@@ -6,6 +6,7 @@ import type { GetUserModel } from "../out";
 import { UserApi } from "../out";
 
 export const GET_USER_KEY = "getUser";
+export const GET_USER_COURSES_KEY = "getUserCourses";
 
 export const userActions = {
   useUser: (config?: UseQueryOptions<GetUserModel>) =>
@@ -13,6 +14,12 @@ export const userActions = {
       queryKey: GET_USER_KEY,
       queryFn: () => UserApi.getUser(),
       retry: false,
+      ...config,
+    }),
+  useUserCourses: (config?: UseQueryOptions<UserCoursesResponse>) =>
+    useQuery({
+      queryKey: GET_USER_COURSES_KEY,
+      queryFn: () => UserApi.getUserCourses(),
       ...config,
     }),
   useRegister: () => useMutation(UserApi.registerUser),
