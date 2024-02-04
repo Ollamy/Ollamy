@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
@@ -75,14 +75,14 @@ function Login(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.email}>
-							<TextInput
-								value={value}
-								onChangeText={onChange}
-								onBlur={onBlur}
-								inputMode="email"
-								style={styles.input}
-								placeholder="Email"
-							/>
+						<TextInput
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							inputMode="email"
+							style={styles.input}
+							placeholder="Email"
+						/>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -95,15 +95,15 @@ function Login(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.password}>
-							<TextInput
-								secureTextEntry
-								value={value}
-								onChangeText={onChange}
-								onBlur={onBlur}
-								inputMode="text"
-								style={styles.input}
-								placeholder="Password"
-							/>
+						<TextInput
+							secureTextEntry
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							inputMode="text"
+							style={styles.input}
+							placeholder="Password"
+						/>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -114,9 +114,9 @@ function Login(): JSX.Element {
 				<Text style={styles.text}>Forgot your password ?</Text>
 				<Text style={styles.highlightText}>Recover password</Text>
 			</View>
-				<Button isLoading={isLoading} onPress={handleSubmit(onSubmit)} style={styles.button}>
-					<Text style={styles.buttonText}>Log in</Text>
-				</Button>
+			<Button isLoading={isLoading} onPress={handleSubmit(onSubmit)} style={styles.button}>
+				<Text style={styles.buttonText}>Log in</Text>
+			</Button>
 			<View style={styles.horizontalContainer}>
 				<Text style={styles.text}>Don`t have an account ?</Text>
 				<Text onPress={() => navigate('/register')} style={styles.highlightText}>

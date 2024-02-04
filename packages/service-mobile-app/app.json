@@ -1,7 +1,7 @@
 {
   "expo": {
     "scheme": "ollamy-app",
-    "name": "Ollamy",
+    "name": "service-mobile-app",
     "slug": "ollamy",
     "version": "1.0.0",
     "orientation": "portrait",

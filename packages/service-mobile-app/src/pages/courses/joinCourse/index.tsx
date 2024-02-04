@@ -1,10 +1,6 @@
 import { Box, Button, HStack, Heading, Image, Text, VStack } from 'native-base';
 import { useNavigate, useParams } from 'react-router-native';
-import { useGetCourseByIdQuery } from 'src/services/course/course';
 import { CourseResponse } from 'src/services/course/course.dto';
-import * as Linking from 'expo-linking';
-import { useEffect } from 'react';
-import Toast from 'react-native-toast-message';
 
 const data: CourseResponse = {
 	title: 'Build a web app with React',
@@ -16,18 +12,10 @@ const data: CourseResponse = {
 
 const JoinCourse = (): JSX.Element => {
 	const { id } = useParams();
-	const url = Linking.useURL();
-	if (url) {
-		console.log('parsed :', Linking.parse(url || ''));
-	}
+
 	const navigate = useNavigate();
 	// const { data, isLoading } = useGetCourseByIdQuery(id!);
 	// const [joinCourse, { data, isLoading }] = useJoinCourseMutation();
-
-	useEffect(() => {
-		console.log('id :', id);
-		console.log('url :', url);
-	}, [id, url]);
 
 	const goHome = () => navigate('/home');
 
