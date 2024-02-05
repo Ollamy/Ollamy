@@ -3163,6 +3163,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/serve-static@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@nestjs/serve-static@npm:4.0.0"
+  dependencies:
+    path-to-regexp: 0.2.5
+  peerDependencies:
+    "@fastify/static": ^6.5.0
+    "@nestjs/common": ^9.0.0 || ^10.0.0
+    "@nestjs/core": ^9.0.0 || ^10.0.0
+    express: ^4.18.1
+    fastify: ^4.7.0
+  peerDependenciesMeta:
+    "@fastify/static":
+      optional: true
+    express:
+      optional: true
+    fastify:
+      optional: true
+  checksum: e3ee40453aa77bdc7d18dd41dda369b2e49e750101d77372bc44d3fedec7740094bb2102429bd589afa7b34d4f81b07bddb4f0481be5abc6f268fe5a7ae945f3
+  languageName: node
+  linkType: hard
+
 "@nestjs/swagger@npm:^6.2.1":
   version: 6.3.0
   resolution: "@nestjs/swagger@npm:6.3.0"
@@ -5576,6 +5598,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mime-types@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "@types/mime-types@npm:2.1.4"
+  checksum: f8c521c54ee0c0b9f90a65356a80b1413ed27ccdc94f5c7ebb3de5d63cedb559cd2610ea55b4100805c7349606a920d96e54f2d16b2f0afa6b7cd5253967ccc9
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:*":
   version: 3.0.4
   resolution: "@types/mime@npm:3.0.4"
@@ -7094,6 +7123,7 @@ __metadata:
     "@nestjs/platform-express": ^9.4.0
     "@nestjs/platform-socket.io": ^10.2.4
     "@nestjs/schematics": ^9.1.0
+    "@nestjs/serve-static": ^4.0.0
     "@nestjs/swagger": ^6.2.1
     "@nestjs/testing": ^9.4.2
     "@nestjs/websockets": ^10.2.4
@@ -7105,6 +7135,7 @@ __metadata:
     "@types/express": ^4.17.17
     "@types/jest": ^29.5.1
     "@types/jsonwebtoken": ^9.0.1
+    "@types/mime-types": ^2.1.4
     "@types/node": ^18.14.1
     "@types/socket.io": ^3.0.2
     "@types/supertest": ^2.0.12
@@ -7118,6 +7149,7 @@ __metadata:
     jest: ^29.4.3
     jest-junit: ^16.0.0
     jsonwebtoken: ^9.0.0
+    mime-types: ^2.1.35
     pbkdf2: ^3.1.2
     pg: ^8.11.3
     prettier: ^2.8.4
@@ -14829,7 +14861,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -16073,6 +16105,13 @@ __metadata:
   version: 0.1.7
   resolution: "path-to-regexp@npm:0.1.7"
   checksum: 69a14ea24db543e8b0f4353305c5eac6907917031340e5a8b37df688e52accd09e3cebfe1660b70d76b6bd89152f52183f28c74813dbf454ba1a01c82a38abce
+  languageName: node
+  linkType: hard
+
+"path-to-regexp@npm:0.2.5":
+  version: 0.2.5
+  resolution: "path-to-regexp@npm:0.2.5"
+  checksum: 44adcbd847d170786490de80d2abc4762d5e65cd8857f230b87bdff6ab1bd17a91baa201fea549954b4cbfd208ae021a3a4ebac19a69ebdf3fdc628c8344ad39
   languageName: node
   linkType: hard
 

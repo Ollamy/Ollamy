@@ -283,8 +283,12 @@ describe('updateQuestion', () => {
     };
     jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
 
-    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
-      PrismaClientInitializationError,
+    await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
+        success: true,
+        answer: "correctAnswerId",
+        end: true,
+        nextQuestionId: undefined,
+      }
     );
   });
 
@@ -308,8 +312,11 @@ describe('updateQuestion', () => {
     };
     jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
 
-    await expect(questionService.validateAnswer(mockBody)).rejects.toThrow(
-      PrismaClientInitializationError,
-    );
+    await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
+      success: false,
+      answer: "correctAnswerId",
+      end: true,
+      nextQuestionId: undefined,
+    });
   });
 });
