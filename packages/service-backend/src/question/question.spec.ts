@@ -291,7 +291,7 @@ describe('updateQuestion', () => {
   //       nextQuestionId: undefined,
   //     }
   //   );
-  // });
+  });
 
   it('should return success: false if the answer is incorrect', async () => {
     const mockBody: validateAnswerModel = {
