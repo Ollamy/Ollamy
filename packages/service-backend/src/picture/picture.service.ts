@@ -5,11 +5,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import prisma from 'client';
-import { Picture, Prisma } from '@prisma/client';
+import { Picture } from '@prisma/client';
 import axios from 'axios';
+import { resolve, join } from 'path';
+import { writeFile } from 'fs/promises';
+import { v4 as uuidv4 } from 'uuid';
+import { extension } from 'mime-types';
+import { BACKEND_PORT, FRONTEND_URL } from 'setup';
+
 
 @Injectable()
 export class PictureService {
+  static publicFolder = resolve(process.cwd(), 'public');
+  static backendURL = `${FRONTEND_URL}:${BACKEND_PORT}/public`;
+
   static isValidUrl(string) {
     try {
       new URL(string);
@@ -19,23 +28,31 @@ export class PictureService {
     }
   }
 
-  static async getBase64Image(imageUrl: string): Promise<string> {
+  static async getBase64Image(imageUrl: string): Promise<{ data: string, type: string }> {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const base64ImageData = response.data.toString('base64');
-    Logger.debug(base64ImageData);
-    return base64ImageData;
+    const ext = extension(response.headers['content-type']) || 'png';
+
+    return {
+      data: base64ImageData,
+      type: ext
+    };
   }
 
   static async postPicture(pictureData: string): Promise<string> {
     try {
-      const picture: string | undefined =
+      const raw =
         PictureService.isValidUrl(pictureData) === true
           ? await PictureService.getBase64Image(pictureData)
-          : pictureData;
+          : { data: pictureData, type: 'png' };
+
+      const filename = `${uuidv4()}.${raw.type}`;
+      const picturePath = join(this.publicFolder, filename);
+      await writeFile(picturePath, raw.data, 'base64')
 
       const pictureDb = await prisma.picture.create({
         data: {
-          picture: picture,
+          filename: filename,
         },
       });
 
@@ -46,29 +63,6 @@ export class PictureService {
       return pictureDb.id;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Picture not created !');
-    }
-  }
-
-  static async deletePicture(pictureId: string): Promise<string> {
-    try {
-      const pictureDb = await prisma.picture.delete({
-        where: {
-          id: pictureId,
-        },
-      });
-
-      if (!pictureDb) {
-        Logger.error('Picture does not exists !');
-        throw new NotFoundException('Picture does not exists !');
-      }
-
-      return pictureId;
-    } catch (error) {
-      Logger.error(error);
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new ConflictException('Picture already removed !');
-      }
       throw new ConflictException('Picture not created !');
     }
   }
@@ -86,34 +80,10 @@ export class PictureService {
         throw new ConflictException('Picture does not exists !');
       }
 
-      return pictureDb.picture;
+      return `${this.backendURL}/${pictureDb.filename}`;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Picture not deleted !');
-    }
-  }
-
-  static async updatePicture(
-    pictureId: string,
-    pictureData: string,
-  ): Promise<string> {
-    try {
-      const pictureDb: Picture = await prisma.picture.update({
-        where: {
-          id: pictureId,
-        },
-        data: pictureData,
-      });
-
-      if (!pictureDb) {
-        Logger.error('Picture does not exists !');
-        throw new ConflictException('Picture does not exists !');
-      }
-
-      return pictureId;
-    } catch (error) {
-      Logger.error(error);
-      throw new ConflictException('Picture not updated !');
     }
   }
 }
