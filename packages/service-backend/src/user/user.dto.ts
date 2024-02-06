@@ -8,6 +8,7 @@ import {
   IsBoolean,
   IsArray,
   ValidateNested,
+  IsUrl,
 } from 'class-validator';
 
 export class UserModel {
@@ -124,11 +125,20 @@ export class UserCourses {
   description: string
 
   @ApiProperty()
-  @IsUUID()
-  picture_id: string
+  @IsUrl()
+  picture: string
 
   @ApiProperty()
+  @IsBoolean()
   owner: boolean
+
+  @ApiProperty()
+  @IsUUID()
+  last_lesson_id: string
+
+  @ApiProperty()
+  @IsUUID()
+  last_section_id: string
 }
 
 export class UserCoursesResponse {
