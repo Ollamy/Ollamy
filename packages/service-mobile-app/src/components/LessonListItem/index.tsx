@@ -2,8 +2,11 @@ import { HStack, Box, VStack, Image, Text, Pressable } from 'native-base';
 import VerticalProgressBar, { LessonStatus, STATUS_COLORS } from 'src/components/VerticalProgressBar';
 import { Lesson } from 'src/pages/courses/dashboard/section';
 
+// @ts-ignore
 import CompletedIcon from 'assets/completed.png';
+// @ts-ignore
 import InProgressIcon from 'assets/yellow-right-arrow.png';
+// @ts-ignore
 import NotStartedIcon from 'assets/lock.png';
 
 interface LessonItemProps {
