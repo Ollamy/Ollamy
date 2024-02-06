@@ -1,21 +1,12 @@
 import { Test } from '@nestjs/testing';
-import {
-  Course,
-  Picture,
-  Section,
-  UsertoLesson,
-  Lesson,
-  UsertoCourse,
-} from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CourseService } from 'course/course.service';
 import { GetCourseRequest } from 'course/course.dto';
 import { SectionModel } from 'section/section.dto';
-
+import { context } from 'tests/data/user.data';
 import {
-  context,
-  courseID,
+  courseId,
   createCourseData,
   deleteCourseId,
   mockCourseDb,
@@ -177,12 +168,12 @@ describe('getCourse', () => {
 
     {
       // Invoke the function being tested and Perform assertions
-      const result = await courseService.getCourse(courseID, context);
+      const result = await courseService.getCourse(courseId, context);
 
       expect(prisma.course.findFirst).toHaveBeenCalledTimes(1);
       expect(prisma.course.findFirst).toHaveBeenCalledWith({
         where: {
-          id: courseID,
+          id: courseId,
         },
       });
 
@@ -209,7 +200,7 @@ describe('getCourse', () => {
     }
 
     {
-      await expect(courseService.getCourse(courseID, context)).rejects.toThrow(
+      await expect(courseService.getCourse(courseId, context)).rejects.toThrow(
         ConflictException,
       );
     }
@@ -220,7 +211,7 @@ describe('getCourse', () => {
       .spyOn(prisma.course, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
-    await expect(courseService.getCourse(courseID, context)).rejects.toThrow(
+    await expect(courseService.getCourse(courseId, context)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -246,14 +237,14 @@ describe('updateCourse', () => {
     {
       // Invoke the function being tested and Perform assertions
       const result = await courseService.updateCourse(
-        courseID,
+        courseId,
         mockUpdateCourseData,
       );
 
       expect(prisma.course.update).toHaveBeenCalledTimes(1);
       expect(prisma.course.update).toHaveBeenCalledWith({
         where: {
-          id: courseID,
+          id: courseId,
         },
         data: {
           title: mockUpdateCourseData.title,
@@ -262,7 +253,7 @@ describe('updateCourse', () => {
         },
       });
 
-      const expectedMessage = courseID;
+      const expectedMessage = courseId;
       expect(result).toStrictEqual({ id: expectedMessage });
     }
   });
@@ -274,7 +265,7 @@ describe('updateCourse', () => {
 
     {
       await expect(
-        courseService.updateCourse(courseID, mockUpdateCourseData),
+        courseService.updateCourse(courseId, mockUpdateCourseData),
       ).rejects.toThrow(ConflictException);
     }
   });
@@ -288,7 +279,7 @@ describe('updateCourse', () => {
 
     {
       await expect(
-        courseService.updateCourse(courseID, mockUpdateCourseData),
+        courseService.updateCourse(courseId, mockUpdateCourseData),
       ).rejects.toThrow(ConflictException);
     }
   });
@@ -315,12 +306,12 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      const result = await courseService.getCourseSections(courseID);
+      const result = await courseService.getCourseSections(courseId);
 
       expect(prisma.section.findMany).toHaveBeenCalledTimes(1);
       expect(prisma.section.findMany).toHaveBeenCalledWith({
         where: {
-          course_id: courseID,
+          course_id: courseId,
         },
       });
 
@@ -346,7 +337,7 @@ describe('getCourseSections', () => {
     }
 
     {
-      await expect(courseService.getCourseSections(courseID)).rejects.toThrow(
+      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
         NotFoundException,
       );
     }

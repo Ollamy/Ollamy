@@ -12,11 +12,13 @@ import {
   IdCourseModel,
   UpdateCourseModel,
 } from 'course/course.dto';
+
+import { context } from 'tests/data/user.data';
 import { v4 as uuidv4 } from 'uuid';
 
 // Data
 
-export const courseID = uuidv4();
+export const courseId = uuidv4();
 
 export const createCourseData: CreateCourseModel = {
   title: 'title',
@@ -25,13 +27,7 @@ export const createCourseData: CreateCourseModel = {
 };
 
 export const deleteCourseId: IdCourseModel = {
-  id: courseID,
-};
-
-export const context = {
-  __user: {
-    id: uuidv4(),
-  },
+  id: courseId,
 };
 
 // Mock
@@ -46,7 +42,7 @@ export const mockPictureDb: Picture = {
 };
 
 export const mockCourseDb: Course = {
-  id: courseID,
+  id: courseId,
   owner_id: context.__user.id,
   title: createCourseData.title,
   description: createCourseData.description,
@@ -83,14 +79,14 @@ export const mockUpdateCourseData: UpdateCourseModel = {
 
 export const mockSection1: Section = {
   id: uuidv4(),
-  course_id: courseID,
+  course_id: courseId,
   title: 'title',
   description: 'desc',
 };
 
 export const mockSection2: Section = {
   id: uuidv4(),
-  course_id: courseID,
+  course_id: courseId,
   title: 'title',
   description: 'desc',
 };

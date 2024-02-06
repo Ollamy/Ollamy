@@ -4,7 +4,7 @@ import {
   CreateSectionModel,
   IdSectionModel,
   UpdateSectionModel,
-} from './section.dto';
+} from '../section/section.dto';
 import { Lesson, Prisma, Section } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
@@ -47,7 +47,7 @@ describe('postSection', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionDb.id});
+    expect(result).toStrictEqual({ id: mockSectionDb.id });
   });
 
   it('should throw NotFoundException if section creation fails', async () => {
@@ -117,7 +117,7 @@ describe('deleteSection', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionData.id});
+    expect(result).toStrictEqual({ id: mockSectionData.id });
   });
 
   it('should throw NotFoundException if section does not exist', async () => {
@@ -274,7 +274,7 @@ describe('updateSection', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionId});
+    expect(result).toStrictEqual({ id: mockSectionId });
   });
 
   it('should throw ConflictException if section does not exist', async () => {

@@ -3,12 +3,13 @@ import { UserController } from 'user/user.controller';
 import { UserService } from 'user/user.service';
 import { CreateUserModel, LoginUserModel } from 'user/user.dto';
 import prisma from 'client';
-import { User } from '@prisma/client';
 import {
   BadRequestException,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
+
+import { context, loginUserData, mockUserDb } from 'tests/data/user.data';
 
 describe('UserController', () => {
   let userService: UserService;
@@ -24,22 +25,30 @@ describe('UserController', () => {
 
   describe('registerUser', () => {
     it('register test', async () => {
-      jest.spyOn(userService, 'registerUser').mockImplementation();
+      {
+        jest.spyOn(userService, 'registerUser').mockImplementation();
+      }
 
-      expect(() =>
-        userService.registerUser(new CreateUserModel()),
-      ).toBeInstanceOf(Function);
+      {
+        expect(() =>
+          userService.registerUser(new CreateUserModel()),
+        ).toBeInstanceOf(Function);
+      }
     });
   });
 
   describe('loginUser', () => {
     it('login test', async () => {
-      jest.spyOn(userService, 'loginUser').mockImplementation();
+      {
+        jest.spyOn(userService, 'loginUser').mockImplementation();
+      }
 
-      userService.loginUser(new LoginUserModel());
-      expect(() => userService.loginUser(new LoginUserModel())).toBeInstanceOf(
-        Function,
-      );
+      {
+        userService.loginUser(new LoginUserModel());
+        expect(() =>
+          userService.loginUser(new LoginUserModel()),
+        ).toBeInstanceOf(Function);
+      }
     });
   });
 });
@@ -57,77 +66,57 @@ describe('loginUser', () => {
   });
 
   it('should handle login correctly', async () => {
-    // Mock the dependencies or services
-    const mockUserDb: User = {
-      id: '123',
-      email: 'test@example.com',
-      password: 'hashedPassword',
-      firstname: 'test',
-      lastname: 'test',
-      communities_id: ['2'],
-    };
-    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+    {
+      // Mock the dependencies or services
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+      jest.spyOn(userService, 'hashPassword').mockReturnValue('hashedPassword');
+      jest.spyOn(userService, 'createToken').mockResolvedValue('mockToken');
+    }
 
-    const mockHashPassword = jest
-      .spyOn(userService, 'hashPassword')
-      .mockReturnValue('hashedPassword');
+    {
+      // Invoke the function being tested and Perform assertions
+      const loginResult = await userService.loginUser(loginUserData);
 
-    const mockCreateToken = jest
-      .spyOn(userService, 'createToken')
-      .mockResolvedValue('mockToken');
+      expect(prisma.user.findUnique).toHaveBeenCalledTimes(1);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: {
+          email: expect.any(String),
+        },
+      });
 
-    // Invoke the function being tested
-    const loginResult = await userService.loginUser({
-      email: 'test@example.com',
-      password: 'hashedPassword',
-      firstname: 'test',
-      lasname: 'test',
-      communities_id: ['2'],
-    } as LoginUserModel);
+      expect(userService.hashPassword).toHaveBeenCalledTimes(1);
+      expect(userService.hashPassword).toHaveBeenCalledWith(expect.any(String));
 
-    // Perform assertions
-    expect(prisma.user.findUnique).toHaveBeenCalledTimes(1);
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        email: expect.any(String),
-      },
-    });
+      expect(userService.createToken).toHaveBeenCalledTimes(1);
+      expect(userService.createToken).toHaveBeenCalledWith(expect.any(String));
 
-    expect(mockHashPassword).toHaveBeenCalledTimes(1);
-    expect(mockHashPassword).toHaveBeenCalledWith(expect.any(String));
-
-    expect(mockCreateToken).toHaveBeenCalledTimes(1);
-    expect(mockCreateToken).toHaveBeenCalledWith(expect.any(String));
-
-    expect(loginResult).toBe('mockToken');
+      expect(loginResult).toBe('mockToken');
+    }
   });
 
   it('should throw NotFoundException if user does not exist', async () => {
-    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+    {
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+    }
 
-    await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
-      NotFoundException,
-    );
+    {
+      await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
+        NotFoundException,
+      );
+    }
   });
 
   it('should throw BadRequestException if wrong password is provided', async () => {
-    const mockUserDb: User = {
-      id: '123',
-      email: 'test@example.com',
-      password: 'hashedPassword',
-      firstname: 'test',
-      lastname: 'test',
-      communities_id: ['2'],
-    };
-    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+    {
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+      jest.spyOn(userService, 'hashPassword').mockReturnValue('wrongPassword');
+    }
 
-    const mockHashPassword = jest
-      .spyOn(userService, 'hashPassword')
-      .mockReturnValue('wrongPassword');
-
-    await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
-      BadRequestException,
-    );
+    {
+      await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
+        BadRequestException,
+      );
+    }
   });
 });
 
@@ -144,50 +133,54 @@ describe('getUser', () => {
   });
 
   it('should return the user data', async () => {
-    // Mock the dependencies or services
-    const mockUserDb: User = {
-      id: '123',
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'john.doe@example.com',
-      password: 'test',
-      communities_id: ['2'],
-    };
-    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+    {
+      // Mock the dependencies or services
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
+    }
 
-    // Invoke the function being tested
-    const result = await userService.getUser({ __user: { id: '123' } });
+    {
+      // Invoke the function being tested
+      const result = await userService.getUser(context);
 
-    // Perform assertions
-    expect(prisma.user.findUnique).toHaveBeenCalledTimes(4);
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: expect.any(String),
-      },
-    });
+      // Perform assertions
+      expect(prisma.user.findUnique).toHaveBeenCalledTimes(4);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: expect.any(String),
+        },
+      });
 
-    expect(result).toEqual({
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'john.doe@example.com',
-    });
+      expect(result).toEqual({
+        firstname: mockUserDb.firstname,
+        lastname: mockUserDb.lastname,
+        email: mockUserDb.email,
+      });
+    }
   });
 
   it('should throw NotFoundException if user does not exist', async () => {
-    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+    {
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+    }
 
-    await expect(
-      userService.getUser({ __user: { id: '123' } }),
-    ).rejects.toThrow(ConflictException);
+    {
+      await expect(userService.getUser(context)).rejects.toThrow(
+        ConflictException,
+      );
+    }
   });
 
   it('should throw ConflictException if an error occurs', async () => {
-    jest
-      .spyOn(prisma.user, 'findUnique')
-      .mockRejectedValue(new Error('Some error'));
+    {
+      jest
+        .spyOn(prisma.user, 'findUnique')
+        .mockRejectedValue(new Error('Some error'));
+    }
 
-    await expect(
-      userService.getUser({ __user: { id: '123' } }),
-    ).rejects.toThrow(ConflictException);
+    {
+      await expect(userService.getUser(context)).rejects.toThrow(
+        ConflictException,
+      );
+    }
   });
 });
