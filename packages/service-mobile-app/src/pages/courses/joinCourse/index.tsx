@@ -1,7 +1,7 @@
-import { AxiosError } from 'axios';
 import { Box, Button, HStack, Heading, Image, Text, VStack } from 'native-base';
 import Toast, { ToastShowParams } from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
+import YesNoButton from 'src/components/buttons/YesNoButton';
 import { useGetCourseByIdQuery, useJoinCourseMutation } from 'src/services/course/course';
 
 const JoinCourse = (): JSX.Element => {
@@ -14,14 +14,13 @@ const JoinCourse = (): JSX.Element => {
 	const navigate = useNavigate();
 	const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-
 	const handleJoinCourse = async () => {
 		try {
 			await joinCourse(id!).unwrap();
 			showToast({
 				type: 'success',
 				text1: 'Success',
-				text2: 'You have successfully logged in',
+				text2: 'Course joined successfully',
 				visibilityTime: 2000,
 				onHide: () => navigate('/home'),
 			});
@@ -62,8 +61,8 @@ const JoinCourse = (): JSX.Element => {
 				</Box>
 				<Box w="full" flex="1" p="6">
 					<VStack h="100%" w="100%" justifyContent="center" alignItems="center" space="md">
-						<Image w={100} h={100} alt="picture" source={{ uri: data.picture }} />
-						<Text fontSize="sm" color="coolGray.900">
+						<Image w={100} h={100} alt="picture" resizeMode="contain" source={{ uri: data.picture }} />
+						<Text fontSize="md" color="coolGray.900">
 							{data.description}
 						</Text>
 					</VStack>
@@ -73,21 +72,9 @@ const JoinCourse = (): JSX.Element => {
 				<Heading size="lg" textAlign="center">
 					Join this course ?
 				</Heading>
-				<HStack space="md">
-					<Button
-						onPress={handleJoinCourse}
-						isLoading={isJoinCourseLoading}
-						bg="green.600"
-						color="white"
-						py="8px"
-						px="24px"
-						borderRadius="4px"
-					>
-						Yes
-					</Button>
-					<Button onPress={goHome} bg="red.600" color="white" py="8px" px="24px" borderRadius="4px">
-						No
-					</Button>
+				<HStack space="lg">
+					<YesNoButton variant="Yes" onPress={handleJoinCourse} isLoading={isJoinCourseLoading} />
+					<YesNoButton variant="No" onPress={goHome} />
 				</HStack>
 			</VStack>
 			<Toast />
