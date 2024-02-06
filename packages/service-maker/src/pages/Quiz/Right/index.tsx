@@ -1,5 +1,6 @@
+import type { ReactElement } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
-import { ReactElement, useCallback } from "react";
 
 // eslint-disable-next-line
 interface RightProps {
@@ -10,17 +11,17 @@ interface RightProps {
   quizData: any;
 }
 
-const Right = ({
+function Right({
   typeSelected,
   setTypeSelected,
   setDoneStatus,
   doneStatus,
   quizData,
-}: RightProps): ReactElement => {
+}: RightProps): ReactElement {
   const handleClickDoneButton = useCallback(() => {
     if (doneStatus) return;
 
-    setDoneStatus((old) => !old);
+    setDoneStatus((old: any) => !old);
     setTypeSelected("single");
   }, [doneStatus, setDoneStatus, setTypeSelected]);
 
@@ -34,18 +35,18 @@ const Right = ({
       <Body>
         <SubTitle>Type of question</SubTitle>
         <QuestionTypeParentContainer>
-          {/*<QuestionTypeContainer*/}
-          {/*  isSelected={typeSelected === "single"}*/}
-          {/*  onClick={() => setTypeSelected("single")}*/}
-          {/*>*/}
-          {/*  Single choice*/}
-          {/*</QuestionTypeContainer>*/}
-          {/*<QuestionTypeContainer*/}
-          {/*  isSelected={typeSelected === "multiple"}*/}
-          {/*  onClick={() => setTypeSelected("multiple")}*/}
-          {/*>*/}
-          {/*  Multiple choice*/}
-          {/*</QuestionTypeContainer>*/}
+          {/* <QuestionTypeContainer */}
+          {/*  isSelected={typeSelected === "single"} */}
+          {/*  onClick={() => setTypeSelected("single")} */}
+          {/* > */}
+          {/*  Single choice */}
+          {/* </QuestionTypeContainer> */}
+          {/* <QuestionTypeContainer */}
+          {/*  isSelected={typeSelected === "multiple"} */}
+          {/*  onClick={() => setTypeSelected("multiple")} */}
+          {/* > */}
+          {/*  Multiple choice */}
+          {/* </QuestionTypeContainer> */}
           <QuestionTypeContainer
             isSelected={typeSelected === "free"}
             onClick={() => setTypeSelected("free")}
@@ -56,7 +57,7 @@ const Right = ({
       </Body>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   position: relative;

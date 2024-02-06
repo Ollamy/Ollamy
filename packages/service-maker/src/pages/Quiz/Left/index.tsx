@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { ReactElement, useCallback } from "react";
-import api from "../../../services/api";
+import type { ReactElement } from "react";
+import { useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { CreateQuestionModel } from "backend/src/question/question.dto";
-import * as timers from "timers";
-import { QuestionModel } from "services/api/out";
+import type { QuestionModel } from "services/api/out";
+import styled from "styled-components";
+
+import api from "../../../services/api";
 
 // eslint-disable-next-line
 interface LeftProps {
@@ -13,11 +13,11 @@ interface LeftProps {
   setCurrentEditedQuestionId: any;
 }
 
-const Left = ({
+function Left({
   quizData,
   setQuizData,
   setCurrentEditedQuestionId,
-}: LeftProps): ReactElement => {
+}: LeftProps): ReactElement {
   const { mutateAsync: createQuestion } = api.question.useCreateQuestion();
   const { mutateAsync: removeQuestion } = api.question.useRemoveQuestion();
   const { lessonId } = useParams();
@@ -61,7 +61,7 @@ const Left = ({
     (id: string) => {
       setCurrentEditedQuestionId(id);
     },
-    [setCurrentEditedQuestionId],
+    [setCurrentEditedQuestionId]
   );
 
   const handleRemoveQuestion = useCallback(
@@ -70,23 +70,21 @@ const Left = ({
       e.stopPropagation();
       removeQuestion({ idQuestionModel: { id } });
     },
-    [removeQuestion],
+    [removeQuestion]
   );
 
   return (
     <Container>
       <Button onClick={handleAddQuestion}>Add question</Button>
-      {quizData?.map(({ title, id }, index) => {
-        return (
-          <Question onClick={() => handleClickOnQuestion(id)} key={`${index}`}>
-            {title}
-            {/*<p onClick={(e) => handleRemoveQuestion(e, id)}>x</p>*/}
-          </Question>
-        );
-      })}
+      {quizData?.map(({ title, id }, index) => (
+        <Question onClick={() => handleClickOnQuestion(id)} key={`${index}`}>
+          {title}
+          {/* <p onClick={(e) => handleRemoveQuestion(e, id)}>x</p> */}
+        </Question>
+      ))}
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

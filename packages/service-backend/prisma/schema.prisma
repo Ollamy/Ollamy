@@ -220,7 +220,7 @@ model UserDiscussions {
 
 model Picture {
   id       String     @id @default(uuid()) @db.Uuid
-  picture  String
+  filename  String
   Course   Course[]
   Question Question[]
   Answer   Answer[]

@@ -1,7 +1,9 @@
-import styled from "styled-components";
-import { ReactElement, useCallback, useEffect, useState } from "react";
-import api from "../../../services/api";
+import type { ReactElement } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+
+import api from "../../../services/api";
 
 // eslint-disable-next-line
 interface ContentProps {
@@ -12,13 +14,13 @@ interface ContentProps {
   currentEditedQuestionId: string;
 }
 
-const Content = ({
+function Content({
   doneStatus,
   setQuizData,
   typeSelected,
   setDoneStatus,
   currentEditedQuestionId,
-}: ContentProps): ReactElement => {
+}: ContentProps): ReactElement {
   const { mutateAsync: getQuestion } = api.question.useGetQuestion();
   const { mutateAsync: getAnswer } = api.answer.useGetAnswer();
   const { mutateAsync: updateQuestion } = api.question.useUpdateQuestion();
@@ -48,11 +50,11 @@ const Content = ({
     getQ();
   }, [currentEditedQuestionId, getQuestion]);
 
-  const handleChangeQuestionValue = useCallback((e) => {
+  const handleChangeQuestionValue = useCallback((e: any) => {
     setQuestionValue(e.target.value);
   }, []);
 
-  const handleChangeAnswer = useCallback((e) => {
+  const handleChangeAnswer = useCallback((e: any) => {
     setAnswer(e.target.value);
   }, []);
 
@@ -95,7 +97,7 @@ const Content = ({
   return (
     <Container>
       <InputQuestion
-        placeholder={"Write your question here..."}
+        placeholder="Write your question here..."
         value={questionValue}
         onChange={handleChangeQuestionValue}
       />
@@ -104,12 +106,12 @@ const Content = ({
         <InputQuestion
           value={answer}
           onChange={handleChangeAnswer}
-          placeholder={"The expected response"}
+          placeholder="The expected response"
         />
       )}
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

@@ -143,7 +143,7 @@ export class CourseController {
     required: true,
   })
   @LoggedMiddleware(true)
-  @Get('/sections/:id')
+  @Get('/:id/sections')
   async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
@@ -158,7 +158,7 @@ export class CourseController {
     required: true,
   })
   @LoggedMiddleware(true)
-  @Post('/user/:id')
+  @Post('/:id/user')
   async addUserToCourse(
     @Param('id') id: string,
     @OllContext() ctx: any,

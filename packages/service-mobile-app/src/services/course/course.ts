@@ -12,14 +12,14 @@ export const courseApi = api.injectEndpoints({
 		}),
 		joinCourse: build.mutation<CourseResponse, string>({
 			query: (id) => ({
-				url: `/course/user/${id}`,
+				url: `/course/${id}/user`,
 				method: 'POST',
 			}),
 			invalidatesTags: [{ type: 'Course', id: 'LIST' }],
 		}),
 		getCourseSections: build.query<CourseResponse, string>({
 			query: (id) => ({
-				url: `/course/section/${id}`,
+				url: `/course/${id}/sections`,
 				method: 'GET',
 			}),
 			providesTags: (result) => (result ? [{ type: 'Course', id: result.id }] : [{ type: 'Course', id: 'LIST' }]),
