@@ -116,7 +116,7 @@ function Login(): JSX.Element {
 				<Text style={styles.buttonText}>Log in</Text>
 			</Button>
 			<View style={styles.horizontalContainer}>
-				<Text style={styles.text}>Don`t have an account ?</Text>
+				<Text style={styles.text}>Don't have an account ?</Text>
 				<Text onPress={() => navigate('/register')} style={styles.highlightText}>
 					Register
 				</Text>
