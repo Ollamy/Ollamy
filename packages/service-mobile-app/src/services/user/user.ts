@@ -15,7 +15,7 @@ export const userApi = api.injectEndpoints({
 				url: '/user/courses',
 				method: 'GET',
 			}),
-			providesTags: ['Course'],
+			providesTags: [{type: 'Course', id: 'LIST'}],
 		}),
 	}),
 });

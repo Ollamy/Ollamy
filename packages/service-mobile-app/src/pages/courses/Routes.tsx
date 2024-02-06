@@ -1,4 +1,3 @@
-import { Text } from "native-base";
 import { Route, Routes } from "react-router-native";
 import CourseDashboard from "src/pages/courses/dashboard";
 import SectionDashboard from "src/pages/courses/dashboard/section";

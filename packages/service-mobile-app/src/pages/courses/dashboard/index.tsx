@@ -46,9 +46,6 @@ const SECTION_DATA: CourseSection[] = [
 const CourseDashboard = (): JSX.Element => {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const indexToAlignSelf = (index: number) => {
-		return index % 4 === 0 ? 'flex-start' : index % 4 === 1 || index % 4 === 3 ? 'center' : 'flex-end';
-	};
 
 	return (
 		<VStack flex="1" w="100%" space="8">

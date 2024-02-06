@@ -5,6 +5,7 @@ export interface CourseResponse {
   title: string;
   description: string;
   picture: string;
+	ownerId: string;
 }
 
 export interface CourseInfo {

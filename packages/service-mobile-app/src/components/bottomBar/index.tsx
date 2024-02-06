@@ -26,7 +26,7 @@ function BottomBar() {
 					<Image style={{ height: '100%', width: '100%' }} source={PROGRESS} />
 				</Box>
 			</CustomIconButton>
-			<CustomIconButton onPress={() => navigate('/course/join/7b1ea4b3-a262-4400-8bd2-0262487b07c5')}>
+			<CustomIconButton onPress={() => navigate('/course/join/08a17bbb-1d82-4dc3-8b0c-7a9ea90724ee')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={EVENT} />
 				</Box>

@@ -8,7 +8,7 @@ export interface GetUserCoursesResponse {
 	courses: UserCourse[];
 }
 
-interface UserCourse {
+export interface UserCourse {
 	id: string;
 	title: string;
 	description: string;

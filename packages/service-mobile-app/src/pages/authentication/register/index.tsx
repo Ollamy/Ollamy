@@ -38,10 +38,9 @@ function Register(): JSX.Element {
 				lastname: 'grare',
 				email: data.email,
 				password: data.password,
-			});
+			}).unwrap();
 			showToast({
 				type: 'success',
-				topOffset: 92,
 				text1: 'Success',
 				text2: 'Your account has been created successfully',
 			});
@@ -49,7 +48,6 @@ function Register(): JSX.Element {
 		} catch (error) {
 			showToast({
 				type: 'error',
-				topOffset: 92,
 				text1:
 					((error as AxiosError)?.response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
 						?.data.error ?? 'Something went wrong',
