@@ -16,6 +16,7 @@ export const userApi = api.injectEndpoints({
 				method: 'GET',
 			}),
 			providesTags: [{type: 'Course', id: 'LIST'}],
+			forceRefetch: () => true,
 		}),
 	}),
 });

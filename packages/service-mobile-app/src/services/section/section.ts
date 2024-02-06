@@ -9,6 +9,7 @@ export const sectionApi = api.injectEndpoints({
 				url: `/section/lessons/${id}`,
 				method: 'GET',
 			}),
+			forceRefetch: () => true,
 			providesTags: (result, _error, id) => (result ? [{ type: 'Section', id }] : [{ type: 'Section', id: 'LIST' }]),
 		}),
 		getSectionById: build.query<SectionResponse, string>({

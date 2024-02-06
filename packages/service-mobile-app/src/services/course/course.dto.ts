@@ -6,6 +6,8 @@ export interface CourseResponse {
   description: string;
   picture: string;
 	ownerId: string;
+	lastLessonId?: string;
+	lastSectionId?: string;
 }
 
 export interface CourseInfo {

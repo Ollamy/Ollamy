@@ -1,5 +1,6 @@
 import { api } from 'src/services/api';
 import { CourseResponse } from 'src/services/course/course.dto';
+import { SectionResponse } from 'src/services/section/section.dto';
 
 export const courseApi = api.injectEndpoints({
 	endpoints: (build) => ({
@@ -17,12 +18,12 @@ export const courseApi = api.injectEndpoints({
 			}),
 			invalidatesTags: [{ type: 'Course', id: 'LIST' }],
 		}),
-		getCourseSections: build.query<CourseResponse, string>({
+		getCourseSections: build.query<SectionResponse[], string>({
 			query: (id) => ({
 				url: `/course/${id}/sections`,
 				method: 'GET',
 			}),
-			providesTags: (result) => (result ? [{ type: 'Course', id: result.id }] : [{ type: 'Course', id: 'LIST' }]),
+			providesTags: (result, _err, arg) => (result ? [{ type: 'Course', id: arg }] : [{ type: 'Course', id: 'LIST' }]),
 		}),
 	}),
 });
