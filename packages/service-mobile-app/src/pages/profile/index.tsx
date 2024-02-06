@@ -20,7 +20,6 @@ function Profile() {
 
 	return (
 		<>
-			{/* <TopBar /> */}
 			<View style={styles.body}>
 				<Box style={styles.profileContainer}>
 					<Box height="100px" width="100px">

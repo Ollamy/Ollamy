@@ -67,7 +67,6 @@ function Chat() {
 
 	return (
 		<>
-			{/* <TopBar /> */}
 			<View style={styles.body}>
 				<FlatList
 					data={messages}
