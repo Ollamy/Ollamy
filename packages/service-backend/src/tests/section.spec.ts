@@ -4,7 +4,7 @@ import {
   CreateSectionModel,
   IdSectionModel,
   UpdateSectionModel,
-} from '../section/section.dto';
+} from 'section/section.dto';
 import { Lesson, Prisma, Section } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
