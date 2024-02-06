@@ -11,8 +11,10 @@ function Home() {
 	const filteredCourseData = useMemo(() => {
 		if (!data || isFetching) return [];
 		return data.courses.filter((c) => c.title.toLowerCase().includes(inputValue.toLowerCase()));
-	}, [inputValue]);
-
+	}, [inputValue, data, isFetching]);
+	
+	if (isFetching) return <Text>Loading...</Text>;
+	
 	return (
 		<>
 			<VStack w="100%" flex="1" space="8">
