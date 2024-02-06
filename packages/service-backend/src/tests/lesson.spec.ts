@@ -1,13 +1,18 @@
 import { Test } from '@nestjs/testing';
-import { Lesson, Question, QuestionDifficulty, UsertoLesson } from '@prisma/client';
+import {
+  Lesson,
+  Question,
+  QuestionDifficulty,
+  UsertoLesson,
+} from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { LessonService } from './lesson.service';
+import { LessonService } from 'lesson/lesson.service';
 import {
   CreateLessonModel,
   IdLessonModel,
   UpdateLessonModel,
-} from './lesson.dto';
+} from 'lesson/lesson.dto';
 import { QuestionModel } from 'question/question.dto';
 
 describe('postLesson', () => {
@@ -40,7 +45,9 @@ describe('postLesson', () => {
       },
     };
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
-    jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue({} as UsertoLesson);
+    jest
+      .spyOn(prisma.usertoLesson, 'create')
+      .mockResolvedValue({} as UsertoLesson);
 
     // Invoke the function being tested
     const result = await lessonService.postLesson(mockLessonData, mockContext);
@@ -69,9 +76,9 @@ describe('postLesson', () => {
       },
     };
 
-    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      lessonService.postLesson(mockLessonData, mockContext),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if an error occurs', async () => {
@@ -91,9 +98,9 @@ describe('postLesson', () => {
       },
     };
 
-    await expect(lessonService.postLesson(mockLessonData, mockContext)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      lessonService.postLesson(mockLessonData, mockContext),
+    ).rejects.toThrow(ConflictException);
   });
 });
 

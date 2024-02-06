@@ -7,9 +7,9 @@ import {
   IdQuestionModel,
   UpdateQuestionModel,
   validateAnswerModel,
-} from './question.dto';
-import { QuestionService } from './question.service';
-import { PictureService } from '../picture/picture.service';
+} from 'question/question.dto';
+import { QuestionService } from 'question/question.service';
+import { PictureService } from 'picture/picture.service';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('postQuestion', () => {

@@ -6,8 +6,8 @@ import {
   CreateLectureModel,
   IdLectureModel,
   UpdateLectureModel,
-} from './lecture.dto';
-import { LectureService } from './lecture.service';
+} from 'lecture/lecture.dto';
+import { LectureService } from 'lecture/lecture.service';
 
 describe('postLecture', () => {
   let lectureService: LectureService;

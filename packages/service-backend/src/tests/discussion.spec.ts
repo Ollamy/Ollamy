@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, ConflictException } from '@nestjs/common';
-import { DiscussionService } from './discussion.service';
-import { CreateDiscussionModel, MessageModel } from './discussion.dto';
+import { DiscussionService } from 'discussion/discussion.service';
+import { CreateDiscussionModel } from 'discussion/discussion.dto';
 import { Discussion, UserDiscussions, Message } from '@prisma/client';
 import prisma from 'client';
 

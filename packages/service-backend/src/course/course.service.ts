@@ -49,7 +49,7 @@ export class CourseService {
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Course not created !');
+      throw new ConflictException(`Course not created !`);
     }
   }
 
