@@ -1,7 +1,7 @@
 import { Heading, Image, Text, VStack } from 'native-base';
 
 interface SectionHeaderProps {
-	icon: string;
+	icon?: string;
 	title: string;
 	description: string;
 }
@@ -20,11 +20,13 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ icon, title, description 
 			alignItems="center"
 			space="12px"
 		>
-			<Image source={{ uri: icon }} alt="icon" width="100px" height="100px" marginTop={-24} />
-			<Heading textAlign="center" size="lg" color="#876BF6">
+			{icon && <Image source={{ uri: icon }} alt="icon" width="100px" height="100px" marginTop={-24} />}
+			<Heading textAlign="center" size="xl" color="#876BF6">
 				{title}
 			</Heading>
-			<Text textAlign="center">{description}</Text>
+			<Text fontSize="md" textAlign="center">
+				{description}
+			</Text>
 		</VStack>
 	);
 };
