@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
+import type { GetCourseRequest } from "services/api/out";
 import styled from "styled-components";
 
 import profile from "../../../assets/profile.png";
@@ -8,10 +9,14 @@ import { CoursePicture } from "../../../components/Course/Picture/course.picture
 import { CourseSetting } from "../../../components/Course/Setting/course.setting";
 import { Navbar } from "../../../components/Navbar/navbar";
 import TopBar from "../../../components/TopBar";
+// eslint-disable-next-line import/no-cycle
+import api from "../../../services/api";
 
 export function SettingPage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [profilPercentage, setProfilePercentage] = useState<number>(45);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [courseProfile, setCourseProfile] = useState<GetCourseRequest>();
 
   return (
     <Container>
@@ -27,6 +32,7 @@ export function SettingPage(): ReactElement {
               subTitleCourse="Course name"
               subTitleInfo="Price"
               subTitlePrice="Price"
+              userProfile={courseProfile}
             />
             <CoursePicture
               title="Course picture"

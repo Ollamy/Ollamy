@@ -1,21 +1,32 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { GetUserModel } from "services/api/out";
 import styled from "styled-components";
 
-import profile from "../../assets/profile.png";
+import prof from "../../assets/profile.png";
 import { CoursePicture } from "../../components/Course/Picture/course.picture";
 import { Navbar } from "../../components/Navbar/navbar";
 import { ProfileInfo } from "../../components/profile/profile";
 import TopBar from "../../components/TopBar";
+// eslint-disable-next-line import/no-cycle
+import api from "../../services/api";
 
 export function ProfilePage(): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [profile, setProfile] = useState<GetUserModel>();
+
   const [profilPercentage, setProfilePercentage] = useState<number>(45);
+  const { data } = api.user.useUser();
+
+  useEffect(() => {
+    if (data) {
+      setProfile(data);
+    }
+  }, [data]);
 
   return (
     <Container>
       <TopBar title="Profile">
-        <img src={profile} alt="profile pic" height="90%" />
+        <img src={prof} alt="profile pic" height="90%" />
       </TopBar>
       <Body>
         <Navbar user="Alexandre Garage" profilPercentage={profilPercentage} />
@@ -27,6 +38,7 @@ export function ProfilePage(): ReactElement {
                 subTitleCourse="First name"
                 subTitleInfo="Last name"
                 subTitlePrice="Email"
+                userProfile={profile}
               />
             </RightContainerSetting>
           </RightContainerTopCourseSettings>
