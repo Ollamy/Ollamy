@@ -3,6 +3,17 @@ import { NotFoundException, ConflictException } from '@nestjs/common';
 import { DiscussionService } from 'discussion/discussion.service';
 import { CreateDiscussionModel } from 'discussion/discussion.dto';
 import { Discussion, UserDiscussions, Message } from '@prisma/client';
+import { context } from 'tests/data/user.data';
+import {
+  mockDiscussionData,
+  mockDiscussionDb,
+  mockUserDiscussionDb,
+  mockUserId,
+  mockDiscussionId,
+  userId,
+  content,
+  mockUserDiscussion
+} from 'tests/data/discussion.data';
 import prisma from 'client';
 
 describe('DiscussionService', () => {
@@ -18,23 +29,7 @@ describe('DiscussionService', () => {
 
   describe('postDiscussion', () => {
     it('should create a discussion and user discussions', async () => {
-      // Mock the dependencies or services
-      const mockDiscussionData: CreateDiscussionModel = {
-        title: 'Discussion Title',
-        imageUrl: 'https://example.com/image.jpg',
-        userIds: ['1', '2', '3'],
-      };
-      const mockDiscussionDb: Discussion = {
-        id: '1',
-        title: 'Discussion Title',
-        image_url: 'https://example.com/image.jpg',
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-      const mockUserDiscussionDb: UserDiscussions = {
-        user_id: '1',
-        discussion_id: '1',
-      };
+
       jest
         .spyOn(prisma.discussion, 'create')
         .mockResolvedValue(mockDiscussionDb);
@@ -73,12 +68,6 @@ describe('DiscussionService', () => {
     it('should throw ConflictException if discussion creation fails', async () => {
       jest.spyOn(prisma.discussion, 'create').mockResolvedValue(null);
 
-      const mockDiscussionData: CreateDiscussionModel = {
-        title: 'Discussion Title',
-        imageUrl: 'https://example.com/image.jpg',
-        userIds: ['1', '2', '3'],
-      };
-
       await expect(
         discussionService.postDiscussion(mockDiscussionData),
       ).rejects.toThrow(ConflictException);
@@ -89,12 +78,6 @@ describe('DiscussionService', () => {
         .spyOn(prisma.discussion, 'create')
         .mockRejectedValue(new Error('Some error'));
 
-      const mockDiscussionData: CreateDiscussionModel = {
-        title: 'Discussion Title',
-        imageUrl: 'https://example.com/image.jpg',
-        userIds: ['1', '2', '3'],
-      };
-
       await expect(
         discussionService.postDiscussion(mockDiscussionData),
       ).rejects.toThrow(ConflictException);
@@ -104,12 +87,6 @@ describe('DiscussionService', () => {
   describe('postUserDiscussion', () => {
     it('should create a user discussion', async () => {
       // Mock the dependencies or services
-      const mockUserId = '1';
-      const mockDiscussionId = '1';
-      const mockUserDiscussionDb: UserDiscussions = {
-        user_id: mockUserId,
-        discussion_id: mockDiscussionId,
-      };
       jest
         .spyOn(prisma.userDiscussions, 'create')
         .mockResolvedValue(mockUserDiscussionDb);
@@ -209,13 +186,6 @@ describe('DiscussionService', () => {
 
     it('should throw ConflictException if message creation fails', async () => {
       // Mock data
-      const userId = '1';
-      const discussionId = '1';
-      const content = 'Hello, this is a test message';
-      const mockUserDiscussion: UserDiscussions = {
-        user_id: userId,
-        discussion_id: discussionId,
-      };
 
       // Mock Prisma functions
       jest
@@ -225,21 +195,21 @@ describe('DiscussionService', () => {
 
       // Call the function being tested and expect an exception
       await expect(
-        discussionService.postDiscussionMessage(userId, discussionId, content),
+        discussionService.postDiscussionMessage(userId, mockDiscussionId, content),
       ).rejects.toThrow(ConflictException);
 
       // Assertions
       expect(prisma.userDiscussions.findFirst).toHaveBeenCalledWith({
         where: {
           user_id: userId,
-          discussion_id: discussionId,
+          discussion_id: mockDiscussionId,
         },
       });
       expect(prisma.message.create).toHaveBeenCalledWith({
         data: {
           owner_id: userId,
           content,
-          discussion_id: discussionId,
+          discussion_id: mockDiscussionId,
         },
       });
     });
