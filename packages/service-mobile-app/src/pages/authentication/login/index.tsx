@@ -1,13 +1,12 @@
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
 import type { AxiosError, AxiosResponse } from 'axios';
-import { FormControl } from 'native-base';
-import { useLoginMutation } from 'src/services/auth';
+import { Button, FormControl } from 'native-base';
+import { useLoginMutation } from 'src/services/auth/auth';
 
 interface LoginForm {
 	email: string;
@@ -31,10 +30,9 @@ function Login(): JSX.Element {
 			await login({
 				email: data.email,
 				password: data.password,
-			});
+			}).unwrap();
 			showToast({
 				type: 'success',
-				topOffset: 92,
 				text1: 'Success',
 				text2: 'You have successfully logged in',
 			});
@@ -42,7 +40,6 @@ function Login(): JSX.Element {
 		} catch (error) {
 			showToast({
 				type: 'error',
-				topOffset: 92,
 				text1:
 					((error as AxiosError).response as AxiosResponse<{ message: string; error: string; statusCode: number }>)
 						?.data.error ?? 'Something went wrong',
@@ -76,16 +73,14 @@ function Login(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.email}>
-						<GestureHandlerRootView>
-							<TextInput
-								value={value}
-								onChangeText={onChange}
-								onBlur={onBlur}
-								inputMode="email"
-								style={styles.input}
-								placeholder="Email"
-							/>
-						</GestureHandlerRootView>
+						<TextInput
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							inputMode="email"
+							style={styles.input}
+							placeholder="Email"
+						/>
 						{errors.email?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -98,17 +93,15 @@ function Login(): JSX.Element {
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<FormControl isInvalid={!!errors.password}>
-						<GestureHandlerRootView>
-							<TextInput
-								secureTextEntry
-								value={value}
-								onChangeText={onChange}
-								onBlur={onBlur}
-								inputMode="text"
-								style={styles.input}
-								placeholder="Password"
-							/>
-						</GestureHandlerRootView>
+						<TextInput
+							secureTextEntry
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							inputMode="text"
+							style={styles.input}
+							placeholder="Password"
+						/>
 						{errors.password?.type === 'required' && (
 							<FormControl.ErrorMessage>This field is required</FormControl.ErrorMessage>
 						)}
@@ -119,15 +112,11 @@ function Login(): JSX.Element {
 				<Text style={styles.text}>Forgot your password ?</Text>
 				<Text style={styles.highlightText}>Recover password</Text>
 			</View>
-			{isLoading ? (
-				<ActivityIndicator />
-			) : (
-				<TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-					<Text style={styles.buttonText}>Log in</Text>
-				</TouchableOpacity>
-			)}
+			<Button isLoading={isLoading} onPress={handleSubmit(onSubmit)} style={styles.button}>
+				<Text style={styles.buttonText}>Log in</Text>
+			</Button>
 			<View style={styles.horizontalContainer}>
-				<Text style={styles.text}>Don`t have an account ?</Text>
+				<Text style={styles.text}>Don't have an account ?</Text>
 				<Text onPress={() => navigate('/register')} style={styles.highlightText}>
 					Register
 				</Text>

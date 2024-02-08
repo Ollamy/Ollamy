@@ -155,9 +155,8 @@ export class CourseService {
       }
 
       return courseSectionsDb.map((lesson: Section) => ({
-        courseId: lesson.course_id,
         ...lesson,
-      })) as SectionModel[];
+      })) as unknown as SectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
