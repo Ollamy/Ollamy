@@ -2,7 +2,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import { NativeBaseProvider, Text } from 'native-base';
-import AppSafeArea from 'src/components/SafeArea/AppSafeArea';
 import Login from 'src/pages/authentication/login';
 import Register from 'src/pages/authentication/register';
 import Chat from 'src/pages/chat';
@@ -12,6 +11,7 @@ import Profile from 'src/pages/profile';
 import SplashScreen from 'src/pages/splashScreen';
 import { store } from 'src/store';
 import customTheme from 'src/theme/theme';
+import AppSafeArea from 'src/components/safeArea/AppSafeArea';
 
 function App() {
 	return (
