@@ -1,16 +1,5 @@
 import { api } from 'src/services/api';
-
-export interface LoginRequest {
-	email: string;
-	password: string;
-}
-
-export interface RegisterRequest {
-	email: string;
-	password: string;
-	firstname: string;
-	lastname: string;
-}
+import { LoginRequest, RegisterRequest } from 'src/services/auth/auth.dto';
 
 export const authApi = api.injectEndpoints({
 	endpoints: (build) => ({
@@ -23,7 +12,7 @@ export const authApi = api.injectEndpoints({
 			invalidatesTags: ['User'],
 		}),
 		register: build.mutation<unknown, RegisterRequest>({
-			query: (body) => ({
+		query: (body) => ({
 				url: '/user/register',
 				body,
 				method: 'POST',

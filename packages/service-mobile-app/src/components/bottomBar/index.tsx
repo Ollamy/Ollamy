@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-native';
 import { Box } from 'native-base';
 
 // @ts-ignore
-import COMMUNITY from '../../../assets/icons/community.png';
+import COMMUNITY from 'assets/icons/community.png';
 // @ts-ignore
-import EVENT from '../../../assets/icons/event.png';
+import EVENT from 'assets/icons/event.png';
 // @ts-ignore
-import MEDAL from '../../../assets/icons/medal.png';
+import MEDAL from 'assets/icons/medal.png';
 // @ts-ignore
-import PROGRESS from '../../../assets/icons/progress.png';
+import PROGRESS from 'assets/icons/progress.png';
 import CustomIconButton from '../buttons/customIconButton';
 
 function BottomBar() {
@@ -21,12 +21,12 @@ function BottomBar() {
 
 	return (
 		<Box style={styles.container}>
-			<CustomIconButton onPress={handlePress}>
+			<CustomIconButton onPress={() => navigate('/home')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={PROGRESS} />
 				</Box>
 			</CustomIconButton>
-			<CustomIconButton onPress={handlePress}>
+			<CustomIconButton onPress={() => navigate('/course/join/fd73de44-a783-4f31-82f9-c07b60dbf73f')}>
 				<Box height="35px" width="35px">
 					<Image style={{ height: '100%', width: '100%' }} source={EVENT} />
 				</Box>
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		borderTopRightRadius: 16,
 		borderTopLeftRadius: 16,
+		borderBottomWidth: 0,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
