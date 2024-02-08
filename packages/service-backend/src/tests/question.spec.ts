@@ -1,13 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { Question } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException } from '@nestjs/common';
-import {
-  CreateQuestionModel,
-  IdQuestionModel,
-  UpdateQuestionModel,
-  validateAnswerModel,
-} from 'question/question.dto';
 import {
   mockQuestionData,
   mockQuestionDb,
@@ -20,8 +13,8 @@ import {
   mockQuestionDb3,
   correctAnswerId,
   mockQuestionDb4,
-  mockBodyIncorrect
-} from 'tests/data/question.data'
+  mockBodyIncorrect,
+} from 'tests/data/question.data';
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -117,7 +110,9 @@ describe('getQuestion', () => {
   it('should return a question model when the question exists', async () => {
     // Mock the dependencies or services
 
-    jest.spyOn(PictureService, 'getPicture').mockResolvedValue('1');
+    jest
+      .spyOn(PictureService, 'getPicture')
+      .mockResolvedValue(mockQuestionDb2.picture_id);
     jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(mockQuestionDb2);
 
     // Invoke the function being tested
@@ -165,7 +160,6 @@ describe('getQuestion', () => {
       .spyOn(prisma.question, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
-
     await expect(questionService.getQuestion(mockQuestionId2)).rejects.toThrow(
       ConflictException,
     );
@@ -202,7 +196,9 @@ describe('updateQuestion', () => {
   });
 
   it('should return success: true if the answer is correct', async () => {
-    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb3);
+    jest
+      .spyOn(prisma.question, 'findUnique')
+      .mockResolvedValue(mockQuestionDb3);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
     await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
@@ -214,11 +210,14 @@ describe('updateQuestion', () => {
   });
 
   it('should return success: false if the answer is incorrect', async () => {
-
-    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb4);
+    jest
+      .spyOn(prisma.question, 'findUnique')
+      .mockResolvedValue(mockQuestionDb4);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
-    await expect(questionService.validateAnswer(mockBodyIncorrect)).resolves.toEqual({
+    await expect(
+      questionService.validateAnswer(mockBodyIncorrect),
+    ).resolves.toEqual({
       success: false,
       answer: correctAnswerId,
       end: true,

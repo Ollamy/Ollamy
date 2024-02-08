@@ -3,7 +3,6 @@ import {
   Lesson,
   Picture,
   Section,
-  User,
   UsertoCourse,
   UsertoLesson,
 } from '@prisma/client';

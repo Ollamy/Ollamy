@@ -8,11 +8,9 @@ import {
   mockDiscussionData,
   mockDiscussionDb,
   mockUserDiscussionDb,
-  mockUserId,
-  mockDiscussionId,
-  userId,
-  content,
-  mockUserDiscussion
+  mockMessage,
+  mockUserDiscussion,
+  discussionId,
 } from 'tests/data/discussion.data';
 import prisma from 'client';
 
@@ -29,7 +27,6 @@ describe('DiscussionService', () => {
 
   describe('postDiscussion', () => {
     it('should create a discussion and user discussions', async () => {
-
       jest
         .spyOn(prisma.discussion, 'create')
         .mockResolvedValue(mockDiscussionDb);
@@ -93,16 +90,16 @@ describe('DiscussionService', () => {
 
       // Invoke the function being tested
       const result = await discussionService.postUserDiscussion(
-        mockUserId,
-        mockDiscussionId,
+        context.__user.id,
+        discussionId,
       );
 
       // Perform assertions
       expect(prisma.userDiscussions.create).toHaveBeenCalledTimes(4);
       expect(prisma.userDiscussions.create).toHaveBeenCalledWith({
         data: {
-          user_id: mockUserId,
-          discussion_id: mockDiscussionId,
+          user_id: context.__user.id,
+          discussion_id: discussionId,
         },
       });
 
@@ -111,23 +108,6 @@ describe('DiscussionService', () => {
   });
   describe('postDiscussionMessage', () => {
     it('should create a user message', async () => {
-      // Mock data
-      const userId = '1';
-      const discussionId = '1';
-      const content = 'Hello, this is a test message';
-      const mockUserDiscussion: UserDiscussions = {
-        user_id: userId,
-        discussion_id: discussionId,
-      };
-      const mockMessage: Message = {
-        id: '1',
-        owner_id: userId,
-        content,
-        discussion_id: discussionId,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-
       // Mock Prisma functions
       jest
         .spyOn(prisma.userDiscussions, 'findFirst')
@@ -136,40 +116,36 @@ describe('DiscussionService', () => {
 
       // Call the function being tested
       const result = await discussionService.postDiscussionMessage(
-        userId,
+        context.__user.id,
         discussionId,
-        content,
+        mockMessage.content,
       );
 
       // Assertions
       expect(result).toEqual('User Message created');
       expect(prisma.userDiscussions.findFirst).toHaveBeenCalledWith({
         where: {
-          user_id: userId,
+          user_id: context.__user.id,
           discussion_id: discussionId,
         },
       });
       expect(prisma.message.create).toHaveBeenCalledWith({
         data: {
-          owner_id: userId,
-          content,
+          owner_id: context.__user.id,
+          content: mockMessage.content,
           discussion_id: discussionId,
         },
       });
     });
 
     it('should throw ConflictException if the user is not part of the discussion', async () => {
-      // Mock data
-      const userId = '1';
-      const discussionId = '1';
-
       // Mock Prisma function to return null
       jest.spyOn(prisma.userDiscussions, 'findFirst').mockResolvedValue(null);
 
       // Call the function being tested and expect an exception
       await expect(
         discussionService.postDiscussionMessage(
-          userId,
+          context.__user.id,
           discussionId,
           'Test message',
         ),
@@ -178,7 +154,7 @@ describe('DiscussionService', () => {
       // Assertions
       expect(prisma.userDiscussions.findFirst).toHaveBeenCalledWith({
         where: {
-          user_id: userId,
+          user_id: context.__user.id,
           discussion_id: discussionId,
         },
       });
@@ -195,21 +171,25 @@ describe('DiscussionService', () => {
 
       // Call the function being tested and expect an exception
       await expect(
-        discussionService.postDiscussionMessage(userId, mockDiscussionId, content),
+        discussionService.postDiscussionMessage(
+          context.__user.id,
+          discussionId,
+          mockMessage.content,
+        ),
       ).rejects.toThrow(ConflictException);
 
       // Assertions
       expect(prisma.userDiscussions.findFirst).toHaveBeenCalledWith({
         where: {
-          user_id: userId,
-          discussion_id: mockDiscussionId,
+          user_id: context.__user.id,
+          discussion_id: discussionId,
         },
       });
       expect(prisma.message.create).toHaveBeenCalledWith({
         data: {
-          owner_id: userId,
-          content,
-          discussion_id: mockDiscussionId,
+          owner_id: context.__user.id,
+          content: mockMessage.content,
+          discussion_id: discussionId,
         },
       });
     });

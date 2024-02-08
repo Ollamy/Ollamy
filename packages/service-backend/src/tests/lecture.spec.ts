@@ -1,21 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { Lecture } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException } from '@nestjs/common';
-import {
-  CreateLectureModel,
-  IdLectureModel,
-  UpdateLectureModel,
-} from 'lecture/lecture.dto';
+import { IdLectureModel } from 'lecture/lecture.dto';
 import {
   mockLectureData,
   mockLectureDb,
   mockLectureDb2,
   mockLectureId,
-  mockLectureId2,
   mockLectureDb3,
   mockLectureData2,
-  mockUpdatedLecture
+  mockUpdatedLecture,
 } from 'tests/data/lecture.data';
 import { LectureService } from 'lecture/lecture.service';
 
@@ -130,14 +124,14 @@ describe('getLecture', () => {
 
     // Invoke the function being tested
     const result = await lectureService.getLecture({
-      id: mockLectureId2,
+      id: mockLectureDb2.id,
     } as IdLectureModel);
 
     // Perform assertions
     expect(prisma.lecture.findUnique).toHaveBeenCalledTimes(1);
     expect(prisma.lecture.findUnique).toHaveBeenCalledWith({
       where: {
-        id: mockLectureId2,
+        id: mockLectureDb2.id,
       },
     });
 
@@ -152,7 +146,7 @@ describe('getLecture', () => {
 
     await expect(
       lectureService.getLecture({
-        id: mockLectureId2,
+        id: mockLectureDb2.id,
       } as IdLectureModel),
     ).rejects.toThrow(ConflictException);
   });
@@ -164,7 +158,7 @@ describe('getLecture', () => {
 
     await expect(
       lectureService.getLecture({
-        id: mockLectureId2,
+        id: mockLectureDb2.id,
       } as IdLectureModel),
     ).rejects.toThrow(ConflictException);
   });
@@ -187,7 +181,7 @@ describe('updateLecture', () => {
     // Invoke the function being tested
     const result = await lectureService.updateLecture(
       {
-        id: mockLectureId2,
+        id: mockLectureDb2.id,
       } as IdLectureModel,
       mockLectureData2,
     );
@@ -196,15 +190,15 @@ describe('updateLecture', () => {
     expect(prisma.lecture.update).toHaveBeenCalledTimes(1);
     expect(prisma.lecture.update).toHaveBeenCalledWith({
       where: {
-        id: mockLectureId2,
+        id: mockLectureDb2.id,
       },
       data: {
         data: '1',
-        lesson_id: mockLectureId2,
+        lesson_id: mockLectureDb2.lesson_id,
       },
     });
 
-    expect(result).toStrictEqual({ id: mockLectureId2 });
+    expect(result).toStrictEqual({ id: mockUpdatedLecture.id });
   });
 
   it('should throw ConflictException if the lecture does not exist', async () => {
@@ -213,7 +207,7 @@ describe('updateLecture', () => {
     await expect(
       lectureService.updateLecture(
         {
-          id: mockLectureId2,
+          id: mockLectureDb2.id,
         } as IdLectureModel,
         mockLectureData2,
       ),
@@ -228,7 +222,7 @@ describe('updateLecture', () => {
     await expect(
       lectureService.updateLecture(
         {
-          id: mockLectureId2,
+          id: mockLectureDb2.id,
         } as IdLectureModel,
         mockLectureData2,
       ),

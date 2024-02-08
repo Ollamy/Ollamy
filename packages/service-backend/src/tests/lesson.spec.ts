@@ -1,23 +1,13 @@
 import { Test } from '@nestjs/testing';
-import {
-  Lesson,
-  Question,
-  QuestionDifficulty,
-  UsertoLesson,
-} from '@prisma/client';
+import { UsertoLesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from 'lesson/lesson.service';
+
+import { context } from './data/user.data';
 import {
-  CreateLessonModel,
-  IdLessonModel,
-  UpdateLessonModel,
-} from 'lesson/lesson.dto';
-import {
-  mockContext,
   mockCreatedLesson,
   mockLessonData,
-  mockUserId,
   mockDeletedLesson,
   mockLessonData2,
   mockLesson,
@@ -25,8 +15,8 @@ import {
   mockLessonUpdatedData,
   mockUpdatedLesson,
   mockLessonData3,
-  mockLessonQuestions
-} from 'tests/data/lesson.data'
+  mockLessonQuestions,
+} from 'tests/data/lesson.data';
 import { QuestionModel } from 'question/question.dto';
 
 describe('postLesson', () => {
@@ -40,14 +30,11 @@ describe('postLesson', () => {
     lessonService = moduleRef.get<LessonService>(LessonService);
   });
   it('should return a success message when the lesson is created', async () => {
-
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
-    jest
-      .spyOn(prisma.usertoLesson, 'create')
-      .mockResolvedValue({} as UsertoLesson);
+    jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue(null);
 
     // Invoke the function being tested
-    const result = await lessonService.postLesson(mockLessonData, mockContext);
+    const result = await lessonService.postLesson(mockLessonData, context);
 
     // Perform assertions
     expect(prisma.lesson.create).toHaveBeenCalledTimes(1);
@@ -62,7 +49,7 @@ describe('postLesson', () => {
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(null);
 
     await expect(
-      lessonService.postLesson(mockLessonData, mockContext),
+      lessonService.postLesson(mockLessonData, context.__user.id),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -72,7 +59,7 @@ describe('postLesson', () => {
       .mockRejectedValue(new Error('Some error'));
 
     await expect(
-      lessonService.postLesson(mockLessonData, mockContext),
+      lessonService.postLesson(mockLessonData, context.__user.id),
     ).rejects.toThrow(ConflictException);
   });
 });
@@ -134,7 +121,6 @@ describe('getLesson', () => {
   });
 
   it('should return the lesson when it exists', async () => {
-
     jest.spyOn(prisma.lesson, 'findFirst').mockResolvedValue(mockLesson);
 
     // Invoke the function being tested
@@ -183,7 +169,6 @@ describe('updateLesson', () => {
   });
 
   it('should update the lesson when it exists', async () => {
-
     jest.spyOn(prisma.lesson, 'update').mockResolvedValue(mockUpdatedLesson);
 
     // Invoke the function being tested

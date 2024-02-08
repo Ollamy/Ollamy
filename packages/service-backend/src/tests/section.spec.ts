@@ -1,22 +1,18 @@
 import { Test } from '@nestjs/testing';
 import { SectionService } from 'section/section.service';
 import {
-  CreateSectionModel,
-  IdSectionModel,
-  UpdateSectionModel,
-} from 'section/section.dto';
-import {
   mockSectionData,
   mockSectionDb,
   mockSectionData2,
   mockSectionDb2,
   mockError,
+  sectionId,
   mockSectionData3,
-  mockSectionId,
   mockSectionDb3,
-  mockLessonDb
-} from 'tests/data/section.data'
-import { Lesson, Prisma, Section } from '@prisma/client';
+  mockLessonDb,
+  courseId,
+} from 'tests/data/section.data';
+import { Lesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
@@ -99,17 +95,17 @@ describe('deleteSection', () => {
   it('should throw NotFoundException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'delete').mockResolvedValue(null);
 
-    await expect(sectionService.deleteSection(mockSectionData2)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if section has already been removed', async () => {
     jest.spyOn(prisma.section, 'delete').mockRejectedValue(mockError);
 
-    await expect(sectionService.deleteSection(mockSectionData2)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if an error occurs', async () => {
@@ -117,9 +113,9 @@ describe('deleteSection', () => {
       .spyOn(prisma.section, 'delete')
       .mockRejectedValue(new Error('Some error'));
 
-    await expect(sectionService.deleteSection(mockSectionData2)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 });
 
@@ -139,13 +135,13 @@ describe('getSection', () => {
     jest.spyOn(prisma.section, 'findFirst').mockResolvedValue(mockSectionDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSection(mockSectionId);
+    const result = await sectionService.getSection(sectionId);
 
     // Perform assertions
     expect(prisma.section.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.section.findFirst).toHaveBeenCalledWith({
       where: {
-        id: mockSectionId,
+        id: sectionId,
       },
     });
 
@@ -160,7 +156,7 @@ describe('getSection', () => {
   it('should throw ConflictException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'findFirst').mockResolvedValue(null);
 
-    await expect(sectionService.getSection(mockSectionId)).rejects.toThrow(
+    await expect(sectionService.getSection(sectionId)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -170,7 +166,7 @@ describe('getSection', () => {
       .spyOn(prisma.section, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
-    await expect(sectionService.getSection(mockSectionId)).rejects.toThrow(
+    await expect(sectionService.getSection(sectionId)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -194,7 +190,7 @@ describe('updateSection', () => {
 
     // Invoke the function being tested
     const result = await sectionService.updateSection(
-      mockSectionId,
+      sectionId,
       mockSectionData3,
     );
 
@@ -202,23 +198,23 @@ describe('updateSection', () => {
     expect(prisma.section.update).toHaveBeenCalledTimes(1);
     expect(prisma.section.update).toHaveBeenCalledWith({
       where: {
-        id: mockSectionId,
+        id: sectionId,
       },
       data: {
         title: 'Updated Section Title',
         description: 'Updated Section Description',
-        course_id: '456',
+        course_id: courseId,
       },
     });
 
-    expect(result).toStrictEqual({ id: mockSectionId });
+    expect(result).toStrictEqual({ id: sectionId });
   });
 
   it('should throw ConflictException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'update').mockResolvedValue(null);
 
     await expect(
-      sectionService.updateSection(mockSectionId, mockSectionData3),
+      sectionService.updateSection(sectionId, mockSectionData3),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -228,7 +224,7 @@ describe('updateSection', () => {
       .mockRejectedValue(new Error('Some error'));
 
     await expect(
-      sectionService.updateSection(mockSectionId, mockSectionData3),
+      sectionService.updateSection(sectionId, mockSectionData3),
     ).rejects.toThrow(ConflictException);
   });
 });
@@ -249,13 +245,13 @@ describe('getSectionLessons', () => {
     jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSectionLessons(mockSectionId);
+    const result = await sectionService.getSectionLessons(sectionId);
 
     // Perform assertions
     expect(prisma.lesson.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.lesson.findMany).toHaveBeenCalledWith({
       where: {
-        section_id: mockSectionId,
+        section_id: sectionId,
       },
     });
 
@@ -274,8 +270,8 @@ describe('getSectionLessons', () => {
       .spyOn(prisma.lesson, 'findMany')
       .mockRejectedValue(new Error('Some error'));
 
-    await expect(
-      sectionService.getSectionLessons(mockSectionId),
-    ).rejects.toThrow(NotFoundException);
+    await expect(sectionService.getSectionLessons(sectionId)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 });
