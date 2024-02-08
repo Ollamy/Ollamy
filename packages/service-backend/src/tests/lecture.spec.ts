@@ -193,7 +193,7 @@ describe('updateLecture', () => {
         id: mockLectureDb2.id,
       },
       data: {
-        data: '1',
+        data: mockUpdatedLecture.data,
         lesson_id: mockLectureDb2.lesson_id,
       },
     });

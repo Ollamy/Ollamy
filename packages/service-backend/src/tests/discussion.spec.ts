@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException, ConflictException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import { DiscussionService } from 'discussion/discussion.service';
-import { CreateDiscussionModel } from 'discussion/discussion.dto';
-import { Discussion, UserDiscussions, Message } from '@prisma/client';
 import { context } from 'tests/data/user.data';
 import {
   mockDiscussionData,
@@ -147,7 +145,7 @@ describe('DiscussionService', () => {
         discussionService.postDiscussionMessage(
           context.__user.id,
           discussionId,
-          'Test message',
+          mockMessage.content,
         ),
       ).rejects.toThrow(ConflictException);
 

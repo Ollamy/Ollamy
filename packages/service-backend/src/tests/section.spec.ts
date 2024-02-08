@@ -201,8 +201,8 @@ describe('updateSection', () => {
         id: sectionId,
       },
       data: {
-        title: 'Updated Section Title',
-        description: 'Updated Section Description',
+        title: mockSectionData3.title,
+        description: mockSectionData3.description,
         course_id: courseId,
       },
     });

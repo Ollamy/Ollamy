@@ -14,10 +14,10 @@ import {
   correctAnswerId,
   mockQuestionDb4,
   mockBodyIncorrect,
+  questionId,
 } from 'tests/data/question.data';
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
-import { v4 as uuidv4 } from 'uuid';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
@@ -148,9 +148,7 @@ describe('getQuestion', () => {
   it('should throw ConflictException if the question does not exist', async () => {
     jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(null);
 
-    const mockQuestionId = '123';
-
-    await expect(questionService.getQuestion(mockQuestionId)).rejects.toThrow(
+    await expect(questionService.getQuestion(questionId)).rejects.toThrow(
       ConflictException,
     );
   });

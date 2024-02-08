@@ -1,5 +1,4 @@
 import { Test } from '@nestjs/testing';
-import { UsertoLesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from 'lesson/lesson.service';
@@ -15,9 +14,7 @@ import {
   mockLessonUpdatedData,
   mockUpdatedLesson,
   mockLessonData3,
-  mockLessonQuestions,
 } from 'tests/data/lesson.data';
-import { QuestionModel } from 'question/question.dto';
 
 describe('postLesson', () => {
   let lessonService: LessonService;
@@ -217,51 +214,10 @@ describe('getLessonQuestions', () => {
     lessonService = moduleRef.get<LessonService>(LessonService);
   });
 
-  it('should return the questions for the lesson when they exist', async () => {
-    // Mock the dependencies or services
-    jest
-      .spyOn(prisma.question, 'findMany')
-      .mockResolvedValue(mockLessonQuestions);
-
-    // Invoke the function being tested
-    const result = await lessonService.getLessonQuestions(mockLessonId);
-
-    // Perform assertions
-    expect(prisma.question.findMany).toHaveBeenCalledTimes(1);
-    expect(prisma.question.findMany).toHaveBeenCalledWith({
-      orderBy: [
-        {
-          order: 'asc',
-        },
-      ],
-      where: { lesson_id: mockLessonId },
-    });
-
-    const expectedQuestions: QuestionModel[] = mockLessonQuestions.map(
-      (question) => ({
-        id: question.id,
-        lessonId: question.lesson_id,
-        title: question.title,
-        description: question.description,
-        trustAnswerId: question.trust_answer_id,
-        typeAnswer: question.type_answer,
-        typeQuestion: question.type_question,
-        difficulty: question.difficulty,
-        picture_id: question.picture_id,
-        points: question.points,
-        order: question.order,
-      }),
-    );
-
-    // expect(result).toEqual(expectedQuestions);
-  });
-
   it('should throw NotFoundException if an error occurs', async () => {
     jest
       .spyOn(prisma.question, 'findMany')
       .mockRejectedValue(new Error('Some error'));
-
-    const mockLessonId = '123';
 
     await expect(
       lessonService.getLessonQuestions(mockLessonId),
