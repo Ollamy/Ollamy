@@ -8,6 +8,20 @@ import {
   UpdateQuestionModel,
   validateAnswerModel,
 } from 'question/question.dto';
+import {
+  mockQuestionData,
+  mockQuestionDb,
+  mockQuestionId,
+  mockQuestionDb2,
+  mockQuestionId2,
+  mockQuestionData2,
+  mockQuestionId3,
+  mockBody,
+  mockQuestionDb3,
+  correctAnswerId,
+  mockQuestionDb4,
+  mockBodyIncorrect
+} from 'tests/data/question.data'
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,16 +40,6 @@ describe('postQuestion', () => {
   it('should throw NotFoundException if question creation fails', async () => {
     jest.spyOn(prisma.question, 'create').mockResolvedValue(null);
 
-    const mockQuestionData: CreateQuestionModel = {
-      lessonId: '123',
-      title: 'Question Title',
-      description: 'Question Description',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      data: 'test',
-      order: 0,
-    };
-
     await expect(
       questionService.postQuestion(mockQuestionData),
     ).rejects.toThrow(ConflictException);
@@ -45,16 +49,6 @@ describe('postQuestion', () => {
     jest
       .spyOn(prisma.question, 'create')
       .mockRejectedValue(new Error('Some error'));
-
-    const mockQuestionData: CreateQuestionModel = {
-      lessonId: '123',
-      title: 'Question Title',
-      description: 'Question Description',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      data: 'test',
-      order: 0,
-    };
 
     await expect(
       questionService.postQuestion(mockQuestionData),
@@ -74,23 +68,6 @@ describe('deleteQuestion', () => {
   });
 
   it('should delete a question and return the deletion message', async () => {
-    // Mock the dependencies or services
-    const mockQuestionId: IdQuestionModel = {
-      id: '123',
-    };
-    const mockQuestionDb: Question = {
-      id: mockQuestionId.id,
-      lesson_id: '1',
-      title: '2',
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      trust_answer_id: '1',
-      description: '1',
-      picture_id: '',
-      points: 0,
-      difficulty: 'BEGINNER',
-      order: 0,
-    };
     jest.spyOn(prisma.question, 'delete').mockResolvedValue(mockQuestionDb);
 
     // Invoke the function being tested
@@ -110,10 +87,6 @@ describe('deleteQuestion', () => {
   it('should throw NotFoundException if question deletion fails', async () => {
     jest.spyOn(prisma.question, 'delete').mockResolvedValue(null);
 
-    const mockQuestionId: IdQuestionModel = {
-      id: '123',
-    };
-
     await expect(
       questionService.deleteQuestion(mockQuestionId),
     ).rejects.toThrow(ConflictException);
@@ -123,10 +96,6 @@ describe('deleteQuestion', () => {
     jest
       .spyOn(prisma.question, 'delete')
       .mockRejectedValue(new Error('Some error'));
-
-    const mockQuestionId: IdQuestionModel = {
-      id: '123',
-    };
 
     await expect(
       questionService.deleteQuestion(mockQuestionId),
@@ -147,25 +116,12 @@ describe('getQuestion', () => {
 
   it('should return a question model when the question exists', async () => {
     // Mock the dependencies or services
-    const mockQuestionId = '123';
-    const mockQuestionDb: Question = {
-      id: mockQuestionId,
-      lesson_id: '1',
-      title: '2',
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      trust_answer_id: '1',
-      description: '1',
-      picture_id: '1',
-      points: 0,
-      difficulty: 'BEGINNER',
-      order: 0,
-    };
+
     jest.spyOn(PictureService, 'getPicture').mockResolvedValue('1');
-    jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(mockQuestionDb);
+    jest.spyOn(prisma.question, 'findFirst').mockResolvedValue(mockQuestionDb2);
 
     // Invoke the function being tested
-    const result = await questionService.getQuestion(mockQuestionId);
+    const result = await questionService.getQuestion(mockQuestionId2);
 
     // Perform assertions
     expect(prisma.question.findFirst).toHaveBeenCalledTimes(1);
@@ -176,21 +132,21 @@ describe('getQuestion', () => {
         },
       ],
       where: {
-        id: mockQuestionId,
+        id: mockQuestionId2,
       },
     });
 
     expect(result).toEqual({
-      id: mockQuestionDb.id,
-      lessonId: mockQuestionDb.lesson_id,
-      title: mockQuestionDb.title,
-      description: mockQuestionDb.description,
-      typeAnswer: mockQuestionDb.type_answer,
-      typeQuestion: mockQuestionDb.type_question,
-      trustAnswerId: mockQuestionDb.trust_answer_id,
-      difficulty: mockQuestionDb.difficulty,
-      pictureId: mockQuestionDb.picture_id,
-      order: mockQuestionDb.order,
+      id: mockQuestionDb2.id,
+      lessonId: mockQuestionDb2.lesson_id,
+      title: mockQuestionDb2.title,
+      description: mockQuestionDb2.description,
+      typeAnswer: mockQuestionDb2.type_answer,
+      typeQuestion: mockQuestionDb2.type_question,
+      trustAnswerId: mockQuestionDb2.trust_answer_id,
+      difficulty: mockQuestionDb2.difficulty,
+      pictureId: mockQuestionDb2.picture_id,
+      order: mockQuestionDb2.order,
     });
   });
 
@@ -209,9 +165,8 @@ describe('getQuestion', () => {
       .spyOn(prisma.question, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockQuestionId = '123';
 
-    await expect(questionService.getQuestion(mockQuestionId)).rejects.toThrow(
+    await expect(questionService.getQuestion(mockQuestionId2)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -231,16 +186,8 @@ describe('updateQuestion', () => {
   it('should throw ConflictException if the question does not exist', async () => {
     jest.spyOn(prisma.question, 'update').mockResolvedValue(null);
 
-    const mockQuestionId = '98ea81ae-678a-4cf5-bd88-2e6f43429c24';
-    const mockQuestionData: UpdateQuestionModel = {
-      lessonId: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
-      title: 'test',
-      description: 'desc',
-      trustAnswerId: '1',
-    };
-
     await expect(
-      questionService.updateQuestion(mockQuestionId, mockQuestionData),
+      questionService.updateQuestion(mockQuestionId3, mockQuestionData2),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -249,42 +196,13 @@ describe('updateQuestion', () => {
       .spyOn(prisma.question, 'update')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockQuestionId = '98ea81ae-678a-4cf5-bd88-2e6f43429c24';
-    const mockQuestionData: UpdateQuestionModel = {
-      lessonId: 'a4dca408-a53d-4fb5-b566-e2fb3ec90078',
-      title: 'test',
-      description: 'desc',
-      trustAnswerId: '1',
-    };
-
     await expect(
-      questionService.updateQuestion(mockQuestionId, mockQuestionData),
+      questionService.updateQuestion(mockQuestionId3, mockQuestionData2),
     ).rejects.toThrow(ConflictException);
   });
 
   it('should return success: true if the answer is correct', async () => {
-    const correctAnswerId = uuidv4();
-    const questionId = uuidv4();
-    const lessonId = uuidv4();
-
-    const mockBody: validateAnswerModel = {
-      questionId: questionId,
-      answerId: correctAnswerId,
-    };
-    const mockQuestionDb: Question = {
-      id: mockBody.questionId,
-      lesson_id: lessonId,
-      title: '2',
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      trust_answer_id: correctAnswerId,
-      description: '1',
-      picture_id: '1',
-      points: 0,
-      difficulty: 'BEGINNER',
-      order: 0,
-    };
-    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
+    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb3);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
     await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
@@ -296,32 +214,11 @@ describe('updateQuestion', () => {
   });
 
   it('should return success: false if the answer is incorrect', async () => {
-    const incorrectAnswerId = uuidv4();
-    const correctAnswerId = uuidv4();
-    const questionId = uuidv4();
-    const lessonId = uuidv4();
 
-    const mockBody: validateAnswerModel = {
-      questionId: questionId,
-      answerId: incorrectAnswerId,
-    };
-    const mockQuestionDb: Question = {
-      id: mockBody.questionId,
-      lesson_id: lessonId,
-      title: '2',
-      type_answer: 'TEXT',
-      type_question: 'TEXT',
-      trust_answer_id: correctAnswerId,
-      description: '1',
-      picture_id: '1',
-      points: 0,
-      difficulty: 'BEGINNER',
-      order: 0,
-    };
-    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb);
+    jest.spyOn(prisma.question, 'findUnique').mockResolvedValue(mockQuestionDb4);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
-    await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
+    await expect(questionService.validateAnswer(mockBodyIncorrect)).resolves.toEqual({
       success: false,
       answer: correctAnswerId,
       end: true,
