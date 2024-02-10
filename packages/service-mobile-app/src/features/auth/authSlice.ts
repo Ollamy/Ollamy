@@ -1,30 +1,29 @@
+import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from 'src/store';
 
-import { createSlice } from '@reduxjs/toolkit';
-
 export interface User {
-	first_name: string;
-	last_name: string;
-	email: string;
-	phone: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
 }
 
 const initialState = {
-	user: null,
-	token: null,
-	isAuthenticated: false,
+  user: null,
+  token: null,
+  isAuthenticated: false,
 } as { user: null | User; token: string | null; isAuthenticated: boolean };
 
 const slice = createSlice({
-	name: 'auth',
-	initialState,
-	reducers: {
-		logout: () => initialState,
-		login: () => ({
-			...initialState,
-			isAuthenticated: true,
-		}),
-	},
+  name: 'auth',
+  initialState,
+  reducers: {
+    logout: () => initialState,
+    login: () => ({
+      ...initialState,
+      isAuthenticated: true,
+    }),
+  },
 });
 
 export const { logout } = slice.actions;

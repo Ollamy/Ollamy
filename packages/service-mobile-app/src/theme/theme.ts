@@ -1,8 +1,7 @@
-import { extendTheme } from "native-base";
+import { extendTheme } from 'native-base';
 
 const customTheme = extendTheme({
-  components: {
-  }
-})
+  components: {},
+});
 
 export default customTheme;
