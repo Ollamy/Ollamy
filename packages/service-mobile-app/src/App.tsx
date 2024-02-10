@@ -2,7 +2,7 @@ import { NativeBaseProvider, Text } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { NativeRouter, Route, Routes } from 'react-router-native';
-import AppSafeArea from 'src/components/AppSafeArea/AppSafeArea';
+import AppSafeArea from 'src/components/layout/AppSafeArea/AppSafeArea';
 import Login from 'src/pages/authentication/login';
 import Register from 'src/pages/authentication/register';
 import Chat from 'src/pages/chat';
