@@ -1,6 +1,7 @@
 apis/AnswerApi.ts
 apis/CourseApi.ts
 apis/DefaultApi.ts
+apis/LectureApi.ts
 apis/LessonApi.ts
 apis/QuestionApi.ts
 apis/SectionApi.ts

@@ -1,12 +1,15 @@
 {
   "name": "ollamy",
   "packageManager": "yarn@3.6.0",
-  "repository": "git@github.com:Ollamy/Ollamy.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Ollamy/Ollamy.git"
+  },
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/**/*"
+    "packages/*"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.21.0",

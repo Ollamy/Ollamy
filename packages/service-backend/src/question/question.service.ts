@@ -224,17 +224,17 @@ export class QuestionService {
         throw new ConflictException('Answers does not exists !');
       }
 
-      const answerPromises = answersDb.map(async (answer) => {
-        return {
-          id: answer.id,
-          questionId: answer.question_id,
-          data: answer.data,
-          picture: answer.picture_id
-            ? await PictureService.getPicture(answer.picture_id)
-            : undefined,
-        } as AnswerModel;
-      });
-
+      const answerPromises = answersDb.map(
+        async (answer) =>
+          ({
+            id: answer.id,
+            questionId: answer.question_id,
+            data: answer.data,
+            picture: answer.picture_id
+              ? await PictureService.getPicture(answer.picture_id)
+              : undefined,
+          } as AnswerModel),
+      );
       return await Promise.all(answerPromises);
     } catch (error) {
       Logger.error(error);

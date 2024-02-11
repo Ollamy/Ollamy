@@ -13,6 +13,7 @@ import {
   UserCoursesResponse,
   UserIdResponse,
 } from './user.dto';
+import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
@@ -206,15 +207,28 @@ export class UserService {
           },
         },
       });
+
       return {
-        courses: courses.map((course) => {
+        courses: await Promise.all(courses.map(async (course) => {
+          const { last_lesson_id, last_section_id } = userDb.UsertoCourse.find(
+            (c) => c.course_id === course.id,
+          );
+
           const isOwner = course.owner_id === ctx.__user.id;
+          const picture = await PictureService.getPicture(course.picture_id);
+
           delete course.owner_id;
+          delete course.picture_id;
+
           return {
             ...course,
+            picture,
+            last_lesson_id,
+            last_section_id,
             owner: isOwner,
           };
         }),
+        )
       };
     } catch (error) {
       Logger.error(error);

@@ -12,6 +12,9 @@ import { AlertGateway } from './alert/alert.gateway';
 import { AlertController } from './alert/alert.controller';
 import { PictureModule } from './picture/picture.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { LectureModule } from './lecture/lecture.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -22,6 +25,12 @@ import { ChatGateway } from './chat/chat.gateway';
     QuestionModule,
     AnswerModule,
     PictureModule,
+    LectureModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
+  }),
+
   ],
   controllers: [AppController, AlertController],
   providers: [

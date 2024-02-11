@@ -37,7 +37,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [19.8.1]
+        node-version: [20.0.0]
 
     steps:
       - uses: actions/checkout@v3
@@ -61,11 +61,6 @@ jobs:
       - name: Run backend tests
         working-directory: ./packages/service-backend
         run: yarn test:ci
-
-      - name: list files
-        working-directory: ./packages/service-backend
-        if: success() || failure()
-        run: ls -la
 
       - name: Upload test results
         id: upload-test-results
