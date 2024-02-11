@@ -51,6 +51,21 @@ export class QuestionModel {
   order: number;
 }
 
+export class LectureModel {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+
+  @ApiProperty()
+  @IsUUID()
+  lessonId: string;
+
+  @ApiProperty()
+  @IsString()
+  data: string;
+}
+
+
 export class CreateQuestionModel {
   @ApiProperty()
   @IsUUID()

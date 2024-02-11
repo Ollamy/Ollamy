@@ -24,7 +24,7 @@ import {
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { QuestionModel } from 'question/question.dto';
+import { LectureModel, QuestionModel } from 'question/question.dto';
 import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
@@ -52,7 +52,10 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerLesson(@Body() body: CreateLessonModel, @OllContext() ctx: any): Promise<LessonIdResponse> {
+  async registerLesson(
+    @Body() body: CreateLessonModel,
+    @OllContext() ctx: any,
+  ): Promise<LessonIdResponse> {
     return this.lessonService.postLesson(body, ctx);
   }
 
@@ -136,6 +139,21 @@ export class LessonController {
   @Get('/questions/:id')
   async getLessonQuestions(@Param('id') id: string): Promise<QuestionModel[]> {
     return this.lessonService.getLessonQuestions(id);
+  }
+
+  @ApiOkResponse({
+    description: "lesson's lecture",
+    type: [QuestionModel],
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the lesson',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Get('/lecture/:id')
+  async getLessonLecture(@Param('id') id: string): Promise<LectureModel> {
+    return this.lessonService.getLessonLecture(id);
   }
 
   @ApiOkResponse({
