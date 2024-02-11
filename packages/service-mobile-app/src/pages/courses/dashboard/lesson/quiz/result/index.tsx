@@ -5,13 +5,13 @@ import TextButton from 'src/components/buttons/textButton';
 import TopBar from 'src/components/topBar';
 
 // @ts-ignore
-import BADCHECK from '../../../../../../../assets/icons/badCheck.png';
+import BADCHECK from 'assets/icons/badCheck.png';
 // @ts-ignore
-import CUP from '../../../../../../../assets/icons/cup.png';
+import CUP from 'assets/icons/cup.png';
 // @ts-ignore
-import FAIL from '../../../../../../../assets/icons/fail.png';
+import FAIL from 'assets/icons/fail.png';
 // @ts-ignore
-import GOODCHECK from '../../../../../../../assets/icons/goodCheck.png';
+import GOODCHECK from 'assets/icons/goodCheck.png';
 
 interface LectureProps {
 	totalQuestionNb: number;

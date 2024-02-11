@@ -5,8 +5,7 @@ import { io } from 'socket.io-client';
 import { useGetUserQuery } from 'src/services/user/user';
 import { EnvVar } from 'src/utils/loadEnv';
 
-import IconButton from '../../components/buttons/iconButton';
-import TopBar from '../../components/TopBar';
+import IconButton from 'src/components/buttons/iconButton';
 
 interface Messages {
 	sender: string;

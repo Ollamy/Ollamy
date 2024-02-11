@@ -10,7 +10,7 @@ import EVENT from 'assets/icons/event.png';
 import MEDAL from 'assets/icons/medal.png';
 // @ts-ignore
 import PROGRESS from 'assets/icons/progress.png';
-import CustomIconButton from '../buttons/customIconButton';
+import CustomIconButton from 'src/components/buttons/customIconButton';
 
 function BottomBar() {
 	const handlePress = () => {

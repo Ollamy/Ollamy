@@ -4,7 +4,7 @@ import { Box, Image, ScrollView, Spinner, Text, View } from 'native-base';
 import TextButton from 'src/components/buttons/textButton';
 
 // @ts-ignore
-import STAR from '../../../../../../../assets/icons/star.png';
+import STAR from 'assets/icons/star.png';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 
 interface QuestionProps {

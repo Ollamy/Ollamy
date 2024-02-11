@@ -8,8 +8,8 @@ import EARTH from 'assets/icons/earth.png';
 import PROFILE from 'assets/icons/profile.png';
 // @ts-ignore
 import TRESOR from 'assets/icons/tresor.png';
-import CustomIconButton from '../buttons/customIconButton';
-import TopBarContainer from '../topBarContainer';
+import CustomIconButton from 'src/components/buttons/customIconButton';
+import TopBarContainer from 'src/components/topBarContainer';
 
 function TopBar() {
 	const navigate = useNavigate();
