@@ -19,6 +19,10 @@ export interface GetLessonRequest {
     id: string;
 }
 
+export interface GetLessonLectureRequest {
+    id: string;
+}
+
 export interface GetLessonQuestionsRequest {
     id: string;
 }
@@ -96,6 +100,33 @@ export class LessonApi extends runtime.BaseAPI {
      */
     static getLesson(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonModel> {
         return localLessonApi.getLessonRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async getLessonLectureRaw(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getLessonLecture.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/lesson/lecture/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getLessonLecture(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+        return localLessonApi.getLessonLectureRaw(requestParameters, initOverrides);
     }
 
     /**
