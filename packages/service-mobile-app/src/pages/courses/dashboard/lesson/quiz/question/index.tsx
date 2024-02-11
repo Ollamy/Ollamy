@@ -55,7 +55,7 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
 				))}
 			</Box>
 			<Text style={styles.questionTitle}>{question.title}</Text>
-			<View style={{ maxHeight: '40%' }}>
+			<View style={{ maxHeight: '35%' }}>
 				<ScrollView contentContainerStyle={styles.answerScrollView}>
 					{answers.map((answer) => (
 						<TouchableOpacity
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 	},
 	answerContainer: {
 		width: '48%',
-		paddingVertical: 60,
+		paddingVertical: 45,
 		borderRadius: 12,
 		borderWidth: 4,
 		borderColor: '#D9D9D9',

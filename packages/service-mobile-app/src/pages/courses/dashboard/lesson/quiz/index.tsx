@@ -51,12 +51,12 @@ function Quiz({ lessonId }: QuizProps) {
 
 	return (
 		<View>
-			{/* <TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
+			<TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
 				<>
 					<IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
 					<ProgressBar progress={currentQuestionOrder / numberQuestion} width={220} height={15} />
 				</>
-			</TopBarContainer> */}
+			</TopBarContainer>
 			<Question questionId={currentQuestionId} nextQuestion={handleNext} />
 		</View>
 	);
