@@ -1,8 +1,8 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Outlet } from 'react-router-native';
 import { VStack } from 'native-base';
-import BottomBar from 'src/components/BottomBar';
-import TopBar from 'src/components/TopBar';
+import BottomBar from 'src/components/bottomBar';
+import TopBar from 'src/components/topBar';
 
 function AppSafeArea(): JSX.Element {
 	return (

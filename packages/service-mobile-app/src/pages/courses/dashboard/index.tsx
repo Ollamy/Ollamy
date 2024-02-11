@@ -4,11 +4,19 @@ import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem';
 import { LessonStatus } from 'src/components/VerticalProgressBar';
 import { useGetCourseByIdQuery, useGetCourseSectionsQuery } from 'src/services/course/course';
+import { SectionResponse } from 'src/services/section/section.dto';
 
 export interface CourseSection {
 	id: string;
 	title: string;
 	status: LessonStatus;
+}
+
+function getLastSectionIndex(sectionsData: SectionResponse[], lastSectionId: string | undefined) {
+	if (!lastSectionId) return 0;
+	const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastSectionId);
+
+	return lastSectionIndex !== -1 ? lastSectionIndex : 0;
 }
 
 const CourseDashboard = (): JSX.Element => {
@@ -20,17 +28,15 @@ const CourseDashboard = (): JSX.Element => {
 
 	const sections = useMemo<CourseSection[]>(() => {
 		if (!sectionsData) return [];
-		const lastSectionIndex = sectionsData.findIndex((s) => s.id === courseData?.lastSectionId);
+		const lastSectionIndex = getLastSectionIndex(sectionsData, courseData?.lastSectionId);
 
 		return sectionsData.map((s, i) => ({
 			...s,
 			status:
-				lastSectionIndex !== -1
-					? i < lastSectionIndex
-						? LessonStatus.COMPLETED
-						: i === lastSectionIndex
-						? LessonStatus.IN_PROGRESS
-						: LessonStatus.NOT_STARTED
+				i < lastSectionIndex
+					? LessonStatus.COMPLETED
+					: i === lastSectionIndex
+					? LessonStatus.IN_PROGRESS
 					: LessonStatus.NOT_STARTED,
 		}));
 	}, [courseData, sectionsData]);

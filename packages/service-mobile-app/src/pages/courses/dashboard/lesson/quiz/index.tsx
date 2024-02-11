@@ -4,11 +4,11 @@ import { Spinner, View } from 'native-base';
 import IconButton from 'src/components/buttons/iconButton';
 import ProgressBar from 'src/components/progressBar';
 import TopBarContainer from 'src/components/topBarContainer';
-import { useGetLessonQuestionsQuery } from 'src/services/lesson';
-import { useValidateAnswerMutation } from 'src/services/question';
 
 import Question from './question';
 import ResultPage from './result';
+import { useGetLessonQuestionsQuery } from 'src/services/lesson/lesson';
+import { useValidateAnswerMutation } from 'src/services/question/question';
 
 interface QuizProps {
 	lessonId: string;
@@ -51,12 +51,12 @@ function Quiz({ lessonId }: QuizProps) {
 
 	return (
 		<View>
-			<TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
+			{/* <TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
 				<>
 					<IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
 					<ProgressBar progress={currentQuestionOrder / numberQuestion} width={220} height={15} />
 				</>
-			</TopBarContainer>
+			</TopBarContainer> */}
 			<Question questionId={currentQuestionId} nextQuestion={handleNext} />
 		</View>
 	);

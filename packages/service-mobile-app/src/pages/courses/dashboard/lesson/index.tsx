@@ -3,11 +3,14 @@ import { View } from 'native-base';
 
 import Lecture from './lecture';
 import Quiz from './quiz';
+import { useParams } from 'react-router-native';
 
-function Course() {
-	const lessonId = 'cdcb1351-bd68-4b05-a69d-8ceb52effb31';
+function Lesson() {
+	const { lessonId } = useParams();
 	const [isLectureFinish, setIsLectureFinish] = useState(false);
 
+
+	if (!lessonId) return <></>;
 	return (
 		<View>
 			{!isLectureFinish ? (
@@ -19,4 +22,4 @@ function Course() {
 	);
 }
 
-export default Course;
+export default Lesson;

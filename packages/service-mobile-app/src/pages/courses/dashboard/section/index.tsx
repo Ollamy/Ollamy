@@ -6,6 +6,7 @@ import LessonListItem from 'src/components/LessonListItem';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
 import { useMemo } from 'react';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
+import { LessonResponse } from 'src/services/lesson/lesson.dto';
 
 export interface Lesson {
 	id: string;
@@ -21,6 +22,13 @@ interface Section {
 	lessons: Lesson[];
 }
 
+function getLastLessonIndex(sectionsData: LessonResponse[], lastLessonId: string | undefined) {
+	if (!lastLessonId) return 0;
+	const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastLessonId);
+
+	return lastSectionIndex !== -1 ? lastSectionIndex : 0;
+}
+
 const SectionDashboard = () => {
 	const { id: courseId, sectionId } = useParams();
 
@@ -31,17 +39,15 @@ const SectionDashboard = () => {
 
 	const lessons = useMemo<any[]>(() => {
 		if (!lessonsData) return [];
-		const lastLessonIndex = lessonsData.findIndex((s) => s.id === courseData?.lastLessonId);
+		const lastLessonIndex = getLastLessonIndex(lessonsData, courseData?.lastLessonId);
 
 		return lessonsData.map((s, i) => ({
 			...s,
 			status:
-				lastLessonIndex !== -1
-					? i < lastLessonIndex
-						? LessonStatus.COMPLETED
-						: i === lastLessonIndex
-						? LessonStatus.IN_PROGRESS
-						: LessonStatus.NOT_STARTED
+				i < lastLessonIndex
+					? LessonStatus.COMPLETED
+					: i === lastLessonIndex
+					? LessonStatus.IN_PROGRESS
 					: LessonStatus.NOT_STARTED,
 		}));
 	}, [courseData, lessonsData]);
@@ -69,7 +75,12 @@ const SectionDashboard = () => {
 
 				<VStack w="full">
 					{lessons.map((lesson, index) => (
-						<LessonListItem lesson={lesson} index={index} key={lesson.id} />
+						<LessonListItem
+							lesson={lesson}
+							index={index}
+							key={lesson.id}
+							onPress={() => navigate(`lesson/${lesson.id}`)}
+						/>
 					))}
 				</VStack>
 			</VStack>

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Box, Image, ScrollView, Spinner, Text, View } from 'native-base';
 import TextButton from 'src/components/buttons/textButton';
-import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question';
 
 // @ts-ignore
-import STAR from '../../../../../assets/icons/star.png';
+import STAR from '../../../../../../../assets/icons/star.png';
+import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 
 interface QuestionProps {
 	questionId: string;
