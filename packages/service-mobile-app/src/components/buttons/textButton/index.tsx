@@ -1,6 +1,7 @@
+import { Pressable } from 'native-base';
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface TextButtonProps {
@@ -14,11 +15,11 @@ interface TextButtonProps {
 function TextButton({ onPress, title, style, rightIconName, disabled }: TextButtonProps) {
 	return (
 		// @ts-ignore
-		<TouchableOpacity onPress={onPress} style={{...(style ?? styles.buttonContainer), opacity: disabled ? 0.5 : 1}} disabled={disabled}>
+		<Pressable onPress={onPress} style={{...(style ?? styles.buttonContainer), opacity: disabled ? 0.5 : 1}} disabled={disabled}>
 			<View />
 			<Text style={styles.buttonText}>{title}</Text>
 			{rightIconName ? <Icon name={rightIconName} style={{ fontSize: 24, color: 'white' }} /> : <View />}
-		</TouchableOpacity>
+		</Pressable>
 	);
 }
 

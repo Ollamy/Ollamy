@@ -1,5 +1,6 @@
+import { Pressable } from 'native-base';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Props {
@@ -11,11 +12,11 @@ interface Props {
 
 function IconButton({ onPress, iconName, style, styleIcon }: Props) {
 	return (
-		<TouchableOpacity onPress={onPress}>
+		<Pressable onPress={onPress}>
 			<View style={style ?? styles.buttonContainer}>
 				<Icon name={iconName} style={styleIcon ?? styles.icon} />
 			</View>
-		</TouchableOpacity>
+		</Pressable>
 	);
 }
 

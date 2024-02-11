@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Box, Image, ScrollView, Spinner, Text, View } from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Box, Image, Pressable, ScrollView, Spinner, Text, View } from 'native-base';
 import TextButton from 'src/components/buttons/textButton';
 
 // @ts-ignore
@@ -58,14 +58,14 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
 			<View style={{ maxHeight: '35%' }}>
 				<ScrollView contentContainerStyle={styles.answerScrollView}>
 					{answers.map((answer) => (
-						<TouchableOpacity
+						<Pressable
 							key={answer.id}
 							disabled={trueAnswer !== undefined}
 							style={{ ...styles.answerContainer, borderColor: borderColor(answer.id, selectAnswer, trueAnswer) }}
 							onPress={() => setSelectAnswer(answer.id)}
 						>
 							<Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
-						</TouchableOpacity>
+						</Pressable>
 					))}
 				</ScrollView>
 			</View>

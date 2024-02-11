@@ -1,5 +1,6 @@
+import { Pressable } from 'native-base';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 interface Props {
 	onPress: () => void;
@@ -9,9 +10,9 @@ interface Props {
 
 function CustomIconButton({ onPress, children, style }: Props) {
 	return (
-		<TouchableOpacity onPress={onPress}>
+		<Pressable onPress={onPress}>
 			<View style={style ?? styles.buttonContainer}>{children}</View>
-		</TouchableOpacity>
+		</Pressable>
 	);
 }
 
