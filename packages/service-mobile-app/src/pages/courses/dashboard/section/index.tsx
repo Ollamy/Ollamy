@@ -14,14 +14,6 @@ export interface Lesson {
 	status: LessonStatus;
 }
 
-interface Section {
-	id: string;
-	icon: string;
-	title: string;
-	description: string;
-	lessons: Lesson[];
-}
-
 function getLastLessonIndex(sectionsData: LessonResponse[], lastLessonId: string | undefined) {
 	if (!lastLessonId) return 0;
 	const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastLessonId);
@@ -58,33 +50,34 @@ const SectionDashboard = () => {
 	if (!sectionData) return <Text>Section not found.</Text>;
 
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
-			<VStack w="full" space="md">
-				<Button
-					onPress={() => navigate(`/course/${courseId}`)}
-					bg="coolGray.100"
-					size="lg"
-					leftIcon={<ArrowBackIcon />}
-					alignSelf="flex-start"
-					variant="unstyled"
-				>
-					Go back
-				</Button>
+		<VStack w="full" space="md">
+			<Button
+				onPress={() => navigate(`/course/${courseId}`)}
+				bg="coolGray.100"
+				size="lg"
+				leftIcon={<ArrowBackIcon />}
+				alignSelf="flex-start"
+				variant="unstyled"
+			>
+				Go back
+			</Button>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<VStack w="full" space="md">
+					<SectionHeader title={sectionData.title} description={sectionData.description} />
 
-				<SectionHeader title={sectionData.title} description={sectionData.description} />
-
-				<VStack w="full">
-					{lessons.map((lesson, index) => (
-						<LessonListItem
-							lesson={lesson}
-							index={index}
-							key={lesson.id}
-							onPress={() => navigate(`lesson/${lesson.id}`)}
-						/>
-					))}
+					<VStack w="full">
+						{lessons.map((lesson, index) => (
+							<LessonListItem
+								lesson={lesson}
+								index={index}
+								key={lesson.id}
+								onPress={() => navigate(`lesson/${lesson.id}`)}
+							/>
+						))}
+					</VStack>
 				</VStack>
-			</VStack>
-		</ScrollView>
+			</ScrollView>
+		</VStack>
 	);
 };
 
