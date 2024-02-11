@@ -97,7 +97,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
                   onClick={handleChangeColor}
                   currentColor={colorsChoice[currentColor]}
                 >
-                  <Image src={"public/sparkles-outline.svg"} />
+                  <Image src={"sparkles-outline.svg"} />
                 </CourseColor>
               </CouseColorContainer>
               <Form onReset={handleReset} onSubmit={handleSubmit}>
@@ -135,7 +135,7 @@ const DashboardContent = ({}: DashboardContentProps): ReactElement => {
                   <CourseDescription>{course.description}</CourseDescription>
                 </TextContainer>
                 <EditImage
-                  src={"public/create-outline.svg"}
+                  src={"create-outline.svg"}
                   onClick={() => {
                     navigate(`/course/${course.id}`);
                   }}
