@@ -2,7 +2,7 @@ import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { Box } from 'native-base';
 
 interface TopBarContainerProps {
-	children: JSX.Element;
+	children: any;
 	style?: StyleProp<ViewStyle>;
 }
 
