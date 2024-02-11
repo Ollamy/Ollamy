@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { extension } from 'mime-types';
 import { BACKEND_PORT, FRONTEND_URL } from 'setup';
 
-
 @Injectable()
 export class PictureService {
   static publicFolder = resolve(process.cwd(), 'public');
@@ -28,14 +27,16 @@ export class PictureService {
     }
   }
 
-  static async getBase64Image(imageUrl: string): Promise<{ data: string, type: string }> {
+  static async getBase64Image(
+    imageUrl: string,
+  ): Promise<{ data: string; type: string }> {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const base64ImageData = response.data.toString('base64');
     const ext = extension(response.headers['content-type']) || 'png';
 
     return {
       data: base64ImageData,
-      type: ext
+      type: ext,
     };
   }
 
@@ -48,7 +49,7 @@ export class PictureService {
 
       const filename = `${uuidv4()}.${raw.type}`;
       const picturePath = join(this.publicFolder, filename);
-      await writeFile(picturePath, raw.data, 'base64')
+      await writeFile(picturePath, raw.data, 'base64');
 
       const pictureDb = await prisma.picture.create({
         data: {
@@ -67,7 +68,12 @@ export class PictureService {
     }
   }
 
-  static async getPicture(pictureId: string): Promise<string | undefined> {
+  static async getPicture(
+    pictureId: string | null,
+  ): Promise<string | undefined> {
+    if (!pictureId) {
+      return `${this.backendURL}/default-course.png`;
+    }
     try {
       const pictureDb: Picture = await prisma.picture.findFirst({
         where: {
