@@ -7,12 +7,13 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useForm } from "react-hook-form";
 
-import image from "../assets/imageSideBar.png";
-import { ButtonMaker } from "../components/button/button";
-import { FormMaker } from "../components/form/form";
-import { InputMaker } from "../components/input/input";
-import { SideBarMaker } from "../components/sidebar/sidebar";
-import api from "../services/api";
+import image from "../../assets/imageSideBar.png";
+import { ButtonMaker } from "../../components/button/button";
+import { FormMaker } from "../../components/form/form";
+import { InputMaker } from "../../components/input/input";
+import { SideBarMaker } from "../../components/sidebar/sidebar";
+// eslint-disable-next-line import/no-cycle
+import api from "../../services/api";
 
 type Inputs = {
   email: string;
@@ -61,10 +62,11 @@ export function Login(): React.ReactNode {
           Login
         </h1>
         <label htmlFor="email">Email</label>
-        <InputMaker register={{ ...register("email") }} />
+        <InputMaker register={{ ...register("email") }} padding="20px" />
         <label htmlFor="password">Password</label>
         <InputMaker
           type="password"
+          padding="20px"
           margin="0px 0px 20px 0px"
           register={{ ...register("password") }}
         />
