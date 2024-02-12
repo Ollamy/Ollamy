@@ -1,10 +1,9 @@
+from colorama import Fore, Style, init
 import sys
-
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 import argparse
-
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import cursor, connection
@@ -69,18 +68,22 @@ def test_database_data(cursor: cursor) -> None:
         ids = {str(row[0]) for row in cursor.fetchall()}
         table_data[table_name] = ids
 
-    GREEN = '\033[92m'
-    RESET = '\033[0m'
-    message = "[OK] Every tables has been successfully filled"
-    prefix = message[:4]
-    suffix = message[4:]
+    init(autoreset=True)
+
+    SUCCESS = "[OK] Every table has been successfully filled"
+    FAILURE = "[ERROR] An error occurred while filling tables"
+
+    ok_prefix = SUCCESS[:4]
+    ok_suffix = SUCCESS[4:]
+
+    error_prefix = FAILURE[:7]
+    error_suffix = FAILURE[7:]
 
     print("Table data:")
     if table_data == FAKE_IDS:
-        print(GREEN + prefix + RESET + suffix + '\n')
-        print(table_data)
+        print(Fore.GREEN + ok_prefix + Style.RESET_ALL + ok_suffix)
     else:
-        print('Error')
+        print(Fore.RED + error_prefix + Style.RESET_ALL + error_suffix)
 
 def main() -> None:
     if sys.argv.__len__() != 2:
@@ -109,10 +112,6 @@ def main() -> None:
     db: connection = psycopg2.connect(**db_params)
     cursor = db.cursor()
 
-    # if args.info:
-    #     print_table_data(cursor)
-    #     return
-
     actions: dict[str, tuple] = {
         'create': (create_database_structure, "Database setup complete."),
         'delete': (delete_database_data, "Database data deleted."),
@@ -121,7 +120,6 @@ def main() -> None:
     }
 
     selected_action: tuple = (None, None)
-    # actions.get('create' if args.create else 'delete', (None, None))
 
     if args.create:
         selected_action = actions.get('create')
