@@ -56,12 +56,16 @@ def main() -> None:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Database Setup Script')
     parser.add_argument('-c', '--create', action='store_true', help='Create database structure')
     parser.add_argument('-d', '--delete', action='store_true', help='Delete database data')
-    # parser.add_argument('-i', '--info', action='store_true', help='Print data in tables after the action')
+    parser.add_argument('-i', '--info', action='store_true', help='Print data in tables after the action')
 
     args = parser.parse_args()
 
     db: connection = psycopg2.connect(**db_params)
-    cursor: cursor = db.cursor()
+    cursor = db.cursor()
+
+    if args.info:
+        print_table_data(cursor)
+        return
 
     actions: dict[str, tuple] = {
         'create': (create_database_structure, "Database setup complete."),
@@ -78,9 +82,6 @@ def main() -> None:
         print(action_message)
 
     print_table_data(cursor)
-
-    # if args.info:
-    #     print_table_data(cursor)
 
     db.close()
 
