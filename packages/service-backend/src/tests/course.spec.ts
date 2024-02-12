@@ -304,7 +304,7 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      expect(await courseService.getCourseSections(courseId)).toThrow(
+      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
         NotFoundException,
       );
     }
