@@ -296,12 +296,10 @@ describe('getCourseSections', () => {
     courseService = moduleRef.get<CourseService>(CourseService);
   });
 
-  it('should return an array of course sections', async () => {
+  it('should throw a NotFoundException if no sections are found', async () => {
     {
       // Spy on the dependencies or services
-      jest
-        .spyOn(prisma.section, 'findMany')
-        .mockResolvedValue([mockSection1, mockSection2]);
+      jest.spyOn(prisma.section, 'findMany').mockResolvedValue(null);
     }
 
     {
@@ -315,17 +313,7 @@ describe('getCourseSections', () => {
         },
       });
 
-      const expectedSections: SectionModel[] = [
-        {
-          courseId: mockSection1.course_id,
-          ...mockSection1,
-        },
-        {
-          courseId: mockSection2.course_id,
-          ...mockSection2,
-        },
-      ];
-      expect(result).toEqual(expectedSections);
+      expect(result).toThrow(NotFoundException);
     }
   });
 
