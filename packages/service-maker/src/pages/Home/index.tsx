@@ -1,11 +1,15 @@
+import { type ReactElement, useEffect } from "react";
 import styled from "styled-components";
-import DashboardContent from "./Content";
-import { ReactElement, useEffect } from "react";
+
 import TopBar from "../../components/TopBar";
+// eslint-disable-next-line import/no-cycle
 import api from "../../services/api";
 import { DefaultApi } from "../../services/api/out";
 
-function HomePage(): ReactElement {
+import DashboardContent from "./Content";
+
+export function HomePage(): ReactElement {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = api.user.useUser();
 
   useEffect(() => {
@@ -14,12 +18,7 @@ function HomePage(): ReactElement {
 
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
-      {data && (
-        <span>
-          Hello {data.firstname} {data.lastname}
-        </span>
-      )}
+      <TopBar title="Ollamy Maker" />
       <DashboardContent />
     </Container>
   );
@@ -35,5 +34,3 @@ const Container = styled.div`
 
   background: #f1f3f6;
 `;
-
-export default HomePage;

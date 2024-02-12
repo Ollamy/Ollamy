@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import image from "../assets/imageSideBar.png";
-import { ButtonMaker } from "../components/button/button";
-import { FormMaker } from "../components/form/form";
-import { InputMaker } from "../components/input/input";
-import { SideBarMaker } from "../components/sidebar/sidebar";
-import api from "../services/api";
+import image from "../../assets/imageSideBar.png";
+import { ButtonMaker } from "../../components/button/button";
+import { FormMaker } from "../../components/form/form";
+import { InputMaker } from "../../components/input/input";
+import { SideBarMaker } from "../../components/sidebar/sidebar";
+// eslint-disable-next-line import/no-cycle
+import api from "../../services/api";
 
 type Inputs = {
   firstname: string;
@@ -78,10 +78,12 @@ export function Register(): React.ReactNode {
           <>
             <label htmlFor="firstName">First name</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("firstname", { required: true }) }}
             />
             <label htmlFor="lastName">Last name</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("lastname", { required: true }) }}
             />
             <ButtonMaker
@@ -94,20 +96,24 @@ export function Register(): React.ReactNode {
           <>
             <label htmlFor="email">Email</label>
             <InputMaker
+              padding="24px"
               register={{ ...register("email", { required: true }) }}
             />
             <label htmlFor="password">Password</label>
             <InputMaker
               type="password"
+              padding="24px"
               register={{ ...register("password", { required: true }) }}
             />
             <label htmlFor="ConfirmPassword">Confirm Password</label>
             <InputMaker
               type="password"
+              padding="24px"
               errorMessage={errors.rePassword && errors.rePassword.message}
               register={{
                 ...register("rePassword", {
                   required: true,
+                  // eslint-disable-next-line consistent-return
                   validate: (val: string) => {
                     if (watch("password") !== val) {
                       return "Your passwords do no match";
