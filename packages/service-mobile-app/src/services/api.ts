@@ -1,7 +1,7 @@
 import type { RootState } from 'src/store';
 import { EnvVar } from 'src/utils/loadEnv';
 
-import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: EnvVar.backendUrl,
@@ -15,10 +15,8 @@ const baseQuery = fetchBaseQuery({
 	},
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
-
 export const api = createApi({
-	baseQuery: baseQueryWithRetry,
-	tagTypes: ['User'],
+	baseQuery,
+	tagTypes: ['User', 'Course', 'Section', 'Lesson'],
 	endpoints: () => ({}),
 });

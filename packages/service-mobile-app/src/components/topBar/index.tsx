@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-native';
 import { Box, View } from 'native-base';
 
 // @ts-ignore
-import EARTH from '../../../assets/icons/earth.png';
+import EARTH from 'assets/icons/earth.png';
 // @ts-ignore
-import PROFILE from '../../../assets/icons/profile.png';
+import PROFILE from 'assets/icons/profile.png';
 // @ts-ignore
-import TRESOR from '../../../assets/icons/tresor.png';
+import TRESOR from 'assets/icons/tresor.png';
 import CustomIconButton from '../buttons/customIconButton';
 
 function TopBar() {
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		borderBottomRightRadius: 16,
 		borderBottomLeftRadius: 16,
+		borderTopWidth: 0,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',

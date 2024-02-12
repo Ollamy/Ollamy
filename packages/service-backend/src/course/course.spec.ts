@@ -461,14 +461,12 @@ describe('getCourseSections', () => {
 
     const expectedSections: SectionModel[] = [
       {
-        courseId: mockSection1.course_id,
         ...mockSection1,
       },
       {
-        courseId: mockSection2.course_id,
         ...mockSection2,
       },
-    ];
+    ] as unknown as SectionModel[];
     expect(result).toEqual(expectedSections);
   });
 
