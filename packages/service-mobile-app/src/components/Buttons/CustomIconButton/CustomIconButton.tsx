@@ -1,23 +1,17 @@
-import type { StyleProp, ViewStyle } from 'react-native';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Box } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 
 interface Props {
-  onPress: () => void;
+  onPress?: () => void;
   children: JSX.Element;
-  style?: StyleProp<ViewStyle>;
 }
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    backgroundColor: 'transparent',
-    padding: 10,
-  },
-});
-
-function CustomIconButton({ onPress, children, style }: Props) {
+function CustomIconButton({ onPress, children }: Props) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={style ?? styles.buttonContainer}>{children}</View>
+      <Box backgroundColor="transparent" p={5}>
+        {children}
+      </Box>
     </TouchableOpacity>
   );
 }
