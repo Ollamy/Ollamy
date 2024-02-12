@@ -1,7 +1,10 @@
-import { UseQueryOptions, useMutation, useQuery } from "react-query";
+import type { UseQueryOptions } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import { queryClient } from "../../../main";
-import { GetAnswerRequest, AnswerApi, AnswerModel } from "../out";
+import type { AnswerModel, GetAnswerRequest } from "../out";
+import { AnswerApi } from "../out";
+
 import { GET_SECTION_LESSONS_KEY } from "./section";
 
 const GET_LESSON_KEY = "getAnswer";
@@ -9,7 +12,7 @@ const GET_LESSON_KEY = "getAnswer";
 export const answerActions = {
   useAnswer: (
     requestParameters: GetAnswerRequest,
-    config?: UseQueryOptions<AnswerModel>,
+    config?: UseQueryOptions<AnswerModel>
   ) =>
     useQuery({
       queryKey: [GET_LESSON_KEY, requestParameters.id],

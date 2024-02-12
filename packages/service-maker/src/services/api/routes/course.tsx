@@ -1,9 +1,10 @@
 import type { UseQueryOptions } from "react-query";
 import { useMutation, useQuery } from "react-query";
 
+// eslint-disable-next-line import/no-cycle
 import { queryClient } from "../../../main";
 import type {
-  GetCourseOperationRequest,
+  CourseModel,
   GetCourseRequest,
   GetCourseSectionsRequest,
   SectionModel,
@@ -17,8 +18,8 @@ export const GET_COURSE_SECTIONS_KEY = "getCourseSections";
 
 export const courseActions = {
   useCourse: (
-    requestParameters: GetCourseOperationRequest,
-    config?: UseQueryOptions<GetCourseRequest>
+    requestParameters: GetCourseRequest,
+    config?: UseQueryOptions<CourseModel>
   ) =>
     useQuery({
       queryKey: GET_COURSE_KEY,

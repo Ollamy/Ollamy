@@ -10,10 +10,16 @@ export function InputMaker({
   register,
   type,
   errorMessage,
+  padding,
 }: InputMakerInterface): React.ReactNode {
   return (
     <Container>
-      <MakerInputStyled margin={margin} {...register} type={type} />
+      <MakerInputStyled
+        margin={margin}
+        {...register}
+        type={type}
+        padding={padding}
+      />
       {errorMessage && <ErrorContainer>{errorMessage}</ErrorContainer>}
     </Container>
   );

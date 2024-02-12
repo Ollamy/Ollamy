@@ -28,6 +28,6 @@
   },
   "include": [
     "src"
-  ],
+, "src/components/Course/Picture/course.picture.interface.ts"  ],
   "references": [{ "path": "./tsconfig.node.json"}]
 }
