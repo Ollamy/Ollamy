@@ -1,14 +1,17 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import api from "../../../../services/api";
-import { CourseModel } from "services/api/out";
-import CreateModal from "../../../../components/modal";
-import Dropdown from "../../../../components/dropdown";
-import LessonList from "./lessonList";
+import type { ReactElement } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import type { GetCourseRequest } from "services/api/out";
+import styled from "styled-components";
+
+import Dropdown from "../../../../components/dropdown";
+import CreateModal from "../../../../components/modal";
+import api from "../../../../services/api";
+
+import LessonList from "./lessonList";
 
 interface SideBarMenuProps {
-  course: CourseModel;
+  course: GetCourseRequest;
   sectionId?: string;
   lessonId?: string;
 }
@@ -24,7 +27,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    sectionId ?? null,
+    sectionId ?? null
   );
 
   const { data: courseSections } = api.course.useCourseSection({

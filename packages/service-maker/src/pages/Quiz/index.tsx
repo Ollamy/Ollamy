@@ -1,13 +1,15 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import TopBar from "../../components/TopBar";
-import Left from "./Left";
-import Content from "./Content";
-import Right from "./Right";
+import type { ReactElement } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CreateQuestionModel } from "backend/src/question/question.dto";
+import type { QuestionModel } from "services/api/out";
+import styled from "styled-components";
+
+import TopBar from "../../components/TopBar";
 import api from "../../services/api";
-import { QuestionModel } from "services/api/out";
+
+import Content from "./Content";
+import Left from "./Left";
+import Right from "./Right";
 
 // eslint-disable-next-line
 interface QuizEditorProps {}
@@ -42,7 +44,7 @@ const QuizEditor = ({}: QuizEditorProps): ReactElement => {
 
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
+      <TopBar title="Ollamy Maker" />
       <Body>
         <LeftPart>
           <Left

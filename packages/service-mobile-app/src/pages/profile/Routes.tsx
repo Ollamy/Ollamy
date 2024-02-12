@@ -1,15 +1,12 @@
-import Profile from 'pages/profile';
+import { Route, Routes } from 'react-router-native';
+import Profile from 'src/pages/profile';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-function ProfileNavigator() {
-	const Stack = createNativeStackNavigator();
-
+function ProfileRoutes() {
 	return (
-		<Stack.Navigator initialRouteName="profile">
-			<Stack.Screen name="profile" component={Profile} />
-		</Stack.Navigator>
+		<Routes>
+			<Route path="profile" Component={Profile} />
+		</Routes>
 	);
 }
 
-export default ProfileNavigator;
+export default ProfileRoutes;

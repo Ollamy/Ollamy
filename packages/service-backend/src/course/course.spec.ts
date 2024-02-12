@@ -45,7 +45,7 @@ describe('postCourse', () => {
     };
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockCourseDb: Course = {
       id: '1',
@@ -141,7 +141,7 @@ describe('deleteCourse', () => {
     };
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockCourseDb: Course = {
       id: mockCourseId.id,
@@ -211,7 +211,7 @@ describe('getCourse', () => {
     const mockCourseId = '1';
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockLastLessonDb = {
       lesson_id: '2',
@@ -269,12 +269,16 @@ describe('getCourse', () => {
     const expectedCourseModel: GetCourseRequest = {
       id: mockCourseDb.id,
       ownerId: mockCourseDb.owner_id,
-      picture: mockPictureDb.picture,
+      picture: mockPictureDb.filename,
       title: mockCourseDb.title,
       description: mockCourseDb.description,
       lastLessonId: '123',
       lastSectionId: '456',
     };
+    expect(result.picture).toContain('http');
+    expect(result.picture).toContain(mockPictureDb.filename);
+    delete result.picture;
+    delete expectedCourseModel.picture;
     expect(result).toEqual(expectedCourseModel);
   });
 
@@ -329,7 +333,7 @@ describe('updateCourse', () => {
     const mockCourseId = '1';
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
@@ -376,13 +380,13 @@ describe('updateCourse', () => {
     const mockCourseId = '1';
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
       title: 'tilte',
       description: 'desc',
-      picture: mockPictureDb.picture,
+      picture: mockPictureDb.filename,
     };
 
     await expect(
@@ -398,13 +402,13 @@ describe('updateCourse', () => {
     const mockCourseId = '1';
     const mockPictureDb: Picture = {
       id: '1',
-      picture: 'data',
+      filename: 'data',
     };
     const mockCourseData: UpdateCourseModel = {
       ownerId: '1',
       title: 'title',
       description: 'desc',
-      picture: mockPictureDb.picture,
+      picture: mockPictureDb.filename,
     };
 
     await expect(
@@ -457,14 +461,12 @@ describe('getCourseSections', () => {
 
     const expectedSections: SectionModel[] = [
       {
-        courseId: mockSection1.course_id,
         ...mockSection1,
       },
       {
-        courseId: mockSection2.course_id,
         ...mockSection2,
       },
-    ];
+    ] as unknown as SectionModel[];
     expect(result).toEqual(expectedSections);
   });
 
