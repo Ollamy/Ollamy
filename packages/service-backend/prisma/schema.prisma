@@ -203,16 +203,16 @@ model Message {
   created_at    DateTime    @default(now())
   updated_at    DateTime    @updatedAt
   discussion_id String      @db.Uuid
-  Discussion    Discussion? @relation(fields: [discussion_id], references: [id])
+  Discussion    Discussion? @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
   owner_id      String      @db.Uuid
-  user          User        @relation(references: [id], fields: [owner_id])
+  user          User        @relation(references: [id], fields: [owner_id], onDelete: Cascade)
   content       String
 }
 
 model UserDiscussions {
-  user          User       @relation(fields: [user_id], references: [id])
+  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String     @db.Uuid
-  discussion    Discussion @relation(fields: [discussion_id], references: [id])
+  discussion    Discussion @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
   discussion_id String     @db.Uuid
 
   @@id([user_id, discussion_id])
