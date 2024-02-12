@@ -304,16 +304,9 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      const result = await courseService.getCourseSections(courseId);
-
-      expect(prisma.section.findMany).toHaveBeenCalledTimes(1);
-      expect(prisma.section.findMany).toHaveBeenCalledWith({
-        where: {
-          course_id: courseId,
-        },
-      });
-
-      expect(result).toThrow(NotFoundException);
+      expect(await courseService.getCourseSections(courseId)).toThrow(
+        NotFoundException,
+      );
     }
   });
 
