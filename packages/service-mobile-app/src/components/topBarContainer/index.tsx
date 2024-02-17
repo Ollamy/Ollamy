@@ -2,7 +2,7 @@ import { Box } from 'native-base';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 interface TopBarContainerProps {
-  children: JSX.Element;
+  children: JSX.Element[] | JSX.Element;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -13,7 +13,7 @@ function TopBarContainer({ children, style }: TopBarContainerProps) {
       height={60}
       borderColor="#BDBDBD"
       borderWidth={1}
-      paddingX={10}
+      paddingX={5}
       borderBottomRightRadius={16}
       borderBottomLeftRadius={16}
       display="flex"

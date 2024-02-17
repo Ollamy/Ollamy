@@ -51,9 +51,12 @@ function Quiz({ lessonId }: QuizProps) {
 
   return (
     <View>
-      <TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
+      <TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', paddingRight: 70, gap: 10 }}>
         <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
-        <ProgressBar progress={currentQuestionOrder / numberQuestion} />
+        <ProgressBar
+          progress={currentQuestionOrder / numberQuestion}
+          nextProgress={(currentQuestionOrder + 1) / numberQuestion}
+        />
       </TopBarContainer>
       <Question questionId={currentQuestionId} nextQuestion={handleNext} />
     </View>
