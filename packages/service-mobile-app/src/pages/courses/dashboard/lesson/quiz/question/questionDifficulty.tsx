@@ -1,6 +1,6 @@
 // @ts-ignore
 import STAR from 'assets/icons/star.png';
-import { Box, HStack, Image, View } from 'native-base';
+import { Box, HStack, Image } from 'native-base';
 
 interface QuestionDifficultyProps {
   difficulty: number;
