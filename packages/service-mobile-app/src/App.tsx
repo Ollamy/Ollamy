@@ -10,7 +10,6 @@ import Home from 'src/pages/home';
 import Profile from 'src/pages/profile';
 import SplashScreen from 'src/pages/splashScreen';
 import { store } from 'src/store';
-
 import customTheme from 'src/theme/theme';
 
 function App() {
