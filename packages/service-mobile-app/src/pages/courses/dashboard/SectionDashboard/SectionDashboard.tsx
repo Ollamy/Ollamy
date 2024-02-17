@@ -45,12 +45,11 @@ function SectionDashboard() {
         <Button
           onPress={() => navigate(`/course/${courseId}`)}
           bg="coolGray.100"
-          size="lg"
           leftIcon={<ArrowBackIcon />}
           alignSelf="flex-start"
           variant="unstyled"
         >
-          Go back
+          <Text bold>Go back</Text>
         </Button>
         <SectionHeader title={sectionData.title} description={sectionData.description} />
 

@@ -40,12 +40,11 @@ function CourseDashboard(): JSX.Element {
       <Button
         onPress={() => navigate('/home')}
         bg="coolGray.100"
-        size="lg"
         leftIcon={<ArrowBackIcon />}
         alignSelf="flex-start"
         variant="unstyled"
       >
-        Go back
+        <Text bold>Go back</Text>
       </Button>
       {courseData && <Heading size="lg">{courseData?.title}</Heading>}
       <ScrollView showsVerticalScrollIndicator={false}>
