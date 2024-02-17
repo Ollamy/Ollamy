@@ -4,6 +4,7 @@ import Markdown from 'react-native-markdown-display';
 import { useNavigate } from 'react-router-native';
 import IconButton from 'src/components/Buttons/IconButton/IconButton';
 import TextButton from 'src/components/buttons/textButton';
+import ErrorPage from 'src/components/ErrorPage/ErrorPage';
 import TopBarContainer from 'src/components/topBarContainer';
 import { useGetLessonLectureQuery } from 'src/services/lesson/lesson';
 
@@ -18,7 +19,7 @@ function Lecture(props: LectureProps) {
 
   const { data: course, isLoading } = useGetLessonLectureQuery({ id: lessonId });
 
-  if (isLoading || !course) return <></>;
+  if (isLoading || !course) return <ErrorPage />;
 
   return (
     <View style={styles.body}>
