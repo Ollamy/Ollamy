@@ -2,33 +2,18 @@ name: Lint - Mobile application
 
 on:
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
     paths:
-      - packages/service-mobile-app/**
-
-  push:
-    branches:
-      - master
-      - development
-    paths:
-      - packages/service-mobile-app/**
+      - "packages/service-mobile-app/**"
 
 jobs:
   build:
-    if: github.event.pull_request.draft != true
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
 
-      # TMP see https://github.com/yarnpkg/yarn/issues/9015
       - name: Switch yarn version
         id: switch version
         run: npm install -g yarn@1.22.19
@@ -39,4 +24,4 @@ jobs:
 
       - name: Lint
         id: lint
-        run: yarn lint packages/service-mobile-app/src
+        run: yarn workspace service-mobile-app lint
