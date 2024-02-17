@@ -6,17 +6,17 @@ export interface LessonResponse {
 }
 
 export interface GetLessonQuestionsRequest {
-	id: string;
-	lessonId: string;
-	title: string;
-	description: string;
-	typeAnswer: string;
-	typeQuestion: string;
-	order: number;
+  id: string;
+  lessonId: string;
+  title: string;
+  description: string;
+  typeAnswer: string;
+  typeQuestion: string;
+  order: number;
 }
 
 export interface GetLessonLectureRequest {
-	id: string;
-	lessonId: string;
-	data: string;
+  id: string;
+  lessonId: string;
+  data: string;
 }

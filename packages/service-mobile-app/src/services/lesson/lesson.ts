@@ -1,5 +1,5 @@
 import { api } from 'src/services/api';
-import { GetLessonLectureRequest, GetLessonQuestionsRequest, LessonResponse } from 'src/services/lesson/lesson.dto';
+import type { GetLessonLectureRequest, GetLessonQuestionsRequest, LessonResponse } from 'src/services/lesson/lesson.dto';
 
 export const lessonApi = api.injectEndpoints({
 	endpoints: (build) => ({

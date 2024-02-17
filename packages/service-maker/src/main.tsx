@@ -9,10 +9,14 @@ import {
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
-import HomePage from "./pages/Home";
-import { Login } from "./pages/Login";
-import ProfilePage from "./pages/Profile";
-import { Register } from "./pages/Register";
+// eslint-disable-next-line import/no-cycle
+import { Login } from "./pages/Auth/Login";
+import { Register } from "./pages/Auth/Register";
+import { SettingPage } from "./pages/Course/Chapter/chapterSettings";
+import { FormationSetting } from "./pages/Course/courseSettings";
+import { ProfilePage } from "./pages/formatter/formatterSettings";
+// eslint-disable-next-line import/no-cycle
+import { HomePage } from "./pages/Home";
 import MakerHubPage from "./pages/maker/hub";
 import QuizEditor from "./pages/Quiz";
 
@@ -41,6 +45,14 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/setting",
+    element: <SettingPage />,
+  },
+  {
+    path: "/formation",
+    element: <FormationSetting />,
   },
   {
     path: "/course/:id",
@@ -78,6 +90,10 @@ const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 
+  * {
+    box-sizing: border-box;
+  }
+
   p, h1, h2, span, button {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -100,5 +116,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
