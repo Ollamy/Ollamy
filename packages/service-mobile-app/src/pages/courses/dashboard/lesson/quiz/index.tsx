@@ -2,7 +2,7 @@ import { Spinner, View } from 'native-base';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-native';
 import IconButton from 'src/components/Buttons/IconButton/IconButton';
-import ProgressBar from 'src/components/progressBar';
+import ProgressBar from 'src/components/ProgressBar/ProgressBar';
 import TopBarContainer from 'src/components/topBarContainer';
 import { useGetLessonQuestionsQuery } from 'src/services/lesson/lesson';
 import { useValidateAnswerMutation } from 'src/services/question/question';
@@ -53,7 +53,7 @@ function Quiz({ lessonId }: QuizProps) {
     <View>
       <TopBarContainer style={{ display: 'flex', justifyContent: 'flex-start', gap: 32 }}>
         <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
-        <ProgressBar progress={currentQuestionOrder / numberQuestion} width={220} height={15} />
+        <ProgressBar progress={currentQuestionOrder / numberQuestion} />
       </TopBarContainer>
       <Question questionId={currentQuestionId} nextQuestion={handleNext} />
     </View>

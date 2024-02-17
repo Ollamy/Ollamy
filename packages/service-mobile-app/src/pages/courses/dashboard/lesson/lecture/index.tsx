@@ -1,5 +1,5 @@
-import { Text } from 'native-base';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, Text, VStack } from 'native-base';
+import { SafeAreaView } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { useNavigate } from 'react-router-native';
 import IconButton from 'src/components/Buttons/IconButton/IconButton';
@@ -22,54 +22,36 @@ function Lecture(props: LectureProps) {
   if (isLoading || !course) return <ErrorPage />;
 
   return (
-    <View style={styles.body}>
+    <VStack width="100%" height="100%" alignItems="center">
       <TopBarContainer>
         <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
       </TopBarContainer>
-      <View style={{ paddingHorizontal: 24, maxHeight: '60%', marginTop: 40, marginBottom: 100 }}>
-        <View style={styles.lectureContainer}>
-          <Text style={styles.titleContainer}>{'Lecture'}</Text>
-          <SafeAreaView>
-            <ScrollView contentInsetAdjustmentBehavior="automatic">
-              <Markdown>{course.data}</Markdown>
-            </ScrollView>
-          </SafeAreaView>
-        </View>
-      </View>
+      <VStack
+        borderRadius={8}
+        borderColor="#BDBDBD"
+        borderWidth={1}
+        shadow={10}
+        padding={28}
+        paddingBottom={95}
+        space={34}
+        justifyContent="flex-start"
+        alignItems="center"
+        height="65%"
+        width="80%"
+        marginY={10}
+      >
+        <Text color="#876BF6" fontSize={24} fontWeight={700}>
+          Lecture
+        </Text>
+        <SafeAreaView style={{ width: '100%' }}>
+          <ScrollView contentInsetAdjustmentBehavior="automatic">
+            <Markdown>{course.data}</Markdown>
+          </ScrollView>
+        </SafeAreaView>
+      </VStack>
       <TextButton title="Take the Quiz" onPress={() => setLectureState(true)} rightIconName="arrow-forward" />
-    </View>
+    </VStack>
   );
 }
-
-const styles = StyleSheet.create({
-  body: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  lectureContainer: {
-    width: '100%',
-    borderRadius: 8,
-    borderColor: '#BDBDBD',
-    borderWidth: 1,
-    shadowRadius: 10,
-    padding: 28,
-    paddingBottom: 95,
-    gap: 34,
-
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  titleContainer: {
-    color: '#876BF6',
-    fontSize: 24,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-});
 
 export default Lecture;
