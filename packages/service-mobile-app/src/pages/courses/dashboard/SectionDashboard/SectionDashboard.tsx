@@ -55,7 +55,12 @@ function SectionDashboard() {
 
         <VStack w="full">
           {lessons.map((lesson, index) => (
-            <LessonListItem lesson={lesson} index={index} key={lesson.id} />
+            <LessonListItem
+              lesson={lesson}
+              index={index}
+              key={lesson.id}
+              onPress={() => navigate(`lesson/${lesson.id}`)}
+            />
           ))}
         </VStack>
       </VStack>
