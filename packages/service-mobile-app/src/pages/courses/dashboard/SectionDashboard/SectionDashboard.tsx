@@ -5,7 +5,15 @@ import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
 import { type Lesson, LessonStatus } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
+import type { LessonResponse } from 'src/services/lesson/lesson.dto';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
+
+function getLastLessonIndex(sectionsData: LessonResponse[], lastLessonId: string | undefined) {
+  if (!lastLessonId) return 0;
+  const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastLessonId);
+
+  return lastSectionIndex !== -1 ? lastSectionIndex : 0;
+}
 
 function SectionDashboard() {
   const { id: courseId, sectionId } = useParams();
@@ -17,11 +25,10 @@ function SectionDashboard() {
 
   const lessons = useMemo<Lesson[]>(() => {
     if (!lessonsData) return [];
-    const lastLessonIndex = lessonsData.findIndex((s) => s.id === courseData?.lastLessonId);
+    const lastLessonIndex = getLastLessonIndex(lessonsData, courseData?.lastLessonId);
 
     return lessonsData.map((s, i) => {
-      if (lastLessonIndex === -1) return { ...s, status: LessonStatus.NOT_STARTED };
-      if (i < lastLessonIndex) return { ...s, status: LessonStatus.COMPLETED };
+      if (i > lastLessonIndex) return { ...s, status: LessonStatus.NOT_STARTED };
       if (i === lastLessonIndex) return { ...s, status: LessonStatus.IN_PROGRESS };
       return { ...s, status: LessonStatus.NOT_STARTED };
     });
@@ -38,18 +45,22 @@ function SectionDashboard() {
         <Button
           onPress={() => navigate(`/course/${courseId}`)}
           bg="coolGray.100"
-          size="lg"
           leftIcon={<ArrowBackIcon />}
           alignSelf="flex-start"
           variant="unstyled"
         >
-          Go back
+          <Text bold>Go back</Text>
         </Button>
         <SectionHeader title={sectionData.title} description={sectionData.description} />
 
         <VStack w="full">
           {lessons.map((lesson, index) => (
-            <LessonListItem lesson={lesson} index={index} key={lesson.id} />
+            <LessonListItem
+              lesson={lesson}
+              index={index}
+              key={lesson.id}
+              onPress={() => navigate(`lesson/${lesson.id}`)}
+            />
           ))}
         </VStack>
       </VStack>

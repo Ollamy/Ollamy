@@ -44,7 +44,9 @@ async function bootstrap() {
     origin: [
       `${FRONTEND_URL}:${FRONTEND_PORT}`,
       'http://127.0.0.1:5173',
+      'http://localhost:19006',
       'http://localhost:5173',
+      'http://localhost:8081',
     ],
     credentials: true,
     allowedHeaders: 'Content-Type',

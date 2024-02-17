@@ -12,13 +12,23 @@ import {
   UpdateLessonModel,
   LessonIdResponse,
 } from './lesson.dto';
-import { QuestionModel } from 'question/question.dto';
+import { LectureModel, QuestionModel } from 'question/question.dto';
 import prisma from 'client';
-import { Prisma, Question, Lesson, UsertoLesson } from '@prisma/client';
+import {
+  Prisma,
+  Question,
+  Lesson,
+  UsertoLesson,
+  Lecture,
+} from '@prisma/client';
+import { error } from 'console';
 
 @Injectable()
 export class LessonService {
-  async postLesson(lessonData: CreateLessonModel, ctx: any): Promise<LessonIdResponse> {
+  async postLesson(
+    lessonData: CreateLessonModel,
+    ctx: any,
+  ): Promise<LessonIdResponse> {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
@@ -39,7 +49,7 @@ export class LessonService {
           lesson_id: lessonDb.id,
         },
       });
-  
+
       return { id: lessonDb.id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
@@ -152,6 +162,29 @@ export class LessonService {
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');
+    }
+  }
+
+  async getLessonLecture(LessonId: string): Promise<LectureModel> {
+    try {
+      const lessonlectureDb: Lecture = await prisma.lecture.findFirst({
+        where: {
+          lesson_id: LessonId,
+        },
+      });
+
+      if (!lessonlectureDb) {
+        Logger.error('No lecture for this course !');
+        throw new NotFoundException('No lecture for this course !');
+      }
+
+      return {
+        lessonId: lessonlectureDb.lesson_id,
+        ...lessonlectureDb,
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new NotFoundException(error);
     }
   }
 

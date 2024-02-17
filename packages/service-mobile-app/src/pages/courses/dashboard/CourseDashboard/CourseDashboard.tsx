@@ -4,6 +4,14 @@ import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import { type CourseSection, LessonStatus } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery, useGetCourseSectionsQuery } from 'src/services/course/course';
+import type { SectionResponse } from 'src/services/section/section.dto';
+
+function getLastSectionIndex(sectionsData: SectionResponse[], lastSectionId: string | undefined) {
+  if (!lastSectionId) return 0;
+  const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastSectionId);
+
+  return lastSectionIndex !== -1 ? lastSectionIndex : 0;
+}
 
 function CourseDashboard(): JSX.Element {
   const navigate = useNavigate();
@@ -14,11 +22,10 @@ function CourseDashboard(): JSX.Element {
 
   const sections = useMemo<CourseSection[]>(() => {
     if (!sectionsData) return [];
-    const lastSectionIndex = sectionsData.findIndex((s) => s.id === courseData?.lastSectionId);
+    const lastSectionIndex = getLastSectionIndex(sectionsData, courseData?.lastSectionId);
 
     return sectionsData.map((s, i) => {
-      if (lastSectionIndex === -1) return { ...s, status: LessonStatus.NOT_STARTED };
-      if (i < lastSectionIndex) return { ...s, status: LessonStatus.COMPLETED };
+      if (i > lastSectionIndex) return { ...s, status: LessonStatus.NOT_STARTED };
       if (i === lastSectionIndex) return { ...s, status: LessonStatus.IN_PROGRESS };
       return { ...s, status: LessonStatus.NOT_STARTED };
     });
@@ -33,12 +40,11 @@ function CourseDashboard(): JSX.Element {
       <Button
         onPress={() => navigate('/home')}
         bg="coolGray.100"
-        size="lg"
         leftIcon={<ArrowBackIcon />}
         alignSelf="flex-start"
         variant="unstyled"
       >
-        Go back
+        <Text bold>Go back</Text>
       </Button>
       {courseData && <Heading size="lg">{courseData?.title}</Heading>}
       <ScrollView showsVerticalScrollIndicator={false}>
