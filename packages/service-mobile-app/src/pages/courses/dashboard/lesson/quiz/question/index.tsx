@@ -1,10 +1,11 @@
 // @ts-ignore
-import STAR from 'assets/icons/star.png';
-import { Box, Image, Pressable, ScrollView, Spinner, Text, View } from 'native-base';
+import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import TextButton from 'src/components/buttons/textButton';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
+
+import QuestionDifficulty from './questionDifficulty';
+import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
@@ -45,22 +46,30 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
     }
   };
   return (
-    <View style={styles.body}>
-      <Box style={styles.difficultyContainer}>
-        {Array.from({ length: 2 }, (_, idx) => (
-          <Box key={idx} height="20px" width="20px">
-            <Image style={{ height: '100%', width: '100%' }} source={STAR} alt="difficulty star" />
-          </Box>
-        ))}
-      </Box>
-      <Text style={styles.questionTitle}>{question.title}</Text>
-      <View style={{ maxHeight: '35%' }}>
-        <ScrollView contentContainerStyle={styles.answerScrollView}>
+    <VStack height="100%" space="32px" marginTop={23} paddingX="20px">
+      <QuestionDifficulty difficulty={2} />
+      <QuestionTitle title={question.title} />
+      <View maxHeight="35%">
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}
+        >
           {answers.map((answer) => (
             <Pressable
               key={answer.id}
               disabled={trueAnswer !== undefined}
-              style={{ ...styles.answerContainer, borderColor: borderColor(answer.id, selectAnswer, trueAnswer) }}
+              width="48%"
+              paddingY="45px"
+              borderRadius={12}
+              borderWidth={4}
+              justifyContent="center"
+              alignItems="center"
+              marginBottom={5}
+              style={{ borderColor: borderColor(answer.id, selectAnswer, trueAnswer) }}
               onPress={() => setSelectAnswer(answer.id)}
             >
               <Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
@@ -79,58 +88,8 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
           rightIconName="arrow-forward"
         />
       </View>
-    </View>
+    </VStack>
   );
 }
-
-const styles = StyleSheet.create({
-  body: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-
-    gap: 32,
-    marginTop: 23,
-    paddingHorizontal: 20,
-  },
-  difficultyContainer: {
-    width: 'auto',
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#ECE6FC',
-  },
-  answerScrollView: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  answerContainer: {
-    width: '48%',
-    paddingVertical: 45,
-    borderRadius: 12,
-    borderWidth: 4,
-    borderColor: '#D9D9D9',
-    justifyContent: 'center',
-
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  questionTitle: {
-    alignSelf: 'center',
-
-    color: '#876BF6',
-    fontWeight: 'bold',
-    fontSize: 24,
-    lineHeight: 24,
-  },
-});
 
 export default Question;
