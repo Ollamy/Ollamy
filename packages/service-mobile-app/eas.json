@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 3.8.1"
+    "version": ">= 7.2.0"
   },
   "build": {
     "development": {
@@ -21,6 +21,9 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000/"
       }
     },
     "production": {
