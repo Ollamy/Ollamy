@@ -36,7 +36,6 @@ jobs:
       FRONTEND_PORT: "3000"
 
     steps:
-
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
@@ -47,15 +46,27 @@ jobs:
 
       - name: Build backend container
         id: build
-        run: docker compose build backend database
+        run: docker compose build backend
 
       - name: Run backend container
         id: run
         run: docker compose up --wait -d backend
 
       - name: Check OpenApi generation
-        id: test
+        id: check
         run: ./script/openapi/test-backend-client-generator-cli.sh http://localhost:${{ secrets.BACKEND_PORT }} packages/service-maker script/openapi
+
+      - name: Run backend tests
+        id: test
+        run: docker-compose exec -it backend yarn test:cov:json
+
+      - name: Create test-reports directory
+        id: create-directory
+        run: mkdir -p test-reports
+
+      - name: Copy coverage report to test-reports directory
+        id: copy-coverage-report
+        run: docker cp "$(docker-compose ps -q backend)":/app/packages/service-backend/coverage/coverage.json test-reports/
 
       - name: Stop backend container
         id: stop
