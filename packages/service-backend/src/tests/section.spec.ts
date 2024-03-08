@@ -1,11 +1,18 @@
 import { Test } from '@nestjs/testing';
 import { SectionService } from 'section/section.service';
 import {
-  CreateSectionModel,
-  IdSectionModel,
-  UpdateSectionModel,
-} from './section.dto';
-import { Lesson, Prisma, Section } from '@prisma/client';
+  mockSectionData,
+  mockSectionDb,
+  mockSectionData2,
+  mockSectionDb2,
+  mockError,
+  sectionId,
+  mockSectionData3,
+  mockSectionDb3,
+  mockLessonDb,
+  courseId,
+} from 'tests/data/section.data';
+import { Lesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
@@ -20,18 +27,6 @@ describe('postSection', () => {
     sectionService = moduleRef.get<SectionService>(SectionService);
   });
   it('should create a section and return the success message', async () => {
-    // Mock the dependencies or services
-    const mockSectionData: CreateSectionModel = {
-      courseId: '123',
-      title: 'Section Title',
-      description: 'Section Description',
-    };
-    const mockSectionDb: Section = {
-      id: '456',
-      course_id: mockSectionData.courseId,
-      title: mockSectionData.title,
-      description: mockSectionData.description,
-    };
     jest.spyOn(prisma.section, 'create').mockResolvedValue(mockSectionDb);
 
     // Invoke the function being tested
@@ -47,17 +42,11 @@ describe('postSection', () => {
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionDb.id});
+    expect(result).toStrictEqual({ id: mockSectionDb.id });
   });
 
   it('should throw NotFoundException if section creation fails', async () => {
     jest.spyOn(prisma.section, 'create').mockResolvedValue(null);
-
-    const mockSectionData: CreateSectionModel = {
-      courseId: '123',
-      title: 'Section Title',
-      description: 'Section Description',
-    };
 
     await expect(sectionService.postSection(mockSectionData)).rejects.toThrow(
       ConflictException,
@@ -68,12 +57,6 @@ describe('postSection', () => {
     jest
       .spyOn(prisma.section, 'create')
       .mockRejectedValue(new Error('Some error'));
-
-    const mockSectionData: CreateSectionModel = {
-      courseId: '123',
-      title: 'Section Title',
-      description: 'Section Description',
-    };
 
     await expect(sectionService.postSection(mockSectionData)).rejects.toThrow(
       ConflictException,
@@ -93,60 +76,36 @@ describe('deleteSection', () => {
   });
 
   it('should delete a section and return the success message', async () => {
-    // Mock the dependencies or services
-    const mockSectionData: IdSectionModel = {
-      id: '123',
-    };
-    const mockSectionDb: Section = {
-      id: mockSectionData.id,
-      course_id: '123',
-      title: 'Section Title',
-      description: 'Section Description',
-      // other properties
-    };
-    jest.spyOn(prisma.section, 'delete').mockResolvedValue(mockSectionDb);
+    jest.spyOn(prisma.section, 'delete').mockResolvedValue(mockSectionDb2);
 
     // Invoke the function being tested
-    const result = await sectionService.deleteSection(mockSectionData);
+    const result = await sectionService.deleteSection(mockSectionData2);
 
     // Perform assertions
     expect(prisma.section.delete).toHaveBeenCalledTimes(1);
     expect(prisma.section.delete).toHaveBeenCalledWith({
       where: {
-        id: mockSectionData.id,
+        id: mockSectionData2.id,
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionData.id});
+    expect(result).toStrictEqual({ id: mockSectionData2.id });
   });
 
   it('should throw NotFoundException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'delete').mockResolvedValue(null);
 
-    const mockSectionData: IdSectionModel = {
-      id: '123',
-    };
-
-    await expect(sectionService.deleteSection(mockSectionData)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if section has already been removed', async () => {
-    const mockError: Prisma.PrismaClientKnownRequestError =
-      new Prisma.PrismaClientKnownRequestError('error', {
-        code: '1',
-        clientVersion: '1',
-      });
     jest.spyOn(prisma.section, 'delete').mockRejectedValue(mockError);
 
-    const mockSectionData: IdSectionModel = {
-      id: '123',
-    };
-
-    await expect(sectionService.deleteSection(mockSectionData)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should throw ConflictException if an error occurs', async () => {
@@ -154,13 +113,9 @@ describe('deleteSection', () => {
       .spyOn(prisma.section, 'delete')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockSectionData: IdSectionModel = {
-      id: '123',
-    };
-
-    await expect(sectionService.deleteSection(mockSectionData)).rejects.toThrow(
-      ConflictException,
-    );
+    await expect(
+      sectionService.deleteSection(mockSectionData2),
+    ).rejects.toThrow(ConflictException);
   });
 });
 
@@ -177,23 +132,16 @@ describe('getSection', () => {
 
   it('should return a section when it exists', async () => {
     // Mock the dependencies or services
-    const mockSectionId = '123';
-    const mockSectionDb: Section = {
-      id: mockSectionId,
-      course_id: '456',
-      title: 'Section Title',
-      description: 'Section Description',
-    };
     jest.spyOn(prisma.section, 'findFirst').mockResolvedValue(mockSectionDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSection(mockSectionId);
+    const result = await sectionService.getSection(sectionId);
 
     // Perform assertions
     expect(prisma.section.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.section.findFirst).toHaveBeenCalledWith({
       where: {
-        id: mockSectionId,
+        id: sectionId,
       },
     });
 
@@ -208,9 +156,7 @@ describe('getSection', () => {
   it('should throw ConflictException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'findFirst').mockResolvedValue(null);
 
-    const mockSectionId = '123';
-
-    await expect(sectionService.getSection(mockSectionId)).rejects.toThrow(
+    await expect(sectionService.getSection(sectionId)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -220,9 +166,7 @@ describe('getSection', () => {
       .spyOn(prisma.section, 'findFirst')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockSectionId = '123';
-
-    await expect(sectionService.getSection(mockSectionId)).rejects.toThrow(
+    await expect(sectionService.getSection(sectionId)).rejects.toThrow(
       ConflictException,
     );
   });
@@ -241,54 +185,36 @@ describe('updateSection', () => {
 
   it('should update a section and return the success message', async () => {
     // Mock the dependencies or services
-    const mockSectionId = '123';
-    const mockSectionData: UpdateSectionModel = {
-      title: 'Updated Section Title',
-      description: 'Updated Section Description',
-      courseId: '456',
-    };
-    const mockSectionDb: Section = {
-      id: mockSectionId,
-      course_id: '456',
-      title: 'Section Title',
-      description: 'Section Description',
-    };
-    jest.spyOn(prisma.section, 'update').mockResolvedValue(mockSectionDb);
+
+    jest.spyOn(prisma.section, 'update').mockResolvedValue(mockSectionDb3);
 
     // Invoke the function being tested
     const result = await sectionService.updateSection(
-      mockSectionId,
-      mockSectionData,
+      sectionId,
+      mockSectionData3,
     );
 
     // Perform assertions
     expect(prisma.section.update).toHaveBeenCalledTimes(1);
     expect(prisma.section.update).toHaveBeenCalledWith({
       where: {
-        id: mockSectionId,
+        id: sectionId,
       },
       data: {
-        title: 'Updated Section Title',
-        description: 'Updated Section Description',
-        course_id: '456',
+        title: mockSectionData3.title,
+        description: mockSectionData3.description,
+        course_id: courseId,
       },
     });
 
-    expect(result).toStrictEqual({id: mockSectionId});
+    expect(result).toStrictEqual({ id: sectionId });
   });
 
   it('should throw ConflictException if section does not exist', async () => {
     jest.spyOn(prisma.section, 'update').mockResolvedValue(null);
 
-    const mockSectionId = '123';
-    const mockSectionData: UpdateSectionModel = {
-      title: 'Updated Section Title',
-      description: 'Updated Section Description',
-      courseId: '456',
-    };
-
     await expect(
-      sectionService.updateSection(mockSectionId, mockSectionData),
+      sectionService.updateSection(sectionId, mockSectionData3),
     ).rejects.toThrow(ConflictException);
   });
 
@@ -297,15 +223,8 @@ describe('updateSection', () => {
       .spyOn(prisma.section, 'update')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockSectionId = '123';
-    const mockSectionData: UpdateSectionModel = {
-      title: 'Updated Section Title',
-      description: 'Updated Section Description',
-      courseId: '456',
-    };
-
     await expect(
-      sectionService.updateSection(mockSectionId, mockSectionData),
+      sectionService.updateSection(sectionId, mockSectionData3),
     ).rejects.toThrow(ConflictException);
   });
 });
@@ -322,31 +241,17 @@ describe('getSectionLessons', () => {
   });
   it('should return an array of lessons when they exist', async () => {
     // Mock the dependencies or services
-    const mockSectionId = '123';
-    const mockLessonDb: Lesson[] = [
-      {
-        id: '1',
-        section_id: mockSectionId,
-        title: 'Lesson 1',
-        description: 'Lesson 1 Description',
-      },
-      {
-        id: '2',
-        section_id: mockSectionId,
-        title: 'Lesson 2',
-        description: 'Lesson 2 Description',
-      },
-    ];
+
     jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSectionLessons(mockSectionId);
+    const result = await sectionService.getSectionLessons(sectionId);
 
     // Perform assertions
     expect(prisma.lesson.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.lesson.findMany).toHaveBeenCalledWith({
       where: {
-        section_id: mockSectionId,
+        section_id: sectionId,
       },
     });
 
@@ -365,10 +270,8 @@ describe('getSectionLessons', () => {
       .spyOn(prisma.lesson, 'findMany')
       .mockRejectedValue(new Error('Some error'));
 
-    const mockSectionId = '123';
-
-    await expect(
-      sectionService.getSectionLessons(mockSectionId),
-    ).rejects.toThrow(NotFoundException);
+    await expect(sectionService.getSectionLessons(sectionId)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 });
