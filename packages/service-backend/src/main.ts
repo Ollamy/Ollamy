@@ -47,9 +47,10 @@ async function bootstrap() {
       'http://localhost:19006',
       'http://localhost:5173',
       'http://localhost:8081',
+      'https://webhook.site',
     ],
     credentials: true,
-    allowedHeaders: 'Content-Type',
+    allowedHeaders: ['Content-Type', 'expo-signature'],
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
   app.use(cookieParser());
