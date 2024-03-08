@@ -1,3 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+
 export class WebHookMobileBuild {
   id: string;
   appId: string;
@@ -19,5 +22,7 @@ export class WebHookMobileBuildHeader {
 }
 
 export class GetLastBuildUrlResponse {
+  @ApiProperty()
+  @IsString()
   url: string;
 }
