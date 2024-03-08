@@ -16,6 +16,8 @@ export const REDIS_HOST = get('REDIS_HOST').required().asString();
 export const REDIS_PORT = get('REDIS_PORT').required().asPortNumber();
 export const REDIS_PASSWORD = get('REDIS_PASSWORD').required().asString();
 export const REDIS_USERNAME = get('REDIS_USERNAME').required().asString();
-export const EAS_BUILD_WEBHOOK_SECRET = get('EAS_BUILD_WEBHOOK_SECRET').required().asString();
+export const EAS_BUILD_WEBHOOK_SECRET = get('EAS_BUILD_WEBHOOK_SECRET')
+  .required()
+  .asString();
 
 Logger.log(`Env variables Loaded`);
