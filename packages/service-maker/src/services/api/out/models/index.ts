@@ -333,6 +333,19 @@ export interface GetCourseRequest {
 /**
  * 
  * @export
+ * @interface GetLastBuildUrlResponse
+ */
+export interface GetLastBuildUrlResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetLastBuildUrlResponse
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
  * @interface GetUserModel
  */
 export interface GetUserModel {

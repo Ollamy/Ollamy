@@ -34,6 +34,7 @@ export function Register(): React.ReactNode {
     formState: { errors },
   } = useForm<Inputs>();
   const { mutateAsync: registerMutation } = api.user.useRegister();
+  const buildRes = api.mobileApp.useLastMobileBuild();
 
   const onSubmit = async (data: Inputs): Promise<void> => {
     try {
@@ -48,6 +49,10 @@ export function Register(): React.ReactNode {
   };
   const handleLoginClick = (): void => {
     window.location.href = "login";
+  };
+
+  const downloadLastBuild = () => {
+    if (buildRes.status === "success") window.location.href = buildRes.data.url;
   };
 
   return (
@@ -128,15 +133,23 @@ export function Register(): React.ReactNode {
             />
           </>
         )}
-        <p>
-          Already have an account?{" "}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <p>
+            Already have an account?{" "}
+            <span
+              style={{ color: "#876BF6", cursor: "pointer" }}
+              onClick={handleLoginClick}
+            >
+              Login
+            </span>
+          </p>
           <span
-            style={{ color: "#876BF6", cursor: "pointer" }}
-            onClick={handleLoginClick}
+            style={{ color: "#876BF6", cursor: "pointer", alignSelf: "center" }}
+            onClick={downloadLastBuild}
           >
-            Login
+            Download mobile app
           </span>
-        </p>
+        </div>
       </FormMaker>
     </div>
   );
