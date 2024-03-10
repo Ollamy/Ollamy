@@ -15,7 +15,7 @@ import {
   ValidateAnswerResponse,
 } from './question.dto';
 import prisma from 'client';
-import { Answer, Prisma, Question } from '@prisma/client';
+import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { AnswerModel } from '../answer/answer.dto';
 
@@ -56,6 +56,7 @@ export class QuestionService {
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
           order: questionData.order,
+          points: questionData?.points,
         },
       });
 
@@ -126,6 +127,7 @@ export class QuestionService {
           : undefined,
         difficulty: questionDb.difficulty,
         order: questionDb.order,
+        points: questionDb.points,
       } as QuestionModel;
     } catch (error) {
       Logger.error(error);
@@ -244,10 +246,18 @@ export class QuestionService {
 
   async validateAnswer(
     body: validateAnswerModel,
+    ctx: any,
   ): Promise<ValidateAnswerResponse> {
     const questionDb: Question = await prisma.question.findUnique({
       where: {
         id: body.questionId,
+      },
+    });
+
+    const userLesson = await prisma.usertoLesson.findFirst({
+      where: {
+        user_id: ctx.__user.id,
+        lesson_id: questionDb.lesson_id,
       },
     });
 
@@ -273,11 +283,44 @@ export class QuestionService {
         ) + 1
       ] ?? null;
 
+    const isValidated = questionDb.trust_answer_id === body.answerId;
+    const questionPoints =
+      questionDb.points === undefined ? 0 : questionDb.points;
+
+    if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
+      await prisma.usertoScore.update({
+        where: { user_id: ctx.__user.id },
+        data: {
+          score: {
+            increment: questionPoints,
+          },
+        },
+      });
+
+      await prisma.usertoLesson.update({
+        where: {
+          lesson_id_user_id: {
+            user_id: userLesson.user_id,
+            lesson_id: userLesson.lesson_id,
+          },
+        },
+        data: {
+          score: {
+            increment: questionPoints,
+          },
+        },
+      });
+    }
+
     return {
-      success: questionDb.trust_answer_id === body.answerId,
+      success: isValidated,
       answer: questionDb.trust_answer_id,
       end: !(nextQuestion !== null),
       nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
+      points:
+        isValidated && userLesson.status !== LessonStatus.COMPLETED
+          ? questionPoints
+          : 0,
     };
   }
 }

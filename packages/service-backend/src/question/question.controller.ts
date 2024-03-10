@@ -32,6 +32,7 @@ import {
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
+import { OllContext } from '../context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -188,7 +189,8 @@ export class QuestionController {
   @Post('/validate')
   async validateAnswer(
     @Body() body: validateAnswerModel,
+    @OllContext() ctx: any,
   ): Promise<ValidateAnswerResponse> {
-    return this.questionService.validateAnswer(body);
+    return this.questionService.validateAnswer(body, ctx);
   }
 }

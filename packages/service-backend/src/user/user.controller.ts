@@ -4,6 +4,7 @@ import SessionService from 'redis/session/session.service';
 import {
   CreateUserModel,
   GetUserModel,
+  GetUserScoreModel,
   LoginUserModel,
   UpdateUserModel,
   UserCoursesResponse,
@@ -198,5 +199,15 @@ export class UserController {
   @Get('/courses')
   async getUserCourses(@OllContext() ctx: any): Promise<UserCoursesResponse> {
     return this.userService.getUserCourses(ctx);
+  }
+
+  @ApiOkResponse({
+    description: "user's score",
+    type: GetUserModel,
+  })
+  @LoggedMiddleware(true)
+  @Get('/score')
+  async getUserScore(@OllContext() ctx: any): Promise<GetUserScoreModel> {
+    return this.userService.getUserScore(ctx);
   }
 }
