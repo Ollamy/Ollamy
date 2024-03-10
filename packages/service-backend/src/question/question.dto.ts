@@ -48,8 +48,8 @@ export class QuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsString()
+  order: string;
 
   @ApiProperty()
   @IsNumber()
@@ -120,6 +120,7 @@ export class CreateQuestionModel {
 
   @ApiProperty()
   @IsObject()
+  @IsOptional()
   between?: betweenOrder | undefined;
 
   @ApiProperty()

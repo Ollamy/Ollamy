@@ -22,9 +22,7 @@ import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(
-    questionData: CreateQuestionModel,
-  ): Promise<QuestionIdResponse> {
+  async postQuestion(questionData: CreateQuestionModel): Promise<QuestionIdResponse> {
     try {
       const questionOrders: { order: string; id: string }[] =
         await prisma.question.findMany({
@@ -35,12 +33,18 @@ export class QuestionService {
             order: true,
             id: true,
           },
+          orderBy: [
+            {
+              order: 'asc',
+            },
+          ],
         });
 
       let order = null;
+      let lastkey = questionOrders[questionOrders.length - 1]?.order ?? null;
 
       if (questionData.between === undefined) {
-        order = generateKeyBetween(null, null);
+        order = generateKeyBetween(lastkey, null);
       } else {
         const beforeOrder = questionOrders.find(
           (a) => a.id === questionData.between.before,
@@ -51,6 +55,7 @@ export class QuestionService {
 
         order = generateKeyBetween(beforeOrder, afterOrder);
       }
+
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -232,14 +237,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-          ({
-            id: answer.id,
-            questionId: answer.question_id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-          } as AnswerModel),
+        ({
+          id: answer.id,
+          questionId: answer.question_id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+        } as AnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -284,9 +289,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;

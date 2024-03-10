@@ -70,7 +70,7 @@ export const mockLessonQuestions: Question[] = [
     difficulty: QuestionDifficulty.BEGINNER,
     picture_id: uuidv4(),
     points: 1,
-    order: 0,
+    order: "a0",
     // other question properties
   },
   {
@@ -84,7 +84,7 @@ export const mockLessonQuestions: Question[] = [
     difficulty: QuestionDifficulty.ADVANCED,
     picture_id: uuidv4(),
     points: 2,
-    order: 1,
+    order: "a1",
     // other question properties
   },
   // other questions
