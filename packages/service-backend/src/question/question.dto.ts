@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -69,6 +70,18 @@ export class LectureModel {
   data: string;
 }
 
+export class betweenOrder {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  before?: string | undefined;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  after?: string | undefined;
+}
+
 export class CreateQuestionModel {
   @ApiProperty()
   @IsUUID()
@@ -106,8 +119,8 @@ export class CreateQuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsObject()
+  between?: betweenOrder | undefined;
 
   @ApiProperty()
   @IsNumber()

@@ -18,6 +18,7 @@ import prisma from 'client';
 import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { AnswerModel } from '../answer/answer.dto';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class QuestionService {
@@ -25,27 +26,30 @@ export class QuestionService {
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
-      const questionOrders: { order: number }[] =
+      const questionOrders: { order: string; id: string }[] =
         await prisma.question.findMany({
           where: {
             lesson_id: questionData.lessonId,
           },
           select: {
             order: true,
+            id: true,
           },
         });
 
-      if (
-        questionOrders
-          .map((question) => question.order)
-          .includes(questionData.order)
-      ) {
-        Logger.error(
-          'Failed to create question (question order already exists) !',
-        );
-        throw new ConflictException(
-          'Failed to create question (question order already exists)!',
-        );
+      let order = null;
+
+      if (questionData.between === undefined) {
+        order = generateKeyBetween(null, null);
+      } else {
+        const beforeOrder = questionOrders.find(
+          (a) => a.id === questionData.between.before,
+        )?.order;
+        const afterOrder = questionOrders.find(
+          (a) => a.id === questionData.between.after,
+        )?.order;
+
+        order = generateKeyBetween(beforeOrder, afterOrder);
       }
       const questionDb: Question = await prisma.question.create({
         data: {
@@ -55,7 +59,7 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
-          order: questionData.order,
+          order: order,
           points: questionData?.points,
         },
       });

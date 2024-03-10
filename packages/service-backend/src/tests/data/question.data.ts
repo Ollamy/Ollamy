@@ -21,7 +21,7 @@ export const mockQuestionData: CreateQuestionModel = {
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
   data: 'test',
-  order: 0,
+  between: undefined,
 };
 
 export const mockQuestionId: IdQuestionModel = {
