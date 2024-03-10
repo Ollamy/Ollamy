@@ -99,6 +99,29 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
+    async getUserScoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/user/score`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getUserScore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+        return localUserApi.getUserScoreRaw(initOverrides);
+    }
+
+    /**
+     */
     async loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
         if (requestParameters.loginUserModel === null || requestParameters.loginUserModel === undefined) {
             throw new runtime.RequiredError('loginUserModel','Required parameter requestParameters.loginUserModel was null or undefined when calling loginUser.');
