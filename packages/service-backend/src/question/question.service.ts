@@ -22,7 +22,9 @@ import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class QuestionService {
-  async postQuestion(questionData: CreateQuestionModel): Promise<QuestionIdResponse> {
+  async postQuestion(
+    questionData: CreateQuestionModel,
+  ): Promise<QuestionIdResponse> {
     try {
       const questionDb: Question = await prisma.question.create({
         data: {
@@ -152,44 +154,18 @@ export class QuestionService {
   async updateQuestionOrder(
     questionData: UpdateQuestionOrderModel,
   ): Promise<object> {
-    const questions: Question[] = await prisma.question.findMany({
+    const order = generateKeyBetween(questionData?.after, questionData?.before);
+    await prisma.question.update({
       where: {
-        id: { in: [questionData.origin, questionData.dest] },
-      },
-    });
-
-    if (!questions || questions.length !== 2) {
-      Logger.error('Questions does not exists !');
-      throw new ConflictException('Questions does not exists !');
-    }
-
-    const updatedOrigin = await prisma.question.update({
-      where: {
-        id: questions[0].id,
+        id: questionData.origin,
       },
       data: {
-        order: questions[1].order,
-      },
-    });
-
-    const updatedDest = await prisma.question.update({
-      where: {
-        id: questions[1].id,
-      },
-      data: {
-        order: questions[0].order,
+        order: order,
       },
     });
 
     return {
-      origin: {
-        id: updatedOrigin.id,
-        order: updatedOrigin.order,
-      },
-      dest: {
-        id: updatedDest.id,
-        order: updatedDest.order,
-      },
+      order: order,
     };
   }
 
@@ -208,14 +184,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-        ({
-          id: answer.id,
-          questionId: answer.question_id,
-          data: answer.data,
-          picture: answer.picture_id
-            ? await PictureService.getPicture(answer.picture_id)
-            : undefined,
-        } as AnswerModel),
+          ({
+            id: answer.id,
+            questionId: answer.question_id,
+            data: answer.data,
+            picture: answer.picture_id
+              ? await PictureService.getPicture(answer.picture_id)
+              : undefined,
+          } as AnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -260,9 +236,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-      lessonQuestions.findIndex(
-        (question) => question.id === body.questionId,
-      ) + 1
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;

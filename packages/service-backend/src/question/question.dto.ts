@@ -175,12 +175,18 @@ export class UpdateQuestionModel {
 
 export class UpdateQuestionOrderModel {
   @ApiProperty()
-  @IsUUID()
-  origin?: string;
+  @IsString()
+  @IsOptional()
+  after?: string | null;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  before?: string | null;
 
   @ApiProperty()
   @IsUUID()
-  dest?: string;
+  origin: string;
 }
 
 export class QuestionIdResponse {
