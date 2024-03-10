@@ -155,8 +155,9 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          origin: 'Origin id',
-          dest: 'Target id',
+          before: 'order id',
+          after: 'order id',
+          origin: 'question id',
         } as UpdateQuestionOrderModel,
       },
     },
