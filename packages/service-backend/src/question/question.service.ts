@@ -254,10 +254,12 @@ export class QuestionService {
       },
     });
 
-    const userLesson = await prisma.usertoLesson.findFirst({
+    const userLesson = await prisma.usertoLesson.findUnique({
       where: {
-        user_id: ctx.__user.id,
-        lesson_id: questionDb.lesson_id,
+        lesson_id_user_id: {
+          user_id: ctx.__user.id,
+          lesson_id: questionDb.lesson_id,
+        },
       },
     });
 
