@@ -49,6 +49,10 @@ export class QuestionModel {
   @ApiProperty()
   @IsNumber()
   order: number;
+
+  @ApiProperty()
+  @IsNumber()
+  points?: number;
 }
 
 export class LectureModel {
@@ -64,7 +68,6 @@ export class LectureModel {
   @IsString()
   data: string;
 }
-
 
 export class CreateQuestionModel {
   @ApiProperty()
@@ -105,6 +108,11 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsNumber()
   order: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  points?: number;
 }
 
 export class IdQuestionModel {
@@ -205,4 +213,12 @@ export class ValidateAnswerResponse {
   @IsString()
   @IsOptional()
   nextQuestionId?: string | undefined;
+
+  @ApiProperty({
+    name: 'points',
+    description: 'Points scored in the last question',
+  })
+  @IsString()
+  @IsOptional()
+  points?: number | undefined;
 }

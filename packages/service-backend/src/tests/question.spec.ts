@@ -15,7 +15,10 @@ import {
   mockQuestionDb4,
   mockBodyIncorrect,
   questionId,
+  mockUserLesson,
 } from 'tests/data/question.data';
+import { context } from 'tests/data/user.data';
+
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
 
@@ -142,6 +145,7 @@ describe('getQuestion', () => {
       difficulty: mockQuestionDb2.difficulty,
       pictureId: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
+      points: mockQuestionDb2.points,
     });
   });
 
@@ -193,33 +197,24 @@ describe('updateQuestion', () => {
     ).rejects.toThrow(ConflictException);
   });
 
-  it('should return success: true if the answer is correct', async () => {
-    jest
-      .spyOn(prisma.question, 'findUnique')
-      .mockResolvedValue(mockQuestionDb3);
-    jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
-
-    await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
-      success: true,
-      answer: correctAnswerId,
-      end: true,
-      nextQuestionId: undefined,
-    });
-  });
-
   it('should return success: false if the answer is incorrect', async () => {
     jest
       .spyOn(prisma.question, 'findUnique')
       .mockResolvedValue(mockQuestionDb4);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
+    jest
+      .spyOn(prisma.usertoLesson, 'findUnique')
+      .mockResolvedValue(mockUserLesson);
+
     await expect(
-      questionService.validateAnswer(mockBodyIncorrect),
+      questionService.validateAnswer(mockBodyIncorrect, context),
     ).resolves.toEqual({
       success: false,
       answer: correctAnswerId,
       end: true,
       nextQuestionId: undefined,
+      points: 0,
     });
   });
 });

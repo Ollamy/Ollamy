@@ -224,6 +224,12 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     order: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    points: number;
 }
 /**
  * 
@@ -620,6 +626,12 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     order: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof QuestionModel
+     */
+    points: number;
 }
 /**
  * 
@@ -952,4 +964,10 @@ export interface ValidateAnswerResponse {
      * @memberof ValidateAnswerResponse
      */
     nextQuestionId: string;
+    /**
+     * Points scored in the last question
+     * @type {number}
+     * @memberof ValidateAnswerResponse
+     */
+    points: number;
 }

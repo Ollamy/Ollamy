@@ -98,6 +98,20 @@ export class GetUserModel {
   email: string;
 }
 
+export class GetUserScoreModel {
+  @ApiProperty({
+    description: `user id`,
+  })
+  @IsString()
+  user_id: string;
+
+  @ApiProperty({
+    description: `user's score`,
+  })
+  @IsString()
+  score: number;
+}
+
 export class UserIdResponse {
   @ApiProperty()
   @IsUUID()
@@ -110,35 +124,34 @@ export class UserTrueResponse {
   success: boolean;
 }
 
-
 export class UserCourses {
   @ApiProperty()
   @IsUUID()
-  id: string
+  id: string;
 
   @ApiProperty()
   @IsString()
-  title: string
+  title: string;
 
   @ApiProperty()
   @IsString()
-  description: string
+  description: string;
 
   @ApiProperty()
   @IsUrl()
-  picture: string
+  picture: string;
 
   @ApiProperty()
   @IsBoolean()
-  owner: boolean
+  owner: boolean;
 
   @ApiProperty()
   @IsUUID()
-  last_lesson_id: string
+  last_lesson_id: string;
 
   @ApiProperty()
   @IsUUID()
-  last_section_id: string
+  last_section_id: string;
 }
 
 export class UserCoursesResponse {
@@ -146,5 +159,5 @@ export class UserCoursesResponse {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UserCourses)
-  courses: UserCourses[]
+  courses: UserCourses[];
 }
