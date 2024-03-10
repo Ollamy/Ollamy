@@ -232,8 +232,6 @@ export function generateNKeysBetween(
     ];
 }
 
-
-
 export function InitOrderKey(items: string[]) {
     const first = generateKeyBetween(null, null);
     const keys = [first];
