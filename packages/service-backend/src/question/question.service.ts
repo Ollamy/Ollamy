@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateQuestionModel,
@@ -26,6 +27,15 @@ export class QuestionService {
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
+      let order: string;
+
+      try {
+        order = generateKeyBetween(questionData.between?.after, questionData.between?.before)
+      } catch (error) {
+        Logger.error(error);
+        throw new HttpException(error.message, 409);
+      }
+
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -34,10 +44,7 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
-          order: generateKeyBetween(
-            questionData.between?.after,
-            questionData.between?.before,
-          ),
+          order: order,
           points: questionData?.points,
         },
       });
@@ -154,7 +161,13 @@ export class QuestionService {
   async updateQuestionOrder(
     questionData: UpdateQuestionOrderModel,
   ): Promise<object> {
-    const order = generateKeyBetween(questionData?.after, questionData?.before);
+    let order: string;
+    try {
+      order = generateKeyBetween(questionData?.after, questionData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
+    }
     await prisma.question.update({
       where: {
         id: questionData.origin,
@@ -184,14 +197,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-          ({
-            id: answer.id,
-            questionId: answer.question_id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-          } as AnswerModel),
+        ({
+          id: answer.id,
+          questionId: answer.question_id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+        } as AnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -236,9 +249,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;
