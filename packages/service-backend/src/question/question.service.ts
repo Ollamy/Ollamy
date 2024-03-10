@@ -24,38 +24,6 @@ import { generateKeyBetween } from 'order/order.service';
 export class QuestionService {
   async postQuestion(questionData: CreateQuestionModel): Promise<QuestionIdResponse> {
     try {
-      const questionOrders: { order: string; id: string }[] =
-        await prisma.question.findMany({
-          where: {
-            lesson_id: questionData.lessonId,
-          },
-          select: {
-            order: true,
-            id: true,
-          },
-          orderBy: [
-            {
-              order: 'asc',
-            },
-          ],
-        });
-
-      let order = null;
-      let lastkey = questionOrders[questionOrders.length - 1]?.order ?? null;
-
-      if (questionData.between === undefined) {
-        order = generateKeyBetween(lastkey, null);
-      } else {
-        const beforeOrder = questionOrders.find(
-          (a) => a.id === questionData.between.before,
-        )?.order;
-        const afterOrder = questionOrders.find(
-          (a) => a.id === questionData.between.after,
-        )?.order;
-
-        order = generateKeyBetween(beforeOrder, afterOrder);
-      }
-
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -64,7 +32,10 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
-          order: order,
+          order: generateKeyBetween(
+            questionData.between?.after,
+            questionData.between?.before,
+          ),
           points: questionData?.points,
         },
       });

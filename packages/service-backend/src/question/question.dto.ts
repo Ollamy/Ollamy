@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  isObject,
   IsObject,
   IsOptional,
   IsString,
@@ -74,12 +75,12 @@ export class betweenOrder {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  before?: string | undefined;
+  before?: string | null;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  after?: string | undefined;
+  after?: string | null;
 }
 
 export class CreateQuestionModel {
@@ -121,7 +122,7 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsObject()
   @IsOptional()
-  between?: betweenOrder | undefined;
+  between: betweenOrder;
 
   @ApiProperty()
   @IsNumber()

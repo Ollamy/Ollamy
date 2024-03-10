@@ -240,24 +240,3 @@ export function InitOrderKey(items: string[]) {
     }
     return keys.map((key, index) => ({ key, item: items[index] }));
 }
-
-function main() {
-    const items = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10"];
-    const keys = InitOrderKey(items);
-    console.log(keys);
-
-    const newKeys = generateKeyBetween(keys[9].key, null);
-    keys.push({ key: newKeys, item: "Q11" });
-    keys.sort((a, b) => a.key.localeCompare(b.key));
-    console.log(keys);
-
-
-    const newKeys2 = generateKeyBetween(keys[5].key, keys[6].key);
-    keys[2].key = newKeys2;
-
-    keys.sort((a, b) => a.key.localeCompare(b.key));
-    console.log(keys);
-
-}
-
-export { main }
