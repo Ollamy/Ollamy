@@ -15,6 +15,7 @@ import {
   mockQuestionDb4,
   mockBodyIncorrect,
   questionId,
+  mockUserLesson,
 } from 'tests/data/question.data';
 import { context } from 'tests/data/user.data';
 
@@ -201,6 +202,10 @@ describe('updateQuestion', () => {
       .spyOn(prisma.question, 'findUnique')
       .mockResolvedValue(mockQuestionDb4);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
+
+    jest
+      .spyOn(prisma.usertoLesson, 'findUnique')
+      .mockResolvedValue(mockUserLesson);
 
     await expect(
       questionService.validateAnswer(mockBodyIncorrect, context),

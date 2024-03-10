@@ -1,4 +1,4 @@
-import { Question } from '@prisma/client';
+import { LessonStatus, Question, UsertoLesson } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateQuestionModel,
@@ -6,6 +6,7 @@ import {
   UpdateQuestionModel,
   validateAnswerModel,
 } from '@ollamy/backend/question/question.dto';
+import { context } from './user.data';
 
 export const questionId = uuidv4();
 export const correctAnswerId = uuidv4();
@@ -98,4 +99,16 @@ export const mockQuestionDb4: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 0,
+};
+
+export const mockUserLesson: UsertoLesson = {
+  id: uuidv4(),
+  user_id: context.__user.id,
+  lesson_id: lessonId,
+  score: 1,
+  complete_lecture: false,
+  complete_question: false,
+  status: LessonStatus.NOT_STARTED,
+  created_at: new Date(),
+  updated_at: new Date(),
 };
