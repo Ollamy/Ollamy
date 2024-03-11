@@ -47,6 +47,25 @@ export interface AnswerModel {
 /**
  * 
  * @export
+ * @interface BetweenOrder
+ */
+export interface BetweenOrder {
+    /**
+     * 
+     * @type {string}
+     * @memberof BetweenOrder
+     */
+    before: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BetweenOrder
+     */
+    after: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseIdResponse
  */
 export interface CourseIdResponse {
@@ -220,10 +239,10 @@ export interface CreateQuestionModel {
     difficulty: string;
     /**
      * 
-     * @type {number}
+     * @type {BetweenOrder}
      * @memberof CreateQuestionModel
      */
-    order: number;
+    between: BetweenOrder;
     /**
      * 
      * @type {number}
@@ -622,10 +641,10 @@ export interface QuestionModel {
     difficulty: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof QuestionModel
      */
-    order: number;
+    order: string;
     /**
      * 
      * @type {number}
@@ -812,13 +831,19 @@ export interface UpdateQuestionOrderModel {
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
-    origin: string;
+    after: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
-    dest: string;
+    before: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    origin: string;
 }
 /**
  * 
