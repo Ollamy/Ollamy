@@ -3,6 +3,8 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  isObject,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
@@ -47,8 +49,8 @@ export class QuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsString()
+  order: string;
 
   @ApiProperty()
   @IsNumber()
@@ -67,6 +69,18 @@ export class LectureModel {
   @ApiProperty()
   @IsString()
   data: string;
+}
+
+export class betweenOrder {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  before?: string | null;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  after?: string | null;
 }
 
 export class CreateQuestionModel {
@@ -106,8 +120,9 @@ export class CreateQuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsObject()
+  @IsOptional()
+  between: betweenOrder;
 
   @ApiProperty()
   @IsNumber()
@@ -160,12 +175,18 @@ export class UpdateQuestionModel {
 
 export class UpdateQuestionOrderModel {
   @ApiProperty()
-  @IsUUID()
-  origin?: string;
+  @IsString()
+  @IsOptional()
+  after?: string | null;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  before?: string | null;
 
   @ApiProperty()
   @IsUUID()
-  dest?: string;
+  origin: string;
 }
 
 export class QuestionIdResponse {

@@ -184,7 +184,7 @@ INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, 
     ('0ddde9c0-915e-4f48-b5d4-28d0080d682c', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'MEMBER', '{"READ"}', '{"READ"}');
 
 -- UsertoLesson
-INSERT INTO "UsertoLesson" (id, lesson_id, user_id, points, complete_lecture, complete_question, status, updated_at) VALUES
+INSERT INTO "UsertoLesson" (id, lesson_id, user_id, score, complete_lecture, complete_question, status, updated_at) VALUES
     ('2c7e2e95-65e2-48fe-b5f4-d41b0f2e48e5', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 10, true, true, 'COMPLETED', NOW()),
     ('3c8c23db-f42f-46ac-902d-98d124f0e39f', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 5, true, false, 'IN_PROGRESS', NOW()),
     ('23f6f60b-c977-4b71-b953-554d61d7e9de', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '83f7337b-cf79-438e-86d4-3ba0db64b5db', NULL, false, false, 'NOT_STARTED', NOW()),

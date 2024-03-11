@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateQuestionModel,
@@ -18,6 +19,7 @@ import prisma from 'client';
 import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { AnswerModel } from '../answer/answer.dto';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class QuestionService {
@@ -25,28 +27,15 @@ export class QuestionService {
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
-      const questionOrders: { order: number }[] =
-        await prisma.question.findMany({
-          where: {
-            lesson_id: questionData.lessonId,
-          },
-          select: {
-            order: true,
-          },
-        });
+      let order: string;
 
-      if (
-        questionOrders
-          .map((question) => question.order)
-          .includes(questionData.order)
-      ) {
-        Logger.error(
-          'Failed to create question (question order already exists) !',
-        );
-        throw new ConflictException(
-          'Failed to create question (question order already exists)!',
-        );
+      try {
+        order = generateKeyBetween(questionData.between?.after, questionData.between?.before)
+      } catch (error) {
+        Logger.error(error);
+        throw new HttpException(error.message, 409);
       }
+
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -55,7 +44,7 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
-          order: questionData.order,
+          order: order,
           points: questionData?.points,
         },
       });
@@ -172,44 +161,24 @@ export class QuestionService {
   async updateQuestionOrder(
     questionData: UpdateQuestionOrderModel,
   ): Promise<object> {
-    const questions: Question[] = await prisma.question.findMany({
-      where: {
-        id: { in: [questionData.origin, questionData.dest] },
-      },
-    });
-
-    if (!questions || questions.length !== 2) {
-      Logger.error('Questions does not exists !');
-      throw new ConflictException('Questions does not exists !');
+    let order: string;
+    try {
+      order = generateKeyBetween(questionData?.after, questionData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
     }
-
-    const updatedOrigin = await prisma.question.update({
+    await prisma.question.update({
       where: {
-        id: questions[0].id,
+        id: questionData.origin,
       },
       data: {
-        order: questions[1].order,
-      },
-    });
-
-    const updatedDest = await prisma.question.update({
-      where: {
-        id: questions[1].id,
-      },
-      data: {
-        order: questions[0].order,
+        order: order,
       },
     });
 
     return {
-      origin: {
-        id: updatedOrigin.id,
-        order: updatedOrigin.order,
-      },
-      dest: {
-        id: updatedDest.id,
-        order: updatedDest.order,
-      },
+      order: order,
     };
   }
 
@@ -228,14 +197,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-          ({
-            id: answer.id,
-            questionId: answer.question_id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-          } as AnswerModel),
+        ({
+          id: answer.id,
+          questionId: answer.question_id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+        } as AnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -280,9 +249,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;
