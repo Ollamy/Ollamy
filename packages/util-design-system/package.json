@@ -1,0 +1,21 @@
+{
+  "name": "@ollamy/design-system",
+  "version": "1.0.0",
+  "main": "components/index.ts",
+  "packageManager": "yarn@3.6.0",
+  "dependencies": {
+    "@types/styled-components": "^5.1.26",
+    "@types/styled-components-react-native": "^5.2.1",
+    "react": "18.2.0",
+    "react-native": "^0.73.4",
+    "react-native-gesture-handler": "~2.12.0",
+    "react-native-reanimated": "~3.3.0",
+    "styled-components": "^5.3.6"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28"
+  },
+  "peerDependencies": {
+    "@ollamy/design-system": "*"
+  }
+}
