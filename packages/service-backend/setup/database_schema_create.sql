@@ -5,6 +5,13 @@ INSERT INTO "User" (id, firstname, lastname, email, password) VALUES
     ('a5e15301-9fb3-4d95-b08d-67fd781aafab', 'Emma', 'Johnson', 'emma.johnson@example.com', 'NAqTEqHA4qEZToRCvRRyuNo4mhbRZ1MEgAHfOVPMaVZmU5OW88ze0yrxDNNh4T5F3kbXOARSdJnja3vwXhFJCw=='),
     ('65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'Daniel', 'Smith', 'daniel.smith@example.com', 'NAqTEqHA4qEZToRCvRRyuNo4mhbRZ1MEgAHfOVPMaVZmU5OW88ze0yrxDNNh4T5F3kbXOARSdJnja3vwXhFJCw==');
 
+-- UsertoScore
+INSERT INTO "UsertoScore" (id, user_id, score) VALUES
+    ('2ed5d296-e4bf-4464-a474-a8a33032fd11', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 0),
+    ('38ff8078-7c0a-46c4-9e2a-d721c5747d36', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 0),
+    ('890f9e61-eafa-40f0-87da-2534789bee83', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 0),
+    ('f23f74bb-ff85-403f-a07b-e4094f9b563d', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 0);
+
 -- Picture
 INSERT INTO "Picture" (id, filename) VALUES
     ('3a43db61-67b7-4ef4-9b58-3fbc87ea80f4', 'https://example.com/picture1.jpg'),
@@ -43,28 +50,28 @@ INSERT INTO "Lesson" (id, section_id, title, description) VALUES
     ('ebd8e177-cede-4f23-b26e-b7405f4e8301', 'daae7023-37d4-40b8-bb03-07f60a3e0a1d', 'JavaScript Basics', 'Introduction to client-side scripting with JavaScript');
 
 -- Question
-INSERT INTO "Question" (id, lesson_id, title, "order", type_answer, type_question, description, difficulty, points, picture_id) VALUES
-    ('c3fdc564-8f46-4050-9d9b-515a20a9923a', '8722bf34-6868-4a8b-988d-3b18fdbc384f', 'What factors should you consider when choosing a programming language?', 0, 'TEXT', 'TEXT', 'Explain the key factors to consider when selecting a programming language for a project.', 'BEGINNER', 1, NULL),
-    ('04bae167-b647-4898-9bc9-61bd3a73e4e8', '8722bf34-6868-4a8b-988d-3b18fdbc384f', 'What is the significance of syntax in programming languages?', 1, 'TEXT', 'TEXT', 'Explain why proper syntax is crucial in programming languages and how it impacts code execution.', 'BEGINNER', 1, NULL),
-    ('3ed01a60-23c3-451f-bc66-1b65bbbd9b3c', '8722bf34-6868-4a8b-988d-3b18fdbc384f', 'How does a programming language community contribute to language improvement?', 2, 'TEXT', 'TEXT', 'Discuss the role of a programming language community in enhancing and evolving the language over time.', 'BEGINNER', 1, NULL),
-    ('6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'How do you manipulate strings and numbers in programming?', 0, 'TEXT', 'TEXT', 'Provide examples of manipulating text and numeric data in a programming language of your choice.', 'BEGINNER', 1, NULL),
-    ('ce360d48-2673-47bf-ad6f-964a9f4541b0', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'What are the common operations performed on strings?', 1, 'TEXT', 'TEXT', 'Discuss common string operations and provide examples of how they are implemented in programming languages.', 'BEGINNER', 1, NULL),
-    ('f0f60df4-b4b6-4e06-a44c-dc22d074a8e5', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'How can numeric data be manipulated in programming languages?', 2, 'TEXT', 'TEXT', 'Explain various operations that can be performed on numeric data and provide examples in a programming language.', 'BEGINNER', 1, NULL),
-    ('ccbdc053-6094-4192-bf50-d496e566235c', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', 'What are the main concepts of object-oriented programming?', 0, 'TEXT', 'TEXT', 'Describe the fundamental concepts of object-oriented programming, including classes and objects.', 'INTERMEDIATE', 2, NULL),
-    ('0a5f4512-5cb2-46fc-8273-38cffad1ebd1', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', 'How does encapsulation contribute to the principles of object-oriented programming?', 1, 'TEXT', 'TEXT', 'Explain the role of encapsulation in achieving the principles of encapsulation and data hiding in OOP.', 'INTERMEDIATE', 2, NULL),
-    ('2e9baa9b-42a0-4050-8235-10e232f5bf79', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', 'How does polymorphism enhance code flexibility in object-oriented programming?', 2, 'TEXT', 'TEXT', 'Discuss how polymorphism allows for flexibility in code design and implementation in OOP.', 'INTERMEDIATE', 2, NULL),
-    ('a0b245ee-bfe6-4a97-900d-5d3f83db3cc9', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'Normalization in Databases', 0, 'TEXT', 'TEXT', 'Explain the concept of normalization in relational databases.', 'ADVANCED', 3, NULL),
-    ('c387a713-5ebd-4ae2-a80e-962db812ca59', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'What is the role of normalization in optimizing database performance?', 1, 'TEXT', 'TEXT', 'Discuss how normalization contributes to optimizing database performance and preventing data redundancy.', 'ADVANCED', 3, NULL),
-    ('9383f283-6d36-48af-96d0-0f7b1f15e9d4', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'Give an example of a situation where denormalization might be justified in database design.', 2, 'TEXT', 'TEXT', 'Discuss a scenario where denormalization could be a justifiable approach in database design and implementation.', 'ADVANCED', 3, NULL),
-    ('e06291a9-cafc-44f5-a5bd-495680d5ba3b', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'Basic SELECT Statements', 0, 'TEXT', 'TEXT', 'Write a basic SQL SELECT statement to retrieve data from a table.', 'INTERMEDIATE', 2, NULL),
-    ('0e975ad9-a2c9-4c88-a4bb-99076514ca28', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'How can you filter data using the WHERE clause in SQL?', 1, 'TEXT', 'TEXT', 'Explain how the WHERE clause is used to filter data when querying a database using SQL.', 'INTERMEDIATE', 2, NULL),
-    ('43ce3b42-f38f-4616-9a28-9ea199a753f1', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'Explain the purpose of the ORDER BY clause in SQL.', 2, 'TEXT', 'TEXT', 'Discuss the role of the ORDER BY clause in sorting query results in SQL and provide examples.', 'INTERMEDIATE', 2, NULL),
-    ('71a6d640-66b3-4e34-8025-b88cddadace6', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', 'Semantic HTML', 0, 'TEXT', 'TEXT', 'Explain the importance of using semantic HTML elements in web development.', 'BEGINNER', 1, NULL),
-    ('747ef924-17cc-4d03-a226-8e26864bc280', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', 'Provide examples of semantic HTML elements and their uses.', 1, 'TEXT', 'TEXT', 'List and explain examples of semantic HTML elements and describe their significance in web development.', 'BEGINNER', 1, NULL),
-    ('0046b857-1fc0-430c-9439-a1d48ebe4c9b', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', 'How does the use of semantic HTML contribute to website accessibility?', 2, 'TEXT', 'TEXT', 'Discuss the role of semantic HTML in enhancing the accessibility of websites for users with disabilities.', 'BEGINNER', 1, NULL),
-    ('25eb593b-9932-43f4-9a0b-d965257188da', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', 'JavaScript Variables', 0, 'TEXT', 'TEXT', 'Define and give examples of JavaScript variables.', 'BEGINNER', 1, NULL),
-    ('ce5d4580-a450-42ec-8a49-7222e8add528', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', 'Explain the difference between var, let, and const in JavaScript.', 1, 'TEXT', 'TEXT', 'Discuss the distinctions between the var, let, and const keywords in JavaScript and when to use each.', 'BEGINNER', 1, NULL),
-    ('fd353e6b-1e10-465c-a36b-4b226dc1f8f8', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', 'How can you effectively use comments in JavaScript code?', 2, 'TEXT', 'TEXT', 'Explain the purpose and best practices for using comments in JavaScript code for improved readability and maintenance.', 'BEGINNER', 1, NULL);
+INSERT INTO "Question" (id, lesson_id, trust_answer_id, title, "order", type_answer, type_question, description, difficulty, points, picture_id) VALUES
+    ('c3fdc564-8f46-4050-9d9b-515a20a9923a', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '3b7c7382-cc5c-4fe6-8117-6e03962f75fc', 'What factors should you consider when choosing a programming language?', 'a0', 'TEXT', 'TEXT', 'Explain the key factors to consider when selecting a programming language for a project.', 'BEGINNER', 2, NULL),
+    ('04bae167-b647-4898-9bc9-61bd3a73e4e8', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '9531243f-62b9-446d-8e42-6d5c759b76f8', 'What is the significance of syntax in programming languages?', 'a1', 'TEXT', 'TEXT', 'Explain why proper syntax is crucial in programming languages and how it impacts code execution.', 'BEGINNER', 2, NULL),
+    ('3ed01a60-23c3-451f-bc66-1b65bbbd9b3c', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '25fa47d5-c50c-41ef-a62a-f2acaf22e81a', 'How does a programming language community contribute to language improvement?', 'a2', 'TEXT', 'TEXT', 'Discuss the role of a programming language community in enhancing and evolving the language over time.', 'BEGINNER', 2, NULL),
+    ('6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '7610521e-534e-492f-9dc1-0a14125bd1f8', 'How do you manipulate strings and numbers in programming?', 'a0', 'TEXT', 'TEXT', 'Provide examples of manipulating text and numeric data in a programming language of your choice.', 'BEGINNER', 2, NULL),
+    ('ce360d48-2673-47bf-ad6f-964a9f4541b0', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '8c84e27a-aece-4840-895e-352272088cd6', 'What are the common operations performed on strings?', 'a1', 'TEXT', 'TEXT', 'Discuss common string operations and provide examples of how they are implemented in programming languages.', 'BEGINNER', 2, NULL),
+    ('f0f60df4-b4b6-4e06-a44c-dc22d074a8e5', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'd01ea964-c019-4f2f-8d6e-80727b8a2fd7', 'How can numeric data be manipulated in programming languages?', 'a2', 'TEXT', 'TEXT', 'Explain various operations that can be performed on numeric data and provide examples in a programming language.', 'BEGINNER', 2, NULL),
+    ('ccbdc053-6094-4192-bf50-d496e566235c', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '9de23c6e-59c0-4415-b538-1b9b59e34905', 'What are the main concepts of object-oriented programming?', 'a0', 'TEXT', 'TEXT', 'Describe the fundamental concepts of object-oriented programming, including classes and objects.', 'INTERMEDIATE', 5, NULL),
+    ('0a5f4512-5cb2-46fc-8273-38cffad1ebd1', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '6e0f86c2-6eba-4d19-be4b-8db2a9537296', 'How does encapsulation contribute to the principles of object-oriented programming?', 'a1', 'TEXT', 'TEXT', 'Explain the role of encapsulation in achieving the principles of encapsulation and data hiding in OOP.', 'INTERMEDIATE', 5, NULL),
+    ('2e9baa9b-42a0-4050-8235-10e232f5bf79', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '619bd7c2-b4d8-4ba4-9d98-aafe9552692c', 'How does polymorphism enhance code flexibility in object-oriented programming?', 'a2', 'TEXT', 'TEXT', 'Discuss how polymorphism allows for flexibility in code design and implementation in OOP.', 'INTERMEDIATE', 5, NULL),
+    ('a0b245ee-bfe6-4a97-900d-5d3f83db3cc9', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', '3a5a937a-fe93-4d9f-b357-25b0a3f3239c', 'Normalization in Databases', 'a0', 'TEXT', 'TEXT', 'Explain the concept of normalization in relational databases.', 'ADVANCED', 10, NULL),
+    ('c387a713-5ebd-4ae2-a80e-962db812ca59', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'b1bcb34b-0abe-4327-8907-ae828268d265', 'What is the role of normalization in optimizing database performance?', 'a1', 'TEXT', 'TEXT', 'Discuss how normalization contributes to optimizing database performance and preventing data redundancy.', 'ADVANCED', 10, NULL),
+    ('9383f283-6d36-48af-96d0-0f7b1f15e9d4', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', '11b31a1a-71d1-4e4c-8c8e-9884c295cf56', 'Give an example of a situation where denormalization might be justified in database design.', 'a2', 'TEXT', 'TEXT', 'Discuss a scenario where denormalization could be a justifiable approach in database design and implementation.', 'ADVANCED', 10, NULL),
+    ('e06291a9-cafc-44f5-a5bd-495680d5ba3b', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'a641f763-a0b7-4aae-be4e-f879a4676892', 'Basic SELECT Statements', 'a0', 'TEXT', 'TEXT', 'Write a basic SQL SELECT statement to retrieve data from a table.', 'INTERMEDIATE', 5, NULL),
+    ('0e975ad9-a2c9-4c88-a4bb-99076514ca28', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', '199d0244-b605-42f1-8b2e-6f3927e97d4a', 'How can you filter data using the WHERE clause in SQL?', 'a1', 'TEXT', 'TEXT', 'Explain how the WHERE clause is used to filter data when querying a database using SQL.', 'INTERMEDIATE', 5, NULL),
+    ('43ce3b42-f38f-4616-9a28-9ea199a753f1', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', '19917e22-c0ce-4c96-8381-df06230cdf6e', 'Explain the purpose of the ORDER BY clause in SQL.', 'a2', 'TEXT', 'TEXT', 'Discuss the role of the ORDER BY clause in sorting query results in SQL and provide examples.', 'INTERMEDIATE', 5, NULL),
+    ('71a6d640-66b3-4e34-8025-b88cddadace6', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', '6054d7dd-c284-40bd-bd33-0e76619ea2ee', 'Semantic HTML', 'a0', 'TEXT', 'TEXT', 'Explain the importance of using semantic HTML elements in web development.', 'BEGINNER', 2, NULL),
+    ('747ef924-17cc-4d03-a226-8e26864bc280', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', '6c3d9919-98d3-4a46-ba62-c2af3c379dd7', 'Provide examples of semantic HTML elements and their uses.', 'a1', 'TEXT', 'TEXT', 'List and explain examples of semantic HTML elements and describe their significance in web development.', 'BEGINNER', 2, NULL),
+    ('0046b857-1fc0-430c-9439-a1d48ebe4c9b', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', '0dc12427-b3db-4e1a-b8bc-c2f4b6032ce8', 'How does the use of semantic HTML contribute to website accessibility?', 'a2', 'TEXT', 'TEXT', 'Discuss the role of semantic HTML in enhancing the accessibility of websites for users with disabilities.', 'BEGINNER', 2, NULL),
+    ('25eb593b-9932-43f4-9a0b-d965257188da', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', '7f936bc2-462b-4aa6-b0c3-ea4b7bbda1e0', 'JavaScript Variables', 'a0', 'TEXT', 'TEXT', 'Define and give examples of JavaScript variables.', 'BEGINNER', 2, NULL),
+    ('ce5d4580-a450-42ec-8a49-7222e8add528', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', 'ae812f5e-c4c8-4d08-a3e3-55645a0999e9', 'Explain the difference between var, let, and const in JavaScript.', 'a1', 'TEXT', 'TEXT', 'Discuss the distinctions between the var, let, and const keywords in JavaScript and when to use each.', 'BEGINNER', 2, NULL),
+    ('fd353e6b-1e10-465c-a36b-4b226dc1f8f8', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', 'c1fa9900-f5b9-4a37-9bc7-b6f4e15ec2a1', 'How can you effectively use comments in JavaScript code?', 'a2', 'TEXT', 'TEXT', 'Explain the purpose and best practices for using comments in JavaScript code for improved readability and maintenance.', 'BEGINNER', 2, NULL);
 
 -- Answer
 INSERT INTO "Answer" (id, question_id, data, picture_id) VALUES
@@ -184,16 +191,16 @@ INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, 
     ('0ddde9c0-915e-4f48-b5d4-28d0080d682c', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'MEMBER', '{"READ"}', '{"READ"}');
 
 -- UsertoLesson
-INSERT INTO "UsertoLesson" (id, lesson_id, user_id, score, complete_lecture, complete_question, status, updated_at) VALUES
-    ('2c7e2e95-65e2-48fe-b5f4-d41b0f2e48e5', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 10, true, true, 'COMPLETED', NOW()),
-    ('3c8c23db-f42f-46ac-902d-98d124f0e39f', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 5, true, false, 'IN_PROGRESS', NOW()),
-    ('23f6f60b-c977-4b71-b953-554d61d7e9de', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '83f7337b-cf79-438e-86d4-3ba0db64b5db', NULL, false, false, 'NOT_STARTED', NOW()),
-    ('1c8eab78-7735-45ab-86e3-f1c03b3c8d29', '7d6392e1-8dc4-48e1-b162-c00b025f6b6a', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 2, true, false, 'IN_PROGRESS', NOW()),
+INSERT INTO "UsertoLesson" (id, lesson_id, user_id, complete_lecture, complete_question, status, updated_at) VALUES
+    ('2c7e2e95-65e2-48fe-b5f4-d41b0f2e48e5', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', true, true, 'IN_PROGRESS', NOW()),
+    ('3c8c23db-f42f-46ac-902d-98d124f0e39f', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', true, false, 'IN_PROGRESS', NOW()),
+    ('23f6f60b-c977-4b71-b953-554d61d7e9de', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '83f7337b-cf79-438e-86d4-3ba0db64b5db', false, false, 'NOT_STARTED', NOW()),
+    ('1c8eab78-7735-45ab-86e3-f1c03b3c8d29', '7d6392e1-8dc4-48e1-b162-c00b025f6b6a', '83f7337b-cf79-438e-86d4-3ba0db64b5db', true, false, 'IN_PROGRESS', NOW()),
 
-    ('3a720ba5-3f11-43df-bad7-e245d438224e', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 8, true, true, 'COMPLETED', NOW()),
-    ('b86110f5-6e92-4d4d-b870-c10b5a48a6e3', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 5, true, false, 'IN_PROGRESS', NOW()),
-    ('7d8ffbbd-1e09-4ff9-88cf-b17d3a4bc067', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 2, true, false, 'IN_PROGRESS', NOW()),
-    ('2b3c9b37-bf1c-4e42-b72b-68e4e5754b25', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 3, true, true, 'COMPLETED', NOW());
+    ('3a720ba5-3f11-43df-bad7-e245d438224e', 'ebfe0b0c-6e42-438e-bf4e-cbbdbb05c51f', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', true, true, 'NOT_STARTED', NOW()),
+    ('b86110f5-6e92-4d4d-b870-c10b5a48a6e3', 'e756b488-1fc4-4fb6-b4f3-d1e28a5935de', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', true, false, 'IN_PROGRESS', NOW()),
+    ('7d8ffbbd-1e09-4ff9-88cf-b17d3a4bc067', '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', true, false, 'IN_PROGRESS', NOW()),
+    ('2b3c9b37-bf1c-4e42-b72b-68e4e5754b25', 'ebd8e177-cede-4f23-b26e-b7405f4e8301', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', true, true, 'NOT_STARTED', NOW());
 
 -- Discussion
 INSERT INTO "Discussion" (id, title, image_url, updated_at) VALUES
