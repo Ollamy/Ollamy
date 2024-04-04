@@ -49,6 +49,6 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^3.0.0",
     "typescript": "*",
-    "vite": "^4.5.2"
+    "vite": "^4.5.3"
   }
 }
