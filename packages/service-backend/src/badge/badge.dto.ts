@@ -32,6 +32,7 @@ export class BadgeModel {
 }
 
 export class GetUsersBadges {
+  @ApiProperty()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => BadgeModel)
