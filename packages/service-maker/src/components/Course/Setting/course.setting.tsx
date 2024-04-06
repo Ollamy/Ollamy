@@ -15,6 +15,7 @@ export function CourseSetting({
   subTitleInfo,
   subTitlePrice,
 }: CouseSettingInterface) {
+  console.log("test");
   return (
     <RightContainerSetting $width="540px">
       <Title>{title}</Title>
