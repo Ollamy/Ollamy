@@ -71,21 +71,6 @@ export const mockUserToCourse: UsertoCourse = {
   hp: 1,
 };
 
-export const updatedMockUserToCourse: UsertoCourse = {
-  id: mockUserToCourse.id,
-  permission_course: mockUserToCourse.permission_course,
-  permission_section: mockUserToCourse.permission_section,
-  permission_lesson: mockUserToCourse.permission_lesson,
-  course_id: mockUserToCourse.course_id,
-  user_id: mockUserToCourse.user_id,
-  role_user: mockUserToCourse.role_user,
-  permission_user: mockUserToCourse.permission_user,
-  last_lesson_id: mockUserToCourse.last_lesson_id,
-  last_section_id: mockUserToCourse.last_section_id,
-  score: mockUserToCourse.score,
-  hp: mockUserToCourse.hp - 1,
-};
-
 export const mockUpdateCourseData: UpdateCourseModel = {
   ownerId: context.__user.id,
   title: 'title',

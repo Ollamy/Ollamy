@@ -216,11 +216,11 @@ describe('updateQuestion', () => {
     jest.spyOn(prisma.section, 'findUnique').mockResolvedValue(mockSection1);
     jest
       .spyOn(prisma.usertoCourse, 'update')
-      .mockResolvedValue(updatedMockUserToCourse);
+      .mockResolvedValue(mockUserToCourse);
 
     jest
       .spyOn(prisma.usertoCourse, 'findUnique')
-      .mockResolvedValue(updatedMockUserToCourse);
+      .mockResolvedValue(mockUserToCourse);
     await expect(
       questionService.validateAnswer(mockBodyIncorrect, context),
     ).resolves.toEqual({
