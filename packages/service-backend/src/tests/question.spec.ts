@@ -22,11 +22,7 @@ import { context } from 'tests/data/user.data';
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
 import { mockLesson } from './data/lesson.data';
-import {
-  mockSection1,
-  mockUserToCourse,
-  updatedMockUserToCourse,
-} from './data/course.data';
+import { mockSection1, mockUserToCourse } from './data/course.data';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
