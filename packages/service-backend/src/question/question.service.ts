@@ -30,7 +30,10 @@ export class QuestionService {
       let order: string;
 
       try {
-        order = generateKeyBetween(questionData.between?.after, questionData.between?.before)
+        order = generateKeyBetween(
+          questionData.between?.after,
+          questionData.between?.before,
+        );
       } catch (error) {
         Logger.error(error);
         throw new HttpException(error.message, 409);
@@ -197,20 +200,42 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-        ({
-          id: answer.id,
-          questionId: answer.question_id,
-          data: answer.data,
-          picture: answer.picture_id
-            ? await PictureService.getPicture(answer.picture_id)
-            : undefined,
-        } as AnswerModel),
+          ({
+            id: answer.id,
+            questionId: answer.question_id,
+            data: answer.data,
+            picture: answer.picture_id
+              ? await PictureService.getPicture(answer.picture_id)
+              : undefined,
+          } as AnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Answers not found !');
     }
+  }
+
+  async getCourseIdFromLesson(lessonId: string): Promise<string> {
+    const { section_id } = await prisma.lesson.findUnique({
+      where: {
+        id: lessonId,
+      },
+      select: {
+        section_id: true,
+      },
+    });
+
+    const { course_id } = await prisma.section.findUnique({
+      where: {
+        id: section_id,
+      },
+      select: {
+        course_id: true,
+      },
+    });
+
+    return course_id;
   }
 
   async validateAnswer(
@@ -249,14 +274,16 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-      lessonQuestions.findIndex(
-        (question) => question.id === body.questionId,
-      ) + 1
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;
     const questionPoints =
       questionDb.points === undefined ? 0 : questionDb.points;
+
+    const courseId = await this.getCourseIdFromLesson(questionDb.lesson_id);
 
     if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
       await prisma.usertoScore.update({
@@ -281,7 +308,33 @@ export class QuestionService {
           },
         },
       });
+    } else if (isValidated === false) {
+      await prisma.usertoCourse.update({
+        where: {
+          course_id_user_id: {
+            course_id: courseId,
+            user_id: ctx.__user.id,
+          },
+        },
+        data: {
+          hp: {
+            decrement: 1,
+          },
+        },
+      });
     }
+
+    const { hp } = await prisma.usertoCourse.findUnique({
+      where: {
+        course_id_user_id: {
+          course_id: courseId,
+          user_id: ctx.__user.id,
+        },
+      },
+      select: {
+        hp: true,
+      },
+    });
 
     return {
       success: isValidated,
@@ -292,6 +345,7 @@ export class QuestionService {
         isValidated && userLesson.status !== LessonStatus.COMPLETED
           ? questionPoints
           : 0,
+      hp: hp,
     };
   }
 }
