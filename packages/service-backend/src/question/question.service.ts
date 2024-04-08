@@ -285,6 +285,18 @@ export class QuestionService {
 
     const courseId = await this.getCourseIdFromLesson(questionDb.lesson_id);
 
+    const { hp } = await prisma.usertoCourse.findUnique({
+      where: {
+        course_id_user_id: {
+          course_id: courseId,
+          user_id: ctx.__user.id,
+        },
+      },
+      select: {
+        hp: true,
+      },
+    });
+
     if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
       await prisma.usertoScore.update({
         where: { user_id: ctx.__user.id },
@@ -308,7 +320,7 @@ export class QuestionService {
           },
         },
       });
-    } else if (isValidated === false) {
+    } else if (isValidated === false && hp > 0) {
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {
@@ -324,18 +336,6 @@ export class QuestionService {
       });
     }
 
-    const { hp } = await prisma.usertoCourse.findUnique({
-      where: {
-        course_id_user_id: {
-          course_id: courseId,
-          user_id: ctx.__user.id,
-        },
-      },
-      select: {
-        hp: true,
-      },
-    });
-
     return {
       success: isValidated,
       answer: questionDb.trust_answer_id,
@@ -345,7 +345,7 @@ export class QuestionService {
         isValidated && userLesson.status !== LessonStatus.COMPLETED
           ? questionPoints
           : 0,
-      hp: hp,
+      hp: hp - 1,
     };
   }
 }
