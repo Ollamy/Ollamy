@@ -19,4 +19,6 @@ jobs:
         username: ${{ secrets.REMOTE_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.REMOTE_PORT }}
-        script: whoami
+        script: |
+          whoami
+          ls -la
