@@ -21,7 +21,7 @@ jobs:
         port: ${{ secrets.REMOTE_PORT }}
         script: |
           cd ollamy-deploy
-          git checkout development && git pull origin development
+          git checkout ${{ github.head_ref || github.ref_name }} && git pull origin ${{ github.head_ref || github.ref_name }}
           sed -i 's/REDIS_PORT=6379/REDIS_PORT=6380/g' .env
           sed -i 's/POSTGRES_PORT=5432/POSTGRES_PORT=5433/g' .env
           sed -i 's/BACKEND_PORT=3000/BACKEND_PORT=4545/g' .env
