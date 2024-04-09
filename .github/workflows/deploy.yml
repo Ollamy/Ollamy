@@ -28,4 +28,4 @@ jobs:
           source .env
           docker compose build backend
           docker compose up -d backend
-          docker compose stop -t 60 backend redis backend
+          docker compose stop -t 60 backend redis database &
