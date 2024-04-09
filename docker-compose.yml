@@ -3,6 +3,7 @@ version: "3.8"
 services:
   redis:
     image: redis:7.0-alpine
+    command: --port ${REDIS_PORT}
     restart: always
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
