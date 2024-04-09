@@ -34,15 +34,8 @@ jobs:
 
     - name: Check if the deployment was successful
       uses: mshick/add-pr-comment@v2
+      if: ${{ success() }}
       with:
         message: |
           The deployment was successful! 🚀🚀🚀
-          The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545
-
-# if user react with heart emoji, stop the workflow
-  stop:
-    if: ${{ github.event.comment.body == '❤️' }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: Stop the workflow
-      run: exit 78
+          The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545/api
