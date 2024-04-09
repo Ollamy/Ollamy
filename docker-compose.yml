@@ -31,6 +31,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
+      PGPORT: ${POSTGRES_PORT}
     networks:
       - backend_nt
     healthcheck:
