@@ -22,3 +22,5 @@ jobs:
         script: |
           cd ollamy-deploy
           git checkout development && git pull origin development
+          docker compose build backend
+          docker run -d --stop-timeout 3600 --rm -p 4545:4545 backend
