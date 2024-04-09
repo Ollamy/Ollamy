@@ -30,12 +30,19 @@ jobs:
           docker compose build backend
           docker compose up -d backend
           docker exec ollamy-deploy-backend-1 yarn prisma migrate reset "--force"
-          docker compose stop -t 60 backend redis database &
 
 
     - name: Check if the deployment was successful
       uses: mshick/add-pr-comment@v2
       with:
         message: |
-          "The deployment was successful! 🚀🚀🚀"
-          "The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545"
+          The deployment was successful! 🚀🚀🚀
+          The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545
+
+# if user react with heart emoji, stop the workflow
+  stop:
+    if: ${{ github.event.comment.body == '❤️' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Stop the workflow
+      run: exit 78
