@@ -20,5 +20,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.REMOTE_PORT }}
         script: |
-          whoami
-          ls -la
+          cd ollamy-deploy
+          git checkout development && git pull origin development
