@@ -32,7 +32,7 @@ jobs:
           docker exec ollamy-deploy-backend-1 yarn prisma migrate reset "--force"
 
 
-    - name: Check if the deployment was successful
+    - name: send PR comment
       uses: mshick/add-pr-comment@v2
       if: ${{ success() }}
       with:
