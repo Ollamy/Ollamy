@@ -1,0 +1,15 @@
+name: Deploy a test version
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  if: ${{ github.event.label.name == 'Deploy-test-version' }}
+  runs-on: ubuntu-latest
+  environment: Docker
+
+  steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
