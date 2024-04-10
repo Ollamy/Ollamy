@@ -39,3 +39,14 @@ jobs:
         message: |
           The deployment was successful! 🚀🚀🚀
           The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545/api
+
+    - name: STOP the Staging server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.REMOTE_PORT }}
+        script: |
+          cd ollamy-deploy
+          docker compose stop -t 600 backend redis database
