@@ -51,6 +51,6 @@ jobs:
         port: ${{ secrets.REMOTE_PORT }}
         script: |
           cd ollamy-deploy
-          sleep 20
+          sleep 600
           docker compose stop backend redis database
           echo "The server has been stopped. cleanup completed."
