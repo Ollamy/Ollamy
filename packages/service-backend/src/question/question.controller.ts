@@ -127,11 +127,11 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          lessonId: 'id',
+          lesson_id: 'id',
           title: 'Question Title',
           description: 'Question decsription',
           data: 'Data of the question',
-          trustAnswerId: 'id',
+          trust_answer_id: 'id',
         } as UpdateQuestionModel,
       },
     },

@@ -230,7 +230,19 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    picture: string;
+    picture_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    video_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    audio_id: string;
     /**
      * 
      * @type {string}
@@ -625,6 +637,18 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
+    video_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    audio_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionModel
+     */
     difficulty: string;
     /**
      * 
@@ -787,7 +811,19 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    picture: string;
+    picture_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    video_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    audio_id: string;
     /**
      * 
      * @type {number}

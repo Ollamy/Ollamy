@@ -43,6 +43,16 @@ export class QuestionModel {
   picture_id?: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  video_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  audio_id?: string;
+
+  @ApiProperty()
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;
@@ -111,7 +121,17 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  picture?: string;
+  picture_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  video_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  audio_id?: string;
 
   @ApiProperty()
   @IsEnum(QuestionDifficulty)
@@ -154,7 +174,17 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  picture?: string;
+  picture_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  video_id?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  audio_id?: string;
 
   @ApiProperty()
   @IsNumber()

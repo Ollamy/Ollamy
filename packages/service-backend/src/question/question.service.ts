@@ -140,8 +140,8 @@ export class QuestionService {
           title: questionData?.title,
           description: questionData?.description,
           lesson_id: questionData?.lesson_id,
-          picture_id: questionData.picture
-            ? await PictureService.postPicture(questionData.picture)
+          picture_id: questionData.picture_id
+            ? await PictureService.postPicture(questionData.picture_id)
             : undefined,
           points: questionData?.points,
           difficulty: questionData?.difficulty,
