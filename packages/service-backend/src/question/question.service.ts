@@ -200,7 +200,6 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-<<<<<<< HEAD
         ({
           id: answer.id,
           question_id: answer.question_id,
@@ -209,16 +208,6 @@ export class QuestionService {
             ? await PictureService.getPicture(answer.picture_id)
             : undefined,
         } as AnswerModel),
-=======
-          ({
-            id: answer.id,
-            questionId: answer.question_id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-          } as AnswerModel),
->>>>>>> origin/development
       );
       return await Promise.all(answerPromises);
     } catch (error) {
