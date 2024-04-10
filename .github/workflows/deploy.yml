@@ -36,6 +36,7 @@ jobs:
       uses: mshick/add-pr-comment@v2
       if: ${{ success() }}
       with:
+        message-id: deploy-test-version
         message: |
           The deployment was successful! 🚀🚀🚀
           The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545/api
