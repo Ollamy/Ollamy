@@ -49,4 +49,4 @@ jobs:
         port: ${{ secrets.REMOTE_PORT }}
         script: |
           cd ollamy-deploy
-          docker compose stop -t 600 backend redis database
+          docker stop -t 600 backend redis database
