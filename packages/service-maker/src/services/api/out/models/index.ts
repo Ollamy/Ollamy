@@ -904,6 +904,25 @@ export interface UpdateUserModel {
 /**
  * 
  * @export
+ * @interface UserCourseHp
+ */
+export interface UserCourseHp {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCourseHp
+     */
+    hp: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCourseHp
+     */
+    timer: number;
+}
+/**
+ * 
+ * @export
  * @interface UserCoursesResponse
  */
 export interface UserCoursesResponse {
@@ -995,4 +1014,10 @@ export interface ValidateAnswerResponse {
      * @memberof ValidateAnswerResponse
      */
     points: number;
+    /**
+     * User's remaining hp
+     * @type {number}
+     * @memberof ValidateAnswerResponse
+     */
+    hp: number;
 }
