@@ -3,25 +3,25 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateUserModel,
-  GetUserModel,
-  LoginUserModel,
-  UpdateUserModel,
+  CreateUser,
+  LoginUser,
+  UpdateUser,
   UserCoursesResponse,
   UserIdResponse,
+  UserModel,
   UserTrueResponse,
 } from '../models/index';
 
 export interface LoginUserRequest {
-    loginUserModel: LoginUserModel;
+    loginUser: LoginUser;
 }
 
 export interface RegisterUserRequest {
-    createUserModel: CreateUserModel;
+    createUser: CreateUser;
 }
 
 export interface UpdateUserRequest {
-    updateUserModel: UpdateUserModel;
+    updateUser: UpdateUser;
 }
 
 /**
@@ -53,7 +53,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    async getUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -70,7 +70,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    static getUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    static getUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         return localUserApi.getUserRaw(initOverrides);
     }
 
@@ -99,7 +99,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserScoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    async getUserScoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -116,15 +116,15 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    static getUserScore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    static getUserScore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserModel> {
         return localUserApi.getUserScoreRaw(initOverrides);
     }
 
     /**
      */
     async loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
-        if (requestParameters.loginUserModel === null || requestParameters.loginUserModel === undefined) {
-            throw new runtime.RequiredError('loginUserModel','Required parameter requestParameters.loginUserModel was null or undefined when calling loginUser.');
+        if (requestParameters.loginUser === null || requestParameters.loginUser === undefined) {
+            throw new runtime.RequiredError('loginUser','Required parameter requestParameters.loginUser was null or undefined when calling loginUser.');
         }
 
         const queryParameters: any = {};
@@ -138,7 +138,7 @@ export class UserApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.loginUserModel,
+            body: requestParameters.loginUser,
         }, initOverrides);
 
         return response.json();
@@ -153,8 +153,8 @@ export class UserApi extends runtime.BaseAPI {
     /**
      */
     async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
-        if (requestParameters.createUserModel === null || requestParameters.createUserModel === undefined) {
-            throw new runtime.RequiredError('createUserModel','Required parameter requestParameters.createUserModel was null or undefined when calling registerUser.');
+        if (requestParameters.createUser === null || requestParameters.createUser === undefined) {
+            throw new runtime.RequiredError('createUser','Required parameter requestParameters.createUser was null or undefined when calling registerUser.');
         }
 
         const queryParameters: any = {};
@@ -168,7 +168,7 @@ export class UserApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.createUserModel,
+            body: requestParameters.createUser,
         }, initOverrides);
 
         return response.json();
@@ -183,8 +183,8 @@ export class UserApi extends runtime.BaseAPI {
     /**
      */
     async updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        if (requestParameters.updateUserModel === null || requestParameters.updateUserModel === undefined) {
-            throw new runtime.RequiredError('updateUserModel','Required parameter requestParameters.updateUserModel was null or undefined when calling updateUser.');
+        if (requestParameters.updateUser === null || requestParameters.updateUser === undefined) {
+            throw new runtime.RequiredError('updateUser','Required parameter requestParameters.updateUser was null or undefined when calling updateUser.');
         }
 
         const queryParameters: any = {};
@@ -198,7 +198,7 @@ export class UserApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.updateUserModel,
+            body: requestParameters.updateUser,
         }, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {

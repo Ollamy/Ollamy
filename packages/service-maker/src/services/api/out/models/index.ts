@@ -30,7 +30,7 @@ export interface AnswerModel {
      * @type {string}
      * @memberof AnswerModel
      */
-    questionId: string;
+    question_id: string;
     /**
      * 
      * @type {string}
@@ -100,7 +100,7 @@ export interface CreateAnswerModel {
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    questionId: string;
+    question_id: string;
     /**
      * 
      * @type {string}
@@ -150,7 +150,7 @@ export interface CreateLectureModel {
      * @type {string}
      * @memberof CreateLectureModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * Lecture data
      * @type {string}
@@ -194,7 +194,7 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * 
      * @type {string}
@@ -218,13 +218,13 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeAnswer: string;
+    type_answer: string;
     /**
      * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeQuestion: string;
+    type_question: string;
     /**
      * 
      * @type {string}
@@ -261,7 +261,7 @@ export interface CreateSectionModel {
      * @type {string}
      * @memberof CreateSectionModel
      */
-    courseId: string;
+    course_id: string;
     /**
      * 
      * @type {string}
@@ -278,31 +278,31 @@ export interface CreateSectionModel {
 /**
  * 
  * @export
- * @interface CreateUserModel
+ * @interface CreateUser
  */
-export interface CreateUserModel {
+export interface CreateUser {
     /**
-     * 
+     * The first name of the user
      * @type {string}
-     * @memberof CreateUserModel
+     * @memberof CreateUser
      */
     firstname: string;
     /**
-     * 
+     * The last name of the user
      * @type {string}
-     * @memberof CreateUserModel
+     * @memberof CreateUser
      */
     lastname: string;
     /**
-     * 
+     * The email address of the user
      * @type {string}
-     * @memberof CreateUserModel
+     * @memberof CreateUser
      */
     email: string;
     /**
-     * Password must contain at least 8 characters, 2 numbers and 2 uppercase letters
+     * Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters
      * @type {string}
-     * @memberof CreateUserModel
+     * @memberof CreateUser
      */
     password: string;
 }
@@ -323,7 +323,7 @@ export interface GetCourseRequest {
      * @type {string}
      * @memberof GetCourseRequest
      */
-    ownerId: string;
+    owner_id: string;
     /**
      * 
      * @type {string}
@@ -347,38 +347,13 @@ export interface GetCourseRequest {
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastLessonId: string;
+    last_lesson_id: string;
     /**
      * 
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastSectionId: string;
-}
-/**
- * 
- * @export
- * @interface GetUserModel
- */
-export interface GetUserModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetUserModel
-     */
-    firstname: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetUserModel
-     */
-    lastname: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetUserModel
-     */
-    email: string;
+    last_section_id: string;
 }
 /**
  * 
@@ -469,7 +444,7 @@ export interface JoinLessonModel {
      * @type {string}
      * @memberof JoinLessonModel
      */
-    userId: string;
+    user_id: string;
 }
 /**
  * 
@@ -495,7 +470,7 @@ export interface LectureModel {
      * @type {string}
      * @memberof LectureModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * Lecture data
      * @type {string}
@@ -533,7 +508,7 @@ export interface LessonModel {
      * @type {string}
      * @memberof LessonModel
      */
-    sectionId: string;
+    section_id: string;
     /**
      * 
      * @type {string}
@@ -550,19 +525,31 @@ export interface LessonModel {
 /**
  * 
  * @export
- * @interface LoginUserModel
+ * @interface LoginUser
  */
-export interface LoginUserModel {
+export interface LoginUser {
     /**
-     * 
+     * The first name of the user
      * @type {string}
-     * @memberof LoginUserModel
+     * @memberof LoginUser
+     */
+    firstname: string;
+    /**
+     * The last name of the user
+     * @type {string}
+     * @memberof LoginUser
+     */
+    lastname: string;
+    /**
+     * The email address of the user
+     * @type {string}
+     * @memberof LoginUser
      */
     email: string;
     /**
-     * 
+     * The password of the user
      * @type {string}
-     * @memberof LoginUserModel
+     * @memberof LoginUser
      */
     password: string;
 }
@@ -596,7 +583,7 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * 
      * @type {string}
@@ -614,25 +601,25 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
-    typeAnswer: string;
+    type_answer: string;
     /**
      * 
      * @type {string}
      * @memberof QuestionModel
      */
-    typeQuestion: string;
+    type_question: string;
     /**
      * 
      * @type {string}
      * @memberof QuestionModel
      */
-    trustAnswerId: string;
+    trust_answer_id: string;
     /**
      * 
      * @type {string}
      * @memberof QuestionModel
      */
-    pictureId: string;
+    picture_id: string;
     /**
      * 
      * @type {string}
@@ -682,7 +669,7 @@ export interface SectionModel {
      * @type {string}
      * @memberof SectionModel
      */
-    courseId: string;
+    course_id: string;
     /**
      * 
      * @type {string}
@@ -707,7 +694,7 @@ export interface UpdateAnswerModel {
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    questionId: string;
+    question_id: string;
     /**
      * 
      * @type {string}
@@ -732,7 +719,7 @@ export interface UpdateCourseModel {
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    ownerId: string;
+    owner_id: string;
     /**
      * 
      * @type {string}
@@ -763,7 +750,7 @@ export interface UpdateLectureModel {
      * @type {string}
      * @memberof UpdateLectureModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * Updated lecture data
      * @type {string}
@@ -782,7 +769,7 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    lessonId: string;
+    lesson_id: string;
     /**
      * 
      * @type {string}
@@ -818,7 +805,7 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    trustAnswerId: string;
+    trust_answer_id: string;
 }
 /**
  * 
@@ -856,7 +843,7 @@ export interface UpdateSectionModel {
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    courseId: string;
+    course_id: string;
     /**
      * 
      * @type {string}
@@ -873,33 +860,33 @@ export interface UpdateSectionModel {
 /**
  * 
  * @export
- * @interface UpdateUserModel
+ * @interface UpdateUser
  */
-export interface UpdateUserModel {
+export interface UpdateUser {
     /**
-     * 
+     * The first name of the user
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UpdateUser
      */
     firstname: string;
     /**
-     * 
+     * The last name of the user
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UpdateUser
      */
     lastname: string;
     /**
-     * 
+     * The email address of the user
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UpdateUser
      */
     email: string;
     /**
-     * 
+     * The password of the user
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UpdateUser
      */
-    password: string;
+    password?: string;
 }
 /**
  * 
@@ -927,7 +914,7 @@ export interface UserCourseHp {
  */
 export interface UserCoursesResponse {
     /**
-     * 
+     * List of courses associated with the user
      * @type {Array<string>}
      * @memberof UserCoursesResponse
      */
@@ -940,7 +927,7 @@ export interface UserCoursesResponse {
  */
 export interface UserIdResponse {
     /**
-     * 
+     * The unique identifier of the user
      * @type {string}
      * @memberof UserIdResponse
      */
@@ -949,11 +936,48 @@ export interface UserIdResponse {
 /**
  * 
  * @export
+ * @interface UserModel
+ */
+export interface UserModel {
+    /**
+     * The first name of the user
+     * @type {string}
+     * @memberof UserModel
+     */
+    firstname: string;
+    /**
+     * The last name of the user
+     * @type {string}
+     * @memberof UserModel
+     */
+    lastname: string;
+    /**
+     * The email address of the user
+     * @type {string}
+     * @memberof UserModel
+     */
+    email: string;
+    /**
+     * The unique identifier of the user
+     * @type {string}
+     * @memberof UserModel
+     */
+    id: string;
+    /**
+     * The password of the user
+     * @type {string}
+     * @memberof UserModel
+     */
+    password: string;
+}
+/**
+ * 
+ * @export
  * @interface UserTrueResponse
  */
 export interface UserTrueResponse {
     /**
-     * 
+     * Indicates if the operation was successful or not
      * @type {boolean}
      * @memberof UserTrueResponse
      */
@@ -970,13 +994,13 @@ export interface ValidateAnswerModel {
      * @type {string}
      * @memberof ValidateAnswerModel
      */
-    questionId: string;
+    question_id: string;
     /**
      * 
      * @type {string}
      * @memberof ValidateAnswerModel
      */
-    answerId: string;
+    answer_id: string;
 }
 /**
  * 
