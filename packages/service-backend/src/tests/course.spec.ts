@@ -18,13 +18,15 @@ import {
   mockUpdateCourseData,
   mockUserToCourse,
 } from 'tests/data/course.data';
+import { TasksService } from '../cron/cron.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 describe('postCourse', () => {
   let courseService: CourseService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -89,7 +91,7 @@ describe('deleteCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -150,7 +152,7 @@ describe('getCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -222,7 +224,7 @@ describe('updateCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -290,7 +292,7 @@ describe('getCourseSections', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);

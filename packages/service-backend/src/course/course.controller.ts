@@ -24,6 +24,7 @@ import {
   CourseTrueResponse,
   CourseIdResponse,
   GetCourseRequest,
+  UserCourseHp,
 } from 'course/course.dto';
 import { SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -164,5 +165,23 @@ export class CourseController {
     @OllContext() ctx: any,
   ): Promise<CourseTrueResponse> {
     return this.courseService.addUserToCourse(id, ctx.__user.id);
+  }
+
+  @ApiOkResponse({
+    description: 'user added to course response',
+    type: UserCourseHp,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the course',
+    required: true,
+  })
+  @LoggedMiddleware(true)
+  @Get('/:id/user/hp')
+  async getUserToCourseHp(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<UserCourseHp> {
+    return this.courseService.getUserToCourseHp(id, ctx.__user.id);
   }
 }

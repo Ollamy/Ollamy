@@ -241,4 +241,11 @@ export class ValidateAnswerResponse {
   @IsString()
   @IsOptional()
   points?: number | undefined;
+
+  @ApiProperty({
+    name: 'hp',
+    description: `User's remaining hp`,
+  })
+  @IsNumber()
+  hp?: number | undefined;
 }

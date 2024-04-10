@@ -10,6 +10,7 @@ import type {
   IdCourseModel,
   SectionModel,
   UpdateCourseModel,
+  UserCourseHp,
 } from '../models/index';
 
 export interface AddUserToCourseRequest {
@@ -25,6 +26,10 @@ export interface GetCourseOperationRequest {
 }
 
 export interface GetCourseSectionsRequest {
+    id: string;
+}
+
+export interface GetUserToCourseHpRequest {
     id: string;
 }
 
@@ -150,6 +155,33 @@ export class CourseApi extends runtime.BaseAPI {
      */
     static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SectionModel>> {
         return localCourseApi.getCourseSectionsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async getUserToCourseHpRaw(requestParameters: GetUserToCourseHpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCourseHp> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserToCourseHp.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/course/{id}/user/hp`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getUserToCourseHp(requestParameters: GetUserToCourseHpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCourseHp> {
+        return localCourseApi.getUserToCourseHpRaw(requestParameters, initOverrides);
     }
 
     /**
