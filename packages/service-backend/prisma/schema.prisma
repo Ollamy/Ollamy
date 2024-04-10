@@ -76,6 +76,7 @@ model UsertoCourse {
   course_id          String              @db.Uuid
   user_id            String              @db.Uuid
   score              Int?                @default(0)
+  hp                 Int?                @default(20)
 
   last_section_id String? @db.Uuid
   last_lesson_id  String? @db.Uuid
