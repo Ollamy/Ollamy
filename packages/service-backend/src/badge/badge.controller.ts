@@ -21,7 +21,7 @@ export class BadgeController {
   })
   @LoggedMiddleware(true)
   @Get('unlocked')
-  async getCourse(@OllContext() ctx: any): Promise<GetUsersBadges> {
+  async getBadges(@OllContext() ctx: any): Promise<GetUsersBadges> {
     return this.badgeService.getUserBadge(ctx);
   }
 }
