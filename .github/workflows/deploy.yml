@@ -50,4 +50,4 @@ jobs:
         port: ${{ secrets.REMOTE_PORT }}
         script: |
           cd ollamy-deploy
-          docker compose stop -t 600 ollamy-deploy-backend-1 ollamy-deploy-redis-1 ollamy-deploy-database-1
+          docker stop -t 600 ollamy-deploy-backend-1 ollamy-deploy-redis-1 ollamy-deploy-database-1
