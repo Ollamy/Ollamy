@@ -245,6 +245,7 @@ model Badge {
   name        String
   description String
   image_name  String
+  color       String
   order       Int
 
   User UserBadges[]

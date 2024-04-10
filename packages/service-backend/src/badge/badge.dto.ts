@@ -29,6 +29,10 @@ export class BadgeModel {
   @ApiProperty()
   @IsString()
   image_name: string;
+
+  @ApiProperty()
+  @IsString()
+  color: string;
 }
 
 export class GetUsersBadges {

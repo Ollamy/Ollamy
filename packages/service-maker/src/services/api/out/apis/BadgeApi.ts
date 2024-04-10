@@ -12,7 +12,7 @@ export class BadgeApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCourseRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUsersBadges> {
+    async getBadgeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUsersBadges> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -29,8 +29,8 @@ export class BadgeApi extends runtime.BaseAPI {
 
     /**
      */
-    static getCourse(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUsersBadges> {
-        return localBadgeApi.getCourseRaw(initOverrides);
+    static getBadge(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUsersBadges> {
+        return localBadgeApi.getBadgeRaw(initOverrides);
     }
 
 }
