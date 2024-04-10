@@ -8,7 +8,7 @@ export class SectionModel {
 
   @ApiProperty()
   @IsUUID()
-  courseId: string;
+  course_id: string;
 
   @ApiProperty()
   @IsString()
@@ -22,7 +22,7 @@ export class SectionModel {
 export class CreateSectionModel {
   @ApiProperty()
   @IsUUID()
-  courseId: string;
+  course_id: string;
 
   @ApiProperty()
   @IsString()
@@ -43,7 +43,7 @@ export class UpdateSectionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  courseId: string;
+  course_id: string;
 
   @ApiProperty()
   @IsString()

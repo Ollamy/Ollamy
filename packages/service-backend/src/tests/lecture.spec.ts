@@ -136,7 +136,7 @@ describe('getLecture', () => {
     });
 
     expect(result).toEqual({
-      lessonId: mockLectureDb3.lesson_id,
+      lesson_id: mockLectureDb3.lesson_id,
       data: mockLectureDb3.data,
     });
   });

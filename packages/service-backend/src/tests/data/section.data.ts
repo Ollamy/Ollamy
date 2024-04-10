@@ -11,13 +11,13 @@ export const courseId = uuidv4();
 export const sectionId = uuidv4();
 
 export const mockSectionData: CreateSectionModel = {
-  courseId: courseId,
+  course_id: courseId,
   title: 'Section Title',
   description: 'Section Description',
 };
 export const mockSectionDb: Section = {
   id: sectionId,
-  course_id: mockSectionData.courseId,
+  course_id: mockSectionData.course_id,
   title: mockSectionData.title,
   description: mockSectionData.description,
 };
@@ -43,7 +43,7 @@ export const mockError: Prisma.PrismaClientKnownRequestError =
 export const mockSectionData3: UpdateSectionModel = {
   title: 'Updated Section Title',
   description: 'Updated Section Description',
-  courseId: courseId,
+  course_id: courseId,
 };
 
 export const mockSectionDb3: Section = {

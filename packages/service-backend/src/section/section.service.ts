@@ -21,7 +21,7 @@ export class SectionService {
     try {
       const sectionDb: Section = await prisma.section.create({
         data: {
-          course_id: sectionData.courseId,
+          course_id: sectionData.course_id,
           title: sectionData.title,
           description: sectionData.description,
         },
@@ -75,7 +75,7 @@ export class SectionService {
       }
 
       return {
-        courseId: sectionDb.course_id,
+        course_id: sectionDb.course_id,
         description: sectionDb.description,
         id: sectionDb.id,
         title: sectionDb.title,
@@ -96,7 +96,7 @@ export class SectionService {
           id: SectionId,
         },
         data: {
-          course_id: sectionData.courseId,
+          course_id: sectionData.course_id,
           title: sectionData.title,
           description: sectionData.description,
         },
@@ -129,7 +129,7 @@ export class SectionService {
 
       return sectionLessonsDb.map((lesson: Lesson) => {
         return {
-          sectionId: lesson.section_id,
+          section_id: lesson.section_id,
           description: lesson.description,
           id: lesson.id,
           title: lesson.title,

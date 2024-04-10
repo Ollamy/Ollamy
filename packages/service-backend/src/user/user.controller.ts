@@ -2,14 +2,14 @@ import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import SessionService from 'redis/session/session.service';
 import {
-  CreateUserModel,
-  GetUserModel,
-  GetUserScoreModel,
-  LoginUserModel,
-  UpdateUserModel,
+  UserModel,
+  CreateUser,
+  LoginUser,
+  UpdateUser,
   UserCoursesResponse,
   UserIdResponse,
   UserTrueResponse,
+  UserScore,
 } from 'user/user.dto';
 import { UserService } from 'user/user.service';
 
@@ -47,7 +47,7 @@ export class UserController {
     type: UserTrueResponse,
   })
   @ApiBody({
-    type: CreateUserModel,
+    type: CreateUser,
     description: 'user data model',
     examples: {
       template: {
@@ -56,7 +56,7 @@ export class UserController {
           lastname: 'lastname',
           email: 'test@test.test',
           password: '1234aaBB@',
-        } as CreateUserModel,
+        } as CreateUser,
       },
     },
   })
@@ -64,7 +64,7 @@ export class UserController {
   async registerUser(
     @Req() request,
     @Response() res,
-    @Body() body: CreateUserModel,
+    @Body() body: CreateUser,
   ) {
     const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
     const cookiesParams =
@@ -90,14 +90,14 @@ export class UserController {
     type: UserTrueResponse,
   })
   @ApiBody({
-    type: LoginUserModel,
+    type: LoginUser,
     description: 'user data model',
     examples: {
       template: {
         value: {
           email: 'test@test.test',
           password: '1234aaBB@',
-        } as LoginUserModel,
+        } as LoginUser,
       },
     },
   })
@@ -105,7 +105,7 @@ export class UserController {
   async loginUser(
     @Req() request,
     @Response() res,
-    @Body() body: LoginUserModel,
+    @Body() body: LoginUser,
   ): Promise<any> {
     const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
     const cookiesParams =
@@ -127,11 +127,11 @@ export class UserController {
 
   @ApiOkResponse({
     description: "user's data",
-    type: GetUserModel,
+    type: UserModel,
   })
   @LoggedMiddleware(true)
   @Get()
-  async getUser(@OllContext() ctx: any): Promise<GetUserModel> {
+  async getUser(@OllContext() ctx: any): Promise<UserModel> {
     return this.userService.getUser(ctx);
   }
 
@@ -141,7 +141,7 @@ export class UserController {
     type: String,
   })
   @ApiBody({
-    type: UpdateUserModel,
+    type: UpdateUser,
     description: 'user data model',
     examples: {
       template: {
@@ -150,7 +150,7 @@ export class UserController {
           lastname: 'lastname',
           email: 'test@test.test',
           password: '1234',
-        } as UpdateUserModel,
+        } as UpdateUser,
       },
     },
   })
@@ -159,7 +159,7 @@ export class UserController {
   async updateUser(
     @Req() request,
     @Response() res,
-    @Body() body: UpdateUserModel,
+    @Body() body: UpdateUser,
     @OllContext() ctx: any,
   ) {
     const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
@@ -203,11 +203,11 @@ export class UserController {
 
   @ApiOkResponse({
     description: "user's score",
-    type: GetUserModel,
+    type: UserModel,
   })
   @LoggedMiddleware(true)
   @Get('/score')
-  async getUserScore(@OllContext() ctx: any): Promise<GetUserScoreModel> {
+  async getUserScore(@OllContext() ctx: any): Promise<UserScore> {
     return this.userService.getUserScore(ctx);
   }
 }

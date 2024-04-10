@@ -32,7 +32,7 @@ export class LectureController {
         examples: {
             template: {
                 value: {
-                    lessonId: 'Lesson Id',
+                    lesson_id: 'Lesson Id',
                     data: 'Lecture data',
                 } as CreateLectureModel,
             },
@@ -95,7 +95,7 @@ export class LectureController {
         examples: {
             template: {
                 value: {
-                    lessonId: 'Lesson Id',
+                    lesson_id: 'Lesson Id',
                     data: 'Lecture data',
                 } as UpdateLectureModel,
             },

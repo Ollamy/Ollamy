@@ -41,7 +41,7 @@ export class AnswerController {
     examples: {
       template: {
         value: {
-          questionId: 'Question Id',
+          question_id: 'Question Id',
           data: 'Answer data',
           picture: 'Picture data',
         } as CreateAnswerModel,

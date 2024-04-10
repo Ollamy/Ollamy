@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
-  isObject,
   IsObject,
   IsOptional,
   IsString,
@@ -18,7 +17,7 @@ export class QuestionModel {
 
   @ApiProperty()
   @IsUUID()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty()
   @IsString()
@@ -29,19 +28,19 @@ export class QuestionModel {
   description: string;
 
   @ApiProperty()
-  typeAnswer: AnswerType;
+  type_answer: AnswerType;
 
   @ApiProperty()
-  typeQuestion: QuestionType;
+  type_question: QuestionType;
 
   @ApiProperty()
   @IsUUID()
-  trustAnswerId: string;
+  trust_answer_id: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  pictureId?: string;
+  picture_id?: string;
 
   @ApiProperty()
   @IsEnum(QuestionDifficulty)
@@ -64,14 +63,14 @@ export class LectureModel {
 
   @ApiProperty()
   @IsUUID()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty()
   @IsString()
   data: string;
 }
 
-export class betweenOrder {
+export class BetweenOrder {
   @ApiProperty()
   @IsString()
   @IsOptional()
@@ -87,7 +86,7 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty()
   @IsString()
@@ -103,11 +102,11 @@ export class CreateQuestionModel {
 
   @ApiProperty()
   @IsString()
-  typeAnswer: AnswerType;
+  type_answer: AnswerType;
 
   @ApiProperty()
   @IsString()
-  typeQuestion: QuestionType;
+  type_question: QuestionType;
 
   @ApiProperty()
   @IsString()
@@ -122,7 +121,7 @@ export class CreateQuestionModel {
   @ApiProperty()
   @IsObject()
   @IsOptional()
-  between: betweenOrder;
+  between: BetweenOrder;
 
   @ApiProperty()
   @IsNumber()
@@ -140,7 +139,7 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lessonId?: string;
+  lesson_id?: string;
 
   @ApiProperty()
   @IsString()
@@ -170,7 +169,7 @@ export class UpdateQuestionModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  trustAnswerId?: string;
+  trust_answer_id?: string;
 }
 
 export class UpdateQuestionOrderModel {
@@ -198,11 +197,11 @@ export class QuestionIdResponse {
 export class validateAnswerModel {
   @ApiProperty()
   @IsUUID()
-  questionId: string;
+  question_id: string;
 
   @ApiProperty()
   @IsUUID()
-  answerId: string;
+  answer_id: string;
 }
 
 export class ValidateAnswerResponse {
@@ -233,7 +232,7 @@ export class ValidateAnswerResponse {
   })
   @IsString()
   @IsOptional()
-  nextQuestionId?: string | undefined;
+  next_question_id?: string | undefined;
 
   @ApiProperty({
     name: 'points',

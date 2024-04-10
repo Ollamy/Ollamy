@@ -110,7 +110,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          sectionId: 'id',
+          section_id: 'id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as LessonModel,
@@ -166,7 +166,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          userId: 'User id',
+          user_id: 'User id',
         } as JoinLessonModel,
       },
     },

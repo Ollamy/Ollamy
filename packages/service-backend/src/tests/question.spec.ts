@@ -136,14 +136,14 @@ describe('getQuestion', () => {
 
     expect(result).toEqual({
       id: mockQuestionDb2.id,
-      lessonId: mockQuestionDb2.lesson_id,
+      lesson_id: mockQuestionDb2.lesson_id,
       title: mockQuestionDb2.title,
       description: mockQuestionDb2.description,
-      typeAnswer: mockQuestionDb2.type_answer,
-      typeQuestion: mockQuestionDb2.type_question,
-      trustAnswerId: mockQuestionDb2.trust_answer_id,
+      type_answer: mockQuestionDb2.type_answer,
+      type_question: mockQuestionDb2.type_question,
+      trust_answer_id: mockQuestionDb2.trust_answer_id,
       difficulty: mockQuestionDb2.difficulty,
-      pictureId: mockQuestionDb2.picture_id,
+      picture_id: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
       points: mockQuestionDb2.points,
     });
@@ -213,7 +213,7 @@ describe('updateQuestion', () => {
       success: false,
       answer: correctAnswerId,
       end: true,
-      nextQuestionId: undefined,
+      next_question_id: undefined,
       points: 0,
     });
   });

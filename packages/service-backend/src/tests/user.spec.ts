@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { UserController } from 'user/user.controller';
 import { UserService } from 'user/user.service';
-import { CreateUserModel, LoginUserModel } from 'user/user.dto';
+import { CreateUser, LoginUser } from 'user/user.dto';
 import prisma from 'client';
 import {
   BadRequestException,
@@ -31,7 +31,7 @@ describe('UserController', () => {
 
       {
         expect(() =>
-          userService.registerUser(new CreateUserModel()),
+          userService.registerUser(new CreateUser()),
         ).toBeInstanceOf(Function);
       }
     });
@@ -44,9 +44,9 @@ describe('UserController', () => {
       }
 
       {
-        userService.loginUser(new LoginUserModel());
+        userService.loginUser(new LoginUser());
         expect(() =>
-          userService.loginUser(new LoginUserModel()),
+          userService.loginUser(new LoginUser()),
         ).toBeInstanceOf(Function);
       }
     });
@@ -100,7 +100,7 @@ describe('loginUser', () => {
     }
 
     {
-      await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
+      await expect(userService.loginUser(new LoginUser())).rejects.toThrow(
         NotFoundException,
       );
     }
@@ -113,7 +113,7 @@ describe('loginUser', () => {
     }
 
     {
-      await expect(userService.loginUser(new LoginUserModel())).rejects.toThrow(
+      await expect(userService.loginUser(new LoginUser())).rejects.toThrow(
         BadRequestException,
       );
     }

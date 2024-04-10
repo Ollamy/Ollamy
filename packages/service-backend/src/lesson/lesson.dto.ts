@@ -8,7 +8,7 @@ export class LessonModel {
 
   @ApiProperty()
   @IsUUID()
-  sectionId: string;
+  section_id: string;
 
   @ApiProperty()
   @IsString()
@@ -43,7 +43,7 @@ export class UpdateLessonModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  sectionId?: string;
+  section_id?: string;
 
   @ApiProperty()
   @IsString()
@@ -59,7 +59,7 @@ export class UpdateLessonModel {
 export class JoinLessonModel {
   @ApiProperty()
   @IsUUID()
-  userId: string;
+  user_id: string;
 }
 
 export class LessonIdResponse {

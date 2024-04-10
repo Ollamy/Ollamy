@@ -116,7 +116,7 @@ export class CourseController {
     examples: {
       template: {
         value: {
-          ownerId: 'id',
+          owner_id: 'id',
           title: 'Course Title',
           description: 'Course description',
           picture: 'Picture Data or Url',

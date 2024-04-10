@@ -4,7 +4,7 @@ import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 export class CreateLectureModel {
   @ApiProperty({ description: 'Lesson ID' })
   @IsUUID()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty({ description: 'Lecture data' })
   @IsString()
@@ -14,7 +14,7 @@ export class CreateLectureModel {
 export class UpdateLectureModel {
   @ApiProperty({ description: 'Lesson ID' })
   @IsUUID()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty({ description: 'Updated lecture data' })
   @IsString()
@@ -30,7 +30,7 @@ export class IdLectureModel {
 export class LectureModel {
   @ApiProperty({ description: 'Lesson ID' })
   @IsUUID()
-  lessonId: string;
+  lesson_id: string;
 
   @ApiProperty({ description: 'Lecture data' })
   @IsString()

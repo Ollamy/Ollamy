@@ -38,11 +38,11 @@ export class QuestionService {
 
       const questionDb: Question = await prisma.question.create({
         data: {
-          lesson_id: questionData.lessonId,
+          lesson_id: questionData.lesson_id,
           title: questionData.title,
           description: questionData.description,
-          type_answer: questionData.typeAnswer,
-          type_question: questionData.typeQuestion,
+          type_answer: questionData.type_answer,
+          type_question: questionData.type_question,
           difficulty: questionData?.difficulty,
           order: order,
           points: questionData?.points,
@@ -105,13 +105,13 @@ export class QuestionService {
 
       return {
         id: questionDb.id,
-        lessonId: questionDb.lesson_id,
+        lesson_id: questionDb.lesson_id,
         title: questionDb.title,
         description: questionDb.description,
-        typeAnswer: questionDb.type_answer,
-        typeQuestion: questionDb.type_question,
-        trustAnswerId: questionDb.trust_answer_id,
-        pictureId: questionDb.picture_id
+        type_answer: questionDb.type_answer,
+        type_question: questionDb.type_question,
+        trust_answer_id: questionDb.trust_answer_id,
+        picture_id: questionDb.picture_id
           ? await PictureService.getPicture(questionDb.picture_id)
           : undefined,
         difficulty: questionDb.difficulty,
@@ -136,13 +136,13 @@ export class QuestionService {
         data: {
           title: questionData?.title,
           description: questionData?.description,
-          lesson_id: questionData?.lessonId,
+          lesson_id: questionData?.lesson_id,
           picture_id: questionData.picture
             ? await PictureService.postPicture(questionData.picture)
             : undefined,
           points: questionData?.points,
           difficulty: questionData?.difficulty,
-          trust_answer_id: questionData?.trustAnswerId,
+          trust_answer_id: questionData?.trust_answer_id,
         },
       });
 
@@ -199,7 +199,7 @@ export class QuestionService {
         async (answer) =>
         ({
           id: answer.id,
-          questionId: answer.question_id,
+          question_id: answer.question_id,
           data: answer.data,
           picture: answer.picture_id
             ? await PictureService.getPicture(answer.picture_id)
@@ -219,7 +219,7 @@ export class QuestionService {
   ): Promise<ValidateAnswerResponse> {
     const questionDb: Question = await prisma.question.findUnique({
       where: {
-        id: body.questionId,
+        id: body.question_id,
       },
     });
 
@@ -250,11 +250,11 @@ export class QuestionService {
     const nextQuestion =
       lessonQuestions[
       lessonQuestions.findIndex(
-        (question) => question.id === body.questionId,
+        (question) => question.id === body.question_id,
       ) + 1
       ] ?? null;
 
-    const isValidated = questionDb.trust_answer_id === body.answerId;
+    const isValidated = questionDb.trust_answer_id === body.answer_id;
     const questionPoints =
       questionDb.points === undefined ? 0 : questionDb.points;
 
@@ -287,7 +287,7 @@ export class QuestionService {
       success: isValidated,
       answer: questionDb.trust_answer_id,
       end: !(nextQuestion !== null),
-      nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
+      next_question_id: nextQuestion !== null ? nextQuestion.id : undefined,
       points:
         isValidated && userLesson.status !== LessonStatus.COMPLETED
           ? questionPoints

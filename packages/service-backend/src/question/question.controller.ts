@@ -50,12 +50,12 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          lessonId: 'Lesson Id',
+          lesson_id: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
           data: 'Question data',
-          typeAnswer: AnswerType.TEXT,
-          typeQuestion: QuestionType.TEXT,
+          type_answer: AnswerType.TEXT,
+          type_question: QuestionType.TEXT,
           picture: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
           between: {

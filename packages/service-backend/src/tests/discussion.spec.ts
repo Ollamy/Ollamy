@@ -40,12 +40,12 @@ describe('DiscussionService', () => {
       expect(prisma.discussion.create).toHaveBeenCalledWith({
         data: {
           title: mockDiscussionData.title,
-          image_url: mockDiscussionData.imageUrl,
+          image_url: mockDiscussionData.image_url,
         },
       });
 
       expect(prisma.userDiscussions.create).toHaveBeenCalledTimes(
-        mockDiscussionData.userIds.length,
+        mockDiscussionData.user_ids.length,
       );
       expect(prisma.userDiscussions.create).toHaveBeenCalledWith(
         expect.objectContaining({

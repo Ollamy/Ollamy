@@ -36,7 +36,7 @@ describe('postSection', () => {
     expect(prisma.section.create).toHaveBeenCalledTimes(1);
     expect(prisma.section.create).toHaveBeenCalledWith({
       data: {
-        course_id: mockSectionData.courseId,
+        course_id: mockSectionData.course_id,
         title: mockSectionData.title,
         description: mockSectionData.description,
       },
@@ -146,7 +146,7 @@ describe('getSection', () => {
     });
 
     expect(result).toEqual({
-      courseId: mockSectionDb.course_id,
+      course_id: mockSectionDb.course_id,
       description: mockSectionDb.description,
       id: mockSectionDb.id,
       title: mockSectionDb.title,
@@ -257,7 +257,7 @@ describe('getSectionLessons', () => {
 
     expect(result).toEqual(
       mockLessonDb.map((lesson: Lesson) => ({
-        sectionId: lesson.section_id,
+        section_id: lesson.section_id,
         description: lesson.description,
         id: lesson.id,
         title: lesson.title,

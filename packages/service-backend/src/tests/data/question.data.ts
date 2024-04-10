@@ -15,11 +15,11 @@ const lessonId = uuidv4();
 export const mockQuestionId2 = uuidv4();
 
 export const mockQuestionData: CreateQuestionModel = {
-  lessonId: lessonId,
+  lesson_id: lessonId,
   title: 'Question Title',
   description: 'Question Description',
-  typeAnswer: 'TEXT',
-  typeQuestion: 'TEXT',
+  type_answer: 'TEXT',
+  type_question: 'TEXT',
   data: 'test',
   between: undefined,
 };
@@ -58,19 +58,19 @@ export const mockQuestionDb2: Question = {
 
 export const mockQuestionId3 = uuidv4();
 export const mockQuestionData2: UpdateQuestionModel = {
-  lessonId: lessonId,
+  lesson_id: lessonId,
   title: 'test',
   description: 'desc',
-  trustAnswerId: correctAnswerId,
+  trust_answer_id: correctAnswerId,
 };
 
 export const mockBody: validateAnswerModel = {
-  questionId: questionId,
-  answerId: correctAnswerId,
+  question_id: questionId,
+  answer_id: correctAnswerId,
 };
 
 export const mockQuestionDb3: Question = {
-  id: mockBody.questionId,
+  id: mockBody.question_id,
   lesson_id: lessonId,
   title: '2',
   type_answer: 'TEXT',
@@ -84,11 +84,11 @@ export const mockQuestionDb3: Question = {
 };
 
 export const mockBodyIncorrect: validateAnswerModel = {
-  questionId: questionId,
-  answerId: incorrectAnswerId,
+  question_id: questionId,
+  answer_id: incorrectAnswerId,
 };
 export const mockQuestionDb4: Question = {
-  id: mockBody.questionId,
+  id: mockBody.question_id,
   lesson_id: lessonId,
   title: '2',
   type_answer: 'TEXT',

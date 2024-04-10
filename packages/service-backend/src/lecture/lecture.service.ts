@@ -9,7 +9,7 @@ export class LectureService {
         try {
             const lectureDb = await prisma.lecture.create({
                 data: {
-                    lesson_id: lectureData.lessonId,
+                    lesson_id: lectureData.lesson_id,
                     data: lectureData.data,
                 },
             });
@@ -63,7 +63,7 @@ export class LectureService {
             }
 
             return {
-                lessonId: lectureDb.lesson_id,
+                lesson_id: lectureDb.lesson_id,
                 data: lectureDb.data,
             } as LectureModel;
         } catch (error) {
@@ -79,7 +79,7 @@ export class LectureService {
                     id: lectureId.id,
                 },
                 data: {
-                    lesson_id: lectureData.lessonId,
+                    lesson_id: lectureData.lesson_id,
                     data: lectureData.data,
                 },
             });

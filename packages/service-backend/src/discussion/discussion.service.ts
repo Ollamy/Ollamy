@@ -20,7 +20,7 @@ export class DiscussionService {
       const discussionDb = await prisma.discussion.create({
         data: {
           title: discussionData.title,
-          image_url: discussionData.imageUrl,
+          image_url: discussionData.image_url,
         },
       });
 
@@ -29,7 +29,7 @@ export class DiscussionService {
         throw new NotFoundException('Failed to create course !');
       }
 
-      discussionData.userIds.forEach(async (userId) => {
+      discussionData.user_ids.forEach(async (userId) => {
         await this.postUserDiscussion(userId, discussionDb.id);
       });
       return discussionDb.id;

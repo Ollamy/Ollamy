@@ -42,7 +42,7 @@ export class SectionController {
     examples: {
       template: {
         value: {
-          courseId: 'Course Id',
+          course_id: 'Course Id',
           title: 'Section Title',
           description: 'Section decsription',
         } as CreateSectionModel,
@@ -106,7 +106,7 @@ export class SectionController {
     examples: {
       template: {
         value: {
-          courseId: 'id',
+          course_id: 'id',
           title: 'Section Title',
           description: 'Section decsription',
         } as UpdateSectionModel,

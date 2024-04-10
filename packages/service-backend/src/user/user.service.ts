@@ -6,13 +6,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import {
-  CreateUserModel,
-  GetUserModel,
-  GetUserScoreModel,
-  LoginUserModel,
-  UpdateUserModel,
+  UserModel,
+  CreateUser,
+  LoginUser,
+  UpdateUser,
   UserCoursesResponse,
   UserIdResponse,
+  UserTrueResponse,
+  UserScore,
 } from './user.dto';
 import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
@@ -71,7 +72,7 @@ export class UserService {
     return Math.abs(hash);
   }
 
-  async registerUser(userData: CreateUserModel): Promise<string> {
+  async registerUser(userData: CreateUser): Promise<string> {
     userData.password = this.hashPassword(userData.password);
 
     try {
@@ -92,7 +93,7 @@ export class UserService {
     }
   }
 
-  async loginUser(userData: LoginUserModel): Promise<string> {
+  async loginUser(userData: LoginUser): Promise<string> {
     const userDb: User = await prisma.user.findUnique({
       where: {
         email: userData.email,
@@ -113,7 +114,7 @@ export class UserService {
     return this.createToken(userDb.id);
   }
 
-  async getUser(ctx: any): Promise<GetUserModel> {
+  async getUser(ctx: any): Promise<UserModel> {
     try {
       const userDb: User = await prisma.user.findUnique({
         where: {
@@ -129,14 +130,14 @@ export class UserService {
         firstname: userDb.firstname,
         lastname: userDb.lastname,
         email: userDb.email,
-      } as GetUserModel;
+      } as UserModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User not found !');
     }
   }
 
-  async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
+  async updateUser(userData: UpdateUser, ctx: any): Promise<string> {
     try {
       userData.password = this.hashPassword(userData.password);
       const userDb: User = await prisma.user.update({
@@ -240,7 +241,7 @@ export class UserService {
     }
   }
 
-  async getUserScore(ctx: any): Promise<GetUserScoreModel> {
+  async getUserScore(ctx: any): Promise<UserScore> {
     try {
       let usertoScoreDb: UsertoScore = await prisma.usertoScore.findUnique({
         where: {
@@ -258,7 +259,7 @@ export class UserService {
       return {
         user_id: usertoScoreDb.user_id,
         score: usertoScoreDb.score,
-      } as GetUserScoreModel;
+      } as UserScore;
     } catch (error) {
       Logger.error(error);
     }

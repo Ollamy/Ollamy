@@ -7,8 +7,8 @@ export const discussionId = uuidv4();
 
 export const mockDiscussionData: CreateDiscussionModel = {
   title: 'Discussion Title',
-  imageUrl: 'https://example.com/image.jpg',
-  userIds: [uuidv4(), uuidv4(), uuidv4()],
+  image_url: 'https://example.com/image.jpg',
+  user_ids: [uuidv4(), uuidv4(), uuidv4()],
 };
 
 export const mockDiscussionDb: Discussion = {

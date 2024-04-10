@@ -8,7 +8,7 @@ export class AnswerModel {
 
   @ApiProperty()
   @IsUUID()
-  questionId: string;
+  question_id: string;
 
   @ApiProperty()
   @IsString()
@@ -24,7 +24,7 @@ export class AnswerModel {
 export class CreateAnswerModel {
   @ApiProperty()
   @IsUUID()
-  questionId: string;
+  question_id: string;
 
   @ApiProperty()
   @IsString()
@@ -46,7 +46,7 @@ export class UpdateAnswerModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  questionId?: string;
+  question_id?: string;
 
   @ApiProperty()
   @IsString()

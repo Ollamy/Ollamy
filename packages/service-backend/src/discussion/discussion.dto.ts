@@ -3,7 +3,6 @@ import {
   IsDateString,
   IsOptional,
   IsString,
-  isString,
   IsUUID,
 } from 'class-validator';
 
@@ -16,11 +15,11 @@ export class DiscussionModel {
 
   @ApiProperty()
   @IsDateString()
-  createdAt: string;
+  created_at: string;
 
   @ApiProperty()
   @IsDateString()
-  updatedAt: string;
+  updated_at: string;
 
   @ApiProperty()
   @IsString()
@@ -28,7 +27,7 @@ export class DiscussionModel {
 
   @ApiProperty()
   @IsString()
-  imageUrl: string;
+  image_url: string;
 }
 
 export class CreateDiscussionModel {
@@ -40,21 +39,21 @@ export class CreateDiscussionModel {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  imageUrl?: string;
+  image_url?: string;
 
   @ApiProperty()
   @IsArray()
-  userIds: string[];
+  user_ids: string[];
 }
 
 export class UserDiscussionsModel {
   @ApiProperty()
   @IsUUID()
-  userId: string;
+  user_id: string;
 
   @ApiProperty()
   @IsUUID()
-  discussionId: string;
+  discussion_id: string;
 }
 
 export class MessageModel {
@@ -64,19 +63,19 @@ export class MessageModel {
 
   @ApiProperty()
   @IsDateString()
-  createdAt: string;
+  created_at: string;
 
   @ApiProperty()
   @IsDateString()
-  updatedAt: string;
+  updated_at: string;
 
   @ApiProperty()
   @IsUUID()
-  discussionId: string;
+  discussion_id: string;
 
   @ApiProperty()
   @IsUUID()
-  ownerId: string;
+  owner_id: string;
 
   @ApiProperty()
   @IsString()

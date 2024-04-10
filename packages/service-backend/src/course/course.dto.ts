@@ -10,7 +10,7 @@ export class CourseModel {
 
   @ApiProperty()
   @IsUUID()
-  ownerId: string;
+  owner_id: string;
 
   @ApiProperty()
   @IsString()
@@ -29,12 +29,12 @@ export class GetCourseRequest extends CourseModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lastLessonId?: string;
+  last_lesson_id?: string;
 
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  lastSectionId?: string;
+  last_section_id?: string;
 }
 
 export class CreateCourseModel {
@@ -61,7 +61,7 @@ export class UpdateCourseModel {
   @ApiProperty()
   @IsUUID()
   @IsOptional()
-  ownerId: string;
+  owner_id: string;
 
   @ApiProperty()
   @IsString()

@@ -151,11 +151,11 @@ export class LessonService {
       return lessonQuestionsDb.map((question: Question) => {
         return {
           id: question.id,
-          lessonId: question.lesson_id,
+          lesson_id: question.lesson_id,
           title: question.title,
           description: question.description,
-          typeAnswer: question.type_answer,
-          typeQuestion: question.type_question,
+          type_answer: question.type_answer,
+          type_question: question.type_question,
           order: question.order,
         };
       }) as QuestionModel[];
@@ -179,7 +179,7 @@ export class LessonService {
       }
 
       return {
-        lessonId: lessonlectureDb.lesson_id,
+        lesson_id: lessonlectureDb.lesson_id,
         ...lessonlectureDb,
       };
     } catch (error) {
@@ -195,7 +195,7 @@ export class LessonService {
     try {
       const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
         data: {
-          user_id: joinData.userId,
+          user_id: joinData.user_id,
           lesson_id: lessonId,
         },
       });

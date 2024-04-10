@@ -179,12 +179,12 @@ describe('getCourse', () => {
 
       const expectedCourseModel: GetCourseRequest = {
         id: mockCourseDb.id,
-        ownerId: mockCourseDb.owner_id,
+        owner_id: mockCourseDb.owner_id,
         picture: mockPictureDb.filename,
         title: mockCourseDb.title,
         description: mockCourseDb.description,
-        lastLessonId: mockLastLessonDb.lesson_id,
-        lastSectionId: mockLastSectionDb.section_id,
+        last_lesson_id: mockLastLessonDb.lesson_id,
+        last_section_id: mockLastSectionDb.section_id,
       };
       expect(result.picture).toContain('http');
       expect(result.picture).toContain(mockPictureDb.filename);

@@ -21,7 +21,7 @@ export class AnswerService {
     try {
       const answerDb: Answer = await prisma.answer.create({
         data: {
-          question_id: answerData.questionId,
+          question_id: answerData.question_id,
           data: answerData.data,
           picture_id: answerData.picture
             ? await PictureService.postPicture(answerData.picture)
@@ -77,7 +77,7 @@ export class AnswerService {
       }
 
       return {
-        questionId: answerDb.question_id,
+        question_id: answerDb.question_id,
         data: answerDb.data,
         picture: answerDb.picture_id
           ? await PictureService.getPicture(answerDb.picture_id)
@@ -99,7 +99,7 @@ export class AnswerService {
           id: answerId.id,
         },
         data: {
-          question_id: answerData.questionId,
+          question_id: answerData.question_id,
           data: answerData.data,
           picture_id: answerData.picture
             ? await PictureService.postPicture(answerData.picture)

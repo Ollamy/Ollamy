@@ -68,10 +68,11 @@ export const mockUserToCourse: UsertoCourse = {
   last_lesson_id: mockLastLessonDb.lesson_id,
   last_section_id: mockLastSectionDb.section_id,
   score: 0,
+  hp: 0
 };
 
 export const mockUpdateCourseData: UpdateCourseModel = {
-  ownerId: context.__user.id,
+  owner_id: context.__user.id,
   title: 'title',
   description: 'desc',
   picture: 'data',

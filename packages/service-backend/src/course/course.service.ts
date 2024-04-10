@@ -98,14 +98,14 @@ export class CourseService {
 
       return {
         id: courseDb.id,
-        ownerId: courseDb.owner_id,
+        owner_id: courseDb.owner_id,
         title: courseDb.title,
         description: courseDb.description,
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        lastLessonId: userToCourse?.last_lesson_id,
-        lastSectionId: userToCourse?.last_section_id,
+        last_lesson_id: userToCourse?.last_lesson_id,
+        last_section_id: userToCourse?.last_section_id,
       };
     } catch (error) {
       Logger.error(error);

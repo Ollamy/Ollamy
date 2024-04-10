@@ -23,13 +23,13 @@ describe('postAnswer', () => {
   it('should create a answer and return the ID', async () => {
     // Mock the dependencies or services
     const mockAnswerData: CreateAnswerModel = {
-      questionId: '123',
+      question_id: '123',
       data: 'test',
       picture: 'picture',
     };
     const mockAnswerDb: Answer = {
       id: '1',
-      question_id: mockAnswerData.questionId,
+      question_id: mockAnswerData.question_id,
       data: mockAnswerData.data,
       picture_id: '1',
     };
@@ -56,7 +56,7 @@ describe('postAnswer', () => {
     jest.spyOn(prisma.answer, 'create').mockResolvedValue(null);
 
     const mockAnswerData: CreateAnswerModel = {
-      questionId: '123',
+      question_id: '123',
       data: 'test',
       picture: 'picture',
     };
@@ -72,7 +72,7 @@ describe('postAnswer', () => {
       .mockRejectedValue(new Error('Some error'));
 
     const mockAnswerData: CreateAnswerModel = {
-      questionId: '123',
+      question_id: '123',
       data: 'test',
       picture: 'picture',
     };
@@ -185,7 +185,7 @@ describe('getAnswer', () => {
     });
 
     expect(result).toEqual({
-      questionId: mockAnswerDb.question_id,
+      question_id: mockAnswerDb.question_id,
       data: mockAnswerDb.data,
       picture: mockAnswerDb.picture_id,
     });
@@ -232,7 +232,7 @@ describe('updateAnswer', () => {
     // Mock the dependencies or services
     const mockAnswerId = '123';
     const mockAnswerData: UpdateAnswerModel = {
-      questionId: mockAnswerId,
+      question_id: mockAnswerId,
       data: '1',
       picture: 'picture',
       // updated answer data
@@ -276,7 +276,7 @@ describe('updateAnswer', () => {
 
     const mockAnswerId = '123';
     const mockAnswerData: UpdateAnswerModel = {
-      questionId: '1',
+      question_id: '1',
       data: 'data',
       picture: 'picture',
     };
@@ -298,7 +298,7 @@ describe('updateAnswer', () => {
 
     const mockAnswerId = '123';
     const mockAnswerData: UpdateAnswerModel = {
-      questionId: '1',
+      question_id: '1',
       data: 'data',
       picture: 'picture',
     };

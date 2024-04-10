@@ -55,7 +55,7 @@ export const mockUpdatedLesson: Lesson = {
 export const mockLessonData3: UpdateLessonModel = {
   title: 'Updated Lesson Title',
   description: 'Updated Lesson Description',
-  sectionId: mockLessonData.section_id,
+  section_id: mockLessonData.section_id,
 };
 
 export const mockLessonQuestions: Question[] = [
