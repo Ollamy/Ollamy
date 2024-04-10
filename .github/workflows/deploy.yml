@@ -40,6 +40,7 @@ jobs:
         message: |
           The deployment was successful! 🚀🚀🚀
           The backend test version is now available at: http://${{ secrets.REMOTE_HOST }}:4545/api
+          🛑🛑 The server will be stopped in 10 minutes. 🛑🛑
 
     - name: STOP the Staging server
       uses: appleboy/ssh-action@v1.0.3
