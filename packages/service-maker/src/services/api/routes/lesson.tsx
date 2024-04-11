@@ -1,10 +1,9 @@
-import { UseQueryOptions, useMutation, useQuery } from "react-query";
+import { UseQueryOptions, useMutation, useQuery } from 'react-query';
+import { GetLessonRequest, LessonApi, LessonModel } from 'services/api/out';
+import { queryClient } from 'main';
+import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
 
-import { queryClient } from "../../../main";
-import { GetLessonRequest, LessonApi, LessonModel } from "../out";
-import { GET_SECTION_LESSONS_KEY } from "./section";
-
-const GET_LESSON_KEY = "getLesson";
+const GET_LESSON_KEY = 'getLesson';
 
 export const lessonActions = {
   useLesson: (

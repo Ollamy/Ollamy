@@ -1,25 +1,22 @@
-import type { UseQueryOptions } from "react-query";
-import { useMutation, useQuery } from "react-query";
-
-// eslint-disable-next-line import/no-cycle
-import { queryClient } from "../../../main";
-import type {
-  CourseModel,
+import type { UseQueryOptions } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import {
+  CourseApi,
+  GetCourseOperationRequest,
   GetCourseRequest,
   GetCourseSectionsRequest,
   SectionModel,
-} from "../out";
-import { CourseApi } from "../out";
+} from 'services/api/out';
+import { GET_USER_COURSES_KEY } from 'services/api/routes/user';
+import { queryClient } from 'main';
 
-import { GET_USER_COURSES_KEY } from "./user";
-
-const GET_COURSE_KEY = "getCourse";
-export const GET_COURSE_SECTIONS_KEY = "getCourseSections";
+const GET_COURSE_KEY = 'getCourse';
+export const GET_COURSE_SECTIONS_KEY = 'getCourseSections';
 
 export const courseActions = {
   useCourse: (
-    requestParameters: GetCourseRequest,
-    config?: UseQueryOptions<CourseModel>
+    requestParameters: GetCourseOperationRequest,
+    config?: UseQueryOptions<GetCourseRequest>,
   ) =>
     useQuery({
       queryKey: GET_COURSE_KEY,
@@ -28,7 +25,7 @@ export const courseActions = {
     }),
   useCourseSection: (
     requestParameters: GetCourseSectionsRequest,
-    config?: UseQueryOptions<Array<SectionModel>>
+    config?: UseQueryOptions<Array<SectionModel>>,
   ) =>
     useQuery({
       queryKey: GET_COURSE_SECTIONS_KEY,

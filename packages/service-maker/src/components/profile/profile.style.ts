@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const RightContainerSetting = styled.div<{ $width: string }>`
+export const RightContainerSetting = styled.div<{ width: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: ${(props) => props.$width};
+  width: ${(props) => props.width};
   border-radius: 8px;
   height: 340px;
   padding: 12px;
@@ -35,9 +35,9 @@ export const SubTitle = styled.h3`
   font-weight: 600;
 `;
 
-export const InputCourse = styled.input<{ $width: string }>`
+export const InputCourse = styled.input<{ width: string }>`
   height: 32px;
-  width: ${(props) => props.$width};
+  width: ${(props) => props.width};
   color: #3d3d3d;
   font-size: 14px;
   padding: 24px;

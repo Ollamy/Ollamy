@@ -1,11 +1,8 @@
-/* eslint-disable react/no-array-index-key */
-import type { ChangeEvent, ReactElement } from "react";
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-
-// eslint-disable-next-line import/no-cycle
-import api from "../../../services/api";
+import type { ChangeEvent, ReactElement } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import api from 'services/api';
 
 interface FormState {
   title: string;
@@ -14,9 +11,9 @@ interface FormState {
 }
 
 const initialFormState: FormState = {
-  title: "",
-  description: "",
-  color: "#E6674F",
+  title: '',
+  description: '',
+  color: '#E6674F',
 };
 
 function DashboardContent(): ReactElement {
@@ -31,7 +28,7 @@ function DashboardContent(): ReactElement {
   const [formData, setFormData] = useState<FormState>(initialFormState);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const colorsChoice = ["#E6674F", "#876BF6", "#F195A4"];
+  const colorsChoice = ['#E6674F', '#876BF6', '#F195A4'];
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,7 +67,12 @@ function DashboardContent(): ReactElement {
         // pop up error
       }
     },
-    [createCourseMutation, formData.color, formData.description, formData.title]
+    [
+      createCourseMutation,
+      formData.color,
+      formData.description,
+      formData.title,
+    ],
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -218,7 +220,9 @@ const MenuTitle = styled.h2`
   font-style: normal;
   font-size: 24px;
   line-height: 30px;
-  font-family: Public Sans, sans-serif;
+  font-family:
+    Public Sans,
+    sans-serif;
 `;
 
 const CouseColorContainer = styled.div`
@@ -272,7 +276,9 @@ const Input = styled.input`
   height: 40px;
 
   color: #757575;
-  font-family: Public Sans, sans-serif;
+  font-family:
+    Public Sans,
+    sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
@@ -299,7 +305,9 @@ const CancelButton = styled.button`
   background: #f5f7fb;
 
   color: rgba(21, 25, 32, 0.5);
-  font-family: Work Sans, sans-serif;
+  font-family:
+    Work Sans,
+    sans-serif;
   font-size: 18.482px;
   font-style: normal;
   font-weight: 600;
@@ -317,7 +325,9 @@ const CreateButton = styled.button`
 
   color: var(--white-white-100-high-emphasys, #fff);
   text-align: center;
-  font-family: Work Sans, sans-serif;
+  font-family:
+    Work Sans,
+    sans-serif;
   font-size: 18.482px;
   font-style: normal;
   font-weight: 600;

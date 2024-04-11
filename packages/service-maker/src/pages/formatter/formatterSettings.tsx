@@ -1,17 +1,13 @@
-import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
-import type { GetUserModel } from "services/api/out";
-import styled from "styled-components";
+import { useState } from 'react';
+import { GetUserModel } from 'services/api/out';
+import api from 'services/api';
+import TopBar from 'components/TopBar';
+import { Navbar } from 'components/Navbar/navbar';
+import { ProfileInfo } from 'components/profile/profile';
+import { CoursePicture } from 'components/Course/Picture/course.picture';
+import styled from 'styled-components';
 
-import prof from "../../assets/profile.png";
-import { CoursePicture } from "../../components/Course/Picture/course.picture";
-import { Navbar } from "../../components/Navbar/navbar";
-import { ProfileInfo } from "../../components/profile/profile";
-import TopBar from "../../components/TopBar";
-// eslint-disable-next-line import/no-cycle
-import api from "../../services/api";
-
-export function ProfilePage(): ReactElement {
+export function ProfilePage() {
   const [profile, setProfile] = useState<GetUserModel>();
 
   const [profilPercentage, setProfilePercentage] = useState<number>(45);
@@ -26,13 +22,13 @@ export function ProfilePage(): ReactElement {
   return (
     <Container>
       <TopBar title="Profile">
-        <img src={prof} alt="profile pic" height="90%" />
+        <img src={'/assets/profile.png'} alt="profile pic" height="90%" />
       </TopBar>
       <Body>
         <Navbar user="Alexandre Garage" profilPercentage={profilPercentage} />
         <RightContainerCourseSettings>
           <RightContainerTopCourseSettings>
-            <RightContainerSetting $width="1040px">
+            <RightContainerSetting width="1040px">
               <ProfileInfo
                 title="Your Profile"
                 subTitleCourse="First name"
@@ -48,7 +44,7 @@ export function ProfilePage(): ReactElement {
               width="600px"
               height="340px"
             />
-            <RightContainerSetting $width="100%">
+            <RightContainerSetting width="100%">
               <Title>Subcriptions</Title>
               <Test>90,420</Test>
             </RightContainerSetting>
@@ -86,12 +82,12 @@ const RightContainerTopCourseSettings = styled.div`
   width: 100%;
 `;
 
-const RightContainerSetting = styled.div<{ $width: string }>`
+const RightContainerSetting = styled.div<{ width: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: ${(props) => props.$width};
+  width: ${(props) => props.width};
   border-radius: 8px;
   height: 340px;
   margin: 24px;
@@ -122,3 +118,6 @@ const Test = styled.h2`
   height: 100%;
   width: 100%;
 `;
+function useEffect(arg0: () => void, arg1: (GetUserModel | undefined)[]) {
+  throw new Error('Function not implemented.');
+}

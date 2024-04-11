@@ -1,14 +1,12 @@
-import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import type { GetCourseRequest } from "services/api/out";
-import styled from "styled-components";
-
-import Dropdown from "../../../../components/dropdown";
-import CreateModal from "../../../../components/modal";
-import api from "../../../../services/api";
-
-import LessonList from "./lessonList";
+import type { ReactElement } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { GetCourseRequest } from 'services/api/out';
+import styled from 'styled-components';
+import api from 'services/api';
+import CreateModal from 'components/modal';
+import Dropdown from 'components/dropdown';
+import LessonList from 'pages/maker/hub/sideBarMenu/lessonList';
 
 interface SideBarMenuProps {
   course: GetCourseRequest;
@@ -22,12 +20,12 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
   const { course, sectionId, lessonId } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    sectionId ?? null
+    sectionId ?? null,
   );
 
   const { data: courseSections } = api.course.useCourseSection({
@@ -35,14 +33,14 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
   });
   const handleClose = async () => {
     setIsOpen(false);
-    setTitle("");
-    setDescription("");
+    setTitle('');
+    setDescription('');
   };
 
   const handleSubmit = async () => {
     try {
-      if (title === "" || description === "") {
-        throw Error("Title and description need to be define");
+      if (title === '' || description === '') {
+        throw Error('Title and description need to be define');
       }
       await createSectionMutation({
         createSectionModel: { courseId: course.id, title, description },
@@ -80,7 +78,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
       </CreateModal>
       <TopBoxContainer>
         {course.title}
-        <SettingButton onClick={() => navigate("/home")}>
+        <SettingButton onClick={() => navigate('/home')}>
           Settings
         </SettingButton>
         <SectionContainer>

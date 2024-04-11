@@ -1,12 +1,9 @@
-import { type ReactElement, useEffect } from "react";
-import styled from "styled-components";
-
-import TopBar from "../../components/TopBar";
-// eslint-disable-next-line import/no-cycle
-import api from "../../services/api";
-import { DefaultApi } from "../../services/api/out";
-
-import DashboardContent from "./Content";
+import { type ReactElement, useEffect } from 'react';
+import styled from 'styled-components';
+import api from 'services/api';
+import { DefaultApi } from 'services/api/out';
+import TopBar from 'components/TopBar';
+import DashboardContent from 'pages/Home/Content';
 
 export function HomePage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

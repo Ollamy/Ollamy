@@ -1,4 +1,4 @@
-import { ButtonMakerStyled } from "./button.style";
+import { ButtonMakerStyled } from 'components/button/button.style';
 
 interface ButtonMakerProps {
   textButton: string;

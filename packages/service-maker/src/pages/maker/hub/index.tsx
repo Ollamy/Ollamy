@@ -1,42 +1,43 @@
-import styled from "styled-components";
-import { ReactElement } from "react";
-import TopBar from "../../../components/TopBar";
-import api from "../../../services/api";
-import { useNavigate, useParams } from "react-router-dom";
-import LoadingComponent from "../../../components/loading/spinner";
-import SideBarMenu from "./sideBarMenu";
-import SectionEdit from "./sectionEdit";
-import LessonEdit from "./lessonEdit";
+import styled from 'styled-components';
+import { ReactElement } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from 'services/api';
+import TopBar from 'components/TopBar';
+import LoadingComponent from 'components/loading/spinner';
+import SideBarMenu from 'pages/maker/hub/sideBarMenu';
+import SectionEdit from 'pages/maker/hub/sectionEdit';
+import LessonEdit from 'pages/maker/hub/lessonEdit';
 
 function MakerHubPage(): ReactElement {
   const navigate = useNavigate();
 
   let { id, sectionId, lessonId } = useParams();
   if (!id) {
-    navigate("/home");
+    navigate('/home');
     return <></>;
   }
 
   const { data: course } = api.course.useCourse({ id });
   const { data: section } = api.section.useSection(
-    { id: sectionId ?? "" },
+    { id: sectionId ?? '' },
     { enabled: sectionId !== undefined },
   );
   const { data: lesson } = api.lesson.useLesson(
-    { id: lessonId ?? "" },
+    { id: lessonId ?? '' },
     { enabled: lessonId !== undefined },
   );
 
   if (!course)
     return (
       <Container>
-        <TopBar title={"Ollamy Maker"} />
+        <TopBar title={'Ollamy Maker'} />
         <LoadingComponent />
       </Container>
     );
+
   return (
     <Container>
-      <TopBar title={"Ollamy Maker"} />
+      <TopBar title={'Ollamy Maker'} />
       <Body>
         <SideBarMenu
           course={course}
