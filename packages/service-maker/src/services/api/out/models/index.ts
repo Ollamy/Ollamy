@@ -383,6 +383,19 @@ export interface GetUserModel {
 /**
  * 
  * @export
+ * @interface GetUsersBadges
+ */
+export interface GetUsersBadges {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetUsersBadges
+     */
+    badges: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface IdAnswerModel
  */
 export interface IdAnswerModel {
