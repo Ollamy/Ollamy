@@ -68,7 +68,7 @@ abstract class BaseQuestion {
   trustAnswerId: string;
 
   @ApiProperty({ description: 'The unique identifier of the picture', required: false })
-  @IsString()
+  @IsUUID()
   @IsOptional()
   pictureId?: string;
 
@@ -176,7 +176,7 @@ export class ValidateAnswerResponse {
   end: boolean;
 
   @ApiProperty({ description: 'The unique identifier of the next question if it is not the last one', required: false })
-  @IsString()
+  @IsUUID()
   @IsOptional()
   nextQuestionId?: string | undefined;
 

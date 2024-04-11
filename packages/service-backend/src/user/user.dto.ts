@@ -126,8 +126,8 @@ export class UserCourses {
   description: string;
 
   @ApiProperty({ description: 'The URL of the picture representing the course' })
-  @IsUrl()
-  picture: string;
+  @IsUUID()
+  pictureId: string;
 
   @ApiProperty({ description: 'Indicates if the user owns this course' })
   @IsBoolean()
