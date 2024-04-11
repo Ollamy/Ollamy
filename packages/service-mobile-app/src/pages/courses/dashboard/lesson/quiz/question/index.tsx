@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import { useEffect, useState } from 'react';
-import TextButton from 'src/components/buttons/textButton';
+import TextButton from 'src/components/Buttons/TextButton';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 
 import QuestionDifficulty from './questionDifficulty';

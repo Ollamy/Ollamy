@@ -9,6 +9,7 @@ function CourseRouter() {
   return (
     <Routes>
       <Route path="join/:id" element={<JoinCourse />} />
+
       <Route path=":id" element={<CourseDashboard />} />
       <Route path=":id/section/:sectionId" element={<SectionDashboard />} />
       <Route path=":id/section/:sectionId/lesson/:lessonId" element={<Lesson />} />
