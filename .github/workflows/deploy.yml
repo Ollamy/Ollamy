@@ -54,3 +54,12 @@ jobs:
           sleep 600
           docker compose stop backend redis database &> /dev/null || true
           echo "The server has been stopped. cleanup completed."
+          exit 0
+      continue-on-error: true
+
+    - name: send PR comment
+      uses: mshick/add-pr-comment@v2
+      with:
+        message-id: deploy-test-version
+        message: |
+          The server has been stopped. cleanup completed.
