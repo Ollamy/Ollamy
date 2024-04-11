@@ -928,10 +928,10 @@ export interface UserCourseHp {
     hp: number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof UserCourseHp
      */
-    timer: number;
+    timer: string;
 }
 /**
  * 
