@@ -52,5 +52,5 @@ jobs:
         script: |
           cd ollamy-deploy
           sleep 600
-          docker compose stop backend redis database
+          docker compose stop backend redis database || true
           echo "The server has been stopped. cleanup completed."
