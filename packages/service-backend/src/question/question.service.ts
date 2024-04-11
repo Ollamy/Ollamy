@@ -12,7 +12,7 @@ import {
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,
-  validateAnswerModel,
+  ValidateAnswerModel,
   ValidateAnswerResponse,
 } from './question.dto';
 import prisma from 'client';
@@ -140,8 +140,8 @@ export class QuestionService {
           title: questionData?.title,
           description: questionData?.description,
           lesson_id: questionData?.lessonId,
-          picture_id: questionData.picture
-            ? await PictureService.postPicture(questionData.picture)
+          picture_id: questionData.pictureId
+            ? await PictureService.postPicture(questionData.pictureId)
             : undefined,
           points: questionData?.points,
           difficulty: questionData?.difficulty,
@@ -239,7 +239,7 @@ export class QuestionService {
   }
 
   async validateAnswer(
-    body: validateAnswerModel,
+    body: ValidateAnswerModel,
     ctx: any,
   ): Promise<ValidateAnswerResponse> {
     const questionDb: Question = await prisma.question.findUnique({
