@@ -212,7 +212,7 @@ export class UserService {
       return {
         courses: await Promise.all(
           courses.map(async (course) => {
-            const { last_lesson_id, last_section_id } =
+            const { last_lesson_id: lastLessonId, last_section_id: lastSectionId } =
               userDb.UsertoCourse.find((c) => c.course_id === course.id);
 
             const isOwner = course.owner_id === ctx.__user.id;
@@ -224,8 +224,8 @@ export class UserService {
             return {
               ...course,
               picture,
-              last_lesson_id,
-              last_section_id,
+              lastLessonId,
+              lastSectionId,
               owner: isOwner,
             };
           }),
@@ -256,7 +256,7 @@ export class UserService {
         });
       }
       return {
-        user_id: usertoScoreDb.user_id,
+        userId: usertoScoreDb.user_id,
         score: usertoScoreDb.score,
       } as GetUserScoreModel;
     } catch (error) {
