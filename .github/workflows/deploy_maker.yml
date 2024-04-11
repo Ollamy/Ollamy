@@ -22,6 +22,7 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           script: |
             cd ollamy-deploy
+            git fetch origin
             git checkout ${{ github.head_ref || github.ref_name }} && git pull origin ${{ github.head_ref || github.ref_name }}
             sed -i 's#REDIS_PORT=6379#REDIS_PORT=6380#g' .env
             sed -i 's#POSTGRES_PORT=5432#POSTGRES_PORT=5433#g' .env
@@ -29,7 +30,6 @@ jobs:
             sed -i 's#FRONTEND_PORT=5173#FRONTEND_PORT=5174#g' .env
             sed -i 's#VITE_PUBLIC_BACKEND_URL=#VITE_PUBLIC_BACKEND_URL=http://${{ secrets.REMOTE_HOST }}:5174#g' .env
             source .env
-            cat packages/service-maker/Dockerfile
             docker compose build maker
             docker compose up -d maker
 
