@@ -207,6 +207,30 @@ export interface CreateQuestionModel {
      */
     typeQuestion: string;
     /**
+     * The text of the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    text?: string;
+    /**
+     * The URL of the video for the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    videoUrl?: string;
+    /**
+     * The URL of the image for the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    imageUrl?: string;
+    /**
+     * The URL of the audio for the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    audioUrl?: string;
+    /**
      * The unique identifier of the trusted answer
      * @type {string}
      * @memberof CreateQuestionModel
@@ -646,6 +670,30 @@ export interface QuestionModel {
      */
     typeQuestion: string;
     /**
+     * The text of the question
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    text?: string;
+    /**
+     * The URL of the video for the question
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    videoUrl?: string;
+    /**
+     * The URL of the image for the question
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    imageUrl?: string;
+    /**
+     * The URL of the audio for the question
+     * @type {string}
+     * @memberof QuestionModel
+     */
+    audioUrl?: string;
+    /**
      * The unique identifier of the trusted answer
      * @type {string}
      * @memberof QuestionModel
@@ -837,6 +885,30 @@ export interface UpdateQuestionModel {
      * @memberof UpdateQuestionModel
      */
     typeQuestion: string;
+    /**
+     * The text of the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    text?: string;
+    /**
+     * The URL of the video for the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    videoUrl?: string;
+    /**
+     * The URL of the image for the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    imageUrl?: string;
+    /**
+     * The URL of the audio for the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    audioUrl?: string;
     /**
      * The unique identifier of the trusted answer
      * @type {string}
