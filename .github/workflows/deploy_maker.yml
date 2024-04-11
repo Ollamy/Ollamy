@@ -32,6 +32,7 @@ jobs:
             source .env
             docker compose build maker
             docker compose up -d maker
+        continue-on-error: true
 
       - name: send PR comment
         uses: mshick/add-pr-comment@v2
