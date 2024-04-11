@@ -11,14 +11,18 @@ import {
   CourseIdResponse,
   CourseTrueResponse,
   GetCourseRequest,
+  UserCourseHp,
 } from './course.dto';
 import { SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Section } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
+import { TasksService } from 'cron/cron.service';
 
 @Injectable()
 export class CourseService {
+  constructor(private readonly cronService: TasksService) {}
+
   async postCourse(
     courseData: CreateCourseModel,
     ctx: any,
@@ -179,7 +183,33 @@ export class CourseService {
         Logger.error('Failed to add user to course !');
         throw new NotFoundException('Failed to add user to course !');
       }
+      this.cronService.createHpCron(userId, courseId);
       return { success: true } as CourseTrueResponse;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not added to course !');
+    }
+  }
+
+  async getUserToCourseHp(
+    courseId: string,
+    userId: string,
+  ): Promise<UserCourseHp> {
+    try {
+      const { hp } = await prisma.usertoCourse.findFirst({
+        where: {
+          user_id: userId,
+          course_id: courseId,
+        },
+        select: {
+          hp: true,
+        },
+      });
+
+      return {
+        hp: hp,
+        timer: this.cronService.getHpCron(userId, courseId),
+      };
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User not added to course !');

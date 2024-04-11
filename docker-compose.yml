@@ -3,6 +3,7 @@ version: "3.8"
 services:
   redis:
     image: redis:7.0-alpine
+    command: --port ${REDIS_PORT}
     restart: always
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
@@ -15,7 +16,7 @@ services:
     networks:
       - backend_nt
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping"]
       interval: 1s
       timeout: 3s
       retries: 30
@@ -30,6 +31,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_HOST: ${POSTGRES_HOST}
+      PGPORT: ${POSTGRES_PORT}
     networks:
       - backend_nt
     healthcheck:

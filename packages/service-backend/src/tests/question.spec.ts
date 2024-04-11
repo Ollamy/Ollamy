@@ -21,6 +21,8 @@ import { context } from 'tests/data/user.data';
 
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
+import { mockLesson } from './data/lesson.data';
+import { mockSection1, mockUserToCourse } from './data/course.data';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
@@ -206,7 +208,15 @@ describe('updateQuestion', () => {
     jest
       .spyOn(prisma.usertoLesson, 'findUnique')
       .mockResolvedValue(mockUserLesson);
+    jest.spyOn(prisma.lesson, 'findUnique').mockResolvedValue(mockLesson);
+    jest.spyOn(prisma.section, 'findUnique').mockResolvedValue(mockSection1);
+    jest
+      .spyOn(prisma.usertoCourse, 'update')
+      .mockResolvedValue(mockUserToCourse);
 
+    jest
+      .spyOn(prisma.usertoCourse, 'findUnique')
+      .mockResolvedValue(mockUserToCourse);
     await expect(
       questionService.validateAnswer(mockBodyIncorrect, context),
     ).resolves.toEqual({
@@ -215,6 +225,7 @@ describe('updateQuestion', () => {
       end: true,
       nextQuestionId: undefined,
       points: 0,
+      hp: 0,
     });
   });
 });
