@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy to Staging server
+      - name: Deploy maker to Staging server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -29,6 +29,7 @@ jobs:
             sed -i 's#FRONTEND_PORT=5173#FRONTEND_PORT=5174#g' .env
             sed -i 's#VITE_PUBLIC_BACKEND_URL=#VITE_PUBLIC_BACKEND_URL=http://${{ secrets.REMOTE_HOST }}:5174#g' .env
             source .env
+            cat packages/service-maker/Dockerfile
             docker compose build maker
             docker compose up -d maker
 
@@ -39,7 +40,7 @@ jobs:
           message-id: deploy-test-version
           message: |
             The deployment was successful! 🚀🚀🚀
-            The maker test version is now available at: http://${{ secrets.REMOTE_HOST }}:5173
+            The maker test version is now available at: http://${{ secrets.REMOTE_HOST }}:5174
             🛑🛑 The server will be stopped in 10 minutes. 🛑🛑
 
       - name: STOP the Staging server
