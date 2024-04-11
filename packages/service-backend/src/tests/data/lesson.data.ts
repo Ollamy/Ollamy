@@ -12,13 +12,13 @@ export const courseId = uuidv4();
 export const mockLessonId = uuidv4();
 
 export const mockLessonData: CreateLessonModel = {
-  section_id: uuidv4(),
+  sectionId: uuidv4(),
   title: 'lesson',
   description: 'desc',
 };
 export const mockCreatedLesson: Lesson = {
   id: mockLessonId,
-  section_id: mockLessonData.section_id,
+  section_id: mockLessonData.sectionId,
   title: mockLessonData.title,
   description: mockLessonData.description,
 };
@@ -55,7 +55,7 @@ export const mockUpdatedLesson: Lesson = {
 export const mockLessonData3: UpdateLessonModel = {
   title: 'Updated Lesson Title',
   description: 'Updated Lesson Description',
-  sectionId: mockLessonData.section_id,
+  sectionId: mockLessonData.sectionId,
 };
 
 export const mockLessonQuestions: Question[] = [

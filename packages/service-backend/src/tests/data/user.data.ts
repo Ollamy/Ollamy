@@ -9,6 +9,8 @@ export const userId = uuidv4();
 export const loginUserData: LoginUserModel = {
   email: 'test@example.com',
   password: 'hashedPassword',
+  firstname: 'test',
+  lastname: 'example'
 };
 
 export const context = {
