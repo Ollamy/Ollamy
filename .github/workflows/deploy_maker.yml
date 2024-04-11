@@ -27,6 +27,7 @@ jobs:
             sed -i 's/POSTGRES_PORT=5432/POSTGRES_PORT=5433/g' .env
             sed -i 's/BACKEND_PORT=3000/BACKEND_PORT=4545/g' .env
             sed -i 's/FRONTEND_PORT=5173/FRONTEND_PORT=5174/g' .env
+            sed -i 's/VITE_PUBLIC_BACKEND_URL=/VITE_PUBLIC_BACKEND_URL=http://${{ secrets.REMOTE_HOST }}:5174/g' .env
             source .env
             docker compose build maker
             docker compose up -d maker
