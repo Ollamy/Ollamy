@@ -1,5 +1,11 @@
 // eslint-disable-next-line max-classes-per-file
-import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -88,4 +94,14 @@ export class CourseTrueResponse {
   @ApiProperty()
   @IsBoolean()
   success: boolean;
+}
+
+export class UserCourseHp {
+  @ApiProperty()
+  @IsNumber()
+  hp: number;
+
+  @ApiProperty()
+  @IsNumber()
+  timer: number;
 }
