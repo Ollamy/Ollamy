@@ -11,9 +11,7 @@ interface HealthModalProps extends IModalProps {
 }
 
 function HealthModal({ health, nextHeartDate, size = 'full', ...props }: HealthModalProps) {
-  // const { data, isLoading } = useGetHealthQuery();
-
-  const { hours, minutes, seconds, formatted } = timeToCountdown(nextHeartDate);
+  const { formatted } = timeToCountdown(nextHeartDate);
 
   return (
     <Modal size={size} {...props} closeOnOverlayClick safeAreaTop>

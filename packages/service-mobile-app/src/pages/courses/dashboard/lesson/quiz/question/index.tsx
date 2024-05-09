@@ -1,6 +1,5 @@
-// @ts-ignore
 import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextButton from 'src/components/Buttons/TextButton';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 
@@ -10,6 +9,7 @@ import QuestionTitle from './questionTitle';
 interface QuestionProps {
   questionId: string;
   nextQuestion: (answerId: string, questionId: string) => void;
+  setHealth: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: string) {
@@ -22,7 +22,7 @@ function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: 
   return '#D9D9D9';
 }
 
-function Question({ questionId, nextQuestion }: QuestionProps) {
+function Question({ questionId, nextQuestion, setHealth }: QuestionProps) {
   const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
@@ -40,6 +40,7 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
   const validateAnswer = async (answerId: string) => {
     try {
       const data = await validate({ answerId, questionId }).unwrap();
+      setHealth((health) => (data.success ? health : health - 1));
       setTrueAnswer(data.answer);
     } catch (error) {
       console.error('rejected', error);

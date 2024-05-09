@@ -25,6 +25,8 @@ function Quiz({ lessonId }: QuizProps) {
   const { data: questions } = useGetLessonQuestionsQuery({ id: lessonId });
   const [validate] = useValidateAnswerMutation();
 
+  const [health, setHealth] = useState<number>(0);
+
   useEffect(() => {
     if (questions && questions.length > 0) setCurrentQuestionId(questions[0].id);
   }, [questions]);
@@ -58,9 +60,9 @@ function Quiz({ lessonId }: QuizProps) {
           progress={currentQuestionOrder / numberQuestion}
           nextProgress={(currentQuestionOrder + 1) / numberQuestion}
         />
-        <HealthPoints health={5} />
+        <HealthPoints health={health} />
       </TopBarContainer>
-      <Question questionId={currentQuestionId} nextQuestion={handleNext} />
+      <Question questionId={currentQuestionId} nextQuestion={handleNext} setHealth={setHealth} />
     </View>
   );
 }

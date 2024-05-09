@@ -1,21 +1,24 @@
 const inputTheme = {
-  baseStyle: {},
   defaultProps: {
     size: 'lg',
     variant: 'default',
+    p: '10px',
+  },
+  sizes: {
+    lg: {
+      fontSize: '16px',
+      p: 10,
+    },
   },
   variants: {
     default: {
-      px: 4,
-      py: 3,
-      rounded: 12,
-      borderWidth: 2,
-      bg: '#F7F7F7',
-      borderColor: '#C7C7C7',
-      fontWeight: 600,
+      rounded: 5,
+      padding: 10,
+      borderWidth: 1,
+      bg: '#FFFFFF',
+      borderColor: '#021E2E19',
       _focus: {
-        bg: '#F7F7F7',
-        borderColor: '#F67E68',
+        borderColor: '#876BF6',
       },
     },
   },

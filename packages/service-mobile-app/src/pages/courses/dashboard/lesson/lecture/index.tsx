@@ -2,13 +2,14 @@ import { ScrollView, Text, useDisclose, VStack } from 'native-base';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import Markdown from 'react-native-markdown-display';
-import { useNavigate } from 'react-router-native';
+import { useNavigate, useParams } from 'react-router-native';
 import IconButton from 'src/components/Buttons/IconButton/IconButton';
 import TextButton from 'src/components/Buttons/TextButton';
 import ErrorPage from 'src/components/ErrorPage/ErrorPage';
 import HealthPoints from 'src/components/HealthPoints';
 import HealthModal from 'src/components/Modal/HealthModal';
 import TopBarContainer from 'src/components/topBarContainer';
+import { useGetCourseUserHpQuery } from 'src/services/course/course';
 import { useGetLessonLectureQuery } from 'src/services/lesson/lesson';
 
 interface LectureProps {
@@ -19,22 +20,26 @@ interface LectureProps {
 function Lecture(props: LectureProps) {
   const navigate = useNavigate();
   const { setLectureState, lessonId } = props;
-  const health = 0;
 
-  const { data: course, isLoading } = useGetLessonLectureQuery({ id: lessonId });
+  const { id: courseId } = useParams();
+  const { data: course, isFetching: isLessonLectureFetching } = useGetLessonLectureQuery({ id: lessonId });
+  const { data: userHp, isFetching: isCourseHpFetching } = useGetCourseUserHpQuery(courseId!);
+
   const { isOpen, onClose, onOpen } = useDisclose();
 
+  const nextHeartDate = new Date('Wed Apr 11 2024 08:25:23 GMT-0700');
+
+  const [next, setNext] = useState<number>(nextHeartDate.getTime() - Date.now());
+
   const handleTakeQuiz = useCallback(() => {
-    if (health > 0) {
+    if (!userHp) return;
+
+    if (userHp.hp > 0) {
       setLectureState(true);
     } else {
       onOpen();
     }
-  }, [health]);
-
-  const nextHeartDate = new Date('Wed Apr 10 2024 20:55:23 GMT-0700');
-
-  const [next, setNext] = useState<number>(nextHeartDate.getTime() - Date.now());
+  }, [onOpen, setLectureState, userHp]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,13 +49,14 @@ function Lecture(props: LectureProps) {
     return () => clearInterval(interval);
   }, [next]);
 
-  if (isLoading || !course) return <ErrorPage />;
+  if (isCourseHpFetching || isLessonLectureFetching) return <Text>Loading...</Text>;
+  if (!course || !userHp) return <ErrorPage />;
 
   return (
     <VStack width="100%" height="100%" alignItems="center">
       <TopBarContainer>
         <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
-        <HealthPoints health={health} />
+        <HealthPoints health={userHp.hp} />
       </TopBarContainer>
       <VStack
         borderRadius={8}
@@ -75,8 +81,8 @@ function Lecture(props: LectureProps) {
           </ScrollView>
         </SafeAreaView>
       </VStack>
-      <HealthModal health={0} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />
-      <TextButton title="Take the Quiz" onPress={handleTakeQuiz} rightIconName="arrow-forward" />
+      <HealthModal health={userHp.hp} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />
+      <TextButton title="Take the quiz" onPress={handleTakeQuiz} rightIconName="arrow-forward" />
     </VStack>
   );
 }
