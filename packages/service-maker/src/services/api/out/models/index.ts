@@ -474,19 +474,6 @@ export interface IdSectionModel {
 /**
  * 
  * @export
- * @interface JoinLessonModel
- */
-export interface JoinLessonModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinLessonModel
-     */
-    userId: string;
-}
-/**
- * 
- * @export
  * @interface LectureIdResponse
  */
 export interface LectureIdResponse {
