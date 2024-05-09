@@ -199,6 +199,14 @@ function Register(): JSX.Element {
                     <Button variant="yellow" onPress={goNext} w="full">
                       NEXT
                     </Button>
+                    <HStack alignItems="center" space={2}>
+                      <Text fontSize={16} fontWeight={600}>
+                        Already have an account ?
+                      </Text>
+                      <Text onPress={() => navigate('/login')} color="#FF8D4D" fontSize={16} fontWeight={600}>
+                        Login
+                      </Text>
+                    </HStack>
                   </>
                 )}
 
@@ -296,22 +304,23 @@ function Register(): JSX.Element {
                     <Button variant="yellow" isLoading={isLoading} onPress={handleSubmit(onSubmit)} w="full">
                       CREATE ACCOUNT
                     </Button>
+
+                    <HStack alignItems="center" space={2}>
+                      <Text fontSize={16} fontWeight={600}>
+                        Already have an account ?
+                      </Text>
+                      <Text onPress={() => navigate('/login')} color="#FF8D4D" fontSize={16} fontWeight={600}>
+                        Login
+                      </Text>
+                    </HStack>
                   </>
                 )}
-                <HStack alignItems="center" space={2}>
-                  <Text fontSize={16} fontWeight={600}>
-                    Already have an account ?
-                  </Text>
-                  <Text onPress={() => navigate('/login')} color="#FF8D4D" fontSize={16} fontWeight={600}>
-                    Login
-                  </Text>
-                </HStack>
-                <Toast />
               </VStack>
             </ScrollView>
           </VStack>
         </Box>
       </Box>
+      <Toast />
     </SafeAreaView>
   );
 }
