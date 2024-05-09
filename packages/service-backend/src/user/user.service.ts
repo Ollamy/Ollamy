@@ -105,6 +105,7 @@ export class UserService {
     }
 
     userData.password = this.hashPassword(userData.password);
+    console.log(userData.password);
 
     if (userData.password !== userDb.password) {
       Logger.error('Wrong password !');
