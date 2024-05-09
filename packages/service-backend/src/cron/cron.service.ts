@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
+import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import prisma from '../client';
 
@@ -47,9 +47,9 @@ export class TasksService {
     this.logger.log(`${userId}_${courseId} cron registered`);
   }
 
-  getHpCron(userId: string, courseId: string): number {
+  getHpCron(userId: string, courseId: string): string {
     const job = this.schedulerRegistry.getCronJob(`hp_${userId}_${courseId}`);
 
-    return job.nextDate().toSeconds() * 1000 - Date.now();
+    return job.nextDate().toUTC().toString();
   }
 }

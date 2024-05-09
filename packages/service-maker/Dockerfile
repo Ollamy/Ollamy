@@ -8,6 +8,7 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn build
+ARG FRONTEND_PORT
+ENV FRONTEND_PORT=${FRONTEND_PORT}
 
-CMD yarn preview --port 5173 --host
+RUN yarn dev --port $FRONTEND_PORT --host
