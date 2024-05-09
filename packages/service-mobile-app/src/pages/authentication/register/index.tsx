@@ -63,7 +63,7 @@ function Register(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-  const { currentStep, goNext, goPrevious, goToStep } = useStepper(STEPS_NUMBER);
+  const { currentStep, goNext, goToStep } = useStepper(STEPS_NUMBER);
 
   const onSubmit = async (data: RegisterForm) => {
     try {

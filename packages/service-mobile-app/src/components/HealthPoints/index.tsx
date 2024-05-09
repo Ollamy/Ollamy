@@ -4,7 +4,7 @@ import { Box, HStack, Text } from 'native-base';
 import { Image } from 'react-native';
 
 interface HealthPointsProps {
-  health: number;
+  health?: number;
 }
 
 function HealthPoints({ health }: HealthPointsProps) {

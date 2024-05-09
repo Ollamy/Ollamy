@@ -8,8 +8,10 @@ import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
-  nextQuestion: (answerId: string, questionId: string) => void;
-  setHealth: React.Dispatch<React.SetStateAction<number>>;
+  nextQuestion: () => void;
+  setNextQuestionId: (id: string | undefined) => void;
+  setIsEnd: (isEnd: boolean) => void;
+  setCurrentErrorNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: string) {
@@ -22,7 +24,7 @@ function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: 
   return '#D9D9D9';
 }
 
-function Question({ questionId, nextQuestion, setHealth }: QuestionProps) {
+function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
   const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
@@ -40,8 +42,10 @@ function Question({ questionId, nextQuestion, setHealth }: QuestionProps) {
   const validateAnswer = async (answerId: string) => {
     try {
       const data = await validate({ answerId, questionId }).unwrap();
-      setHealth((health) => (data.success ? health : health - 1));
+      setNextQuestionId(data.nextQuestionId);
       setTrueAnswer(data.answer);
+      setIsEnd(data.end);
+      if (!data.success) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
     }
@@ -82,10 +86,7 @@ function Question({ questionId, nextQuestion, setHealth }: QuestionProps) {
         <TextButton
           disabled={selectAnswer === undefined}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
-          onPress={() =>
-            selectAnswer &&
-            (trueAnswer !== undefined ? nextQuestion(selectAnswer, questionId) : validateAnswer(selectAnswer))
-          }
+          onPress={() => selectAnswer && (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer))}
           rightIconName="arrow-forward"
         />
       </View>

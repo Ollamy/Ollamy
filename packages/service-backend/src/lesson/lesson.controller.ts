@@ -160,23 +160,12 @@ export class LessonController {
     description: 'lesson join response',
     type: LessonIdResponse,
   })
-  @ApiBody({
-    type: JoinLessonModel,
-    description: 'user data model',
-    examples: {
-      template: {
-        value: {
-          userId: 'User id',
-        } as JoinLessonModel,
-      },
-    },
-  })
   @LoggedMiddleware(true)
   @Post('/:id/join')
   async joinLesson(
     @Param('id') id: string,
-    @Body() body: JoinLessonModel,
+    @OllContext() ctx: any,
   ): Promise<LessonIdResponse> {
-    return this.lessonService.joinLesson(id, body);
+    return this.lessonService.joinLesson(id, ctx);
   }
 }

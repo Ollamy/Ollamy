@@ -298,13 +298,21 @@ export class QuestionService {
     });
 
     if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
-      await prisma.usertoScore.update({
+      await prisma.usertoScore.upsert({
         where: { user_id: ctx.__user.id },
-        data: {
+        create: {
+          user: {
+            connect: {
+              id: ctx.__user.id
+            }
+          },
+          score: questionPoints,
+        },
+        update: {
           score: {
             increment: questionPoints,
           },
-        },
+        }
       });
 
       await prisma.usertoLesson.update({
