@@ -121,10 +121,6 @@ export class CreateQuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsOptional()
-  between: betweenOrder;
-
-  @ApiProperty()
   @IsNumber()
   @IsOptional()
   points?: number;
