@@ -6,7 +6,36 @@ interface QuestionSideBarBodyProps {
 }
 
 const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
-  const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
+  // const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
+
+  const data = [
+    {
+      id: 'string',
+      lessonId: 'string',
+      title: 'string',
+      description: 'string',
+      typeAnswer: 'string',
+      typeQuestion: 'string',
+      trustAnswerId: 'string',
+      pictureId: 'string',
+      difficulty: 'string',
+      order: 'string',
+      points: 0,
+    },
+    {
+      id: 'string',
+      lessonId: 'string',
+      title: 'string',
+      description: 'string',
+      typeAnswer: 'string',
+      typeQuestion: 'string',
+      trustAnswerId: 'string',
+      pictureId: 'string',
+      difficulty: 'string',
+      order: 'string',
+      points: 0,
+    },
+  ];
 
   return data && data.length ? (
     <Container>

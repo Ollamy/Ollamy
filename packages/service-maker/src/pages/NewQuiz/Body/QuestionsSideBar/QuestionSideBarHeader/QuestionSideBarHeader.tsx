@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, { ReactElement, useCallback } from 'react';
-import currentQuiz, { Factory } from 'pages/NewQuiz/Factory/factory';
+import currentQuiz from 'pages/NewQuiz/Factory/factory';
 import { questionActions } from 'services/api/routes/question';
 import * as Dialog from '@radix-ui/react-dialog';
 import { IconButton } from '@radix-ui/themes';
