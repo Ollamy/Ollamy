@@ -16,6 +16,9 @@ import { SettingPage } from 'pages/Course/Chapter/chapterSettings';
 import { FormationSetting } from 'pages/Course/courseSettings';
 import MakerHubPage from 'pages/maker/hub';
 import NewQuiz from 'pages/NewQuiz/quiz';
+import './styles.css';
+import '@radix-ui/themes/styles.css';
+import { Theme } from '@radix-ui/themes';
 
 // Router
 const router = createBrowserRouter([
@@ -109,9 +112,11 @@ const GlobalStyle = createGlobalStyle`
 // EntryPoint of the app
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <GlobalStyle />
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <Theme>
+      <GlobalStyle />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </Theme>
   </React.StrictMode>,
 );

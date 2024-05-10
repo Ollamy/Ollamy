@@ -5,7 +5,7 @@ import {
   QuestionModel,
 } from 'services/api/out';
 import { queryClient } from 'main';
-import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
+import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
 
 const GET_LESSON_KEY = 'getQuestion';
 
@@ -22,28 +22,28 @@ export const questionActions = {
   useCreateQuestion: () =>
     useMutation(QuestionApi.registerQuestion, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
   useGetQuestion: () =>
     useMutation(QuestionApi.getQuestion, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
   useUpdateQuestion: () =>
     useMutation(QuestionApi.updateQuestion, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
   useRemoveQuestion: () =>
     useMutation(QuestionApi.deleteQuestion, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
 };
