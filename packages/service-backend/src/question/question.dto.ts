@@ -72,13 +72,15 @@ export class LectureModel {
 }
 
 export class betweenOrder {
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    required: false,
+  })
   @IsOptional()
   before?: string | null;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    required: false,
+  })
   @IsOptional()
   after?: string | null;
 }
@@ -110,7 +112,6 @@ export class CreateQuestionModel {
   typeQuestion: QuestionType;
 
   @ApiProperty()
-  @IsString()
   @IsOptional()
   picture?: string;
 
@@ -120,7 +121,6 @@ export class CreateQuestionModel {
   difficulty?: QuestionDifficulty;
 
   @ApiProperty()
-  @IsObject()
   @IsOptional()
   between: betweenOrder;
 
