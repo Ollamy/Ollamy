@@ -4,7 +4,9 @@ import styled from 'styled-components';
 interface PictureChoiceProps {}
 
 const PictureChoice = ({}: PictureChoiceProps) => {
-  return <Container></Container>;
+  return <Container>
+    <h1>picture choice</h1>
+  </Container>;
 };
 
 const Container = styled.div``;

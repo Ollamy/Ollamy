@@ -4,7 +4,11 @@ import styled from 'styled-components';
 interface MultipleChoiceProps {}
 
 const MultipleChoice = ({}: MultipleChoiceProps) => {
-  return <Container></Container>;
+  return (
+    <Container>
+      <h1>multiple choice</h1>
+    </Container>
+  );
 };
 
 const Container = styled.div``;

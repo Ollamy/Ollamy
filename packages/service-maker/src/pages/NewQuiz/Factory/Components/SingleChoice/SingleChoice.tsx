@@ -4,7 +4,9 @@ import styled from 'styled-components';
 interface SingleChoiceProps {}
 
 const SingleChoice = ({}: SingleChoiceProps) => {
-  return <Container></Container>;
+  return <Container>
+    <h1>single choice</h1>
+  </Container>;
 };
 
 const Container = styled.div``;
