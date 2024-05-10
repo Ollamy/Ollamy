@@ -1,12 +1,12 @@
 import styled from 'styled-components';
+import { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 
-// eslint-disable-next-line
-interface PictureChoiceProps {}
-
-const PictureChoice = ({}: PictureChoiceProps) => {
-  return <Container>
-    <h1>picture choice</h1>
-  </Container>;
+const PictureChoice = ({}: FactoryComponentInterface) => {
+  return (
+    <Container>
+      <h1>picture choice</h1>
+    </Container>
+  );
 };
 
 const Container = styled.div``;

@@ -7,7 +7,7 @@ import {
 import { queryClient } from 'main';
 import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
 
-const GET_LESSON_KEY = 'getQuestion';
+const GET_QUESTION_KEY = 'getQuestion';
 
 export const questionActions = {
   useQuestion: (
@@ -15,7 +15,7 @@ export const questionActions = {
     config?: UseQueryOptions<QuestionModel>,
   ) =>
     useQuery({
-      queryKey: [GET_LESSON_KEY, requestParameters.id],
+      queryKey: [GET_QUESTION_KEY, requestParameters.id],
       queryFn: () => QuestionApi.getQuestion(requestParameters),
       ...config,
     }),
@@ -25,24 +25,17 @@ export const questionActions = {
         queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
-  useGetQuestion: () =>
-    useMutation(QuestionApi.getQuestion, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
-      },
-    }),
   useUpdateQuestion: () =>
     useMutation(QuestionApi.updateQuestion, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
+        queryClient.invalidateQueries(GET_QUESTION_KEY);
         queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
   useRemoveQuestion: () =>
     useMutation(QuestionApi.deleteQuestion, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
+        queryClient.invalidateQueries(GET_QUESTION_KEY);
         queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),

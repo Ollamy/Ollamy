@@ -7,7 +7,7 @@ interface QuestionSideBarBodyProps {
 }
 
 const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
-  // const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
+  const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
 
   const navigate = useNavigate();
 
@@ -18,35 +18,6 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
       `/quiz/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`,
     );
   };
-
-  const data = [
-    {
-      id: '6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5',
-      lessonId: 'string',
-      title: 'Hello',
-      description: 'Hello world....',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      trustAnswerId: 'string',
-      pictureId: 'string',
-      difficulty: 'INTERMEDIATE',
-      order: 'a0',
-      points: 1,
-    },
-    {
-      id: 'ce360d48-2673-47bf-ad6f-964a9f4541b0',
-      lessonId: 'string',
-      title: 'Bonjour',
-      description: 'Bonjour monde...',
-      typeAnswer: 'TEXT',
-      typeQuestion: 'TEXT',
-      trustAnswerId: 'string',
-      pictureId: 'string',
-      difficulty: 'BEGINNER',
-      order: 'a0',
-      points: 1,
-    },
-  ];
 
   return data && data.length ? (
     <Container>

@@ -16,7 +16,9 @@ const QuizEditor = ({ lessonId }: QuizEditorProps) => {
   return (
     <Container>
       <QuestionsSideBar lessonId={lessonId} />
-      {questionId && <QuestionEditor questionId={questionId} />}
+      {questionId && (
+        <QuestionEditor lessonId={lessonId} questionId={questionId} />
+      )}
       <QuestionsPropertiesSideBar />
     </Container>
   );

@@ -1,83 +1,80 @@
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Button, TextField } from '@radix-ui/themes';
-import useSingleChoiceQuetion from 'hooks/useSingleChoiceQuestion';
-import { useEffect, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useCallback } from 'react';
+import type { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
+import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface SingleChoiceProps {}
+import { Button, TextField } from '@radix-ui/themes';
 
-const SingleChoice = ({}: SingleChoiceProps) => {
-  const {
-    addAnswer,
-    answers,
-    deleteAnswer,
-    description,
-    editAnswer,
-    setDescription,
-    setTitle,
-    title,
-  } = useSingleChoiceQuetion();
+type QuestionType = { title: string; description: string };
 
-  const questionData = {
-    id: '2597ec2d-36fd-4729-a7d6-84c0ba84c9d2',
-    lessonId: 'e70271bf-ac90-4457-b292-5d8ad1411357',
-    title: 'Titre',
-    description: 'Description',
-    typeAnswer: 'string',
-    typeQuestion: 'string',
-    trustAnswerId: 'string',
-    pictureId: 'e70271bf-ac90-4457-b292-5d8ad1411357',
-    difficulty: 'string',
-    order: 'string',
-    points: 0,
-    answers: [
-      {
-        id: '460f99fd-1d06-4047-9807-d720fd98a433',
-        questionId: '2597ec2d-36fd-4729-a7d6-84c0ba84c9d2',
-        data: 'Le musée du Louvre',
-        picture: 'string',
-      },
-      {
-        id: '28c89095-cc2c-4c0e-968d-6f185ec33f04',
-        questionId: '2597ec2d-36fd-4729-a7d6-84c0ba84c9d2',
-        data: 'La tour eiffel',
-        picture: 'string',
-      },
-    ],
-  };
+function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
+  const { data } = questionActions.useQuestion({ id: questionId });
+  const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
-  useEffect(() => {
-    setTitle(questionData.title);
-    setDescription(questionData.description);
-  }, []);
+  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      if (!data) {
+        return;
+      }
 
-  return (
+      const { name, value } = e.target;
+
+      const updateData = (): QuestionType => {
+        if (name === 'title') {
+          return { title: value, description: data.description };
+        }
+        if (name === 'description') {
+          return { title: data.title, description: value };
+        }
+        return { title: '', description: '' };
+      };
+
+      updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          lessonId,
+          ...updateData(),
+          picture: data.pictureId,
+          points: data.points,
+          difficulty: data.difficulty,
+          trustAnswerId: data.trustAnswerId,
+        },
+      });
+    },
+    [data, lessonId, questionId, updateQuestion],
+  );
+
+  return data ? (
     <Container>
       <TextField.Root
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        name={'title'}
+        value={data.title}
+        placeholder={'Title'}
+        onChange={handleChange}
       />
       <TextField.Root
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        name={'description'}
+        onChange={handleChange}
+        value={data.description}
+        placeholder={'Description'}
       />
 
       <h3>Answers</h3>
-      {questionData.answers.map((elem, index) => (
-        <TextField.Root
-          placeholder={`Answer ${index}`}
-          defaultValue={elem.data}
-          key={elem.id}
-          // onChange={(e) => setDescription(e.target.value)}
-        />
-      ))}
+      {/*{data?.answers?.map((elem, index) => (*/}
+      {/*  <TextField.Root*/}
+      {/*    placeholder={`Answer ${index}`}*/}
+      {/*    defaultValue={elem.data}*/}
+      {/*    key={elem.id}*/}
+      {/*    // onChange={(e) => setDescription(e.target.value)}*/}
+      {/*  />*/}
+      {/*))}*/}
       <Button variant="ghost">Add choices</Button>
     </Container>
+  ) : (
+    <p>Whesh elle est ou la data</p>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

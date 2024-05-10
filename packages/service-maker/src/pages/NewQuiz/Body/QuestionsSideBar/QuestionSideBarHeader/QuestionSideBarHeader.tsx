@@ -7,6 +7,7 @@ import { IconButton } from '@radix-ui/themes';
 import { PlusIcon } from '@radix-ui/react-icons';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Form from '@radix-ui/react-form';
+import { lessonActions } from 'services/api/routes/lesson';
 
 interface QuestionSideBarHeaderProps {
   lessonId: string;
@@ -15,6 +16,7 @@ interface QuestionSideBarHeaderProps {
 const QuestionSideBarHeader = ({
   lessonId,
 }: QuestionSideBarHeaderProps): ReactElement => {
+  const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
   const { mutateAsync: createQuestion } = questionActions.useCreateQuestion();
 
   const handleSubmit = useCallback(
@@ -37,14 +39,14 @@ const QuestionSideBarHeader = ({
           picture: '',
           difficulty: 'BEGINNER',
           between: {
-            before: '',
-            after: '',
+            before: undefined,
+            after: data ? data[data.length]?.order || '' : '',
           },
           points: 0,
         },
       });
     },
-    [lessonId],
+    [createQuestion, data, lessonId],
   );
 
   return (

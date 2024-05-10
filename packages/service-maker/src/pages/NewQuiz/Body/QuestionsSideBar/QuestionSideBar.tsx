@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import QuestionSideBarHeader from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBarHeader/QuestionSideBarHeader';
-import { lessonActions } from 'services/api/routes/lesson';
 import QuestionSideBarBody from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBarBody/QuestionSideBarBody';
 
 interface QuestionsSideBarProps {

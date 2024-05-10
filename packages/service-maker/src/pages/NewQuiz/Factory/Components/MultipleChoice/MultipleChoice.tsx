@@ -1,9 +1,7 @@
 import styled from 'styled-components';
+import { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 
-// eslint-disable-next-line
-interface MultipleChoiceProps {}
-
-const MultipleChoice = ({}: MultipleChoiceProps) => {
+const MultipleChoice = ({}: FactoryComponentInterface) => {
   return (
     <Container>
       <h1>multiple choice</h1>

@@ -4,13 +4,15 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
+import React from 'react';
+import { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 
-// eslint-disable-next-line
 interface QuestionEditorProps {
+  lessonId: string;
   questionId: string;
 }
 
-const QuestionEditor = ({ questionId }: QuestionEditorProps) => {
+const QuestionEditor = ({ lessonId, questionId }: QuestionEditorProps) => {
   const { data } = questionActions.useQuestion({ id: questionId });
 
   if (!data) return null;
@@ -19,7 +21,10 @@ const QuestionEditor = ({ questionId }: QuestionEditorProps) => {
     <Center>
       <Container>
         <h3>Question {questionId}</h3>
-        {quizFactory[data.typeQuestion as QuestionType].Component}
+        {React.createElement(
+          quizFactory[data.typeQuestion as QuestionType].Component,
+          { lessonId, questionId },
+        )}
       </Container>
     </Center>
   );
