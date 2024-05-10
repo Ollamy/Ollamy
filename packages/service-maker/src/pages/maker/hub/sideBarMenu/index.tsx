@@ -53,7 +53,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const changeSection = (newSectionId: string | null) => {
     setSelectedSectionId(newSectionId);
-    if (newSectionId) navigate(`/course/${course.id}/${newSectionId}`);
+    if (newSectionId) navigate(`/course/${course.id}/section/${newSectionId}`);
   };
   return (
     <Container>

@@ -1,5 +1,6 @@
 export enum QuestionType {
-  TEXT = 'TEXT'
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE',
 }
 
 export enum Difficulty {

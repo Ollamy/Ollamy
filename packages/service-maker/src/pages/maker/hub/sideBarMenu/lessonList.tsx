@@ -36,7 +36,7 @@ const LessonList = (props: LessonListProps) => {
   useEffect(() => {
     if (selectedLessonId) {
       if (sectionId)
-        navigate(`/course/${courseId}/${sectionId}/${selectedLessonId}`);
+        navigate(`/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`);
     }
   }, [selectedLessonId]);
 

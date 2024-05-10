@@ -39,7 +39,11 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: '/quiz/:id/:sectionId/:lessonId',
+    path: '/quiz/:id/section/:sectionId/lesson/:lessonId',
+    element: <NewQuiz />,
+  },
+  {
+    path: '/quiz/:id/section/:sectionId/lesson/:lessonId/question/:questionId',
     element: <NewQuiz />,
   },
   {
@@ -59,15 +63,11 @@ const router = createBrowserRouter([
     element: <MakerHubPage />,
   },
   {
-    path: '/course/:id/:sectionId',
+    path: '/course/:id/section/:sectionId',
     element: <MakerHubPage />,
   },
   {
-    path: '/course/:id/:sectionId',
-    element: <MakerHubPage />,
-  },
-  {
-    path: '/course/:id/:sectionId/:lessonId',
+    path: '/course/:id/section/:sectionId/lesson/:lessonId',
     element: <MakerHubPage />,
   },
 ]);

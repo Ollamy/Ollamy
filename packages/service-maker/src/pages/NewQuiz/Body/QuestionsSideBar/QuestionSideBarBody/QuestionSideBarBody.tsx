@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { lessonActions } from 'services/api/routes/lesson';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface QuestionSideBarBodyProps {
   lessonId: string;
@@ -8,9 +9,19 @@ interface QuestionSideBarBodyProps {
 const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
   // const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
 
+  const navigate = useNavigate();
+
+  const { id: courseId, sectionId } = useParams();
+
+  const handleRowClick = (id: string) => () => {
+    navigate(
+      `/quiz/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`,
+    );
+  };
+
   const data = [
     {
-      id: 'string',
+      id: 'f5780185-2d4c-497e-9c78-fa3cea5270aa',
       lessonId: 'string',
       title: 'Hello',
       description: 'Hello world....',
@@ -23,7 +34,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
       points: 1,
     },
     {
-      id: 'string',
+      id: '04270ef3-85ea-43d4-9bba-ac2568b2daa6',
       lessonId: 'string',
       title: 'Bonjour',
       description: 'Bonjour monde...',
@@ -41,7 +52,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
     <Container>
       {data.map((elem, index) => {
         return (
-          <Row>
+          <Row onClick={handleRowClick(elem.id)}>
             <RowIndexBadge>{index + 1}</RowIndexBadge>
             <p>{elem.title}</p>
           </Row>
@@ -65,14 +76,15 @@ const Row = styled.div`
   gap: 12px;
   padding: 6px 12px;
   background: white;
+  cursor: pointer;
 
   &:hover {
-    background: #EBEBEB;
+    background: #ebebeb;
   }
 `;
 
 const RowIndexBadge = styled.p`
-  background: #C86597;
+  background: #c86597;
   width: 80px;
   text-align: end;
   border-radius: 2px;

@@ -1,30 +1,23 @@
 import MultipleChoice from 'pages/NewQuiz/Factory/Components/MultipleChoice/MultipleChoice';
 import PictureChoice from 'pages/NewQuiz/Factory/Components/PictureChoise/PictureChoice';
 import SingleChoice from 'pages/NewQuiz/Factory/Components/SingleChoice/SingleChoice';
+import { QuestionType } from 'pages/NewQuiz/Factory/factory.types';
 import { ReactElement } from 'react';
 
 export interface Factory {
-  name: string;
-  label: string;
   Component: ReactElement;
+  label: string;
 }
 
-const currentQuiz: Factory[] = [
-  {
-    name: 'multipleChoice',
-    label: 'Multiple choice',
-    Component: <MultipleChoice />,
-  },
-  {
-    name: 'singleChoice',
-    label: 'Single choice',
+const quizFactory: Record<QuestionType, Factory> = {
+  [QuestionType.TEXT]: {
     Component: <SingleChoice />,
+    label: 'Single choice',
   },
-  {
-    name: 'pictureChoice',
-    label: 'Picture choice',
+  [QuestionType.IMAGE]: {
     Component: <PictureChoice />,
+    label: 'Picture choice',
   },
-] as const;
+} as const;
 
-export default currentQuiz;
+export default quizFactory;

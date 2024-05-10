@@ -63,9 +63,9 @@ const QuestionSideBarHeader = ({
               className="DropdownMenuContent"
               sideOffset={5}
             >
-              {currentQuiz.map((elem) => {
+              {Object.entries(currentQuiz).map(([key, elem]) => {
                 return (
-                  <Dialog.Trigger asChild key={elem.name}>
+                  <Dialog.Trigger asChild key={key}>
                     <DropdownMenu.Item className="DropdownMenuItem">
                       {elem.label}
                     </DropdownMenu.Item>
@@ -102,6 +102,7 @@ const QuestionSideBarHeader = ({
                   />
                 </Form.Control>
               </Form.Field>
+
               <Form.Field className="FormField" name="description">
                 <div
                   style={{
@@ -123,9 +124,32 @@ const QuestionSideBarHeader = ({
                   />
                 </Form.Control>
               </Form.Field>
+
+              <Form.Field className="FormField" name="image">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Form.Label className="FormLabel">Description</Form.Label>
+                  <Form.Message className="FormMessage" match="valueMissing">
+                    Please enter a description
+                  </Form.Message>
+                </div>
+                <Form.Control asChild>
+                  <input type="file" />
+                </Form.Control>
+              </Form.Field>
               <Form.Submit asChild>
                 <button className="Button" style={{ marginTop: 10 }}>
-                  Create Course
+                  Create Question
+                </button>
+              </Form.Submit>
+              <Form.Submit asChild>
+                <button className="Button" style={{ marginTop: 10 }}>
+                  Cancel
                 </button>
               </Form.Submit>
             </Form.Root>
