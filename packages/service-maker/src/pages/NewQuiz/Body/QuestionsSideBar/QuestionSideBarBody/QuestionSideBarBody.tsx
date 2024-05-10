@@ -21,7 +21,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
 
   const data = [
     {
-      id: 'f5780185-2d4c-497e-9c78-fa3cea5270aa',
+      id: '6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5',
       lessonId: 'string',
       title: 'Hello',
       description: 'Hello world....',
@@ -34,7 +34,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
       points: 1,
     },
     {
-      id: '04270ef3-85ea-43d4-9bba-ac2568b2daa6',
+      id: 'ce360d48-2673-47bf-ad6f-964a9f4541b0',
       lessonId: 'string',
       title: 'Bonjour',
       description: 'Bonjour monde...',
@@ -52,7 +52,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
     <Container>
       {data.map((elem, index) => {
         return (
-          <Row onClick={handleRowClick(elem.id)}>
+          <Row onClick={handleRowClick(elem.id)} key={elem.id}>
             <RowIndexBadge>{index + 1}</RowIndexBadge>
             <p>{elem.title}</p>
           </Row>

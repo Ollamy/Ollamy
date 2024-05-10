@@ -27,8 +27,9 @@ const DifficultyPicker = ({
       <StarsContainer>
         {Array.from({ length: maxDifficulty }).map((_, index) => (
           <Star
-            isActive={index < difficultyToNumber[difficulty]}
+            $isActive={index < difficultyToNumber[difficulty]}
             src="/star.png"
+            key={index}
             onClick={() =>
               onClick(
                 Object.entries(difficultyToNumber).find(
@@ -57,12 +58,12 @@ const StarsContainer = styled.div`
 `;
 
 interface ImageProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 
 const Star = styled.img<ImageProps>`
   cursor: pointer;
-  filter: ${(props) => (props.isActive ? null : 'grayscale(100%)')};
+  filter: ${(props) => (props.$isActive ? null : 'grayscale(100%)')};
 `;
 
 export default DifficultyPicker;

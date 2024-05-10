@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import QuestionsSideBar from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBar';
 import QuestionEditor from 'pages/NewQuiz/Body/QuestionEditor/QuestionEditor';
 import QuestionsPropertiesSideBar from 'pages/NewQuiz/Body/QuestionPropertiesSideBar/QuestionsPropertiesSideBar';
+import { useParams } from 'react-router-dom';
 
 interface QuizEditorProps {
   lessonId: string;
@@ -10,10 +11,12 @@ interface QuizEditorProps {
 export type QuizID = string;
 
 const QuizEditor = ({ lessonId }: QuizEditorProps) => {
+  const { questionId } = useParams();
+
   return (
     <Container>
       <QuestionsSideBar lessonId={lessonId} />
-      <QuestionEditor />
+      {questionId && <QuestionEditor questionId={questionId} />}
       <QuestionsPropertiesSideBar />
     </Container>
   );

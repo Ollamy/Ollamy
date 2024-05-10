@@ -52,10 +52,6 @@ const SingleChoice = ({}: SingleChoiceProps) => {
     setDescription(questionData.description);
   }, []);
 
-  useEffect(() => {
-    console.log({ title, description });
-  }, [title, description]);
-
   return (
     <Container>
       <TextField.Root
@@ -74,6 +70,7 @@ const SingleChoice = ({}: SingleChoiceProps) => {
         <TextField.Root
           placeholder={`Answer ${index}`}
           defaultValue={elem.data}
+          key={elem.id}
           // onChange={(e) => setDescription(e.target.value)}
         />
       ))}
