@@ -29,10 +29,25 @@ export class QuestionService {
     try {
       let order: string;
 
+      const lessonQuestions = await prisma.question.findMany({
+        where: {
+          lesson_id: questionData.lessonId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       try {
         order = generateKeyBetween(
-          questionData.between?.after,
-          questionData.between?.before,
+          lessonQuestions[lessonQuestions.length - 1].order,
+          undefined,
         );
       } catch (error) {
         Logger.error(error);
