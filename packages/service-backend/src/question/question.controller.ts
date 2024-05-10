@@ -60,11 +60,7 @@ export class QuestionController {
           trustAnswerId: 'TrustAnswer Id',
           pictureId: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          between: {
-            before: 'order id',
-            after: 'order id',
-          },
-          order: '1',
+          order: 'a0',
         } as CreateQuestionModel,
       },
     },

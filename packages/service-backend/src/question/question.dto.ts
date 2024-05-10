@@ -48,17 +48,26 @@ abstract class BaseQuestion {
   @IsOptional()
   text?: string;
 
-  @ApiProperty({ description: 'The URL of the video for the question', required: false })
+  @ApiProperty({
+    description: 'The URL of the video for the question',
+    required: false,
+  })
   @IsUrl()
   @IsOptional()
   videoUrl?: string;
 
-  @ApiProperty({ description: 'The URL of the image for the question', required: false })
+  @ApiProperty({
+    description: 'The URL of the image for the question',
+    required: false,
+  })
   @IsUrl()
   @IsOptional()
   imageUrl?: string;
 
-  @ApiProperty({ description: 'The URL of the audio for the question', required: false })
+  @ApiProperty({
+    description: 'The URL of the audio for the question',
+    required: false,
+  })
   @IsUrl()
   @IsOptional()
   audioUrl?: string;
@@ -67,12 +76,18 @@ abstract class BaseQuestion {
   @IsUUID()
   trustAnswerId: string;
 
-  @ApiProperty({ description: 'The unique identifier of the picture', required: false })
+  @ApiProperty({
+    description: 'The unique identifier of the picture',
+    required: false,
+  })
   @IsUUID()
   @IsOptional()
   pictureId?: string;
 
-  @ApiProperty({ description: 'The difficulty level of the question', required: false })
+  @ApiProperty({
+    description: 'The difficulty level of the question',
+    required: false,
+  })
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;
@@ -103,14 +118,16 @@ export class LectureModel {
   data: string;
 }
 
-export class BetweenOrder {
-  @ApiProperty({ description: 'The order before the current order', required: false })
-  @IsString()
+export class betweenOrder {
+  @ApiProperty({
+    required: false,
+  })
   @IsOptional()
   before?: string | null;
 
-  @ApiProperty({ description: 'The order after the current order', required: false })
-  @IsString()
+  @ApiProperty({
+    required: false,
+  })
   @IsOptional()
   after?: string | null;
 }
@@ -119,7 +136,28 @@ export class CreateQuestionModel extends BaseQuestion {
   @ApiProperty({ description: 'The data of the question' })
   @IsString()
   data: string;
-  between: BetweenOrder;
+
+  @ApiProperty()
+  @IsString()
+  typeAnswer: AnswerType;
+
+  @ApiProperty()
+  @IsString()
+  typeQuestion: QuestionType;
+
+  @ApiProperty()
+  @IsOptional()
+  picture?: string;
+
+  @ApiProperty()
+  @IsEnum(QuestionDifficulty)
+  @IsOptional()
+  difficulty?: QuestionDifficulty;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  points?: number;
 }
 
 export class IdQuestionModel {
@@ -131,12 +169,18 @@ export class IdQuestionModel {
 export class UpdateQuestionModel extends BaseQuestion {}
 
 export class UpdateQuestionOrderModel {
-  @ApiProperty({ description: 'The order after the current order', required: false })
+  @ApiProperty({
+    description: 'The order after the current order',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   after?: string | null;
 
-  @ApiProperty({ description: 'The order before the current order', required: false })
+  @ApiProperty({
+    description: 'The order before the current order',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   before?: string | null;
@@ -175,12 +219,19 @@ export class ValidateAnswerResponse {
   @IsBoolean()
   end: boolean;
 
-  @ApiProperty({ description: 'The unique identifier of the next question if it is not the last one', required: false })
+  @ApiProperty({
+    description:
+      'The unique identifier of the next question if it is not the last one',
+    required: false,
+  })
   @IsUUID()
   @IsOptional()
   nextQuestionId?: string | undefined;
 
-  @ApiProperty({ description: 'Points scored in the last question', required: false })
+  @ApiProperty({
+    description: 'Points scored in the last question',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   points?: number | undefined;

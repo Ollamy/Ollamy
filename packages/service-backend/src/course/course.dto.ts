@@ -102,6 +102,6 @@ export class UserCourseHp {
   hp: number;
 
   @ApiProperty()
-  @IsNumber()
-  timer: number;
+  @IsString()
+  timer: string;
 }

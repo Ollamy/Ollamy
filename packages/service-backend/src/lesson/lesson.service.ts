@@ -190,12 +190,12 @@ export class LessonService {
 
   async joinLesson(
     lessonId: string,
-    joinData: JoinLessonModel,
+    userId: string,
   ): Promise<LessonIdResponse> {
     try {
       const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
         data: {
-          user_id: joinData.userId,
+          user_id: userId,
           lesson_id: lessonId,
         },
       });

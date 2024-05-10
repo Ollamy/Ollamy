@@ -82,7 +82,10 @@ services:
       retries: 30
 
   maker:
-    build: ./packages/service-maker
+    build:
+      context: ./packages/service-maker
+      args:
+        FRONTEND_PORT: ${FRONTEND_PORT}
     restart: on-failure
     ports:
       - ${MAKER_PORT}:${MAKER_PORT}
