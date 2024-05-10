@@ -55,13 +55,13 @@ export interface BetweenOrder {
      * @type {string}
      * @memberof BetweenOrder
      */
-    before: string;
+    before?: string;
     /**
      * 
      * @type {string}
      * @memberof BetweenOrder
      */
-    after: string;
+    after?: string;
 }
 /**
  * 
