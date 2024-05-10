@@ -47,24 +47,6 @@ export class QuestionController {
   @ApiBody({
     type: CreateQuestionModel,
     description: 'user data model',
-    examples: {
-      template: {
-        value: {
-          lessonId: 'Lesson Id',
-          title: 'Question Title',
-          description: 'Question decsription',
-          data: 'Question data',
-          typeAnswer: AnswerType.TEXT,
-          typeQuestion: QuestionType.TEXT,
-          picture: 'Question picture',
-          difficulty: QuestionDifficulty.BEGINNER,
-          between: {
-            before: 'order id',
-            after: 'order id',
-          },
-        } as CreateQuestionModel,
-      },
-    },
   })
   @LoggedMiddleware(true)
   @Post()

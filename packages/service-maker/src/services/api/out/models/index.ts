@@ -55,13 +55,13 @@ export interface BetweenOrder {
      * @type {string}
      * @memberof BetweenOrder
      */
-    before: string;
+    before?: string;
     /**
      * 
      * @type {string}
      * @memberof BetweenOrder
      */
-    after: string;
+    after?: string;
 }
 /**
  * 
@@ -470,19 +470,6 @@ export interface IdSectionModel {
      * @memberof IdSectionModel
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface JoinLessonModel
- */
-export interface JoinLessonModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinLessonModel
-     */
-    userId: string;
 }
 /**
  * 
