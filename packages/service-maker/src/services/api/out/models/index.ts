@@ -171,12 +171,6 @@ export interface CreateLessonModel {
  */
 export interface CreateQuestionModel {
     /**
-     * The unique identifier of the question
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    id: string;
-    /**
      * The unique identifier of the lesson
      * @type {string}
      * @memberof CreateQuestionModel
@@ -195,17 +189,41 @@ export interface CreateQuestionModel {
      */
     description: string;
     /**
-     * The type of answer for the question
+     * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
     typeAnswer: string;
     /**
-     * The type of question
+     * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
     typeQuestion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    picture?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    difficulty?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    points?: number;
+    /**
+     * The unique identifier of the trusted answer
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    trustAnswerId?: string;
     /**
      * The text of the question
      * @type {string}
@@ -230,48 +248,6 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     audioUrl?: string;
-    /**
-     * The unique identifier of the trusted answer
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    trustAnswerId: string;
-    /**
-     * The unique identifier of the picture
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    pictureId?: string;
-    /**
-     * The difficulty level of the question
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    difficulty?: string;
-    /**
-     * The order of the question
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    order: string;
-    /**
-     * The points for the question
-     * @type {number}
-     * @memberof CreateQuestionModel
-     */
-    points?: number;
-    /**
-     * The data of the question
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    data: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    picture: string;
 }
 /**
  * 
@@ -841,31 +817,55 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    lessonId: string;
+    lessonId?: string;
     /**
      * The title of the question
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    title: string;
+    title?: string;
     /**
      * The description of the question
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    description: string;
+    description?: string;
     /**
-     * The type of answer for the question
+     * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    typeAnswer: string;
+    typeAnswer?: string;
     /**
-     * The type of question
+     * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    typeQuestion: string;
+    typeQuestion?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    picture?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    difficulty?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateQuestionModel
+     */
+    points?: number;
+    /**
+     * The unique identifier of the trusted answer
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    trustAnswerId?: string;
     /**
      * The text of the question
      * @type {string}
@@ -890,36 +890,6 @@ export interface UpdateQuestionModel {
      * @memberof UpdateQuestionModel
      */
     audioUrl?: string;
-    /**
-     * The unique identifier of the trusted answer
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    trustAnswerId: string;
-    /**
-     * The unique identifier of the picture
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    pictureId?: string;
-    /**
-     * The difficulty level of the question
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    difficulty?: string;
-    /**
-     * The order of the question
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    order: string;
-    /**
-     * The points for the question
-     * @type {number}
-     * @memberof UpdateQuestionModel
-     */
-    points?: number;
 }
 /**
  * 

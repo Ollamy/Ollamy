@@ -155,9 +155,6 @@ export class QuestionService {
           title: questionData?.title,
           description: questionData?.description,
           lesson_id: questionData?.lessonId,
-          picture_id: questionData.pictureId
-            ? await PictureService.postPicture(questionData.pictureId)
-            : undefined,
           points: questionData?.points,
           difficulty: questionData?.difficulty,
           trust_answer_id: questionData?.trustAnswerId,
