@@ -19,14 +19,10 @@ import {
 abstract class BaseUser {
   @ApiProperty({ description: 'The first name of the user' })
   @IsString()
-  @MinLength(1)
-  @MaxLength(50)
   firstname: string;
 
   @ApiProperty({ description: 'The last name of the user' })
   @IsString()
-  @MinLength(1)
-  @MaxLength(50)
   lastname: string;
 
   @ApiProperty({ description: 'The email address of the user' })
@@ -107,7 +103,9 @@ export class UserIdResponse {
 }
 
 export class UserTrueResponse {
-  @ApiProperty({ description: 'Indicates if the operation was successful or not' })
+  @ApiProperty({
+    description: 'Indicates if the operation was successful or not',
+  })
   @IsBoolean()
   success: boolean;
 }
@@ -125,7 +123,9 @@ export class UserCourses {
   @IsString()
   description: string;
 
-  @ApiProperty({ description: 'The URL of the picture representing the course' })
+  @ApiProperty({
+    description: 'The URL of the picture representing the course',
+  })
   @IsUUID()
   pictureId: string;
 
