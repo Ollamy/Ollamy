@@ -1,18 +1,15 @@
+import React from 'react';
 import quizFactory from 'pages/NewQuiz/Factory/factory';
-import { QuestionType } from 'pages/NewQuiz/Factory/factory.types';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import type { QuestionType } from 'pages/NewQuiz/Factory/factory.types';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
-import React from 'react';
-import { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 
 interface QuestionEditorProps {
   lessonId: string;
   questionId: string;
 }
 
-const QuestionEditor = ({ lessonId, questionId }: QuestionEditorProps) => {
+function QuestionEditor({ lessonId, questionId }: QuestionEditorProps) {
   const { data } = questionActions.useQuestion({ id: questionId });
 
   if (!data) return null;
@@ -28,7 +25,7 @@ const QuestionEditor = ({ lessonId, questionId }: QuestionEditorProps) => {
       </Container>
     </Center>
   );
-};
+}
 
 const Center = styled.div`
   display: flex;

@@ -1,19 +1,19 @@
-import styled from 'styled-components';
-import QuestionSideBarHeader from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBarHeader/QuestionSideBarHeader';
 import QuestionSideBarBody from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBarBody/QuestionSideBarBody';
+import QuestionSideBarHeader from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBarHeader/QuestionSideBarHeader';
+import styled from 'styled-components';
 
 interface QuestionsSideBarProps {
   lessonId: string;
 }
 
-const QuestionsSideBar = ({ lessonId }: QuestionsSideBarProps) => {
+function QuestionsSideBar({ lessonId }: QuestionsSideBarProps) {
   return (
     <Container>
       <QuestionSideBarHeader lessonId={lessonId} />
       <QuestionSideBarBody lessonId={lessonId} />
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

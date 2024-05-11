@@ -1,5 +1,7 @@
 import { UseQueryOptions, useMutation, useQuery } from 'react-query';
 import {
+  AnswerModel,
+  GetQuestionAnswersRequest,
   GetQuestionRequest,
   QuestionApi,
   QuestionModel,
@@ -8,6 +10,7 @@ import { queryClient } from 'main';
 import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
 
 const GET_QUESTION_KEY = 'getQuestion';
+const GET_ANSWER_KEY = 'getAnswer';
 
 export const questionActions = {
   useQuestion: (
@@ -32,11 +35,13 @@ export const questionActions = {
         queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
       },
     }),
-  useRemoveQuestion: () =>
-    useMutation(QuestionApi.deleteQuestion, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(GET_QUESTION_KEY);
-        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
-      },
+  useGetAnswer: (
+    requestParameters: GetQuestionAnswersRequest,
+    config?: UseQueryOptions<QuestionModel>,
+  ) =>
+    useQuery({
+      queryKey: [GET_ANSWER_KEY, requestParameters.id],
+      queryFn: () => QuestionApi.getQuestionAnswers(requestParameters),
+      ...config,
     }),
 };

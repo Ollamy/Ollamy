@@ -69,7 +69,7 @@ function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
       {/*    // onChange={(e) => setDescription(e.target.value)}*/}
       {/*  />*/}
       {/*))}*/}
-      <Button variant="ghost">Add choices</Button>
+      <Button variant={'ghost'}>Add choices</Button>
     </Container>
   ) : (
     <p>Whesh elle est ou la data</p>

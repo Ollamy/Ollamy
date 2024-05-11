@@ -1,21 +1,23 @@
-import styled from 'styled-components';
-import React, { ReactElement, useCallback } from 'react';
+import type { ReactElement } from 'react';
+import React, { useCallback } from 'react';
 import currentQuiz from 'pages/NewQuiz/Factory/factory';
+import { lessonActions } from 'services/api/routes/lesson';
 import { questionActions } from 'services/api/routes/question';
+import styled from 'styled-components';
+
 import * as Dialog from '@radix-ui/react-dialog';
-import { IconButton } from '@radix-ui/themes';
-import { PlusIcon } from '@radix-ui/react-icons';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Form from '@radix-ui/react-form';
-import { lessonActions } from 'services/api/routes/lesson';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { IconButton } from '@radix-ui/themes';
 
 interface QuestionSideBarHeaderProps {
   lessonId: string;
 }
 
-const QuestionSideBarHeader = ({
+function QuestionSideBarHeader({
   lessonId,
-}: QuestionSideBarHeaderProps): ReactElement => {
+}: QuestionSideBarHeaderProps): ReactElement {
   const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
   const { mutateAsync: createQuestion } = questionActions.useCreateQuestion();
 
@@ -65,15 +67,13 @@ const QuestionSideBarHeader = ({
               className="DropdownMenuContent"
               sideOffset={5}
             >
-              {Object.entries(currentQuiz).map(([key, elem]) => {
-                return (
-                  <Dialog.Trigger asChild key={key}>
-                    <DropdownMenu.Item className="DropdownMenuItem">
-                      {elem.label}
-                    </DropdownMenu.Item>
-                  </Dialog.Trigger>
-                );
-              })}
+              {Object.entries(currentQuiz).map(([key, elem]) => (
+                <Dialog.Trigger asChild key={key}>
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    {elem.label}
+                  </DropdownMenu.Item>
+                </Dialog.Trigger>
+              ))}
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
@@ -160,7 +160,7 @@ const QuestionSideBarHeader = ({
       </Dialog.Root>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
