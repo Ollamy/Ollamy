@@ -266,6 +266,12 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    picture: string;
 }
 /**
  * 
