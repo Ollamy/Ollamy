@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type, Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -7,9 +6,13 @@ import {
   IsOptional,
   IsString,
   IsUUID,
-  IsUrl,
 } from 'class-validator';
-import { AnswerType, QuestionType, QuestionDifficulty, $Enums } from '@prisma/client';
+import {
+  AnswerType,
+  QuestionType,
+  QuestionDifficulty,
+  $Enums,
+} from '@prisma/client';
 
 abstract class BaseQuestion {
   @ApiProperty({ description: 'The unique identifier of the question' })
@@ -59,10 +62,9 @@ abstract class BaseQuestion {
   points?: number;
 }
 
-export class QuestionModel extends BaseQuestion { }
+export class QuestionModel extends BaseQuestion {}
 
 export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
-
   @ApiProperty({ description: 'The lesson id of the question' })
   @IsUUID()
   lessonId: string;
@@ -110,7 +112,6 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   points?: number;
 }
 
-
 export class LessonLectureModel {
   @ApiProperty({ description: 'The unique identifier of the lecture' })
   @IsUUID()
@@ -120,7 +121,6 @@ export class LessonLectureModel {
   @IsString()
   data: string;
 }
-
 
 export class LectureModel {
   @ApiProperty({ description: 'The unique identifier of the lecture' })

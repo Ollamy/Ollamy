@@ -212,8 +212,8 @@ export class QuestionService {
       }
 
       const answerPromises = answersDb.map(
-        async (answer) => (
-          {
+        async (answer) =>
+          ({
             id: answer.id,
             data: answer.data,
             picture: answer.picture_id
@@ -287,9 +287,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-      lessonQuestions.findIndex(
-        (question) => question.id === body.questionId,
-      ) + 1
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;
