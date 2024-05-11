@@ -6,12 +6,12 @@ export class QuestionAnswerModel {
   @IsUUID()
   id: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
@@ -26,12 +26,12 @@ export class AnswerModel {
   @IsUUID()
   questionId: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
@@ -42,16 +42,17 @@ export class AnswerModel {
 }
 
 export class CreateAnswerModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
+  @IsOptional()
   questionId: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
@@ -64,17 +65,17 @@ export class IdAnswerModel {
 }
 
 export class UpdateAnswerModel {
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   questionId?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
