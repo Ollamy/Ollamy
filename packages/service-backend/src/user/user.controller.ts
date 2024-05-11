@@ -170,12 +170,12 @@ export class UserController {
         : {
             httpOnly: true,
             maxAge: SessionService.TTL,
-            sameSite: 'none' as const,
-            secure: true,
+            // sameSite: 'none' as const,
+            // secure: true,
           };
     res.cookie(
       'session',
-      this.userService.updateUser(body, ctx),
+      await this.userService.updateUser(body, ctx),
       cookiesParams,
     );
 
