@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const HomeSidePanel = () => {
+function HomeSidePanel() {
   return (
     <Container>
       <Header>
@@ -8,7 +8,7 @@ const HomeSidePanel = () => {
       </Header>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
