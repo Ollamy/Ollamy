@@ -18,9 +18,10 @@ import {
   ApiParam,
   ApiTags,
   ApiConsumes,
+  ApiResponse,
 } from '@nestjs/swagger';
 import {
-  FileAi,
+  FileAi, QuestionResponse,
 } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -33,8 +34,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AiController {
   constructor(private readonly aiService: AiService) { }
 
-
-  // create an endpoint that take only pdf file in parameter.
   @ApiBody({
     schema: {
       type: 'object',
@@ -46,17 +45,22 @@ export class AiController {
       },
     },
   })
+  @ApiResponse({
+    status: 200,
+    description: 'The questions generated from the pdf file',
+    type: QuestionResponse,
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
   @Post('/generate-question')
   async generateText(
-    @UploadedFile() file: Express.Multer.File): Promise<{ message: string }> {
+    @UploadedFile() file: Express.Multer.File): Promise<QuestionResponse> {
     const AiFile: FileAi = {
       data: file.buffer.toString('base64'),
       mimeType: file.mimetype,
     };
-    await this.aiService.generateText(AiFile);
-    return { message: 'success' }
+
+    return await this.aiService.generateText(AiFile);
   }
 }
