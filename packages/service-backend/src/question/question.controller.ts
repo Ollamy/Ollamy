@@ -4,13 +4,12 @@ import {
   GetQuestionModel,
   IdQuestionModel,
   QuestionIdResponse,
-  QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
 } from 'question/question.dto';
 import { QuestionService } from 'question/question.service';
 
-import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 
 import {
   Body,
@@ -33,7 +32,7 @@ import {
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
-import { OllContext } from '../context/context.decorator';
+import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -180,7 +179,9 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/answers')
-  async getQuestionAnswers(@Param('id') id: string): Promise<QuestionAnswerModel[]> {
+  async getQuestionAnswers(
+    @Param('id') id: string,
+  ): Promise<QuestionAnswerModel[]> {
     return this.questionService.getQuestionAnswers(id);
   }
 

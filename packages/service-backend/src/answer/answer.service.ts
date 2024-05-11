@@ -144,9 +144,7 @@ export class AnswerService {
     }
   }
 
-  async updateAnswerOrder(
-    answerData: UpdateAnswerOrderModel,
-  ): Promise<object> {
+  async updateAnswerOrder(answerData: UpdateAnswerOrderModel): Promise<object> {
     let order: string;
     try {
       order = generateKeyBetween(answerData?.after, answerData?.before);

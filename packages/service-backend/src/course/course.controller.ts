@@ -145,7 +145,9 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/sections')
-  async getCourseSections(@Param('id') id: string): Promise<CourseSectionModel[]> {
+  async getCourseSections(
+    @Param('id') id: string,
+  ): Promise<CourseSectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
 
