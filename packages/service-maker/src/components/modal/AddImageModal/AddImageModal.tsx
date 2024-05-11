@@ -37,6 +37,7 @@ const AddImageModal = ({
             <Text>
               or <Text color="violet">browse file</Text> from device
             </Text>
+            <Text color='gray'>Max. 2Mo</Text>
             <ImageInput
               type="file"
               className="Input"
@@ -45,7 +46,7 @@ const AddImageModal = ({
             />
           </ImageDropZone>
 
-          {droppedImage && <Text>{droppedImage.name}</Text>}
+          {droppedImage && <Text>{droppedImage.name} | {(droppedImage.size / 1e6).toFixed(2)} Mo</Text>}
 
           <div
             style={{
