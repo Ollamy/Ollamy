@@ -959,19 +959,19 @@ export interface UpdateSectionModel {
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    courseId: string;
+    courseId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    description: string;
+    description?: string;
 }
 /**
  * 
