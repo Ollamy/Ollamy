@@ -42,9 +42,8 @@ export class AnswerModel {
 }
 
 export class CreateAnswerModel {
-  @ApiProperty({ required: false })
+  @ApiProperty()
   @IsUUID()
-  @IsOptional()
   questionId: string;
 
   @ApiProperty({ required: false })

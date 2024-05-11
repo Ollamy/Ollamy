@@ -106,7 +106,7 @@ export interface CreateAnswerModel {
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    questionId?: string;
+    questionId: string;
     /**
      * 
      * @type {string}
