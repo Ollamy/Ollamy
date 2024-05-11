@@ -40,10 +40,6 @@ function QuestionSideBarHeader({
           typeQuestion: 'TEXT',
           picture: '',
           difficulty: 'BEGINNER',
-          between: {
-            before: undefined,
-            after: data ? data[data.length]?.order || '' : '',
-          },
           points: 0,
         },
       });

@@ -36,7 +36,9 @@ const LessonList = (props: LessonListProps) => {
   useEffect(() => {
     if (selectedLessonId) {
       if (sectionId)
-        navigate(`/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`);
+        navigate(
+          `/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`,
+        );
     }
   }, [selectedLessonId]);
 
@@ -49,7 +51,7 @@ const LessonList = (props: LessonListProps) => {
       if (!sectionId) throw Error('Section need to be define');
 
       await createLessonMutation({
-        createLessonModel: { section_id: sectionId, title, description: '' },
+        createLessonModel: { sectionId, title, description: '' },
       });
       handleClose();
     } catch (err) {
