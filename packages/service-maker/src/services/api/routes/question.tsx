@@ -1,10 +1,10 @@
 import { UseQueryOptions, useMutation, useQuery } from 'react-query';
 import {
-  AnswerModel,
   GetQuestionAnswersRequest,
+  GetQuestionModel,
   GetQuestionRequest,
+  QuestionAnswerModel,
   QuestionApi,
-  QuestionModel,
 } from 'services/api/out';
 import { queryClient } from 'main';
 import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
@@ -15,7 +15,7 @@ export const GET_ANSWER_KEY = 'getAnswer';
 export const questionActions = {
   useQuestion: (
     requestParameters: GetQuestionRequest,
-    config?: UseQueryOptions<QuestionModel>,
+    config?: UseQueryOptions<GetQuestionModel>,
   ) =>
     useQuery({
       queryKey: [GET_QUESTION_KEY, requestParameters.id],
@@ -37,18 +37,18 @@ export const questionActions = {
     }),
   useGetAnswer: (
     requestParameters: GetQuestionAnswersRequest,
-    config?: UseQueryOptions<AnswerModel[]>,
+    config?: UseQueryOptions<QuestionAnswerModel[]>,
   ) =>
     useQuery({
       queryKey: [GET_ANSWER_KEY, requestParameters.id],
       queryFn: () => QuestionApi.getQuestionAnswers(requestParameters),
       ...config,
     }),
-    useDeleteQuestion: () =>
-      useMutation(QuestionApi.deleteQuestion, {
-        onSuccess: () => {
-          queryClient.invalidateQueries(GET_QUESTION_KEY);
-          queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
-        },
-      }),
+  useDeleteQuestion: () =>
+    useMutation(QuestionApi.deleteQuestion, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_QUESTION_KEY);
+        queryClient.invalidateQueries(GET_LESSON_QUESTION_KEY);
+      },
+    }),
 };
