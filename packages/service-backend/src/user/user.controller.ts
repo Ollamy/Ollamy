@@ -95,8 +95,6 @@ export class UserController {
     examples: {
       template: {
         value: {
-          firstname: 'name',
-          lastname: 'lastname',
           email: 'test@test.test',
           password: '1234aaBB@',
         } as LoginUserModel,
