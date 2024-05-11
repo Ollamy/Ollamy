@@ -76,9 +76,8 @@ export class SectionService {
 
       return {
         courseId: sectionDb.course_id,
-        description: sectionDb.description,
-        id: sectionDb.id,
         title: sectionDb.title,
+        description: sectionDb.description,
       } as SectionModel;
     } catch (error) {
       Logger.error(error);
@@ -129,9 +128,8 @@ export class SectionService {
 
       return sectionLessonsDb.map((lesson: Lesson) => {
         return {
-          sectionId: lesson.section_id,
-          description: lesson.description,
           id: lesson.id,
+          description: lesson.description,
           title: lesson.title,
         };
       }) as LessonModel[];

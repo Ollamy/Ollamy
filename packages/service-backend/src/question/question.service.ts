@@ -14,6 +14,7 @@ import {
   UpdateQuestionOrderModel,
   ValidateAnswerModel,
   ValidateAnswerResponse,
+  GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
 import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
@@ -96,7 +97,7 @@ export class QuestionService {
     }
   }
 
-  async getQuestion(QuestionId: string): Promise<QuestionModel> {
+  async getQuestion(QuestionId: string): Promise<GetQuestionModel> {
     try {
       const questionDb: Question = await prisma.question.findFirst({
         orderBy: [
@@ -114,21 +115,19 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
+      delete questionDb.trust_answer_id;
       return {
-        id: questionDb.id,
-        lessonId: questionDb.lesson_id,
         title: questionDb.title,
         description: questionDb.description,
         typeAnswer: questionDb.type_answer,
         typeQuestion: questionDb.type_question,
-        trustAnswerId: questionDb.trust_answer_id,
         pictureId: questionDb.picture_id
           ? await PictureService.getPicture(questionDb.picture_id)
           : undefined,
         difficulty: questionDb.difficulty,
         order: questionDb.order,
         points: questionDb.points,
-      } as QuestionModel;
+      } as GetQuestionModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not found !');
@@ -145,12 +144,15 @@ export class QuestionService {
           id: QuestionId,
         },
         data: {
+          lesson_id: questionData?.lessonId,
           title: questionData?.title,
           description: questionData?.description,
-          lesson_id: questionData?.lessonId,
-          points: questionData?.points,
-          difficulty: questionData?.difficulty,
+          type_answer: questionData?.typeAnswer,
+          type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
+          picture_id: questionData?.picture,
+          difficulty: questionData?.difficulty,
+          points: questionData?.points,
         },
       });
 

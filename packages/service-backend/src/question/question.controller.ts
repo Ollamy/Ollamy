@@ -1,6 +1,7 @@
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   CreateQuestionModel,
+  GetQuestionModel,
   IdQuestionModel,
   QuestionIdResponse,
   QuestionModel,
@@ -94,7 +95,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: QuestionModel,
+    type: GetQuestionModel,
   })
   @ApiParam({
     name: 'id',
@@ -103,7 +104,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getQuestion(@Param('id') id: string): Promise<QuestionModel> {
+  async getQuestion(@Param('id') id: string): Promise<GetQuestionModel> {
     return this.questionService.getQuestion(id);
   }
 
@@ -125,17 +126,11 @@ export class QuestionController {
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Question data',
           typeAnswer: AnswerType.TEXT,
           typeQuestion: QuestionType.TEXT,
           trustAnswerId: 'TrustAnswer Id',
           pictureId: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          between: {
-            before: 'order id',
-            after: 'order id',
-          },
-          order: '1',
         } as UpdateQuestionModel,
       },
     },
