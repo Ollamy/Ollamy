@@ -32,7 +32,7 @@ export class LessonService {
     try {
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
-          section_id: lessonData.section_id,
+          section_id: lessonData.sectionId,
           title: lessonData.title,
           description: lessonData.description,
         },
@@ -190,26 +190,19 @@ export class LessonService {
 
   async joinLesson(
     lessonId: string,
-    ctx: any,
+    userId: string,
   ): Promise<LessonIdResponse> {
     try {
       let userToLesson = await prisma.usertoLesson.findUnique({
         where: {
           lesson_id_user_id: {
-            user_id: ctx.__user.id,
+            user_id: userId,
             lesson_id: lessonId,
           }
         }
       })
 
-      if (!userToLesson) {
-        userToLesson = await prisma.usertoLesson.create({
-          data: {
-            user_id: ctx.__user.id,
-            lesson_id: lessonId,
-          },
-        });
-      }
+
 
 
       if (!userToLesson) {

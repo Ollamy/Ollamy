@@ -43,7 +43,7 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          section_id: 'Section Id',
+          sectionId: 'Section Id',
           title: 'Lesson Title',
           description: 'Lesson decsription',
         } as CreateLessonModel,
@@ -166,6 +166,6 @@ export class LessonController {
     @Param('id') id: string,
     @OllContext() ctx: any,
   ): Promise<LessonIdResponse> {
-    return this.lessonService.joinLesson(id, ctx);
+    return this.lessonService.joinLesson(id, ctx.__user.id);
   }
 }
