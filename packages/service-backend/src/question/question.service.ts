@@ -151,7 +151,9 @@ export class QuestionService {
           type_answer: questionData?.typeAnswer,
           type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
-          picture_id: questionData?.picture,
+          picture_id: questionData?.picture
+            ? await PictureService.postPicture(questionData.picture)
+            : undefined,
           difficulty: questionData?.difficulty,
           points: questionData?.points,
         },
