@@ -54,6 +54,7 @@ export class AiService {
           {role: 'user', parts: [{text: `What is this file`}, {inlineData: file}]}
       ],
     };
-    const streamingResp = await AiService.generativeModel.generateContentStream(req);
+    const response = await AiService.generativeModel.generateContent(req);
+    console.log('Generated text:', response.response);
   }
 }
