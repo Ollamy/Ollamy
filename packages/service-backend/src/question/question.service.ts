@@ -199,6 +199,11 @@ export class QuestionService {
         where: {
           question_id: QuestionId,
         },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
       });
 
       if (!answersDb) {
@@ -214,7 +219,8 @@ export class QuestionService {
             picture: answer.picture_id
               ? await PictureService.getPicture(answer.picture_id)
               : undefined,
-          } as QuestionAnswerModel),
+            order: answer.order,
+          } as unknown as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {

@@ -17,13 +17,13 @@ export class QuestionAnswerModel {
   @IsString()
   @IsOptional()
   picture?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class AnswerModel {
-  @ApiProperty()
-  @IsUUID()
-  id: string;
-
   @ApiProperty()
   @IsUUID()
   questionId: string;
@@ -37,6 +37,10 @@ export class AnswerModel {
   @IsString()
   @IsOptional()
   picture?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
 
 export class CreateAnswerModel {
@@ -46,7 +50,8 @@ export class CreateAnswerModel {
 
   @ApiProperty()
   @IsString()
-  data: string;
+  @IsOptional()
+  data?: string;
 
   @ApiProperty()
   @IsString()
@@ -81,4 +86,26 @@ export class AnswerIdResponse {
   @ApiProperty()
   @IsUUID()
   id: string;
+}
+
+export class UpdateAnswerOrderModel {
+  @ApiProperty({
+    description: 'The order after the current order',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  after?: string | null;
+
+  @ApiProperty({
+    description: 'The order before the current order',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  before?: string | null;
+
+  @ApiProperty({ description: 'The origin of the answer' })
+  @IsUUID()
+  origin: string;
 }

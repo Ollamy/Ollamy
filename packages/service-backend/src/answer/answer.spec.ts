@@ -32,7 +32,10 @@ describe('postAnswer', () => {
       question_id: mockAnswerData.questionId,
       data: mockAnswerData.data,
       picture_id: '1',
+      order: 'a0',
     };
+
+    jest.spyOn(prisma.answer, 'findMany').mockResolvedValue([]);
     jest.spyOn(PictureService, 'postPicture').mockResolvedValue('1');
     jest.spyOn(prisma.answer, 'create').mockResolvedValue(mockAnswerDb);
 
@@ -40,12 +43,14 @@ describe('postAnswer', () => {
     const result = await answerService.postAnswer(mockAnswerData);
 
     // Perform assertions
+    expect(prisma.answer.findMany).toHaveBeenCalledTimes(1);
     expect(prisma.answer.create).toHaveBeenCalledTimes(1);
     expect(prisma.answer.create).toHaveBeenCalledWith({
       data: {
         question_id: mockAnswerDb.question_id,
         data: mockAnswerDb.data,
         picture_id: mockAnswerDb.picture_id,
+        order: mockAnswerDb.order,
       },
     });
 
@@ -104,6 +109,7 @@ describe('deleteAnswer', () => {
       question_id: '123',
       data: 'test',
       picture_id: '1',
+      order: 'a0',
     };
     jest.spyOn(prisma.answer, 'delete').mockResolvedValue(mockAnswerDb);
 
@@ -167,6 +173,7 @@ describe('getAnswer', () => {
       question_id: '123',
       data: '1',
       picture_id: '1',
+      order: 'a0',
     };
     jest.spyOn(PictureService, 'getPicture').mockResolvedValue('1');
     jest.spyOn(prisma.answer, 'findFirst').mockResolvedValue(mockAnswerDb);
@@ -188,6 +195,7 @@ describe('getAnswer', () => {
       questionId: mockAnswerDb.question_id,
       data: mockAnswerDb.data,
       picture: mockAnswerDb.picture_id,
+      order: mockAnswerDb.order,
     });
   });
 
@@ -242,6 +250,7 @@ describe('updateAnswer', () => {
       question_id: mockAnswerId,
       data: '1',
       picture_id: '1',
+      order: 'a0',
       // updated answer properties
     };
     jest.spyOn(PictureService, 'postPicture').mockResolvedValue('1');

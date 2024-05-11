@@ -192,35 +192,6 @@ export class CreateQuestionModel {
   @IsUUID()
   @IsOptional()
   trustAnswerId: string;
-
-  @ApiProperty({ description: 'The text of the question', required: false })
-  @IsString()
-  @IsOptional()
-  text?: string;
-
-  @ApiProperty({
-    description: 'The URL of the video for the question',
-    required: false,
-  })
-  @IsUrl()
-  @IsOptional()
-  videoUrl?: string;
-
-  @ApiProperty({
-    description: 'The URL of the image for the question',
-    required: false,
-  })
-  @IsUrl()
-  @IsOptional()
-  imageUrl?: string;
-
-  @ApiProperty({
-    description: 'The URL of the audio for the question',
-    required: false,
-  })
-  @IsUrl()
-  @IsOptional()
-  audioUrl?: string;
 }
 
 export class IdQuestionModel {
