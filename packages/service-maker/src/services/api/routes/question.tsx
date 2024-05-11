@@ -37,7 +37,7 @@ export const questionActions = {
     }),
   useGetAnswer: (
     requestParameters: GetQuestionAnswersRequest,
-    config?: UseQueryOptions<QuestionModel>,
+    config?: UseQueryOptions<AnswerModel[]>,
   ) =>
     useQuery({
       queryKey: [GET_ANSWER_KEY, requestParameters.id],

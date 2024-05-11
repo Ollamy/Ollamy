@@ -33,12 +33,8 @@ function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
       updateQuestion({
         id: questionId,
         updateQuestionModel: {
-          lessonId,
+          ...data,
           ...updateData(),
-          picture: data.pictureId,
-          points: data.points,
-          difficulty: data.difficulty,
-          trustAnswerId: data.trustAnswerId,
         },
       });
     },
