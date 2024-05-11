@@ -19,7 +19,7 @@ import {
 import prisma from 'client';
 import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
-import { AnswerModel } from '../answer/answer.dto';
+import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
@@ -117,6 +117,7 @@ export class QuestionService {
 
       delete questionDb.trust_answer_id;
       return {
+        lessonId: questionDb.lesson_id,
         title: questionDb.title,
         description: questionDb.description,
         typeAnswer: questionDb.type_answer,
@@ -192,7 +193,7 @@ export class QuestionService {
     };
   }
 
-  async getQuestionAnswers(QuestionId: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(QuestionId: string): Promise<QuestionAnswerModel[]> {
     try {
       const answersDb: Answer[] = await prisma.answer.findMany({
         where: {
@@ -206,15 +207,14 @@ export class QuestionService {
       }
 
       const answerPromises = answersDb.map(
-        async (answer) =>
-          ({
+        async (answer) => (
+          {
             id: answer.id,
-            questionId: answer.question_id,
             data: answer.data,
             picture: answer.picture_id
               ? await PictureService.getPicture(answer.picture_id)
               : undefined,
-          } as AnswerModel),
+          } as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -281,9 +281,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;

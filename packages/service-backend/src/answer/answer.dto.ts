@@ -1,6 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
+
+
+export class QuestionAnswerModel {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  data?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  picture?: string;
+}
+
 export class AnswerModel {
   @ApiProperty()
   @IsUUID()

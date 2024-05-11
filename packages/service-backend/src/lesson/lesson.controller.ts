@@ -153,7 +153,7 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/lecture/:id')
-  async getLessonLecture(@Param('id') id: string): Promise<LessonLectureModel> {
+  async getLessonLecture(@Param('id') id: string): Promise<LessonLectureModel[]> {
     return this.lessonService.getLessonLecture(id);
   }
 

@@ -161,9 +161,9 @@ export class LessonService {
     }
   }
 
-  async getLessonLecture(LessonId: string): Promise<LessonLectureModel> {
+  async getLessonLecture(LessonId: string): Promise<LessonLectureModel[]> {
     try {
-      const lessonlectureDb: Lecture = await prisma.lecture.findFirst({
+      const lessonlectureDb: Lecture[] = await prisma.lecture.findMany({
         where: {
           lesson_id: LessonId,
         },
@@ -171,13 +171,13 @@ export class LessonService {
 
       if (!lessonlectureDb) {
         Logger.error('No lecture for this course !');
-        return {} as LessonLectureModel;
+        return [] as LessonLectureModel[];
       }
 
-      return {
-        id: lessonlectureDb.id,
-        data: lessonlectureDb.data,
-      };
+      return lessonlectureDb.map((lecture: Lecture) => {
+        delete lecture.lesson_id;
+        return lecture;
+      }) as LessonLectureModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException(error);

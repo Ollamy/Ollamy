@@ -10,7 +10,7 @@ import {
 } from 'question/question.dto';
 import { QuestionService } from 'question/question.service';
 
-import { AnswerModel } from '../answer/answer.dto';
+import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
 
 import {
   Body,
@@ -171,7 +171,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: [AnswerModel],
+    type: [QuestionAnswerModel],
   })
   @ApiParam({
     name: 'id',
@@ -180,7 +180,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/answers')
-  async getQuestionAnswers(@Param('id') id: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(@Param('id') id: string): Promise<QuestionAnswerModel[]> {
     return this.questionService.getQuestionAnswers(id);
   }
 

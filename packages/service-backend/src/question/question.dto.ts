@@ -62,6 +62,11 @@ abstract class BaseQuestion {
 export class QuestionModel extends BaseQuestion { }
 
 export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
+
+  @ApiProperty({ description: 'The lesson id of the question' })
+  @IsUUID()
+  lessonId: string;
+
   @ApiProperty({ description: 'The title of the question' })
   @IsString()
   title: string;
