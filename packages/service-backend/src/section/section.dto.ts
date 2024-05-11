@@ -43,17 +43,17 @@ export class UpdateSectionModel {
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  courseId: string;
+  courseId?: string;
 
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 }
 
 export class SectionIdResponse {

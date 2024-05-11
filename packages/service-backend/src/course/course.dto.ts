@@ -54,6 +54,7 @@ export class CreateCourseModel {
 
   @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   picture?: string;
 }
 
@@ -67,22 +68,22 @@ export class UpdateCourseModel {
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  ownerId: string;
+  ownerId?: string;
 
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  picture: string;
+  picture?: string;
 }
 
 export class CourseIdResponse {

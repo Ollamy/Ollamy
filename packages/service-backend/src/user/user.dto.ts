@@ -81,12 +81,12 @@ export class UpdateUserModel {
   @ApiProperty({ description: 'The first name of the user', required: false })
   @IsString()
   @IsOptional()
-  firstname: string;
+  firstname?: string;
 
   @ApiProperty({ description: 'The last name of the user', required: false })
   @IsString()
   @IsOptional()
-  lastname: string;
+  lastname?: string;
 
   @ApiProperty({
     description: 'The email address of the user',
@@ -94,7 +94,7 @@ export class UpdateUserModel {
   })
   @IsEmail()
   @IsOptional()
-  email: string;
+  email?: string;
 
   @ApiProperty({ description: 'The password of the user', required: false })
   @IsOptional()
