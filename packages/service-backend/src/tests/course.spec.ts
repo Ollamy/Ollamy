@@ -249,6 +249,7 @@ describe('updateCourse', () => {
           id: courseId,
         },
         data: {
+          owner_id: mockUpdateCourseData.ownerId,
           title: mockUpdateCourseData.title,
           description: mockUpdateCourseData.description,
           picture_id: mockPictureDb.id,

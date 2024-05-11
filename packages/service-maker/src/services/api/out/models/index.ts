@@ -118,7 +118,7 @@ export interface CreateCourseModel {
      * @type {string}
      * @memberof CreateCourseModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -384,6 +384,25 @@ export interface GetUserModel {
      * @memberof GetUserModel
      */
     id: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserScoreModel
+ */
+export interface GetUserScoreModel {
+    /**
+     * The unique identifier of the user
+     * @type {string}
+     * @memberof GetUserScoreModel
+     */
+    userId: string;
+    /**
+     * The score of the user
+     * @type {number}
+     * @memberof GetUserScoreModel
+     */
+    score: number;
 }
 /**
  * 
@@ -728,6 +747,19 @@ export interface SectionModel {
 /**
  * 
  * @export
+ * @interface SuccessBody
+ */
+export interface SuccessBody {
+    /**
+     * Result of the request
+     * @type {boolean}
+     * @memberof SuccessBody
+     */
+    success: boolean;
+}
+/**
+ * 
+ * @export
  * @interface UpdateAnswerModel
  */
 export interface UpdateAnswerModel {
@@ -761,25 +793,25 @@ export interface UpdateCourseModel {
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    ownerId: string;
+    ownerId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    description: string;
+    description?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -927,19 +959,19 @@ export interface UpdateSectionModel {
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    courseId: string;
+    courseId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    description: string;
+    description?: string;
 }
 /**
  * 
@@ -952,19 +984,19 @@ export interface UpdateUserModel {
      * @type {string}
      * @memberof UpdateUserModel
      */
-    firstname: string;
+    firstname?: string;
     /**
      * The last name of the user
      * @type {string}
      * @memberof UpdateUserModel
      */
-    lastname: string;
+    lastname?: string;
     /**
      * The email address of the user
      * @type {string}
      * @memberof UpdateUserModel
      */
-    email: string;
+    email?: string;
     /**
      * The password of the user
      * @type {string}
@@ -994,15 +1026,64 @@ export interface UserCourseHp {
 /**
  * 
  * @export
+ * @interface UserCourses
+ */
+export interface UserCourses {
+    /**
+     * The unique identifier of the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    id: string;
+    /**
+     * The title of the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    title: string;
+    /**
+     * The description of the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    description: string;
+    /**
+     * The URL of the picture representing the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    pictureId: string;
+    /**
+     * Indicates if the user owns this course
+     * @type {boolean}
+     * @memberof UserCourses
+     */
+    owner: boolean;
+    /**
+     * The unique identifier of the last lesson
+     * @type {string}
+     * @memberof UserCourses
+     */
+    lastLessonId: string;
+    /**
+     * The unique identifier of the last section
+     * @type {string}
+     * @memberof UserCourses
+     */
+    lastSectionId: string;
+}
+/**
+ * 
+ * @export
  * @interface UserCoursesResponse
  */
 export interface UserCoursesResponse {
     /**
      * List of courses associated with the user
-     * @type {Array<string>}
+     * @type {Array<UserCourses>}
      * @memberof UserCoursesResponse
      */
-    courses: Array<string>;
+    courses: Array<UserCourses>;
 }
 /**
  * 
