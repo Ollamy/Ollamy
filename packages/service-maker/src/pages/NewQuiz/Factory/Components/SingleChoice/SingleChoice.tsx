@@ -1,5 +1,5 @@
 import type { ChangeEventHandler } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
@@ -7,10 +7,13 @@ import styled from 'styled-components';
 import { Button, TextField } from '@radix-ui/themes';
 import { answerActions } from 'services/api/routes/answer';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
+import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
+import { toBase64 } from 'utils/toBase64';
 
 type QuestionType = { title: string; description: string };
 
 function SingleChoice({ questionId }: FactoryComponentInterface) {
+  const [questionImage, setQuestionImage] = useState<File | null>(null);
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -19,6 +22,27 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
   const { mutateAsync: addNewAnswer } = answerActions.useCreateAnswer();
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
+
+  const handleUploadImage = async () => {
+    try {
+      console.log(questionImage);
+      if (!questionImage) return;
+
+      const base64 = await toBase64(questionImage);
+
+      console.log('base 64 :', base64?.toString());
+
+      if (!base64) throw new Error('Error uploading image');
+      updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          picture: base64.toString(),
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -70,6 +94,12 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
 
   return questionData ? (
     <Container>
+      <AddImageModal
+        image={questionImage}
+        setImage={setQuestionImage}
+        onUploadImage={handleUploadImage}
+        customTriggerButton={<Button>Upload Image</Button>}
+      />
       <TextField.Root
         name={'title'}
         placeholder={'Title'}

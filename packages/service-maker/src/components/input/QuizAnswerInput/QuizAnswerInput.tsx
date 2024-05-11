@@ -56,8 +56,8 @@ const QuizAnswerInput = ({
     <Input {...props}>
       <IconsWrapper side="right">
         <AddImageModal
-          droppedImage={droppedImage}
-          setDroppedImage={setDroppedImage}
+          image={droppedImage}
+          setImage={setDroppedImage}
           onUploadImage={onUploadImage}
         />
 

@@ -1,31 +1,38 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon, ImageIcon, UploadIcon } from '@radix-ui/react-icons';
 import { IconButton, Text } from '@radix-ui/themes';
+import { ReactNode } from 'react';
 import { styled } from 'styled-components';
 
 interface AddImageModal {
-  droppedImage: File | null;
-  setDroppedImage: React.Dispatch<React.SetStateAction<File | null>>;
+  image: File | null;
+  setImage: React.Dispatch<React.SetStateAction<File | null>>;
   onUploadImage: () => void;
+  customTriggerButton?: ReactNode;
 }
 
 const AddImageModal = ({
-  droppedImage,
-  setDroppedImage,
+  image,
+  setImage,
   onUploadImage,
+  customTriggerButton,
 }: AddImageModal) => {
   const handleFileChange: React.FormEventHandler<HTMLDivElement> = (e) => {
     if ('files' in e.target) {
-      setDroppedImage((e.target.files as FileList)[0]);
+      setImage((e.target.files as FileList)[0]);
     }
   };
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <IconButton variant="ghost" color="indigo">
-          <ImageIcon />
-        </IconButton>
+        {customTriggerButton ? (
+          customTriggerButton
+        ) : (
+          <IconButton variant="ghost" color="indigo">
+            <ImageIcon />
+          </IconButton>
+        )}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
@@ -37,7 +44,7 @@ const AddImageModal = ({
             <Text>
               or <Text color="violet">browse file</Text> from device
             </Text>
-            <Text color='gray'>Max. 2Mo</Text>
+            <Text color="gray">Max. 2Mo</Text>
             <ImageInput
               type="file"
               className="Input"
@@ -46,7 +53,11 @@ const AddImageModal = ({
             />
           </ImageDropZone>
 
-          {droppedImage && <Text>{droppedImage.name} | {(droppedImage.size / 1e6).toFixed(2)} Mo</Text>}
+          {image && (
+            <Text>
+              {image.name} | {(image.size / 1e6).toFixed(2)} Mo
+            </Text>
+          )}
 
           <div
             style={{
