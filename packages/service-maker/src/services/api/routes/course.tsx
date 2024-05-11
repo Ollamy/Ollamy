@@ -2,10 +2,10 @@ import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import {
   CourseApi,
+  CourseSectionModel,
   GetCourseOperationRequest,
   GetCourseRequest,
   GetCourseSectionsRequest,
-  SectionModel,
 } from 'services/api/out';
 import { GET_USER_COURSES_KEY } from 'services/api/routes/user';
 import { queryClient } from 'main';
@@ -25,7 +25,7 @@ export const courseActions = {
     }),
   useCourseSection: (
     requestParameters: GetCourseSectionsRequest,
-    config?: UseQueryOptions<Array<SectionModel>>,
+    config?: UseQueryOptions<Array<CourseSectionModel>>,
   ) =>
     useQuery({
       queryKey: GET_COURSE_SECTIONS_KEY,

@@ -3,6 +3,7 @@ import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
 import api from 'services/api';
 import { DefaultApi } from 'services/api/out';
 import styled from 'styled-components';
+import DashboardContent from 'pages/Home/Content';
 
 function HomePage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +16,7 @@ function HomePage(): ReactElement {
   return (
     <Container>
       <HomeSidePanel />
+      <DashboardContent />
     </Container>
   );
 }
