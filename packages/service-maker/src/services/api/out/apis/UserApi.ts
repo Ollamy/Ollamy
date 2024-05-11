@@ -5,7 +5,9 @@ import * as runtime from '../runtime';
 import type {
   CreateUserModel,
   GetUserModel,
+  GetUserScoreModel,
   LoginUserModel,
+  SuccessBody,
   UpdateUserModel,
   UserCoursesResponse,
   UserIdResponse,
@@ -99,7 +101,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async getUserScoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    async getUserScoreRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserScoreModel> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -116,7 +118,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    static getUserScore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserModel> {
+    static getUserScore(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetUserScoreModel> {
         return localUserApi.getUserScoreRaw(initOverrides);
     }
 
@@ -182,7 +184,7 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
-    async updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    async updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SuccessBody> {
         if (requestParameters.updateUserModel === null || requestParameters.updateUserModel === undefined) {
             throw new runtime.RequiredError('updateUserModel','Required parameter requestParameters.updateUserModel was null or undefined when calling updateUser.');
         }
@@ -201,16 +203,12 @@ export class UserApi extends runtime.BaseAPI {
             body: requestParameters.updateUserModel,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static updateUser(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+    static updateUser(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SuccessBody> {
         return localUserApi.updateUserRaw(requestParameters, initOverrides);
     }
 
