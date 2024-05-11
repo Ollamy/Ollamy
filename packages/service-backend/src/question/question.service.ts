@@ -12,7 +12,7 @@ import {
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,
-  validateAnswerModel,
+  ValidateAnswerModel,
   ValidateAnswerResponse,
 } from './question.dto';
 import prisma from 'client';
@@ -29,10 +29,25 @@ export class QuestionService {
     try {
       let order: string;
 
+      const lessonQuestions = await prisma.question.findMany({
+        where: {
+          lesson_id: questionData.lessonId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       try {
         order = generateKeyBetween(
-          questionData.between?.after,
-          questionData.between?.before,
+          lessonQuestions[lessonQuestions.length - 1].order,
+          undefined,
         );
       } catch (error) {
         Logger.error(error);
@@ -140,9 +155,6 @@ export class QuestionService {
           title: questionData?.title,
           description: questionData?.description,
           lesson_id: questionData?.lessonId,
-          picture_id: questionData.picture
-            ? await PictureService.postPicture(questionData.picture)
-            : undefined,
           points: questionData?.points,
           difficulty: questionData?.difficulty,
           trust_answer_id: questionData?.trustAnswerId,
@@ -239,7 +251,7 @@ export class QuestionService {
   }
 
   async validateAnswer(
-    body: validateAnswerModel,
+    body: ValidateAnswerModel,
     ctx: any,
   ): Promise<ValidateAnswerResponse> {
     const questionDb: Question = await prisma.question.findUnique({
