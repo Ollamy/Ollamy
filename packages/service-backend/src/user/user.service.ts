@@ -139,7 +139,9 @@ export class UserService {
 
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
     try {
-      userData.password = this.hashPassword(userData.password);
+      if (userData.password) {
+        userData.password = this.hashPassword(userData.password);
+      }
       const userDb: User = await prisma.user.update({
         where: {
           id: ctx.__user.id,
