@@ -9,6 +9,7 @@ import { answerActions } from 'services/api/routes/answer';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
 import { toBase64 } from 'utils/toBase64';
+import { UploadIcon } from '@radix-ui/react-icons';
 
 type QuestionType = { title: string; description: string };
 
@@ -98,7 +99,12 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
         image={questionImage}
         setImage={setQuestionImage}
         onUploadImage={handleUploadImage}
-        customTriggerButton={<Button>Upload Image</Button>}
+        customTriggerButton={
+          <Button variant="surface">
+            <UploadIcon />
+            Upload Image
+          </Button>
+        }
       />
       <TextField.Root
         name={'title'}
