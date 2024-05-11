@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import api from 'services/api';
 import CreateModal from 'components/modal';
+import api from 'services/api';
+import styled from 'styled-components';
 
 interface LessonListProps {
   lessonId?: string;
@@ -10,7 +10,7 @@ interface LessonListProps {
   courseId: string;
 }
 
-const LessonList = (props: LessonListProps) => {
+function LessonList(props: LessonListProps) {
   const navigate = useNavigate();
 
   const { sectionId, courseId, lessonId } = props;
@@ -87,7 +87,7 @@ const LessonList = (props: LessonListProps) => {
       <PlusButton onClick={() => setIsOpen(true)}>+</PlusButton>
     </>
   );
-};
+}
 
 const PlusButton = styled.a`
   display: flex;

@@ -1,7 +1,6 @@
 import type { ReactElement } from 'react';
 import React, { useCallback } from 'react';
 import currentQuiz from 'pages/NewQuiz/Factory/factory';
-import { lessonActions } from 'services/api/routes/lesson';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
@@ -18,7 +17,6 @@ interface QuestionSideBarHeaderProps {
 function QuestionSideBarHeader({
   lessonId,
 }: QuestionSideBarHeaderProps): ReactElement {
-  const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
   const { mutateAsync: createQuestion } = questionActions.useCreateQuestion();
 
   const handleSubmit = useCallback(
@@ -35,7 +33,6 @@ function QuestionSideBarHeader({
           lessonId,
           title,
           description,
-          data: '',
           typeAnswer: 'TEXT',
           typeQuestion: 'TEXT',
           picture: '',
@@ -44,7 +41,7 @@ function QuestionSideBarHeader({
         },
       });
     },
-    [createQuestion, data, lessonId],
+    [createQuestion, lessonId],
   );
 
   return (

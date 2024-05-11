@@ -51,7 +51,7 @@ export class QuestionService {
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
           order: generateKeyBetween(
-            !lessonQuestions
+            !lessonQuestions || !lessonQuestions.length
               ? undefined
               : lessonQuestions[lessonQuestions.length - 1].order,
             undefined,

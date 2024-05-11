@@ -213,27 +213,32 @@ export class UpdateQuestionModel {
     description: 'The unique identifier of the lesson',
     required: false,
   })
+  @IsOptional()
   @IsUUID()
-  lessonId: string;
+  lessonId?: string;
 
   @ApiProperty({ description: 'The title of the question', required: false })
   @IsString()
-  title: string;
+  @IsOptional()
+  title?: string;
 
   @ApiProperty({
     description: 'The description of the question',
     required: false,
   })
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @ApiProperty({ required: false })
   @IsString()
-  typeAnswer: AnswerType;
+  @IsOptional()
+  typeAnswer?: AnswerType;
 
   @ApiProperty({ required: false })
   @IsString()
-  typeQuestion: QuestionType;
+  @IsOptional()
+  typeQuestion?: QuestionType;
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -253,8 +258,9 @@ export class UpdateQuestionModel {
     description: 'The unique identifier of the trusted answer',
     required: false,
   })
+  @IsOptional()
   @IsUUID()
-  trustAnswerId: string;
+  trustAnswerId?: string;
 
   @ApiProperty({ description: 'The text of the question', required: false })
   @IsString()
