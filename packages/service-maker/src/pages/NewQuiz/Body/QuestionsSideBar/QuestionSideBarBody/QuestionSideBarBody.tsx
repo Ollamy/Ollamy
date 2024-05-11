@@ -11,7 +11,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
 
   const navigate = useNavigate();
 
-  const { id: courseId, sectionId } = useParams();
+  const { id: courseId, sectionId, questionId } = useParams();
 
   const handleRowClick = (id: string) => () => {
     navigate(
@@ -23,7 +23,7 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
     <Container>
       {data.map((elem, index) => {
         return (
-          <Row onClick={handleRowClick(elem.id)} key={elem.id}>
+          <Row isActive={elem.id === questionId} onClick={handleRowClick(elem.id)} key={elem.id}>
             <RowIndexBadge>{index + 1}</RowIndexBadge>
             <p>{elem.title}</p>
           </Row>
@@ -41,12 +41,16 @@ const Container = styled.div`
   gap: 4px;
 `;
 
-const Row = styled.div`
+interface RowProps {
+  isActive: boolean;
+}
+
+const Row = styled.div<RowProps>`
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 6px 12px;
-  background: white;
+  background: ${({ isActive }) => (isActive ? '#ebebeb' : 'white')};
   cursor: pointer;
 
   &:hover {
