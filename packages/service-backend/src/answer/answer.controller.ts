@@ -21,6 +21,7 @@ import {
   AnswerModel,
   UpdateAnswerModel,
   AnswerIdResponse,
+  UpdateAnswerOrderModel,
 } from 'answer/answer.dto';
 import { AnswerService } from 'answer/answer.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -121,5 +122,30 @@ export class AnswerController {
     @Body() body: UpdateAnswerModel,
   ): Promise<AnswerIdResponse> {
     return this.answerService.updateAnswer({ id: id } as IdAnswerModel, body);
+  }
+
+  @ApiOkResponse({
+    description: 'Answer order changed',
+    type: AnswerIdResponse,
+  })
+  @ApiBody({
+    type: UpdateAnswerOrderModel,
+    description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          before: 'order id',
+          after: 'order id',
+          origin: 'answer id',
+        } as UpdateAnswerOrderModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Put()
+  async updateAnswerOrder(
+    @Body() body: UpdateAnswerOrderModel,
+  ): Promise<object> {
+    return this.answerService.updateAnswerOrder(body);
   }
 }

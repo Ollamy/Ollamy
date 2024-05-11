@@ -201,6 +201,7 @@ model Answer {
   data        String?
   picture     Picture? @relation(references: [id], fields: [picture_id], onDelete: Cascade)
   picture_id  String?  @db.Uuid
+  order       String
 }
 
 model Discussion {

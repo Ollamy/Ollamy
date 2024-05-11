@@ -12,10 +12,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CourseModel {
   @ApiProperty()
   @IsUUID()
-  id: string;
-
-  @ApiProperty()
-  @IsUUID()
   ownerId: string;
 
   @ApiProperty()
