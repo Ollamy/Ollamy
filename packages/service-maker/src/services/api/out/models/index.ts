@@ -583,18 +583,6 @@ export interface LessonModel {
  */
 export interface LoginUserModel {
     /**
-     * The first name of the user
-     * @type {string}
-     * @memberof LoginUserModel
-     */
-    firstname: string;
-    /**
-     * The last name of the user
-     * @type {string}
-     * @memberof LoginUserModel
-     */
-    lastname: string;
-    /**
      * The email address of the user
      * @type {string}
      * @memberof LoginUserModel

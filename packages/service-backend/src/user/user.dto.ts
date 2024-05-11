@@ -61,7 +61,11 @@ export class CreateUserModel extends BaseUser {
   password: string;
 }
 
-export class LoginUserModel extends BaseUser {
+export class LoginUserModel {
+  @ApiProperty({ description: 'The email address of the user' })
+  @IsEmail()
+  email: string;
+
   @ApiProperty({ description: 'The password of the user' })
   @IsString()
   password: string;
