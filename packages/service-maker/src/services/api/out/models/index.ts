@@ -839,12 +839,6 @@ export interface UpdateLectureModel {
  */
 export interface UpdateQuestionModel {
     /**
-     * The unique identifier of the question
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    id: string;
-    /**
      * The unique identifier of the lesson
      * @type {string}
      * @memberof UpdateQuestionModel

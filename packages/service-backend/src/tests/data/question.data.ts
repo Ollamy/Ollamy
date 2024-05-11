@@ -61,7 +61,6 @@ export const mockQuestionData2: UpdateQuestionModel = {
   title: 'test',
   description: 'desc',
   trustAnswerId: correctAnswerId,
-  id: questionId,
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
 };

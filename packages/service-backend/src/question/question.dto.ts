@@ -205,10 +205,6 @@ export class IdQuestionModel {
 }
 
 export class UpdateQuestionModel {
-  @ApiProperty({ description: 'The unique identifier of the question' })
-  @IsUUID()
-  id: string;
-
   @ApiProperty({
     description: 'The unique identifier of the lesson',
     required: false,

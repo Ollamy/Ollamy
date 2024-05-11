@@ -122,7 +122,6 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          id: 'Question Id',
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
