@@ -14,10 +14,12 @@ export class CreateLectureModel {
 export class UpdateLectureModel {
   @ApiProperty({ description: 'Lesson ID' })
   @IsUUID()
-  lessonId: string;
+  @IsOptional()
+  lessonId?: string;
 
   @ApiProperty({ description: 'Updated lecture data' })
   @IsString()
+  @IsOptional()
   data?: string;
 }
 

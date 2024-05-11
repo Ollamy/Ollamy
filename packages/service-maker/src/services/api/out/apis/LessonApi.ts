@@ -6,6 +6,7 @@ import type {
   CreateLessonModel,
   IdLessonModel,
   LessonIdResponse,
+  LessonLectureModel,
   LessonModel,
   QuestionModel,
 } from '../models/index';
@@ -75,7 +76,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    async getLessonRaw(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonModel> {
+    async getLessonRaw(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateLessonModel> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getLesson.');
         }
@@ -96,13 +97,13 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    static getLesson(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonModel> {
+    static getLesson(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateLessonModel> {
         return localLessonApi.getLessonRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getLessonLectureRaw(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+    async getLessonLectureRaw(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonLectureModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getLessonLecture.');
         }
@@ -123,7 +124,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    static getLessonLecture(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+    static getLessonLecture(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonLectureModel>> {
         return localLessonApi.getLessonLectureRaw(requestParameters, initOverrides);
     }
 

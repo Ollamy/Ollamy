@@ -7,17 +7,22 @@ import {
   QueryClientProvider,
 } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
 import { Login } from 'pages/Auth/Login';
 import { Register } from 'pages/Auth/Register';
-import { HomePage } from 'pages/Home';
-import { ProfilePage } from 'pages/formatter/formatterSettings';
 import { SettingPage } from 'pages/Course/Chapter/chapterSettings';
 import { FormationSetting } from 'pages/Course/courseSettings';
+import { ProfilePage } from 'pages/formatter/formatterSettings';
+import HomePage from 'pages/Home';
 import MakerHubPage from 'pages/maker/hub';
 import NewQuiz from 'pages/NewQuiz/quiz';
-import './styles.css';
+import { createGlobalStyle } from 'styled-components';
+
 import '@radix-ui/themes/styles.css';
+import './styles/alertDialog.css';
+import './styles/Dialog.css';
+import './styles/dropdownMenu.css';
+import './styles/form.css';
+
 import { Theme } from '@radix-ui/themes';
 
 // Router

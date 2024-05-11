@@ -137,13 +137,11 @@ describe('getQuestion', () => {
     });
 
     expect(result).toEqual({
-      id: mockQuestionDb2.id,
       lessonId: mockQuestionDb2.lesson_id,
       title: mockQuestionDb2.title,
       description: mockQuestionDb2.description,
       typeAnswer: mockQuestionDb2.type_answer,
       typeQuestion: mockQuestionDb2.type_question,
-      trustAnswerId: mockQuestionDb2.trust_answer_id,
       difficulty: mockQuestionDb2.difficulty,
       pictureId: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
