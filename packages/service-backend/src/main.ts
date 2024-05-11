@@ -1,5 +1,6 @@
 import { AppModule } from 'app.module';
 import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import RedisCacheService from 'redis/redis.service';
@@ -53,6 +54,7 @@ async function bootstrap() {
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
   app.use(cookieParser());
+  app.use(bodyParser.json({ limit: '10mb' }));
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,

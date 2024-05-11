@@ -30,13 +30,13 @@ export interface AnswerModel {
      * @type {string}
      * @memberof AnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof AnswerModel
      */
-    picture: string;
+    picture?: string;
     /**
      * 
      * @type {number}
@@ -112,13 +112,13 @@ export interface CreateAnswerModel {
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -341,13 +341,13 @@ export interface GetCourseRequest {
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastLessonId: string;
+    lastLessonId?: string;
     /**
      * 
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastSectionId: string;
+    lastSectionId?: string;
 }
 /**
  * 
@@ -372,7 +372,7 @@ export interface GetQuestionModel {
      * @type {string}
      * @memberof GetQuestionModel
      */
-    description: string;
+    description?: string;
     /**
      * The type of answer for the question
      * @type {string}
@@ -397,6 +397,12 @@ export interface GetQuestionModel {
      * @memberof GetQuestionModel
      */
     difficulty?: string;
+    /**
+     * The order of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    trust_answer_id?: string;
     /**
      * The order of the question
      * @type {string}
@@ -670,13 +676,13 @@ export interface QuestionAnswerModel {
      * @type {string}
      * @memberof QuestionAnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof QuestionAnswerModel
      */
-    picture: string;
+    picture?: string;
     /**
      * 
      * @type {number}
@@ -720,7 +726,7 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
-    description: string;
+    description?: string;
     /**
      * The type of answer for the question
      * @type {string}
@@ -820,19 +826,19 @@ export interface UpdateAnswerModel {
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    questionId: string;
+    questionId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -901,13 +907,13 @@ export interface UpdateLectureModel {
      * @type {string}
      * @memberof UpdateLectureModel
      */
-    lessonId: string;
+    lessonId?: string;
     /**
      * Updated lecture data
      * @type {string}
      * @memberof UpdateLectureModel
      */
-    data: string;
+    data?: string;
 }
 /**
  * 

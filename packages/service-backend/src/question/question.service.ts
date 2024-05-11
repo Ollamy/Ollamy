@@ -115,7 +115,6 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      delete questionDb.trust_answer_id;
       return {
         lessonId: questionDb.lesson_id,
         title: questionDb.title,
@@ -126,6 +125,7 @@ export class QuestionService {
           ? await PictureService.getPicture(questionDb.picture_id)
           : undefined,
         difficulty: questionDb.difficulty,
+        trust_answer_id: questionDb.trust_answer_id,
         order: questionDb.order,
         points: questionDb.points,
       } as GetQuestionModel;
@@ -151,7 +151,9 @@ export class QuestionService {
           type_answer: questionData?.typeAnswer,
           type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
-          picture_id: questionData?.picture,
+          picture_id: questionData?.picture
+            ? await PictureService.postPicture(questionData.picture)
+            : undefined,
           difficulty: questionData?.difficulty,
           points: questionData?.points,
         },

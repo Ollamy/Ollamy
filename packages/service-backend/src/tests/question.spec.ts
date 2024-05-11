@@ -146,6 +146,7 @@ describe('getQuestion', () => {
       pictureId: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
       points: mockQuestionDb2.points,
+      trust_answer_id: mockQuestionDb2.trust_answer_id,
     });
   });
 

@@ -33,7 +33,9 @@ export class CourseService {
           owner_id: ctx.__user.id,
           title: courseData.title,
           description: courseData.description,
-          picture_id: await PictureService.postPicture(courseData.picture),
+          picture_id: courseData?.picture
+            ? await PictureService.postPicture(courseData.picture)
+            : undefined,
         },
       });
 
