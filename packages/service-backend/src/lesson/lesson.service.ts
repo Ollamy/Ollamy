@@ -7,7 +7,6 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
-  JoinLessonModel,
   LessonModel,
   UpdateLessonModel,
   LessonIdResponse,
@@ -18,10 +17,8 @@ import {
   Prisma,
   Question,
   Lesson,
-  UsertoLesson,
   Lecture,
 } from '@prisma/client';
-import { error } from 'console';
 
 @Injectable()
 export class LessonService {
@@ -202,8 +199,14 @@ export class LessonService {
         }
       })
 
-
-
+      if (!userToLesson) {
+        userToLesson = await prisma.usertoLesson.create({
+          data: {
+            user_id: userId,
+            lesson_id: lessonId,
+          },
+        });
+      }
 
       if (!userToLesson) {
         Logger.error('Failed to create user lesson !');
