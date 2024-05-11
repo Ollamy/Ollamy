@@ -115,7 +115,6 @@ export class QuestionService {
         throw new ConflictException('Question does not exists !');
       }
 
-      delete questionDb.trust_answer_id;
       return {
         lessonId: questionDb.lesson_id,
         title: questionDb.title,
