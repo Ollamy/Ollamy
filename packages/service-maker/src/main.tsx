@@ -22,6 +22,7 @@ import './styles/alertDialog.css';
 import './styles/Dialog.css';
 import './styles/dropdownMenu.css';
 import './styles/form.css';
+import './styles/navigationMenu.css';
 
 import { Theme } from '@radix-ui/themes';
 
