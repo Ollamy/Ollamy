@@ -21,7 +21,7 @@ type QuestionType = { title: string; description: string };
 
 function SingleChoice({ questionId }: FactoryComponentInterface) {
   const [questionImage, setQuestionImage] = useState<File | null>(null);
-  const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
+  const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(undefined);
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -33,7 +33,7 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
 
   useEffect(() => {
     console.log('answers data: ', answerData);
-    // setTrueAnswer(questionData.)
+    setCorrectAnswer(questionData?.trust_answer_id);
   }, [questionData]);
 
   const handleUploadImage = async () => {
@@ -105,7 +105,18 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
     addNewAnswer({ createAnswerModel: { questionId, data: '', picture: '' } });
   }, [addNewAnswer, questionId]);
 
-  const handleTrueAnswerChange = async () => {};
+  const handlecorrectAnswerChange = async (id: string) => {
+    try {
+      updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          trustAnswerId: id,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return questionData ? (
     <Container>
@@ -148,13 +159,13 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
 
       <h3>Answers</h3>
 
-      <RadioGroup.Root color="green" value={trueAnswer}>
+      <RadioGroup.Root color="green" value={correctAnswer}>
         {answerData?.map((elem, index) => (
           <AnswerRow key={elem.id}>
             <RadioGroup.Item
-              value={index.toString()}
-              onClick={handleTrueAnswerChange}
-            ></RadioGroup.Item>
+              value={elem.id}
+              onClick={() => handlecorrectAnswerChange(elem.id)}
+            />
             <QuizAnswerInput
               answerId={elem.id}
               questionId={questionId}
