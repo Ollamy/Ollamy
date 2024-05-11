@@ -3,6 +3,8 @@ import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
 import api from 'services/api';
 import { DefaultApi } from 'services/api/out';
 import styled from 'styled-components';
+import HomeBody from 'pages/Home/Body/HomeBody';
+import HomeHeader from 'pages/Home/Header/HomeHeader';
 
 export type PageType = 'home' | 'profile' | 'settings';
 
@@ -22,6 +24,10 @@ function HomePage(): ReactElement {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
+      <HomeContainer>
+        <HomeHeader />
+        <HomeBody />
+      </HomeContainer>
     </Container>
   );
 }
@@ -33,6 +39,10 @@ const Container = styled.div`
   height: 100vh;
 
   background: #f1f3f6;
+`;
+
+const HomeContainer = styled.div`
+  width: 100%;
 `;
 
 export default HomePage;
