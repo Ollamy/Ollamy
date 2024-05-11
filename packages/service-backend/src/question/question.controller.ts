@@ -181,7 +181,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: QuestionModel,
+    type: [AnswerModel],
   })
   @ApiParam({
     name: 'id',
