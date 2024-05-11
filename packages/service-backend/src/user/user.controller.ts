@@ -114,8 +114,8 @@ export class UserController {
         : {
             httpOnly: true,
             maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
+            sameSite: 'none' as const, // don't forget to remove after frontend is ready
+            secure: true,
           };
     res.cookie(
       'session',
