@@ -170,8 +170,8 @@ export class UserController {
         : {
             httpOnly: true,
             maxAge: SessionService.TTL,
-            sameSite: 'none' as const,
-            secure: true,
+            // sameSite: 'none' as const,
+            // secure: true,
           };
     res.cookie(
       'session',
