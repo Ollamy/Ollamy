@@ -37,8 +37,6 @@ const QuizAnswerInput = ({
         id: answerId,
         updateAnswerModel: {
           picture: base64.toString(),
-          data: '',
-          questionId,
         },
       });
     } catch (error) {
