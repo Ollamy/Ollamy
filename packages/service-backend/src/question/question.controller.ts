@@ -28,7 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  validateAnswerModel,
+  ValidateAnswerModel,
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
@@ -47,6 +47,23 @@ export class QuestionController {
   @ApiBody({
     type: CreateQuestionModel,
     description: 'user data model',
+    examples: {
+      template: {
+        value: {
+          id: 'Question Id',
+          lessonId: 'Lesson Id',
+          title: 'Question Title',
+          description: 'Question decsription',
+          data: 'Question data',
+          typeAnswer: AnswerType.TEXT,
+          typeQuestion: QuestionType.TEXT,
+          trustAnswerId: 'TrustAnswer Id',
+          pictureId: 'Question picture',
+          difficulty: QuestionDifficulty.BEGINNER,
+          order: 'a0',
+        } as CreateQuestionModel,
+      },
+    },
   })
   @LoggedMiddleware(true)
   @Post()
@@ -109,11 +126,21 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          lessonId: 'id',
+          id: 'Question Id',
+          lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Data of the question',
-          trustAnswerId: 'id',
+          data: 'Question data',
+          typeAnswer: AnswerType.TEXT,
+          typeQuestion: QuestionType.TEXT,
+          trustAnswerId: 'TrustAnswer Id',
+          pictureId: 'Question picture',
+          difficulty: QuestionDifficulty.BEGINNER,
+          between: {
+            before: 'order id',
+            after: 'order id',
+          },
+          order: '1',
         } as UpdateQuestionModel,
       },
     },
@@ -174,7 +201,7 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Post('/validate')
   async validateAnswer(
-    @Body() body: validateAnswerModel,
+    @Body() body: ValidateAnswerModel,
     @OllContext() ctx: any,
   ): Promise<ValidateAnswerResponse> {
     return this.questionService.validateAnswer(body, ctx);

@@ -4,7 +4,7 @@ import {
   CreateQuestionModel,
   IdQuestionModel,
   UpdateQuestionModel,
-  validateAnswerModel,
+  ValidateAnswerModel,
 } from '@ollamy/backend/question/question.dto';
 import { context } from './user.data';
 
@@ -21,6 +21,9 @@ export const mockQuestionData: CreateQuestionModel = {
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
   data: 'test',
+  id: questionId,
+  trustAnswerId: correctAnswerId,
+  order: 'a0',
 };
 
 export const mockQuestionId: IdQuestionModel = {
@@ -61,9 +64,13 @@ export const mockQuestionData2: UpdateQuestionModel = {
   title: 'test',
   description: 'desc',
   trustAnswerId: correctAnswerId,
+  id: questionId,
+  typeAnswer: 'TEXT',
+  typeQuestion: 'TEXT',
+  order: 'a0',
 };
 
-export const mockBody: validateAnswerModel = {
+export const mockBody: ValidateAnswerModel = {
   questionId: questionId,
   answerId: correctAnswerId,
 };
@@ -82,7 +89,7 @@ export const mockQuestionDb3: Question = {
   order: 'a0',
 };
 
-export const mockBodyIncorrect: validateAnswerModel = {
+export const mockBodyIncorrect: ValidateAnswerModel = {
   questionId: questionId,
   answerId: incorrectAnswerId,
 };
