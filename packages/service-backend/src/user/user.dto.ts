@@ -16,6 +16,12 @@ import {
   IsNumber,
 } from 'class-validator';
 
+export class SuccessBody {
+  @ApiProperty({ description: 'Result of the request' })
+  @IsBoolean()
+  success: boolean;
+}
+
 abstract class BaseUser {
   @ApiProperty({ description: 'The first name of the user' })
   @IsString()
@@ -71,7 +77,25 @@ export class LoginUserModel {
   password: string;
 }
 
-export class UpdateUserModel extends BaseUser {
+export class UpdateUserModel {
+  @ApiProperty({ description: 'The first name of the user', required: false })
+  @IsString()
+  @IsOptional()
+  firstname?: string;
+
+  @ApiProperty({ description: 'The last name of the user', required: false })
+  @IsString()
+  @IsOptional()
+  lastname?: string;
+
+  @ApiProperty({
+    description: 'The email address of the user',
+    required: false,
+  })
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
   @ApiProperty({ description: 'The password of the user', required: false })
   @IsOptional()
   @IsString()
@@ -147,7 +171,10 @@ export class UserCourses {
 }
 
 export class UserCoursesResponse {
-  @ApiProperty({ description: 'List of courses associated with the user' })
+  @ApiProperty({
+    description: 'List of courses associated with the user',
+    type: [UserCourses],
+  })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UserCourses)
