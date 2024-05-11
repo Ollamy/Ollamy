@@ -23,7 +23,7 @@ abstract class BaseQuestion {
   @IsString()
   title: string;
 
-  @ApiProperty({ description: 'The description of the question' })
+  @ApiProperty({ description: 'The description of the question', required: false })
   @IsString()
   @IsOptional()
   description: string;
@@ -73,7 +73,7 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @IsString()
   title: string;
 
-  @ApiProperty({ description: 'The description of the question' })
+  @ApiProperty({ description: 'The description of the question', required: false })
   @IsString()
   @IsOptional()
   description: string;
