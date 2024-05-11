@@ -2,10 +2,9 @@ import { type ReactElement, useEffect } from 'react';
 import styled from 'styled-components';
 import api from 'services/api';
 import { DefaultApi } from 'services/api/out';
-import TopBar from 'components/TopBar';
-import DashboardContent from 'pages/Home/Content';
+import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
 
-export function HomePage(): ReactElement {
+function HomePage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = api.user.useUser();
 
@@ -15,19 +14,18 @@ export function HomePage(): ReactElement {
 
   return (
     <Container>
-      <TopBar title="Ollamy Maker" />
-      <DashboardContent />
+      <HomeSidePanel />
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
-  flex-direction: column;
 
   width: 100%;
   height: 100vh;
 
   background: #f1f3f6;
 `;
+
+export default HomePage;
