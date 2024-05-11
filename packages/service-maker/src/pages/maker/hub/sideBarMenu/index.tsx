@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { GetCourseRequest } from 'services/api/out';
 import styled from 'styled-components';
 import api from 'services/api';
@@ -19,9 +19,10 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const { course, sectionId, lessonId } = props;
   const [isOpen, setIsOpen] = useState(false);
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  const { id: courseId } = useParams();
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
@@ -29,7 +30,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
   );
 
   const { data: courseSections } = api.course.useCourseSection({
-    id: course.id,
+    id: courseId!,
   });
   const handleClose = async () => {
     setIsOpen(false);
@@ -43,7 +44,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
         throw Error('Title and description need to be define');
       }
       await createSectionMutation({
-        createSectionModel: { courseId: course.id, title, description },
+        createSectionModel: { courseId: courseId!, title, description },
       });
       handleClose();
     } catch (err) {
@@ -53,7 +54,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const changeSection = (newSectionId: string | null) => {
     setSelectedSectionId(newSectionId);
-    if (newSectionId) navigate(`/course/${course.id}/section/${newSectionId}`);
+    if (newSectionId) navigate(`/course/${courseId}/section/${newSectionId}`);
   };
   return (
     <Container>
@@ -102,7 +103,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
       </TopBoxContainer>
       <LessonList
         sectionId={selectedSectionId}
-        courseId={course.id}
+        courseId={courseId!}
         lessonId={lessonId}
       />
     </Container>
