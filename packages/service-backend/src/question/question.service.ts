@@ -27,8 +27,6 @@ export class QuestionService {
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
-      let order: string;
-
       const lessonQuestions = await prisma.question.findMany({
         where: {
           lesson_id: questionData.lessonId,
@@ -44,14 +42,8 @@ export class QuestionService {
         ],
       });
 
-      try {
-        order = generateKeyBetween(
-          lessonQuestions[lessonQuestions.length - 1].order,
-          undefined,
-        );
-      } catch (error) {
-        Logger.error(error);
-        throw new HttpException(error.message, 409);
+      if (!lessonQuestions) {
+        throw new HttpException('Failed to get questions !', 409);
       }
 
       const questionDb: Question = await prisma.question.create({
@@ -62,7 +54,10 @@ export class QuestionService {
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
-          order: order,
+          order: generateKeyBetween(
+            lessonQuestions[lessonQuestions.length - 1].order,
+            undefined,
+          ),
           points: questionData?.points,
         },
       });
