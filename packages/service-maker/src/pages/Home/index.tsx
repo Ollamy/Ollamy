@@ -1,8 +1,8 @@
 import { type ReactElement, useEffect } from 'react';
-import styled from 'styled-components';
+import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
 import api from 'services/api';
 import { DefaultApi } from 'services/api/out';
-import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
+import styled from 'styled-components';
 
 function HomePage(): ReactElement {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
