@@ -1,10 +1,16 @@
 import type { ChangeEventHandler } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button, TextField } from '@radix-ui/themes';
+import {
+  Button,
+  Radio,
+  RadioGroup,
+  Skeleton,
+  TextField,
+} from '@radix-ui/themes';
 import { answerActions } from 'services/api/routes/answer';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
@@ -15,6 +21,7 @@ type QuestionType = { title: string; description: string };
 
 function SingleChoice({ questionId }: FactoryComponentInterface) {
   const [questionImage, setQuestionImage] = useState<File | null>(null);
+  const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -23,6 +30,11 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
   const { mutateAsync: addNewAnswer } = answerActions.useCreateAnswer();
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
+
+  useEffect(() => {
+    console.log('answers data: ', answerData);
+    // setTrueAnswer(questionData.)
+  }, [questionData]);
 
   const handleUploadImage = async () => {
     try {
@@ -93,44 +105,68 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
     addNewAnswer({ createAnswerModel: { questionId, data: '', picture: '' } });
   }, [addNewAnswer, questionId]);
 
+  const handleTrueAnswerChange = async () => {};
+
   return questionData ? (
     <Container>
-      <AddImageModal
-        image={questionImage}
-        setImage={setQuestionImage}
-        onUploadImage={handleUploadImage}
-        customTriggerButton={
-          <Button variant="surface">
-            <UploadIcon />
-            Upload Image
-          </Button>
-        }
-      />
-      <TextField.Root
-        name={'title'}
-        placeholder={'Title'}
-        onChange={handleChange}
-        value={questionData.title}
-      />
-      <TextField.Root
-        name={'description'}
-        onChange={handleChange}
-        placeholder={'Description'}
-        value={questionData.description}
-      />
+      {questionData.pictureId ? (
+        <Skeleton>
+          <QuestionImage src={questionData.pictureId} />
+        </Skeleton>
+      ) : (
+        <AddImageModal
+          image={questionImage}
+          setImage={setQuestionImage}
+          onUploadImage={handleUploadImage}
+          customTriggerButton={
+            <Button variant="surface">
+              <UploadIcon />
+              Upload Image
+            </Button>
+          }
+        />
+      )}
+      <fieldset>
+        <label>Title</label>
+        <TextField.Root
+          name={'title'}
+          placeholder={'Title'}
+          onChange={handleChange}
+          value={questionData.title}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label>Description</label>
+        <TextField.Root
+          name={'description'}
+          onChange={handleChange}
+          placeholder={'Description'}
+          value={questionData.description}
+        />
+      </fieldset>
 
       <h3>Answers</h3>
-      {answerData?.map((elem, index) => (
-        <QuizAnswerInput
-          answerId={elem.id}
-          questionId={questionId}
-          name={elem.id}
-          defaultValue={elem.data}
-          onChange={handleChangeAnswer}
-          placeholder={`Answer ${index + 1}`}
-          key={elem.id}
-        />
-      ))}
+
+      <RadioGroup.Root color="green" value={trueAnswer}>
+        {answerData?.map((elem, index) => (
+          <AnswerRow key={elem.id}>
+            <RadioGroup.Item
+              value={index.toString()}
+              onClick={handleTrueAnswerChange}
+            ></RadioGroup.Item>
+            <QuizAnswerInput
+              answerId={elem.id}
+              questionId={questionId}
+              name={elem.id}
+              defaultValue={elem.data}
+              onChange={handleChangeAnswer}
+              placeholder={`Answer ${index + 1}`}
+              key={elem.id}
+            />
+          </AnswerRow>
+        ))}
+      </RadioGroup.Root>
       <Button onClick={handleAddAnswer} variant={'ghost'}>
         Add choices
       </Button>
@@ -145,6 +181,23 @@ const Container = styled.div`
   flex-direction: column;
 
   gap: 8px;
+`;
+
+const QuestionImage = styled.img`
+  height: 100px;
+  object-fit: cover;
+  align-self: center;
+
+  cursor: pointer;
+
+  border: 1px solid black;
+`;
+
+const AnswerRow = styled.div`
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
 `;
 
 export default SingleChoice;

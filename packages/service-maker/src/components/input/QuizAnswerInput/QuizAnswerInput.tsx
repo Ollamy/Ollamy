@@ -72,7 +72,9 @@ const QuizAnswerInput = ({
 };
 
 // Just in order to use it below
-const Input = styled(TextField.Root)``;
+const Input = styled(TextField.Root)`
+  flex: 1;
+`;
 
 const IconsWrapper = styled(TextField.Slot)`
   display: none;
