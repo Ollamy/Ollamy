@@ -1,9 +1,10 @@
-import React, { Dispatch, SetStateAction, useCallback } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import React, { useCallback } from 'react';
+import type { PageType } from 'pages/Home/index';
 import styled from 'styled-components';
 
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
-import { PageType } from 'pages/Home/index';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 interface HomeSidePanelProps {
   currentPage: PageType;

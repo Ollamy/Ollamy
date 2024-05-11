@@ -1,21 +1,43 @@
+import { useMemo, useState } from 'react';
 import CourseCard from 'pages/Home/Body/CourseCard/CourseCard';
 import HomeSearchBar from 'pages/Home/Body/SearchBar/HomeSearchBar';
+import api from 'services/api';
 import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface HomeBodyProps {}
+function HomeBody() {
+  const { data } = api.user.useUserCourses();
+  const [searchValue, setSearchValue] = useState<string>('');
 
-function HomeBody({}: HomeBodyProps) {
-  const data = [0, 1, 2, 3, 4, 5, 6];
+  const currentData = useMemo(() => {
+    if (!data) return undefined;
+    return data.courses
+      .filter((element) =>
+        element.title.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [data, searchValue]);
 
   return (
     <Container>
-      <HomeSearchBar />
-      <Grid>
-        {data.map((elem) => (
-          <CourseCard key={elem} />
-        ))}
-      </Grid>
+      <HomeSearchBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+      />
+      {currentData ? (
+        <Grid>
+          {currentData.map(({ id, title, description, pictureId }) => (
+            <CourseCard
+              key={id}
+              courseId={id}
+              title={title}
+              picture={pictureId}
+              description={description}
+            />
+          ))}
+        </Grid>
+      ) : (
+        <TextPlaceholder>{"You haven't created a course yet!"}</TextPlaceholder>
+      )}
     </Container>
   );
 }
@@ -42,5 +64,7 @@ const Grid = styled.div`
 
   overflow: scroll;
 `;
+
+const TextPlaceholder = styled.p``;
 
 export default HomeBody;

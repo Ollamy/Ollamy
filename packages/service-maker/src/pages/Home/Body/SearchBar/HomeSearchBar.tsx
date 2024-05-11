@@ -1,19 +1,34 @@
-import { Button, TextField } from '@radix-ui/themes';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
+
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { TextField } from '@radix-ui/themes';
 
-// eslint-disable-next-line
-interface HomeSearchBarProps {}
+interface HomeSearchBarProps {
+  searchValue: string;
+  setSearchValue: Dispatch<SetStateAction<string>>;
+}
 
-function HomeSearchBar({}: HomeSearchBarProps) {
+function HomeSearchBar({ searchValue, setSearchValue }: HomeSearchBarProps) {
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [setSearchValue],
+  );
+
   return (
     <Container>
-      <CustomField placeholder={'Search in your course…'}>
+      <CustomField
+        value={searchValue}
+        onChange={handleChange}
+        placeholder={'Search in your course…'}
+      >
         <TextField.Slot>
           <MagnifyingGlassIcon height={'16'} width={'16'} />
         </TextField.Slot>
       </CustomField>
-      <CustomButton variant={'outline'}>Search</CustomButton>
     </Container>
   );
 }
@@ -24,6 +39,7 @@ const Container = styled.div`
   gap: 20px;
 
   height: 80px;
+  min-height: 80px;
   width: 100%;
 
   padding: 20px;
@@ -36,15 +52,6 @@ const Container = styled.div`
 const CustomField = styled(TextField.Root)`
   width: 100%;
   background-color: rgba(255, 255, 255, 0);
-`;
-
-const CustomButton = styled(Button)`
-  color: #000;
-  box-shadow: inset 0 0 0 1px var(--gray-a7);
-
-  font-weight: 600;
-
-  cursor: pointer;
 `;
 
 export default HomeSearchBar;

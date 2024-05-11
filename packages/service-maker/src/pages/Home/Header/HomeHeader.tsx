@@ -1,15 +1,29 @@
 import styled from 'styled-components';
 
 import { Button } from '@radix-ui/themes';
+import { courseActions } from 'services/api/routes/course';
+import { useCallback } from 'react';
 
-// eslint-disable-next-line
-interface HomeHeaderProps {}
+function HomeHeader() {
+  const { mutateAsync: createNewCourse } = courseActions.useCreateCourse();
 
-function HomeHeader({}: HomeHeaderProps) {
+  const handleClick = useCallback(() => {
+    createNewCourse({
+      createCourseModel: {
+        title: 'Nicolas',
+        description:
+          "Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.",
+        picture: '',
+      },
+    });
+  }, [createNewCourse]);
+
   return (
     <Container>
       <Title>All your courses, in the same place</Title>
-      <CustomButton variant={'soft'}>Create a new course</CustomButton>
+      <CustomButton variant={'soft'} onClick={handleClick}>
+        Create a new course
+      </CustomButton>
     </Container>
   );
 }

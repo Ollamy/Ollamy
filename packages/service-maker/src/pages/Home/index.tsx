@@ -1,17 +1,13 @@
 import { type ReactElement, useEffect, useState } from 'react';
-import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
-import api from 'services/api';
-import { DefaultApi } from 'services/api/out';
-import styled from 'styled-components';
 import HomeBody from 'pages/Home/Body/HomeBody';
 import HomeHeader from 'pages/Home/Header/HomeHeader';
+import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
+import { DefaultApi } from 'services/api/out';
+import styled from 'styled-components';
 
 export type PageType = 'home' | 'profile' | 'settings';
 
 function HomePage(): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = api.user.useUser();
-
   const [currentPage, setCurrentPage] = useState<PageType>('home');
 
   useEffect(() => {
