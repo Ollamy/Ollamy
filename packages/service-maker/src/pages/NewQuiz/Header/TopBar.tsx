@@ -1,12 +1,17 @@
+import Path from 'components/TopBar/Path/Path';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 // eslint-disable-next-line
 interface TopBarProps {}
 
 const TopBar = ({}: TopBarProps) => {
+  const urlParams = useParams();
+
   return (
     <Container>
       <ProfilContainer>N</ProfilContainer>
+      <Path urlParams={urlParams} />
     </Container>
   );
 };
@@ -14,6 +19,7 @@ const TopBar = ({}: TopBarProps) => {
 const Container = styled.div`
   display: flex;
   align-items: center;
+  gap: 24px;
 
   width: 100%;
   height: 60px;
