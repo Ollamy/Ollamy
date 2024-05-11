@@ -3,6 +3,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  AnswerModel,
   CreateQuestionModel,
   IdQuestionModel,
   QuestionIdResponse,
@@ -105,7 +106,7 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AnswerModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestionAnswers.');
         }
@@ -126,7 +127,7 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AnswerModel>> {
         return localQuestionApi.getQuestionAnswersRaw(requestParameters, initOverrides);
     }
 

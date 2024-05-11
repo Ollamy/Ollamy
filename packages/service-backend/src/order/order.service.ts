@@ -143,17 +143,17 @@ export function generateKeyBetween(
   b: string | null | undefined,
   digits = BASE_62_DIGITS,
 ): string {
-  if (a != null && a != '') {
+  if (a != null) {
     validateOrderKey(a, digits);
   }
-  if (b != null && a != '') {
+  if (b != null) {
     validateOrderKey(b, digits);
   }
-  if (a != null && b != null && a != '' && a >= b) {
+  if (a != null && b != null && a >= b) {
     throw new Error(`${a} >= ${b}`);
   }
-  if (a == null || a == '') {
-    if (b == null || b == '') {
+  if (a == null) {
+    if (b == null) {
       return `a${digits[0]}`;
     }
 
@@ -172,7 +172,7 @@ export function generateKeyBetween(
     return res;
   }
 
-  if (b == null || b == '') {
+  if (b == null) {
     const ia = getIntegerPart(a);
     const fa = a.slice(ia.length);
     const i = incrementInteger(ia, digits);
@@ -208,7 +208,7 @@ export function generateNKeysBetween(
   if (n === 1) {
     return [generateKeyBetween(a, b, digits)];
   }
-  if (b == null || b == '') {
+  if (b == null) {
     let c = generateKeyBetween(a, b, digits);
     const result = [c];
     for (let i = 0; i < n - 1; i++) {
@@ -217,7 +217,7 @@ export function generateNKeysBetween(
     }
     return result;
   }
-  if (a == null || a == '') {
+  if (a == null) {
     let c = generateKeyBetween(a, b, digits);
     const result = [c];
     for (let i = 0; i < n - 1; i++) {

@@ -4,7 +4,7 @@ import {
   CreateQuestionModel,
   IdQuestionModel,
   UpdateQuestionModel,
-  validateAnswerModel,
+  ValidateAnswerModel,
 } from '@ollamy/backend/question/question.dto';
 import { context } from './user.data';
 
@@ -21,7 +21,9 @@ export const mockQuestionData: CreateQuestionModel = {
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
   data: 'test',
-  between: undefined,
+  id: questionId,
+  trustAnswerId: correctAnswerId,
+  order: 'a0',
 };
 
 export const mockQuestionId: IdQuestionModel = {
@@ -39,7 +41,7 @@ export const mockQuestionDb: Question = {
   picture_id: uuidv4(),
   points: 0,
   difficulty: 'BEGINNER',
-  order: "a0",
+  order: 'a0',
 };
 
 export const mockQuestionDb2: Question = {
@@ -53,7 +55,7 @@ export const mockQuestionDb2: Question = {
   picture_id: uuidv4(),
   points: 0,
   difficulty: 'BEGINNER',
-  order: "a0",
+  order: 'a0',
 };
 
 export const mockQuestionId3 = uuidv4();
@@ -62,9 +64,13 @@ export const mockQuestionData2: UpdateQuestionModel = {
   title: 'test',
   description: 'desc',
   trustAnswerId: correctAnswerId,
+  id: questionId,
+  typeAnswer: 'TEXT',
+  typeQuestion: 'TEXT',
+  order: 'a0',
 };
 
-export const mockBody: validateAnswerModel = {
+export const mockBody: ValidateAnswerModel = {
   questionId: questionId,
   answerId: correctAnswerId,
 };
@@ -80,10 +86,10 @@ export const mockQuestionDb3: Question = {
   picture_id: uuidv4(),
   points: 0,
   difficulty: 'BEGINNER',
-  order: "a0",
+  order: 'a0',
 };
 
-export const mockBodyIncorrect: validateAnswerModel = {
+export const mockBodyIncorrect: ValidateAnswerModel = {
   questionId: questionId,
   answerId: incorrectAnswerId,
 };
@@ -98,7 +104,7 @@ export const mockQuestionDb4: Question = {
   picture_id: uuidv4(),
   points: 0,
   difficulty: 'BEGINNER',
-  order: "a0",
+  order: 'a0',
 };
 
 export const mockUserLesson: UsertoLesson = {

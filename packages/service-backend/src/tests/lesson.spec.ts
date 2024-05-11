@@ -35,10 +35,16 @@ describe('postLesson', () => {
 
     // Perform assertions
     expect(prisma.lesson.create).toHaveBeenCalledTimes(1);
-    expect(prisma.lesson.create).toHaveBeenCalledWith({
-      data: mockLessonData,
-    });
 
+    const { sectionId, ...otherData } = mockLessonData;
+
+    expect(prisma.lesson.create).toHaveBeenCalledWith({
+      data: {
+        ...otherData,
+        section_id: sectionId,
+      },
+    });
+    
     expect(result).toStrictEqual({ id: mockCreatedLesson.id });
   });
 
