@@ -3,9 +3,9 @@ import styled from 'styled-components';
 // eslint-disable-next-line
 interface HomeBodyProps {}
 
-const HomeBody = ({}: HomeBodyProps) => {
-  return <Container></Container>;
-};
+function HomeBody({}: HomeBodyProps) {
+  return <Container />;
+}
 
 const Container = styled.div``;
 

@@ -1,17 +1,18 @@
 import styled from 'styled-components';
+
 import { Button } from '@radix-ui/themes';
 
 // eslint-disable-next-line
 interface HomeHeaderProps {}
 
-const HomeHeader = ({}: HomeHeaderProps) => {
+function HomeHeader({}: HomeHeaderProps) {
   return (
     <Container>
       <Title>All your courses, in the same place</Title>
       <CustomButton variant={'soft'}>Create a new course</CustomButton>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
