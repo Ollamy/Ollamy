@@ -42,10 +42,6 @@ export class QuestionService {
         ],
       });
 
-      if (!lessonQuestions) {
-        throw new HttpException('Failed to get questions !', 409);
-      }
-
       const questionDb: Question = await prisma.question.create({
         data: {
           lesson_id: questionData.lessonId,
@@ -55,7 +51,9 @@ export class QuestionService {
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
           order: generateKeyBetween(
-            lessonQuestions[lessonQuestions.length - 1].order,
+            !lessonQuestions
+              ? undefined
+              : lessonQuestions[lessonQuestions.length - 1].order,
             undefined,
           ),
           points: questionData?.points,
