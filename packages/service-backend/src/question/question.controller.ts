@@ -50,17 +50,13 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          id: 'Question Id',
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Question data',
           typeAnswer: AnswerType.TEXT,
           typeQuestion: QuestionType.TEXT,
-          trustAnswerId: 'TrustAnswer Id',
-          pictureId: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          order: 'a0',
+          points: 0,
         } as CreateQuestionModel,
       },
     },

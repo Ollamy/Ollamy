@@ -20,10 +20,7 @@ export const mockQuestionData: CreateQuestionModel = {
   description: 'Question Description',
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
-  data: 'test',
-  id: questionId,
   trustAnswerId: correctAnswerId,
-  order: 'a0',
 };
 
 export const mockQuestionId: IdQuestionModel = {
@@ -67,7 +64,6 @@ export const mockQuestionData2: UpdateQuestionModel = {
   id: questionId,
   typeAnswer: 'TEXT',
   typeQuestion: 'TEXT',
-  order: 'a0',
 };
 
 export const mockBody: ValidateAnswerModel = {

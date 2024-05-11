@@ -6,6 +6,7 @@ import {
   GetUserModel,
   GetUserScoreModel,
   LoginUserModel,
+  SuccessBody,
   UpdateUserModel,
   UserCoursesResponse,
   UserIdResponse,
@@ -114,8 +115,8 @@ export class UserController {
         : {
             httpOnly: true,
             maxAge: SessionService.TTL,
-            sameSite: 'none' as const, // don't forget to remove after frontend is ready
-            secure: true,
+            // sameSite: 'none' as const,
+            // secure: true,
           };
     res.cookie(
       'session',
@@ -137,8 +138,8 @@ export class UserController {
 
   @ApiCookieAuth()
   @ApiOkResponse({
-    description: "user's token",
-    type: String,
+    description: 'success body',
+    type: SuccessBody,
   })
   @ApiBody({
     type: UpdateUserModel,
@@ -161,7 +162,7 @@ export class UserController {
     @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
-  ) {
+  ): Promise<SuccessBody> {
     const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
     const cookiesParams =
       idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
@@ -169,8 +170,8 @@ export class UserController {
         : {
             httpOnly: true,
             maxAge: SessionService.TTL,
-            sameSite: 'none' as const,
-            secure: true,
+            // sameSite: 'none' as const,
+            // secure: true,
           };
     res.cookie(
       'session',
@@ -203,7 +204,7 @@ export class UserController {
 
   @ApiOkResponse({
     description: "user's score",
-    type: GetUserModel,
+    type: GetUserScoreModel,
   })
   @LoggedMiddleware(true)
   @Get('/score')
