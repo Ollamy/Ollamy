@@ -10,7 +10,7 @@ import { queryClient } from 'main';
 import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
 
 const GET_QUESTION_KEY = 'getQuestion';
-const GET_ANSWER_KEY = 'getAnswer';
+export const GET_ANSWER_KEY = 'getAnswer';
 
 export const questionActions = {
   useQuestion: (

@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { AnswerApi, AnswerModel, GetAnswerRequest } from 'services/api/out';
 import { queryClient } from 'main';
 import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
+import { GET_ANSWER_KEY } from 'services/api/routes/question';
 
 const GET_LESSON_KEY = 'getAnswer';
 
@@ -19,7 +20,7 @@ export const answerActions = {
   useCreateAnswer: () =>
     useMutation(AnswerApi.registerAnswer, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_ANSWER_KEY);
       },
     }),
   useGetAnswer: () =>
@@ -32,8 +33,7 @@ export const answerActions = {
   useUpdateAnswer: () =>
     useMutation(AnswerApi.updateAnswer, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+        queryClient.invalidateQueries(GET_ANSWER_KEY);
       },
     }),
   useRemoveAnswer: () =>
