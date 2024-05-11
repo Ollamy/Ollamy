@@ -37,6 +37,12 @@ export interface AnswerModel {
      * @memberof AnswerModel
      */
     picture: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AnswerModel
+     */
+    order: number;
 }
 /**
  * 
@@ -671,6 +677,12 @@ export interface QuestionAnswerModel {
      * @memberof QuestionAnswerModel
      */
     picture: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof QuestionAnswerModel
+     */
+    order: number;
 }
 /**
  * 
@@ -821,6 +833,31 @@ export interface UpdateAnswerModel {
      * @memberof UpdateAnswerModel
      */
     picture: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateAnswerOrderModel
+ */
+export interface UpdateAnswerOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    after?: string;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    before?: string;
+    /**
+     * The origin of the answer
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    origin: string;
 }
 /**
  * 
