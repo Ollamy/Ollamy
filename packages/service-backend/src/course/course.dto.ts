@@ -52,7 +52,7 @@ export class CreateCourseModel {
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   picture?: string;
 }
@@ -64,22 +64,23 @@ export class IdCourseModel {
 }
 
 export class UpdateCourseModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   ownerId: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
   picture: string;
 }

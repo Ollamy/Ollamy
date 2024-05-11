@@ -118,7 +118,7 @@ export interface CreateCourseModel {
      * @type {string}
      * @memberof CreateCourseModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -793,25 +793,25 @@ export interface UpdateCourseModel {
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    ownerId: string;
+    ownerId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    description: string;
+    description?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
