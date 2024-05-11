@@ -126,6 +126,7 @@ export class QuestionService {
           ? await PictureService.getPicture(questionDb.picture_id)
           : undefined,
         difficulty: questionDb.difficulty,
+        trust_answer_id: questionDb.trust_answer_id,
         order: questionDb.order,
         points: questionDb.points,
       } as GetQuestionModel;

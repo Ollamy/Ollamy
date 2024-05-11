@@ -402,6 +402,12 @@ export interface GetQuestionModel {
      * @type {string}
      * @memberof GetQuestionModel
      */
+    trust_answer_id?: string;
+    /**
+     * The order of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
     order: string;
     /**
      * The points for the question

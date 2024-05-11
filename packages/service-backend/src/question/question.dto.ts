@@ -102,6 +102,11 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @IsOptional()
   difficulty?: QuestionDifficulty;
 
+  @ApiProperty({ description: 'The order of the question', required: false })
+  @IsOptional()
+  @IsUUID()
+  trust_answer_id?: string;
+
   @ApiProperty({ description: 'The order of the question' })
   @IsString()
   order: string;
