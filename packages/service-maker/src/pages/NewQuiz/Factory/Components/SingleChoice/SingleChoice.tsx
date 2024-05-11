@@ -1,11 +1,12 @@
 import type { ChangeEventHandler } from 'react';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import type { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
 import { Button, TextField } from '@radix-ui/themes';
 import { answerActions } from 'services/api/routes/answer';
+import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 
 type QuestionType = { title: string; description: string };
 
@@ -67,10 +68,6 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
     addNewAnswer({ createAnswerModel: { questionId, data: '', picture: '' } });
   }, [addNewAnswer, questionId]);
 
-  useEffect(() => {
-    console.log(answerData);
-  }, [answerData]);
-
   return questionData ? (
     <Container>
       <TextField.Root
@@ -88,12 +85,14 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
 
       <h3>Answers</h3>
       {answerData?.map((elem, index) => (
-        <TextField.Root
-          key={elem.id}
+        <QuizAnswerInput
+          answerId={elem.id}
+          questionId={questionId}
           name={elem.id}
           defaultValue={elem.data}
           onChange={handleChangeAnswer}
           placeholder={`Answer ${index + 1}`}
+          key={elem.id}
         />
       ))}
       <Button onClick={handleAddAnswer} variant={'ghost'}>
