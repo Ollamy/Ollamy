@@ -9,12 +9,16 @@ import { Button, TextField } from '@radix-ui/themes';
 type QuestionType = { title: string; description: string };
 
 function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
-  const { data } = questionActions.useQuestion({ id: questionId });
+  const { data: questionData } = questionActions.useQuestion({
+    id: questionId,
+  });
+  const { data: answerData } = questionActions.useGetAnswer({ id: questionId });
+
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
-      if (!data) {
+      if (!questionData) {
         return;
       }
 
@@ -22,10 +26,10 @@ function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
 
       const updateData = (): QuestionType => {
         if (name === 'title') {
-          return { title: value, description: data.description };
+          return { title: value, description: questionData.description };
         }
         if (name === 'description') {
-          return { title: data.title, description: value };
+          return { title: questionData.title, description: value };
         }
         return { title: '', description: '' };
       };
@@ -33,27 +37,27 @@ function SingleChoice({ lessonId, questionId }: FactoryComponentInterface) {
       updateQuestion({
         id: questionId,
         updateQuestionModel: {
-          ...data,
+          id: questionId,
           ...updateData(),
         },
       });
     },
-    [data, lessonId, questionId, updateQuestion],
+    [questionData, questionId, updateQuestion],
   );
 
-  return data ? (
+  return questionData ? (
     <Container>
       <TextField.Root
         name={'title'}
-        value={data.title}
         placeholder={'Title'}
         onChange={handleChange}
+        value={questionData.title}
       />
       <TextField.Root
         name={'description'}
         onChange={handleChange}
-        value={data.description}
         placeholder={'Description'}
+        value={questionData.description}
       />
 
       <h3>Answers</h3>

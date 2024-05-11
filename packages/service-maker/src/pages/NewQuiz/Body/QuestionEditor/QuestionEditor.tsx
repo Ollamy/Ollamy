@@ -10,16 +10,18 @@ interface QuestionEditorProps {
 }
 
 function QuestionEditor({ lessonId, questionId }: QuestionEditorProps) {
-  const { data } = questionActions.useQuestion({ id: questionId });
+  const { data: questionData } = questionActions.useQuestion({
+    id: questionId,
+  });
 
-  if (!data) return null;
+  if (!questionData) return null;
 
   return (
     <Center>
       <Container>
         <h3>Question {questionId}</h3>
         {React.createElement(
-          quizFactory[data.typeQuestion as QuestionType].Component,
+          quizFactory[questionData.typeQuestion as QuestionType].Component,
           { lessonId, questionId },
         )}
       </Container>

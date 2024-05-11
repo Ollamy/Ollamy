@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import QuestionsSideBar from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBar';
+import { useParams } from 'react-router-dom';
 import QuestionEditor from 'pages/NewQuiz/Body/QuestionEditor/QuestionEditor';
 import QuestionsPropertiesSideBar from 'pages/NewQuiz/Body/QuestionPropertiesSideBar/QuestionsPropertiesSideBar';
-import { useParams } from 'react-router-dom';
+import QuestionsSideBar from 'pages/NewQuiz/Body/QuestionsSideBar/QuestionSideBar';
+import styled from 'styled-components';
 
 interface QuizEditorProps {
   lessonId: string;
@@ -10,7 +10,7 @@ interface QuizEditorProps {
 
 export type QuizID = string;
 
-const QuizEditor = ({ lessonId }: QuizEditorProps) => {
+function QuizEditor({ lessonId }: QuizEditorProps) {
   const { questionId } = useParams();
 
   return (
@@ -22,7 +22,7 @@ const QuizEditor = ({ lessonId }: QuizEditorProps) => {
       <QuestionsPropertiesSideBar />
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
