@@ -1,6 +1,6 @@
 import { SlashIcon } from '@radix-ui/react-icons';
 import { TabNav } from '@radix-ui/themes';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseActions } from 'services/api/routes/course';
 import { lessonActions } from 'services/api/routes/lesson';
@@ -17,7 +17,12 @@ interface PathProps {
   };
 }
 
-type ElementType = 'course' | 'section' | 'lesson' | 'question';
+enum ElementType {
+  COURSE = 'course',
+  SECTION = 'section',
+  LESSON = 'lesson',
+  QUESTION = 'question',
+}
 
 interface NavElement {
   element: ElementType;
@@ -47,30 +52,57 @@ const Path = ({ urlParams }: PathProps) => {
     { enabled: !!urlParams.questionId },
   );
 
+  const handleClick = (element: ElementType) => {
+    console.log('element :', element);
+    switch (element) {
+      case ElementType.COURSE:
+        console.log('course');
+        navigate(`/course/${urlParams.id}`);
+        break;
+      case ElementType.SECTION:
+        console.log('section');
+        navigate(`/course/${urlParams.id}/section/${urlParams.sectionId}`);
+        break;
+      case ElementType.LESSON:
+        console.log('lesson');
+        navigate(
+          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`,
+        );
+        break;
+      case ElementType.QUESTION:
+        console.log('question');
+        navigate(
+          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`,
+        );
+        break;
+      default:
+    }
+  };
+
   const navData = useMemo<NavElement[]>(() => {
     const data: NavElement[] = [];
 
     if (!!courseData)
       data.push({
-        element: 'course',
+        element: ElementType.COURSE,
         value: courseData.title,
       });
 
     if (!!sectionData)
       data.push({
-        element: 'section',
+        element: ElementType.SECTION,
         value: sectionData.title,
       });
 
     if (!!lessonData)
       data.push({
-        element: 'lesson',
+        element: ElementType.LESSON,
         value: lessonData.title,
       });
 
     if (!!questionData)
       data.push({
-        element: 'question',
+        element: ElementType.QUESTION,
         value: questionData.title,
       });
     return data;
@@ -80,10 +112,12 @@ const Path = ({ urlParams }: PathProps) => {
     <Container>
       {navData.map((elem, index) => {
         return (
-          <>
-            <Link key={elem.element}>{elem.value}</Link>
-            {index < navData.length - 1 && <SlashIcon color='#9c9c9c' />}
-          </>
+          <Fragment key={elem.element}>
+            <Link onClick={() => handleClick(elem.element)} key={elem.element}>
+              {elem.value}
+            </Link>
+            {index < navData.length - 1 && <SlashIcon color="#9c9c9c" />}
+          </Fragment>
         );
       })}
     </Container>
