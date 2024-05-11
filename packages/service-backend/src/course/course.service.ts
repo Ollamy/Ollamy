@@ -127,9 +127,12 @@ export class CourseService {
           id: CourseId,
         },
         data: {
-          title: courseData.title,
-          description: courseData.description,
-          picture_id: await PictureService.postPicture(courseData.picture),
+          owner_id: courseData?.ownerId,
+          title: courseData?.title,
+          description: courseData?.description,
+          picture_id: courseData?.picture
+            ? await PictureService.postPicture(courseData.picture)
+            : undefined,
         },
       });
 
@@ -159,8 +162,11 @@ export class CourseService {
       }
 
       return courseSectionsDb.map((lesson: Section) => ({
-        ...lesson,
-      })) as unknown as SectionModel[];
+        id: lesson.id,
+        courseId: lesson.course_id,
+        title: lesson.title,
+        description: lesson.description,
+      })) as SectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
@@ -212,7 +218,7 @@ export class CourseService {
       };
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('User not added to course !');
+      throw new ConflictException('Error while fecthing hp !');
     }
   }
 }
