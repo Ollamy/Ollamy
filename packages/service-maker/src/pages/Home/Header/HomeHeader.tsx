@@ -20,9 +20,6 @@ const Container = styled.div`
   justify-content: space-between;
 
   width: 100%;
-
-  padding: 32px;
-  box-sizing: border-box;
 `;
 
 const Title = styled.h1`

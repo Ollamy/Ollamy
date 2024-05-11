@@ -42,7 +42,15 @@ const Container = styled.div`
 `;
 
 const HomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 76px;
+
+  flex: 1;
   width: 100%;
+
+  padding: 32px;
+  box-sizing: border-box;
 `;
 
 export default HomePage;
