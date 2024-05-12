@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     element: <NewCoursePage />,
   },
   {
-    path: '/quiz/:id',
+    path: '/quizEditor/:lessonId',
     element: <NewQuiz />,
   },
   // {

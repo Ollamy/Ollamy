@@ -1,5 +1,6 @@
 import type { MouseEventHandler } from 'react';
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
@@ -15,13 +16,14 @@ interface OptionDropdownMenuProps {
 }
 
 function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { mutateAsync: removeLesson } = lessonActions.useRemoveLesson();
 
   const handleRemoveLesson = useCallback(async () => {
     await removeLesson({ idLessonModel: { id: lessonId } });
     setOpen(false);
-  }, []);
+  }, [lessonId, removeLesson]);
 
   const handleCancelRemoveLesson = useCallback(() => {
     setOpen(false);
@@ -32,6 +34,13 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
       event.preventDefault();
     },
     [],
+  );
+
+  const handleOpenIn = useCallback(
+    (target: 'quizEditor' | 'lectureEditor') => {
+      navigate(`/${target}/${lessonId}`);
+    },
+    [lessonId, navigate],
   );
 
   return (
@@ -49,11 +58,18 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
           className={'DropdownMenuContent'}
           sideOffset={5}
         >
-          <DropdownMenu.Item className={'DropdownMenuItem'}>
-            Open quiz editor
+          <DropdownMenu.Item
+            className={'DropdownMenuItem'}
+            onClick={() => handleOpenIn('quizEditor')}
+          >
+            Open in quiz editor
           </DropdownMenu.Item>
-          <DropdownMenu.Item disabled className={'DropdownMenuItem'}>
-            Open lecture editor
+          <DropdownMenu.Item
+            disabled
+            className={'DropdownMenuItem'}
+            onClick={() => handleOpenIn('lectureEditor')}
+          >
+            Open in lecture editor
           </DropdownMenu.Item>
           <DropdownMenu.Separator className={'DropdownMenuSeparator'} />
           <DropdownMenu.Item disabled className={'DropdownMenuItem'}>
