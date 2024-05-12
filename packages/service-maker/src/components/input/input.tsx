@@ -1,6 +1,7 @@
-import { InputMakerInterface } from 'components/input/input.interface';
-import { MakerInputStyled } from 'components/input/input.style';
+import type { InputMakerInterface } from 'components/input/input.interface';
 import styled from 'styled-components';
+
+import { MakerInputStyled } from 'components/input/input.style';
 
 export function InputMaker({
   margin,

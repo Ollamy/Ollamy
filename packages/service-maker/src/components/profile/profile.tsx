@@ -1,4 +1,5 @@
-import { CouseSettingInterface } from 'components/Course/Setting/course.setting.interface';
+import type { CouseSettingInterface } from 'components/Course/Setting/course.setting.interface';
+
 import {
   ContainerCenteredTitle,
   ContainerSpaceBetween,

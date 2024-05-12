@@ -1,4 +1,6 @@
-import { NavbarInterface } from 'components/Navbar/navbar.interface';
+import type { NavbarInterface } from 'components/Navbar/navbar.interface';
+
+import { SubTitle } from 'components/Income/income.style';
 import {
   NavLeftContainer,
   NavLeftContainerNameProps,
@@ -9,7 +11,6 @@ import {
   StatusBar,
   Title,
 } from 'components/Navbar/navbar.style';
-import { SubTitle } from 'components/Income/income.style';
 
 export function Navbar({ user, profilPercentage }: NavbarInterface) {
   return (

@@ -3,12 +3,12 @@
 @import '@radix-ui/colors/mauve.css';
 
 /* reset */
-input,
-textarea,
-button {
-    all: unset;
-    box-sizing: border-box;
-}
+/*input,*/
+/*textarea,*/
+/*button {*/
+/*    all: unset;*/
+/*    box-sizing: border-box;*/
+/*}*/
 
 .FormRoot {
     width: 260px;

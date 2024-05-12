@@ -1,22 +1,23 @@
-import { RootProps } from '@radix-ui/themes/dist/cjs/components/text-field';
-import styled from 'styled-components';
-import { TextField } from '@radix-ui/themes';
 import { useState } from 'react';
-import { toBase64 } from 'utils/toBase64';
-import { answerActions } from 'services/api/routes/answer';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
 import DeleteModal from 'components/modal/DeleteModal/DeleteModal';
+import { answerActions } from 'services/api/routes/answer';
+import styled from 'styled-components';
+import { toBase64 } from 'utils/toBase64';
+
+import { TextField } from '@radix-ui/themes';
+import type { RootProps } from '@radix-ui/themes/dist/cjs/components/text-field';
 
 interface QuizAnswerInputProps extends RootProps {
   answerId: string;
   questionId: string;
 }
 
-const QuizAnswerInput = ({
+function QuizAnswerInput({
   answerId,
   questionId,
   ...props
-}: QuizAnswerInputProps) => {
+}: QuizAnswerInputProps) {
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
   const { mutateAsync: deleteAnswer } = answerActions.useRemoveAnswer();
 
@@ -64,7 +65,7 @@ const QuizAnswerInput = ({
       </IconsWrapper>
     </Input>
   );
-};
+}
 
 // Just in order to use it below
 const Input = styled(TextField.Root)`

@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react';
+import { styled } from 'styled-components';
+
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon, ImageIcon, UploadIcon } from '@radix-ui/react-icons';
 import { IconButton, Text } from '@radix-ui/themes';
-import { ReactNode } from 'react';
-import { styled } from 'styled-components';
 
 interface AddImageModal {
   image: File | null;
@@ -11,12 +12,12 @@ interface AddImageModal {
   customTriggerButton?: ReactNode;
 }
 
-const AddImageModal = ({
+function AddImageModal({
   image,
   setImage,
   onUploadImage,
   customTriggerButton,
-}: AddImageModal) => {
+}: AddImageModal) {
   const handleFileChange: React.FormEventHandler<HTMLDivElement> = (e) => {
     if ('files' in e.target) {
       setImage((e.target.files as FileList)[0]);
@@ -26,9 +27,7 @@ const AddImageModal = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        {customTriggerButton ? (
-          customTriggerButton
-        ) : (
+        {customTriggerButton || (
           <IconButton variant="ghost" color="indigo">
             <ImageIcon />
           </IconButton>
@@ -81,7 +80,7 @@ const AddImageModal = ({
       </Dialog.Portal>
     </Dialog.Root>
   );
-};
+}
 
 const ImageInput = styled.input`
   position: absolute;

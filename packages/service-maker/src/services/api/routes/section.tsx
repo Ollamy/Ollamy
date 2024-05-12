@@ -1,16 +1,17 @@
-import { UseQueryOptions, useMutation, useQuery } from 'react-query';
-import {
+import type { UseQueryOptions } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import { queryClient } from 'main';
+import type {
   GetSectionLessonsRequest,
   GetSectionRequest,
   LessonModel,
-  SectionApi,
   SectionModel,
 } from 'services/api/out';
-import { queryClient } from 'main';
+import { SectionApi } from 'services/api/out';
 import { GET_COURSE_SECTIONS_KEY } from 'services/api/routes/course';
 
-export const GET_SECTION_KEY = 'getSection';
-export const GET_SECTION_LESSONS_KEY = 'getSectionLesson';
+export const GET_SECTION_KEY = 'getSectionKey';
+export const GET_SECTION_LESSONS_KEY = 'getSectionLessonKey';
 
 export const sectionActions = {
   useSection: (
@@ -22,7 +23,7 @@ export const sectionActions = {
       queryFn: () => SectionApi.getSection(requestParameters),
       ...config,
     }),
-  useSectionLessons: (
+  useGetSectionLessons: (
     requestParameters: GetSectionLessonsRequest,
     config?: UseQueryOptions<Array<LessonModel>>,
   ) =>
@@ -37,10 +38,9 @@ export const sectionActions = {
         queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
       },
     }),
-  useUpdateSection: () =>
-    useMutation(SectionApi.updateSection, {
+  useRemoveSection: () =>
+    useMutation(SectionApi.deleteSection, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_SECTION_KEY);
         queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
       },
     }),

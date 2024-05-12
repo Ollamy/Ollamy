@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
-import api from 'services/api';
-import { SideBarMaker } from 'components/sidebar/sidebar';
+import { ButtonMaker } from 'components/button/button';
 import { FormMaker } from 'components/form/form';
 import { InputMaker } from 'components/input/input';
-import { ButtonMaker } from 'components/button/button';
+import { SideBarMaker } from 'components/sidebar/sidebar';
+import api from 'services/api';
 
 type Inputs = {
   email: string;

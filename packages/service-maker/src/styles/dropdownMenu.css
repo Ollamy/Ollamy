@@ -3,9 +3,9 @@
 @import '@radix-ui/colors/violet.css';
 
 /* reset */
-button {
-    all: unset;
-}
+/*button {*/
+/*    all: unset;*/
+/*}*/
 
 .DropdownMenuContent,
 .DropdownMenuSubContent {
