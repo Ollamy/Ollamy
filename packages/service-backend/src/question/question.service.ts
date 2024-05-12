@@ -263,12 +263,6 @@ export class QuestionService {
       },
     });
 
-    const answerDb: Answer = await prisma.answer.findUnique({
-      where: {
-        id: body.answerId,
-      },
-    });
-
     const userLesson = await prisma.usertoLesson.findUnique({
       where: {
         lesson_id_user_id: {
@@ -300,7 +294,7 @@ export class QuestionService {
       ) + 1
       ] ?? null;
 
-    let isValidated = questionDb.trust_answer_id === body.answerId;
+    let isValidated = questionDb.trust_answer_id === body?.answerId || false;
     const questionPoints =
       questionDb.points === undefined ? 0 : questionDb.points;
 
@@ -380,7 +374,13 @@ export class QuestionService {
     }
 
     if (questionDb.type_answer === AnswerType.FREE_ANSWER) {
-      isValidated = answerDb.data === body.data;
+      const answerDb = await prisma.answer.findFirst({
+        where: {
+          id: questionDb.trust_answer_id
+        },
+      });
+
+      isValidated = body.data === answerDb.data;
     }
 
     if (!(nextQuestion !== null)) {

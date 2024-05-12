@@ -19,7 +19,7 @@ import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, User, UsertoScore } from '@prisma/client';
+import { Prisma, Role, User, UsertoScore } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
 
 @Injectable()
@@ -221,12 +221,19 @@ export class UserService {
             } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
 
             const isOwner = course.owner_id === ctx.__user.id;
-            const pictureId = await PictureService.getPicture(
-              course.picture_id,
-            );
+            const pictureId = await PictureService.getPicture(course.picture_id);
 
             delete course.owner_id;
             delete course.picture_id;
+
+            const users = await prisma.usertoCourse.count({
+              where: {
+                course_id: course.id,
+                role_user: {
+                  equals: Role.MEMBER,
+                },
+              },
+            });
 
             return {
               ...course,
@@ -234,6 +241,7 @@ export class UserService {
               lastLessonId,
               lastSectionId,
               owner: isOwner,
+              numberOfUsers: users,
             };
           }),
         ),

@@ -1,9 +1,11 @@
-import { Heading, Input, ScrollView, Text, VStack } from 'native-base';
+import { Button, Heading, Input, ScrollView, Text, VStack } from 'native-base';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-native';
 import CourseRowButton from 'src/components/Buttons/CourseRowButton/CourseRowButton';
 import { useGetUserCoursesQuery } from 'src/services/user/user';
 
 function Home() {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<string>('');
 
   const { data, isFetching } = useGetUserCoursesQuery();
@@ -16,7 +18,7 @@ function Home() {
   if (isFetching) return <Text>Loading...</Text>;
 
   return (
-    <VStack w="100%" flex="1" space="8">
+    <VStack w="100%" flex="1" space="4">
       <Input
         py="12px"
         fontSize="md"
@@ -24,6 +26,10 @@ function Home() {
         value={inputValue}
         onChangeText={setInputValue}
       />
+      <Button variant="secondary" onPress={() => navigate('/course/find')}>
+        Join a new course
+      </Button>
+
       <Heading>My courses</Heading>
 
       <ScrollView>
