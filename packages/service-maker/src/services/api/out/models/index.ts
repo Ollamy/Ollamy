@@ -1212,6 +1212,12 @@ export interface ValidateAnswerModel {
      * @memberof ValidateAnswerModel
      */
     answerId: string;
+    /**
+     * The data of the answer
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    data?: string;
 }
 /**
  * 
