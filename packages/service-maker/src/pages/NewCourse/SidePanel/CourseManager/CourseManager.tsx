@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
@@ -17,8 +19,6 @@ import {
   IconButton,
   Tooltip,
 } from '@radix-ui/themes';
-import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
-import { useNavigate } from 'react-router-dom';
 
 interface CourseManagerProps {
   courseId: string;
