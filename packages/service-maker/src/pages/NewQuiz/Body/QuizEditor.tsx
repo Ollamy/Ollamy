@@ -16,9 +16,7 @@ function QuizEditor({ lessonId }: QuizEditorProps) {
   return (
     <Container>
       <QuestionsSideBar lessonId={lessonId} />
-      {questionId && (
-        <QuestionEditor lessonId={lessonId} questionId={questionId} />
-      )}
+      {questionId && <QuestionEditor questionId={questionId} />}
       <QuestionsPropertiesSideBar />
     </Container>
   );

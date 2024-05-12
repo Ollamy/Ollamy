@@ -6,7 +6,6 @@ import { QuestionType } from 'pages/NewQuiz/Factory/factory.types';
 
 export interface Factory {
   Component: ({
-    lessonId,
     questionId,
   }: FactoryComponentInterface) => ReactElement;
   label: string;

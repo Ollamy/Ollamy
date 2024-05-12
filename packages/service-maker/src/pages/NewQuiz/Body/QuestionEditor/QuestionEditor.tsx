@@ -5,11 +5,10 @@ import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
 interface QuestionEditorProps {
-  lessonId: string;
   questionId: string;
 }
 
-function QuestionEditor({ lessonId, questionId }: QuestionEditorProps) {
+function QuestionEditor({ questionId }: QuestionEditorProps) {
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -18,13 +17,15 @@ function QuestionEditor({ lessonId, questionId }: QuestionEditorProps) {
 
   return (
     <Center>
-      <Container>
-        <h3>Question {questionId}</h3>
-        {React.createElement(
-          quizFactory[questionData.typeQuestion as QuestionType].Component,
-          { lessonId, questionId },
-        )}
-      </Container>
+      <Wrapper>
+        <Container>
+          <h3>Question {questionId}</h3>
+          {React.createElement(
+            quizFactory[questionData.typeQuestion as QuestionType].Component,
+            { questionId },
+          )}
+        </Container>
+      </Wrapper>
     </Center>
   );
 }
@@ -37,12 +38,19 @@ const Center = styled.div`
   flex: 1;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  width: 480px;
+  height: 100%;
+  padding: 24px 0;
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  width: 480px;
+  width: 100%;
   height: 100%;
   padding: 16px;
 

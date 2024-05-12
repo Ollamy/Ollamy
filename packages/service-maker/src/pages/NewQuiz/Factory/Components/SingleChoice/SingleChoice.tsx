@@ -21,7 +21,9 @@ type QuestionType = { title: string; description: string };
 
 function SingleChoice({ questionId }: FactoryComponentInterface) {
   const [questionImage, setQuestionImage] = useState<File | null>(null);
-  const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(undefined);
+  const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(
+    undefined,
+  );
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -120,23 +122,21 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
 
   return questionData ? (
     <Container>
-      {questionData.pictureId ? (
-        <Skeleton>
-          <QuestionImage src={questionData.pictureId} />
-        </Skeleton>
-      ) : (
-        <AddImageModal
-          image={questionImage}
-          setImage={setQuestionImage}
-          onUploadImage={handleUploadImage}
-          customTriggerButton={
+      <AddImageModal
+        image={questionImage}
+        setImage={setQuestionImage}
+        onUploadImage={handleUploadImage}
+        customTriggerButton={
+          questionData.pictureId ? (
+            <QuestionImage src={questionData.pictureId} />
+          ) : (
             <Button variant="surface">
               <UploadIcon />
               Upload Image
             </Button>
-          }
-        />
-      )}
+          )
+        }
+      />
       <fieldset>
         <label>Title</label>
         <TextField.Root
@@ -200,8 +200,6 @@ const QuestionImage = styled.img`
   align-self: center;
 
   cursor: pointer;
-
-  border: 1px solid black;
 `;
 
 const AnswerRow = styled.div`
