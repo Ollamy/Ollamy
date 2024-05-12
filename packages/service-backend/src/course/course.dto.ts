@@ -128,7 +128,7 @@ export const ExpirationMap: Record<Durationtype, number> = {
 };
 
 export class CourseGenerateCode {
-  @ApiProperty({ description: `Code's expiration time` })
+  @ApiProperty({ description: `Code's expiration time`, enum: Durationtype })
   @IsEnum(Durationtype)
   duration: Durationtype;
 }

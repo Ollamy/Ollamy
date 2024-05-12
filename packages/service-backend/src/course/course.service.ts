@@ -200,10 +200,8 @@ export class CourseService {
     try {
       const courseCode: string = (await RedisCacheService.run(
         'GET',
-        `${courseId}_share`,
+        `sharecode:${courseId}`,
       )) as string;
-
-      console.log(courseCode);
 
       if (courseCode !== undefined) {
         if ((body?.code && body.code !== courseCode) || !body?.code) {
@@ -275,7 +273,7 @@ export class CourseService {
 
       await RedisCacheService.run(
         'SET',
-        `${courseId}_share`,
+        `sharecode:${courseId}`,
         code,
         'EX',
         ExpirationMap[

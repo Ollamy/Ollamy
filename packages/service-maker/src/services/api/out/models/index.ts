@@ -111,8 +111,23 @@ export interface CourseGenerateCode {
      * @type {string}
      * @memberof CourseGenerateCode
      */
-    duration: string;
+    duration: CourseGenerateCodeDurationEnum;
 }
+
+
+/**
+ * @export
+ */
+export const CourseGenerateCodeDurationEnum = {
+    TenMinutes: 'TEN_MINUTES',
+    FifteenMinutes: 'FIFTEEN_MINUTES',
+    OneHour: 'ONE_HOUR',
+    TwoHours: 'TWO_HOURS',
+    OneDay: 'ONE_DAY',
+    OneWeek: 'ONE_WEEK'
+} as const;
+export type CourseGenerateCodeDurationEnum = typeof CourseGenerateCodeDurationEnum[keyof typeof CourseGenerateCodeDurationEnum];
+
 /**
  * 
  * @export
