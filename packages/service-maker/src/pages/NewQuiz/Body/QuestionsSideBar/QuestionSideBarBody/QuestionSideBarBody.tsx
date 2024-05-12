@@ -15,7 +15,7 @@ function QuestionSideBarBody({ lessonId }: QuestionSideBarBodyProps) {
 
   const handleRowClick = (id: string) => () => {
     navigate(
-      `/quiz/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`
+      `/course/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`,
     );
   };
 

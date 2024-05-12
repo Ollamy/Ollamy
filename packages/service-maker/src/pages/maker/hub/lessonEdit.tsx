@@ -37,7 +37,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   };
 
   const handleEdit = useCallback(() => {
-    navigate(`/quiz/${id}/section/${sectionId}/lesson/${lessonId}`);
+    navigate(`/course/${id}/section/${sectionId}/lesson/${lessonId}`);
   }, [id, lessonId, navigate, sectionId]);
 
   return (

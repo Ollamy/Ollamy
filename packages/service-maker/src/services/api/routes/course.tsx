@@ -16,16 +16,16 @@ export const GET_COURSE_SECTIONS_KEY = 'getCourseSections';
 export const courseActions = {
   useCourse: (
     requestParameters: GetCourseOperationRequest,
-    config?: UseQueryOptions<GetCourseRequest>
+    config?: UseQueryOptions<GetCourseRequest>,
   ) =>
     useQuery({
       queryKey: GET_COURSE_KEY,
       queryFn: () => CourseApi.getCourse(requestParameters),
       ...config,
     }),
-  useCourseSection: (
+  useGetCourseSection: (
     requestParameters: GetCourseSectionsRequest,
-    config?: UseQueryOptions<Array<CourseSectionModel>>
+    config?: UseQueryOptions<Array<CourseSectionModel>>,
   ) =>
     useQuery({
       queryKey: GET_COURSE_SECTIONS_KEY,

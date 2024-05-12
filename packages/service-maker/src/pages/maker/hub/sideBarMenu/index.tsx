@@ -26,10 +26,10 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    sectionId ?? null
+    sectionId ?? null,
   );
 
-  const { data: courseSections } = api.course.useCourseSection({
+  const { data: courseSections } = api.course.useGetCourseSection({
     id: courseId!,
   });
   const handleClose = async () => {

@@ -7,7 +7,6 @@ import { sectionActions } from 'services/api/routes/section';
 import { styled } from 'styled-components';
 
 import { SlashIcon } from '@radix-ui/react-icons';
-import { TabNav } from '@radix-ui/themes';
 
 interface PathProps {
   urlParams: {
@@ -35,22 +34,22 @@ function Path({ urlParams }: PathProps) {
 
   const { data: courseData } = courseActions.useCourse(
     { id: urlParams.id! },
-    { enabled: !!urlParams.id }
+    { enabled: !!urlParams.id },
   );
 
   const { data: sectionData } = sectionActions.useSection(
     { id: urlParams.sectionId! },
-    { enabled: !!urlParams.sectionId }
+    { enabled: !!urlParams.sectionId },
   );
 
   const { data: lessonData } = lessonActions.useLesson(
     { id: urlParams.lessonId! },
-    { enabled: !!urlParams.lessonId }
+    { enabled: !!urlParams.lessonId },
   );
 
   const { data: questionData } = questionActions.useQuestion(
     { id: urlParams.questionId! },
-    { enabled: !!urlParams.questionId }
+    { enabled: !!urlParams.questionId },
   );
 
   const handleClick = (element: ElementType) => {
@@ -67,13 +66,13 @@ function Path({ urlParams }: PathProps) {
       case ElementType.LESSON:
         console.log('lesson');
         navigate(
-          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`
+          `/course/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`,
         );
         break;
       case ElementType.QUESTION:
         console.log('question');
         navigate(
-          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`
+          `/course/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`,
         );
         break;
       default:

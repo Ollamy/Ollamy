@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import QuizEditor from 'pages/NewQuiz/Body/QuizEditor';
-import TopBar from 'pages/NewQuiz/Header/TopBar';
+import TopBar from 'components/TopBar/TopBar';
 import styled from 'styled-components';
 
 // eslint-disable-next-line

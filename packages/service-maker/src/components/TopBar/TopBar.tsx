@@ -2,10 +2,7 @@ import { useParams } from 'react-router-dom';
 import Path from 'components/TopBar/Path/Path';
 import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface TopBarProps {}
-
-function TopBar({}: TopBarProps) {
+function TopBar() {
   const urlParams = useParams();
 
   return (
