@@ -20,11 +20,11 @@ const SectionRow = ({
   title,
   description,
 }: SectionRowProps) => {
-  const [_, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const handleClick = useCallback(() => {
     setSearchParams({ sectionId: id });
-  }, []);
+  }, [id, setSearchParams]);
 
   return (
     <Tooltip content={description}>

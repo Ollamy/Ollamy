@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import { courseActions } from 'services/api/routes/course';
 import { Spinner, Text } from '@radix-ui/themes';
 import SectionRow from 'pages/NewCourse/SidePanel/List/Row/SectionRow';
-import useExtractSectionAndLessonIds from 'hooks/useExtractSectionAndLessonIds';
+import useExtractSectionId from 'hooks/useExtractSectionId';
 
 interface SectionListProps {
   courseId: string;
 }
 
 const SectionList = ({ courseId }: SectionListProps) => {
-  const { sectionId } = useExtractSectionAndLessonIds();
+  const { sectionId } = useExtractSectionId();
   const { data } = courseActions.useGetCourseSection({ id: courseId });
 
   return data && data.length ? (

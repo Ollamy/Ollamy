@@ -5,18 +5,18 @@ import CourseSidePanel from 'pages/NewCourse/SidePanel/CourseSidePanel';
 import Section from 'pages/NewCourse/Section/Section';
 import { useParams } from 'react-router-dom';
 import { Text } from '@radix-ui/themes';
-import useExtractSectionAndLessonIds from 'hooks/useExtractSectionAndLessonIds';
+import useExtractSectionId from 'hooks/useExtractSectionId';
 
 // eslint-disable-next-line
 interface NewCoursePageProps {}
 
 const NewCoursePage = ({}: NewCoursePageProps) => {
   const { courseId } = useParams();
-  const { lessonId, sectionId } = useExtractSectionAndLessonIds();
+  const { sectionId } = useExtractSectionId();
 
   useEffect(() => {
-    console.log(sectionId, lessonId);
-  }, [lessonId, sectionId]);
+    console.log(sectionId);
+  }, [sectionId]);
 
   return courseId ? (
     <Container>
