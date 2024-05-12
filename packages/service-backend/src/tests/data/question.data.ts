@@ -87,6 +87,7 @@ export const mockQuestionDb3: Question = {
 export const mockBodyIncorrect: ValidateAnswerModel = {
   questionId: questionId,
   answerId: incorrectAnswerId,
+  data: 'incorrect',
 };
 export const mockQuestionDb4: Question = {
   id: mockBody.questionId,

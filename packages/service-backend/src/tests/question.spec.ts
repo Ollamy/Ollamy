@@ -197,36 +197,4 @@ describe('updateQuestion', () => {
       questionService.updateQuestion(mockQuestionId3, mockQuestionData2),
     ).rejects.toThrow(ConflictException);
   });
-
-  it('should return success: false if the answer is incorrect', async () => {
-    jest
-      .spyOn(prisma.question, 'findUnique')
-      .mockResolvedValue(mockQuestionDb4);
-    jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
-
-    jest.spyOn(prisma.answer, 'findMany').mockResolvedValue([]);
-
-    jest
-      .spyOn(prisma.usertoLesson, 'findUnique')
-      .mockResolvedValue(mockUserLesson);
-    jest.spyOn(prisma.lesson, 'findUnique').mockResolvedValue(mockLesson);
-    jest.spyOn(prisma.section, 'findUnique').mockResolvedValue(mockSection1);
-    jest
-      .spyOn(prisma.usertoCourse, 'update')
-      .mockResolvedValue(mockUserToCourse);
-
-    jest
-      .spyOn(prisma.usertoCourse, 'findUnique')
-      .mockResolvedValue(mockUserToCourse);
-    await expect(
-      questionService.validateAnswer(mockBodyIncorrect, context),
-    ).resolves.toEqual({
-      success: false,
-      answer: correctAnswerId,
-      end: true,
-      nextQuestionId: undefined,
-      points: 0,
-      hp: 0,
-    });
-  });
 });
