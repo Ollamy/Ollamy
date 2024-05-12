@@ -1,38 +1,49 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsBoolean, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class FileAi {
-  @ApiProperty()
+  @ApiProperty({ description: 'The data of the file' })
   @IsString()
   data: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The MIME type of the file' })
   @IsString()
   mimeType: string;
 }
 
-export class Answer {
+export class BaseAnswer {
+  @ApiProperty({ description: 'The answer text' })
   @IsString()
   answer: string;
 
+  @ApiProperty({ description: 'Indicates if the answer is correct or not' })
   @IsBoolean()
   correct: boolean;
 }
 
-export class Question {
+export class Answer extends BaseAnswer {}
+
+export class BaseQuestion {
+  @ApiProperty({ description: 'The question text' })
   @IsString()
   question: string;
 
-  @Type(() => Answer)
-  @ValidateNested({ each: true })
+  @ApiProperty({ description: 'List of answers associated with the question' })
   @IsArray()
-  answers: Answer[];
+  @ValidateNested({ each: true })
+  @Type(() => BaseAnswer)
+  answers: BaseAnswer[];
 }
 
-export class QuestionResponse {
-  @Type(() => Question)
-  @ValidateNested({ each: true })
+export class Question extends BaseQuestion {}
+
+export class BaseQuestionResponse {
+  @ApiProperty({ description: 'List of questions and their answers' })
   @IsArray()
-  root: Question[];
+  @ValidateNested({ each: true })
+  @Type(() => BaseQuestion)
+  root: BaseQuestion[];
 }
+
+export class QuestionResponse extends BaseQuestionResponse {}

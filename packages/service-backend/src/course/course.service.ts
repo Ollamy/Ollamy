@@ -13,7 +13,7 @@ import {
   GetCourseRequest,
   UserCourseHp,
 } from './course.dto';
-import { CourseSectionModel, SectionModel } from 'section/section.dto';
+import { BaseSectionModel, SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Section } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
@@ -149,7 +149,7 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
+  async getCourseSections(CourseId: string): Promise<BaseSectionModel[]> {
     try {
       const courseSectionsDb: Section[] = await prisma.section.findMany({
         where: {
@@ -166,7 +166,7 @@ export class CourseService {
         id: lesson.id,
         title: lesson.title,
         description: lesson.description,
-      })) as CourseSectionModel[];
+      })) as BaseSectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');

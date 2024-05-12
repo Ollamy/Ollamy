@@ -3,6 +3,7 @@ import { Answer } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException } from '@nestjs/common';
 import {
+  BaseAnswerModel,
   CreateAnswerModel,
   IdAnswerModel,
   UpdateAnswerModel,
@@ -243,7 +244,8 @@ describe('updateAnswer', () => {
       questionId: mockAnswerId,
       data: '1',
       picture: 'picture',
-      // updated answer data
+      id: '',
+      order: ''
     };
     const mockUpdatedAnswer: Answer = {
       id: mockAnswerId,
@@ -288,6 +290,8 @@ describe('updateAnswer', () => {
       questionId: '1',
       data: 'data',
       picture: 'picture',
+      id: '',
+      order: ''
     };
 
     await expect(
@@ -310,6 +314,8 @@ describe('updateAnswer', () => {
       questionId: '1',
       data: 'data',
       picture: 'picture',
+      id: '',
+      order: ''
     };
 
     await expect(

@@ -1,104 +1,74 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsString, IsUUID, IsOptional } from 'class-validator';
 
-export class QuestionAnswerModel {
-  @ApiProperty()
+export class BaseAnswerModel {
+  @ApiProperty({ description: 'The unique identifier of the answer' })
   @IsUUID()
   id: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The data of the answer', required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The picture of the answer', required: false })
   @IsString()
   @IsOptional()
   picture?: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The order of the answer' })
   @IsString()
   order: string;
 }
 
-export class AnswerModel {
-  @ApiProperty()
+export class AnswerModel extends BaseAnswerModel {
+  @ApiProperty({ description: 'The unique identifier of the question associated with the answer' })
   @IsUUID()
   questionId: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  data?: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  picture?: string;
-
-  @ApiProperty()
-  @IsString()
-  order: string;
 }
 
 export class CreateAnswerModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the question associated with the answer' })
   @IsUUID()
   questionId: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The data of the answer', required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The picture of the answer', required: false })
   @IsString()
   @IsOptional()
   picture?: string;
 }
 
 export class IdAnswerModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the answer' })
   @IsUUID()
   id: string;
 }
 
-export class UpdateAnswerModel {
-  @ApiProperty({ required: false })
+export class UpdateAnswerModel extends BaseAnswerModel {
+  @ApiProperty({ description: 'The unique identifier of the question associated with the answer', required: false })
   @IsUUID()
   @IsOptional()
   questionId?: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  data?: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  picture?: string;
 }
 
 export class AnswerIdResponse {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the answer' })
   @IsUUID()
   id: string;
 }
 
 export class UpdateAnswerOrderModel {
-  @ApiProperty({
-    description: 'The order after the current order',
-    required: false,
-  })
+  @ApiProperty({ description: 'The order after the current order', required: false })
   @IsString()
   @IsOptional()
   after?: string | null;
 
-  @ApiProperty({
-    description: 'The order before the current order',
-    required: false,
-  })
+  @ApiProperty({ description: 'The order before the current order', required: false })
   @IsString()
   @IsOptional()
   before?: string | null;
