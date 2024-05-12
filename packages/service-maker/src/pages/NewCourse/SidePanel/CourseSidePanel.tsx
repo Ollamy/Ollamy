@@ -16,6 +16,10 @@ function CourseSidePanel({ courseId }: CourseSidePanelProps) {
   const currentData = useMemo(() => {
     if (!data) return undefined;
 
+    if (!searchValue) {
+      return data;
+    }
+
     return data
       .filter((element) =>
         element.title.toLowerCase().includes(searchValue.toLowerCase()),

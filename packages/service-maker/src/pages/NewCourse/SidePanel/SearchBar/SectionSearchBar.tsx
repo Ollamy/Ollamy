@@ -1,17 +1,19 @@
-import { TextField } from '@radix-ui/themes';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
+
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { type ChangeEvent, Dispatch, SetStateAction, useCallback } from 'react';
+import { TextField } from '@radix-ui/themes';
 
 interface SectionSearchBarProps {
   searchValue: string;
   setSearchValue: Dispatch<SetStateAction<string>>;
 }
 
-const SectionSearchBar = ({
+function SectionSearchBar({
   searchValue,
   setSearchValue,
-}: SectionSearchBarProps) => {
+}: SectionSearchBarProps) {
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);
@@ -32,7 +34,7 @@ const SectionSearchBar = ({
       </TextField.Root>
     </Container>
   );
-};
+}
 
 const Container = styled.div``;
 
