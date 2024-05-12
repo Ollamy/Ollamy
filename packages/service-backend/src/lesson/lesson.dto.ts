@@ -15,7 +15,7 @@ export class LessonModel {
   @IsString()
   description: string;
 
-  @ApiProperty({enum: LessonStatus})
+  @ApiProperty({ enum: LessonStatus })
   @IsString()
   status: LessonStatus;
 
@@ -49,17 +49,17 @@ export class IdLessonModel {
 }
 
 export class UpdateLessonModel {
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   sectionId?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   title?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   description?: string;
