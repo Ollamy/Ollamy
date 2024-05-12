@@ -26,7 +26,7 @@ abstract class BaseQuestion {
   @ApiProperty({ description: 'The description of the question', required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @ApiProperty({ description: 'The type of answer for the question' })
   @IsEnum(AnswerType)

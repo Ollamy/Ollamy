@@ -17,8 +17,8 @@ export class QuestionAnswerModel {
   picture?: string;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsString()
+  order: string;
 }
 
 export class AnswerModel {
@@ -37,8 +37,8 @@ export class AnswerModel {
   picture?: string;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsString()
+  order: string;
 }
 
 export class CreateAnswerModel {
