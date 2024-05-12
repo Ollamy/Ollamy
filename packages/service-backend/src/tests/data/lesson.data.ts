@@ -49,7 +49,7 @@ export const mockLessonUpdatedData: UpdateLessonModel = {
 export const mockUpdatedLesson: Lesson = {
   id: mockLessonId,
   section_id: uuidv4(),
-  ...mockLessonUpdatedData,
+  ...mockLessonUpdatedData as { title: string; description: string },
 };
 
 export const mockLessonData3: UpdateLessonModel = {

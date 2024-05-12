@@ -1,16 +1,14 @@
-import { type ReactElement, useEffect } from "react";
-import styled from "styled-components";
+import { type ReactElement, useEffect, useState } from 'react';
+import HomeBody from 'pages/Home/Body/HomeBody';
+import HomeHeader from 'pages/Home/Header/HomeHeader';
+import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
+import { DefaultApi } from 'services/api/out';
+import styled from 'styled-components';
 
-import TopBar from "../../components/TopBar";
-// eslint-disable-next-line import/no-cycle
-import api from "../../services/api";
-import { DefaultApi } from "../../services/api/out";
+export type PageType = 'home' | 'profile' | 'settings';
 
-import DashboardContent from "./Content";
-
-export function HomePage(): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = api.user.useUser();
+function HomePage(): ReactElement {
+  const [currentPage, setCurrentPage] = useState<PageType>('home');
 
   useEffect(() => {
     DefaultApi.healthCheck();
@@ -18,19 +16,37 @@ export function HomePage(): ReactElement {
 
   return (
     <Container>
-      <TopBar title="Ollamy Maker" />
-      <DashboardContent />
+      <HomeSidePanel
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+      <HomeContainer>
+        <HomeHeader />
+        <HomeBody />
+      </HomeContainer>
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
-  flex-direction: column;
 
   width: 100%;
   height: 100vh;
 
   background: #f1f3f6;
 `;
+
+const HomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 76px;
+
+  flex: 1;
+  width: 100%;
+
+  padding: 32px;
+  box-sizing: border-box;
+`;
+
+export default HomePage;

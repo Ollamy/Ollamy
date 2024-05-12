@@ -14,11 +14,12 @@ import {
   UpdateQuestionOrderModel,
   ValidateAnswerModel,
   ValidateAnswerResponse,
+  GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
 import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
-import { AnswerModel } from '../answer/answer.dto';
+import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
@@ -51,7 +52,7 @@ export class QuestionService {
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
           order: generateKeyBetween(
-            !lessonQuestions
+            !lessonQuestions || !lessonQuestions.length
               ? undefined
               : lessonQuestions[lessonQuestions.length - 1].order,
             undefined,
@@ -96,7 +97,7 @@ export class QuestionService {
     }
   }
 
-  async getQuestion(QuestionId: string): Promise<QuestionModel> {
+  async getQuestion(QuestionId: string): Promise<GetQuestionModel> {
     try {
       const questionDb: Question = await prisma.question.findFirst({
         orderBy: [
@@ -115,20 +116,19 @@ export class QuestionService {
       }
 
       return {
-        id: questionDb.id,
         lessonId: questionDb.lesson_id,
         title: questionDb.title,
         description: questionDb.description,
         typeAnswer: questionDb.type_answer,
         typeQuestion: questionDb.type_question,
-        trustAnswerId: questionDb.trust_answer_id,
         pictureId: questionDb.picture_id
           ? await PictureService.getPicture(questionDb.picture_id)
           : undefined,
         difficulty: questionDb.difficulty,
+        trust_answer_id: questionDb.trust_answer_id,
         order: questionDb.order,
         points: questionDb.points,
-      } as QuestionModel;
+      } as GetQuestionModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Question not found !');
@@ -145,12 +145,17 @@ export class QuestionService {
           id: QuestionId,
         },
         data: {
+          lesson_id: questionData?.lessonId,
           title: questionData?.title,
           description: questionData?.description,
-          lesson_id: questionData?.lessonId,
-          points: questionData?.points,
-          difficulty: questionData?.difficulty,
+          type_answer: questionData?.typeAnswer,
+          type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
+          picture_id: questionData?.picture
+            ? await PictureService.postPicture(questionData.picture)
+            : undefined,
+          difficulty: questionData?.difficulty,
+          points: questionData?.points,
         },
       });
 
@@ -190,12 +195,17 @@ export class QuestionService {
     };
   }
 
-  async getQuestionAnswers(QuestionId: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(QuestionId: string): Promise<QuestionAnswerModel[]> {
     try {
       const answersDb: Answer[] = await prisma.answer.findMany({
         where: {
           question_id: QuestionId,
         },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
       });
 
       if (!answersDb) {
@@ -207,12 +217,12 @@ export class QuestionService {
         async (answer) =>
           ({
             id: answer.id,
-            questionId: answer.question_id,
             data: answer.data,
             picture: answer.picture_id
               ? await PictureService.getPicture(answer.picture_id)
               : undefined,
-          } as AnswerModel),
+            order: answer.order,
+          } as unknown as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {

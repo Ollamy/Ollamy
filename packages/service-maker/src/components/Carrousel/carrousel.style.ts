@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ContainerHeight = styled.div`
   display: flex;
@@ -10,12 +10,12 @@ export const ContainerHeight = styled.div`
   width: 100%;
 `;
 
-export const ContainerWidth = styled.div<{ $width: string }>`
+export const ContainerWidth = styled.div<{ width: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: ${(props) => props.$width};
+  width: ${(props) => props.width};
   border-radius: 8px;
   height: 340px;
   margin: 24px;

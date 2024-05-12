@@ -1,13 +1,10 @@
-import type { UseQueryOptions } from "react-query";
-import { useMutation, useQuery } from "react-query";
+import type { UseQueryOptions } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import { GetUserModel, UserApi, UserCoursesResponse } from 'services/api/out';
+import { queryClient } from 'main';
 
-// eslint-disable-next-line import/no-cycle
-import { queryClient } from "../../../main";
-import type { GetUserModel, UserCoursesResponse } from "../out";
-import { UserApi } from "../out";
-
-export const GET_USER_KEY = "getUser";
-export const GET_USER_COURSES_KEY = "getUserCourses";
+export const GET_USER_KEY = 'getUser';
+export const GET_USER_COURSES_KEY = 'getUserCourses';
 
 export const userActions = {
   useUser: (config?: UseQueryOptions<GetUserModel>) =>

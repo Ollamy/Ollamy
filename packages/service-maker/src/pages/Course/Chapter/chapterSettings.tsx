@@ -1,27 +1,20 @@
-import type { ReactElement } from "react";
-import { useState } from "react";
-import type { GetCourseRequest } from "services/api/out";
-import styled from "styled-components";
+import { useState } from 'react';
+import { GetCourseRequest } from 'services/api/out';
+import TopBar from 'components/TopBar';
+import { Navbar } from 'components/Navbar/navbar';
+import { CourseSetting } from 'components/Course/Setting/course.setting';
+import { CoursePicture } from 'components/Course/Picture/course.picture';
+import { CarrouselMaker } from 'components/Carrousel/carrousel';
+import styled from 'styled-components';
 
-import profile from "../../../assets/profile.png";
-import { CarrouselMaker } from "../../../components/Carrousel/carrousel";
-import { CoursePicture } from "../../../components/Course/Picture/course.picture";
-import { CourseSetting } from "../../../components/Course/Setting/course.setting";
-import { Navbar } from "../../../components/Navbar/navbar";
-import TopBar from "../../../components/TopBar";
-// eslint-disable-next-line import/no-cycle
-import api from "../../../services/api";
-
-export function SettingPage(): ReactElement {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function SettingPage() {
   const [profilPercentage, setProfilePercentage] = useState<number>(45);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [courseProfile, setCourseProfile] = useState<GetCourseRequest>();
 
   return (
     <Container>
       <TopBar title="Profile">
-        <img src={profile} alt="profile pic" height="90%" />
+        <img src={'/assets/profile.png'} alt="profile pic" height="90%" />
       </TopBar>
       <Body>
         <Navbar user="Alexandre garage" profilPercentage={profilPercentage} />
@@ -45,13 +38,13 @@ export function SettingPage(): ReactElement {
             startPoint={0}
             image={[
               {
-                subtitle: "Learn basics",
+                subtitle: 'Learn basics',
               },
               {
-                subtitle: "Hook form",
+                subtitle: 'Hook form',
               },
               {
-                subtitle: "Use effect",
+                subtitle: 'Use effect',
               },
             ]}
           />

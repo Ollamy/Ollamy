@@ -175,7 +175,7 @@ export class UserController {
           };
     res.cookie(
       'session',
-      this.userService.updateUser(body, ctx),
+      await this.userService.updateUser(body, ctx),
       cookiesParams,
     );
 

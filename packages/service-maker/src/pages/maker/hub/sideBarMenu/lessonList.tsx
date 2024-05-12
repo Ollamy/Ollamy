@@ -1,8 +1,8 @@
-import CreateModal from "../../../../components/modal";
-import React, { useEffect, useState } from "react";
-import api from "../../../../services/api";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CreateModal from 'components/modal';
+import api from 'services/api';
+import styled from 'styled-components';
 
 interface LessonListProps {
   lessonId?: string;
@@ -10,24 +10,24 @@ interface LessonListProps {
   courseId: string;
 }
 
-const LessonList = (props: LessonListProps) => {
+function LessonList(props: LessonListProps) {
   const navigate = useNavigate();
 
   const { sectionId, courseId, lessonId } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const { mutateAsync: createLessonMutation } = api.lesson.useCreateLesson();
   const { data: sectionLessons } = api.section.useSectionLessons(
     {
-      id: sectionId ?? "",
+      id: sectionId ?? '',
     },
     { enabled: !!sectionId },
   );
 
   const handleClose = async () => {
     setIsOpen(false);
-    setTitle("");
+    setTitle('');
   };
 
   const [selectedLessonId, setSelectedLessonId] = useState<string | undefined>(
@@ -36,7 +36,9 @@ const LessonList = (props: LessonListProps) => {
   useEffect(() => {
     if (selectedLessonId) {
       if (sectionId)
-        navigate(`/course/${courseId}/${sectionId}/${selectedLessonId}`);
+        navigate(
+          `/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`,
+        );
     }
   }, [selectedLessonId]);
 
@@ -45,11 +47,11 @@ const LessonList = (props: LessonListProps) => {
   }, [lessonId]);
   const handleSubmit = async () => {
     try {
-      if (title === "") throw Error("Title need to be define");
-      if (!sectionId) throw Error("Section need to be define");
+      if (title === '') throw Error('Title need to be define');
+      if (!sectionId) throw Error('Section need to be define');
 
       await createLessonMutation({
-        createLessonModel: { sectionId, title, description: "" },
+        createLessonModel: { sectionId, title, description: '' },
       });
       handleClose();
     } catch (err) {
@@ -85,7 +87,7 @@ const LessonList = (props: LessonListProps) => {
       <PlusButton onClick={() => setIsOpen(true)}>+</PlusButton>
     </>
   );
-};
+}
 
 const PlusButton = styled.a`
   display: flex;
@@ -120,7 +122,7 @@ const InputField = styled.input`
 const LessonBox = styled.div<{ is_selected: boolean }>`
   border-radius: 8px;
   border: 1px solid;
-  border-color: ${(props) => (props.is_selected ? "#876BF6" : "#bdbdbd")};
+  border-color: ${(props) => (props.is_selected ? '#876BF6' : '#bdbdbd')};
 
   box-shadow: 2px 2px 8px 0px rgba(189, 189, 189, 0.25);
 

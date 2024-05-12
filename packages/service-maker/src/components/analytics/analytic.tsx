@@ -1,4 +1,4 @@
-import { ContainerAnalytic, Title } from "./analytic.style";
+import { ContainerAnalytic, Title } from 'components/analytics/analytic.style';
 
 export function AnalyticComponent(): React.ReactNode {
   return (
