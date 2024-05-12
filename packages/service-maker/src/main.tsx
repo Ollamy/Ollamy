@@ -108,6 +108,9 @@ const GlobalStyle = createGlobalStyle`
   
   button {
     cursor: pointer !important;
+    &[disabled] {
+      cursor: not-allowed !important;
+    }
   }
 `;
 

@@ -1,7 +1,7 @@
 import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from 'main';
-import type {
+import {
   GetLessonQuestionsRequest,
   GetLessonRequest,
   LessonModel,
@@ -16,13 +16,14 @@ export const GET_LESSON_QUESTION_KEY = 'getLessonQuestion';
 export const lessonActions = {
   useLesson: (
     requestParameters: GetLessonRequest,
-    config?: UseQueryOptions<LessonModel>
+    config?: UseQueryOptions<LessonModel>,
   ) =>
     useQuery({
       queryKey: [GET_LESSON_KEY, requestParameters.id],
       queryFn: () => LessonApi.getLesson(requestParameters),
       ...config,
     }),
+
   useCreateLesson: () =>
     useMutation(LessonApi.registerLesson, {
       onSuccess: () => {
@@ -38,11 +39,17 @@ export const lessonActions = {
     }),
   useGetLessonQuestion: (
     requestParameters: GetLessonQuestionsRequest,
-    config?: UseQueryOptions<Array<QuestionModel>>
+    config?: UseQueryOptions<Array<QuestionModel>>,
   ) =>
     useQuery({
       queryKey: GET_LESSON_QUESTION_KEY,
       queryFn: () => LessonApi.getLessonQuestions(requestParameters),
       ...config,
+    }),
+  useRemoveLesson: () =>
+    useMutation(LessonApi.deleteLesson, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+      },
     }),
 };

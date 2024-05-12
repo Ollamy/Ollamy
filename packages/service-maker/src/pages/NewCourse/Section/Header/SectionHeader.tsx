@@ -61,7 +61,7 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
         />
 
         <EditSectionButtonContainer>
-          <IconButton variant={'surface'} color={'orange'}>
+          <IconButton disabled variant={'surface'} color={'orange'}>
             <GearIcon />
           </IconButton>
           <CustomAlertDialog

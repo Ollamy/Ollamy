@@ -51,7 +51,7 @@ function LessonTable({ sectionId }: LessonTableProps) {
                 <Table.Cell justify={'center'}>{numberOfQuestions}</Table.Cell>
                 <Table.Cell justify={'center'}>{numberOfLectures}</Table.Cell>
                 <Table.Cell justify={'center'}>
-                  <OptionDropdownMenu />
+                  <OptionDropdownMenu lessonId={id} />
                 </Table.Cell>
               </Table.Row>
             ),

@@ -7,11 +7,18 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { DotsHorizontalIcon, TrashIcon } from '@radix-ui/react-icons';
 import { IconButton } from '@radix-ui/themes';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import { lessonActions } from 'services/api/routes/lesson';
 
-function OptionDropdownMenu() {
+interface OptionDropdownMenuProps {
+  lessonId: string;
+}
+
+function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
   const [open, setOpen] = useState(false);
+  const { mutateAsync: removeLesson } = lessonActions.useRemoveLesson();
 
   const handleRemoveLesson = useCallback(async () => {
+    await removeLesson({ idLessonModel: { id: lessonId } });
     setOpen(false);
   }, []);
 
