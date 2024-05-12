@@ -12,8 +12,6 @@ function FindCourse() {
   const { data, isFetching } = useGetCourseByIdQuery(course);
 
   useEffect(() => {
-    console.log({ data });
-
     if (data) {
       setCourseData(data);
     }
