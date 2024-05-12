@@ -1,17 +1,16 @@
 import useExtractSectionId from 'hooks/useExtractSectionId';
 import SectionRow from 'pages/NewCourse/SidePanel/List/Row/SectionRow';
-import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
 import { Spinner, Text } from '@radix-ui/themes';
+import { CourseSectionModel } from 'services/api/out';
 
 interface SectionListProps {
-  courseId: string;
+  data?: CourseSectionModel[];
 }
 
-function SectionList({ courseId }: SectionListProps) {
+function SectionList({ data }: SectionListProps) {
   const { sectionId } = useExtractSectionId();
-  const { data } = courseActions.useGetCourseSection({ id: courseId });
 
   return data && data.length ? (
     <Container>
@@ -26,6 +25,10 @@ function SectionList({ courseId }: SectionListProps) {
         />
       ))}
     </Container>
+  ) : data && !data.length ? (
+    <LoadingContainer>
+      <Text>No results or sections…</Text>
+    </LoadingContainer>
   ) : (
     <LoadingContainer>
       <Spinner />

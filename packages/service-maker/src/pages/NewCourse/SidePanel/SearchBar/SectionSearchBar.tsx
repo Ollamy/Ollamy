@@ -1,14 +1,31 @@
 import { TextField } from '@radix-ui/themes';
 import styled from 'styled-components';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { type ChangeEvent, Dispatch, SetStateAction, useCallback } from 'react';
 
-// eslint-disable-next-line
-interface SectionSearchBarProps {}
+interface SectionSearchBarProps {
+  searchValue: string;
+  setSearchValue: Dispatch<SetStateAction<string>>;
+}
 
-const SectionSearchBar = ({}: SectionSearchBarProps) => {
+const SectionSearchBar = ({
+  searchValue,
+  setSearchValue,
+}: SectionSearchBarProps) => {
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [setSearchValue],
+  );
+
   return (
     <Container>
-      <TextField.Root placeholder={'Find a section…'}>
+      <TextField.Root
+        value={searchValue}
+        onChange={handleChange}
+        placeholder={'Find a section…'}
+      >
         <TextField.Slot>
           <MagnifyingGlassIcon height={'16'} width={'16'} />
         </TextField.Slot>

@@ -2,17 +2,35 @@ import SectionCreator from 'pages/NewCourse/SidePanel/Creator/SectionCreator';
 import SectionList from 'pages/NewCourse/SidePanel/List/SectionList';
 import SectionSearchBar from 'pages/NewCourse/SidePanel/SearchBar/SectionSearchBar';
 import styled from 'styled-components';
+import { useMemo, useState } from 'react';
+import { courseActions } from 'services/api/routes/course';
 
 interface CourseSidePanelProps {
   courseId: string;
 }
 
 function CourseSidePanel({ courseId }: CourseSidePanelProps) {
+  const [searchValue, setSearchValue] = useState<string>('');
+  const { data } = courseActions.useGetCourseSection({ id: courseId });
+
+  const currentData = useMemo(() => {
+    if (!data) return undefined;
+
+    return data
+      .filter((element) =>
+        element.title.toLowerCase().includes(searchValue.toLowerCase()),
+      )
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [data, searchValue]);
+
   return (
     <Container>
-      <SectionSearchBar />
+      <SectionSearchBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+      />
       <SectionCreator courseId={courseId} />
-      <SectionList courseId={courseId} />
+      <SectionList data={currentData} />
     </Container>
   );
 }
