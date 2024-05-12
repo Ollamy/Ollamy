@@ -186,6 +186,7 @@ describe('getCourse', () => {
         description: mockCourseDb.description,
         lastLessonId: mockLastLessonDb.lesson_id,
         lastSectionId: mockLastSectionDb.section_id,
+        numberOfUsers: 0,
       };
       expect(result.picture).toContain('http');
       expect(result.picture).toContain(mockPictureDb.filename);
