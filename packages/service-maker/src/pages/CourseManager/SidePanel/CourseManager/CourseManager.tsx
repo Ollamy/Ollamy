@@ -36,7 +36,7 @@ function CourseManager({ courseId }: CourseManagerProps) {
     await removeCourse({ idCourseModel: { id: courseId } }).then(() => {
       navigate('/home');
     });
-  }, []);
+  }, [courseId, navigate, removeCourse]);
 
   return (
     <Container>
@@ -76,7 +76,7 @@ function CourseManager({ courseId }: CourseManagerProps) {
                 </DataList.Label>
                 <DataList.Value>
                   <Badge color={'blue'} variant={'soft'} radius={'full'}>
-                    42
+                    {data?.numberOfUsers || 0}
                   </Badge>
                 </DataList.Value>
               </DataList.Item>
