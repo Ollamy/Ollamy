@@ -5,18 +5,11 @@ import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
-import { type Lesson, LessonStatus } from 'src/pages/courses/types';
+import type { Lesson } from 'src/pages/courses/types';
+import { LessonStatus } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
 import { useJoinLessonMutation } from 'src/services/lesson/lesson';
-import type { LessonResponse } from 'src/services/lesson/lesson.dto';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
-
-function getLastLessonIndex(sectionsData: LessonResponse[], lastLessonId: string | undefined) {
-  if (!lastLessonId) return 0;
-  const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastLessonId);
-
-  return lastSectionIndex !== -1 ? lastSectionIndex : 0;
-}
 
 function SectionDashboard() {
   const { id: courseId, sectionId } = useParams();
@@ -30,14 +23,15 @@ function SectionDashboard() {
 
   const lessons = useMemo<Lesson[]>(() => {
     if (!lessonsData) return [];
-    const lastLessonIndex = getLastLessonIndex(lessonsData, courseData?.lastLessonId);
+
+    const lastCompletedLesson = lessonsData.findLastIndex((e) => e.status === LessonStatus.COMPLETED);
 
     return lessonsData.map((s, i) => {
-      if (i > lastLessonIndex) return { ...s, status: LessonStatus.NOT_STARTED };
-      if (i === lastLessonIndex) return { ...s, status: LessonStatus.IN_PROGRESS };
-      return { ...s, status: LessonStatus.NOT_STARTED };
+      if (i === lastCompletedLesson + 1) return { ...s, status: LessonStatus.IN_PROGRESS };
+      if (i > lastCompletedLesson) return { ...s, status: LessonStatus.NOT_STARTED };
+      return { ...s, status: LessonStatus.COMPLETED };
     });
-  }, [courseData, lessonsData]);
+  }, [lessonsData]);
 
   const showToast = (body: ToastShowParams): void => Toast.show(body);
 

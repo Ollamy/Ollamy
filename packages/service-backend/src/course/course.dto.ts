@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import {
   IsBoolean,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -28,15 +29,19 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   lastLessonId?: string;
 
-  @ApiProperty({required: false})
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   lastSectionId?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  numberOfUsers: number;
 }
 
 export class CreateCourseModel {
@@ -102,4 +107,41 @@ export class UserCourseHp {
   @ApiProperty()
   @IsString()
   timer: string;
+}
+
+export enum Durationtype {
+  TEN_MINUTES = 'TEN_MINUTES',
+  FIFTEEN_MINUTES = 'FIFTEEN_MINUTES',
+  ONE_HOUR = 'ONE_HOUR',
+  TWO_HOURS = 'TWO_HOURS',
+  ONE_DAY = 'ONE_DAY',
+  ONE_WEEK = 'ONE_WEEK',
+}
+
+export const ExpirationMap: Record<Durationtype, number> = {
+  [Durationtype.TEN_MINUTES]: 10 * 60,
+  [Durationtype.FIFTEEN_MINUTES]: 15 * 60,
+  [Durationtype.ONE_HOUR]: 60 * 60,
+  [Durationtype.TWO_HOURS]: 2 * 60 * 60,
+  [Durationtype.ONE_DAY]: 24 * 60 * 60,
+  [Durationtype.ONE_WEEK]: 7 * 24 * 60 * 60,
+};
+
+export class CourseGenerateCode {
+  @ApiProperty({ description: `Code's expiration time`, enum: Durationtype })
+  @IsEnum(Durationtype)
+  duration: Durationtype;
+}
+
+export class ShareCourseCode {
+  @ApiProperty({ description: `Course's sharing code` })
+  @IsString()
+  code: string;
+}
+
+export class CourseCodeModel {
+  @ApiProperty({ description: `Course's sharing code`, required: false })
+  @IsString()
+  @IsOptional()
+  code?: string;
 }

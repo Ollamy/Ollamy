@@ -26,12 +26,7 @@ function QuizAnswerInput({
   const onUploadImage = async () => {
     try {
       if (!droppedImage) return;
-      console.log('uploading image...');
-
       const base64 = await toBase64(droppedImage);
-
-      console.log('base 64 :', base64?.toString());
-
       if (!base64) throw new Error('Error uploading image');
 
       updateAnswer({

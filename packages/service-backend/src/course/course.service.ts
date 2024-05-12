@@ -12,12 +12,21 @@ import {
   CourseTrueResponse,
   GetCourseRequest,
   UserCourseHp,
+  CourseGenerateCode,
+  ShareCourseCode,
+  ExpirationMap,
+  Durationtype,
+  CourseCodeModel,
 } from './course.dto';
 import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import { Course, Prisma, Section } from '@prisma/client';
+import { Course, Prisma, Role, Section } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { TasksService } from 'cron/cron.service';
+import RedisCacheService from '../redis/redis.service';
+import { courseId } from '../tests/data/course.data';
+
+const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
@@ -97,6 +106,15 @@ export class CourseService {
         },
       });
 
+      const users = await prisma.usertoCourse.count({
+        where: {
+          course_id: courseId,
+          role_user: {
+            equals: Role.MEMBER,
+          },
+        },
+      });
+
       if (!courseDb) {
         Logger.error('Course does not exists !');
         throw new ConflictException('Course does not exists !');
@@ -111,6 +129,7 @@ export class CourseService {
           : undefined,
         lastLessonId: userToCourse?.last_lesson_id,
         lastSectionId: userToCourse?.last_section_id,
+        numberOfUsers: users,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
@@ -175,9 +194,21 @@ export class CourseService {
 
   async addUserToCourse(
     courseId: string,
+    body: CourseCodeModel,
     userId: string,
   ): Promise<CourseTrueResponse> {
     try {
+      const courseCode: string = (await RedisCacheService.run(
+        'GET',
+        `sharecode:${courseId}`,
+      )) as string;
+
+      if (courseCode !== undefined) {
+        if ((body?.code && body.code !== courseCode) || !body?.code) {
+          return { success: false } as CourseTrueResponse;
+        }
+      }
+
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {
           user_id: userId,
@@ -212,7 +243,6 @@ export class CourseService {
         },
       });
 
-
       if (!data) {
         Logger.error('Cannot find userToCourse');
         throw new NotFoundException('Cannot find userToCourse');
@@ -225,6 +255,36 @@ export class CourseService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Error while fecthing hp !');
+    }
+  }
+
+  async generateCodeforCourse(
+    courseId: string,
+    body: CourseGenerateCode,
+  ): Promise<ShareCourseCode> {
+    try {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < CODE_LENGTH; i++) {
+        code += characters.charAt(
+          Math.floor(Math.random() * characters.length),
+        );
+      }
+
+      await RedisCacheService.run(
+        'SET',
+        `sharecode:${courseId}`,
+        code,
+        'EX',
+        ExpirationMap[
+          body?.duration ? body.duration : Durationtype.TEN_MINUTES
+        ],
+      );
+
+      return { code } as ShareCourseCode;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Course not updated !');
     }
   }
 }

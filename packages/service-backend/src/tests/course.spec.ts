@@ -166,6 +166,7 @@ describe('getCourse', () => {
       jest
         .spyOn(prisma.usertoCourse, 'findFirst')
         .mockResolvedValue(mockUserToCourse);
+      jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(0);
     }
 
     {
@@ -186,6 +187,7 @@ describe('getCourse', () => {
         description: mockCourseDb.description,
         lastLessonId: mockLastLessonDb.lesson_id,
         lastSectionId: mockLastSectionDb.section_id,
+        numberOfUsers: 0,
       };
       expect(result.picture).toContain('http');
       expect(result.picture).toContain(mockPictureDb.filename);

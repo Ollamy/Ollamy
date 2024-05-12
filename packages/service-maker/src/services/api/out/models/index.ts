@@ -90,6 +90,47 @@ export interface BadgeModel {
 /**
  * 
  * @export
+ * @interface CourseCodeModel
+ */
+export interface CourseCodeModel {
+    /**
+     * Course's sharing code
+     * @type {string}
+     * @memberof CourseCodeModel
+     */
+    code?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseGenerateCode
+ */
+export interface CourseGenerateCode {
+    /**
+     * Code's expiration time
+     * @type {string}
+     * @memberof CourseGenerateCode
+     */
+    duration: CourseGenerateCodeDurationEnum;
+}
+
+
+/**
+ * @export
+ */
+export const CourseGenerateCodeDurationEnum = {
+    TenMinutes: 'TEN_MINUTES',
+    FifteenMinutes: 'FIFTEEN_MINUTES',
+    OneHour: 'ONE_HOUR',
+    TwoHours: 'TWO_HOURS',
+    OneDay: 'ONE_DAY',
+    OneWeek: 'ONE_WEEK'
+} as const;
+export type CourseGenerateCodeDurationEnum = typeof CourseGenerateCodeDurationEnum[keyof typeof CourseGenerateCodeDurationEnum];
+
+/**
+ * 
+ * @export
  * @interface CourseIdResponse
  */
 export interface CourseIdResponse {
@@ -426,6 +467,12 @@ export interface GetCourseRequest {
      * @memberof GetCourseRequest
      */
     lastSectionId?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetCourseRequest
+     */
+    numberOfUsers: number;
 }
 /**
  * 
@@ -983,6 +1030,19 @@ export interface SectionModel {
 /**
  * 
  * @export
+ * @interface ShareCourseCode
+ */
+export interface ShareCourseCode {
+    /**
+     * Course's sharing code
+     * @type {string}
+     * @memberof ShareCourseCode
+     */
+    code: string;
+}
+/**
+ * 
+ * @export
  * @interface SuccessBody
  */
 export interface SuccessBody {
@@ -1337,6 +1397,12 @@ export interface UserCourses {
      * @memberof UserCourses
      */
     lastSectionId: string;
+    /**
+     * The number of users enrolled in the course
+     * @type {number}
+     * @memberof UserCourses
+     */
+    numberOfUsers: number;
 }
 /**
  * 
