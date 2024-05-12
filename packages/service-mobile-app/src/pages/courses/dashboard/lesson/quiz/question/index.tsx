@@ -3,7 +3,7 @@ import React, { createElement, useEffect, useState } from 'react';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
-import type { AnswerType } from 'src/services/question/question.dto';
+import { AnswerType } from 'src/services/question/question.dto';
 
 import QuestionDifficulty from './questionDifficulty';
 import QuestionTitle from './questionTitle';
@@ -34,7 +34,11 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
 
   const validateAnswer = async (answer: string, answerType: AnswerType) => {
     try {
-      const data = await validate({ answerId: answer, questionId }).unwrap();
+      const data = await validate({
+        answerId: answerType === AnswerType.FREE_ANSWER ? undefined : answer,
+        questionId,
+        data: answerType === AnswerType.FREE_ANSWER ? answer : undefined,
+      }).unwrap();
       setNextQuestionId(data.nextQuestionId);
       setTrueAnswer(data.answer);
       setIsEnd(data.end);
