@@ -202,7 +202,7 @@ export class CourseService {
     userId: string,
   ): Promise<UserCourseHp> {
     try {
-      const { hp } = await prisma.usertoCourse.findFirst({
+      const data = await prisma.usertoCourse.findFirst({
         where: {
           user_id: userId,
           course_id: courseId,
@@ -212,8 +212,14 @@ export class CourseService {
         },
       });
 
+
+      if (!data) {
+        Logger.error('Cannot find userToCourse');
+        throw new NotFoundException('Cannot find userToCourse');
+      }
+
       return {
-        hp: hp,
+        hp: data.hp,
         timer: this.cronService.getHpCron(userId, courseId),
       };
     } catch (error) {

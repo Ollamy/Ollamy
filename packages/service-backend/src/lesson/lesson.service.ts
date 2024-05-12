@@ -7,7 +7,6 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
-  JoinLessonModel,
   LessonModel,
   UpdateLessonModel,
   LessonIdResponse,
@@ -18,10 +17,8 @@ import {
   Prisma,
   Question,
   Lesson,
-  UsertoLesson,
   Lecture,
 } from '@prisma/client';
-import { error } from 'console';
 
 @Injectable()
 export class LessonService {
@@ -189,18 +186,29 @@ export class LessonService {
     userId: string,
   ): Promise<LessonIdResponse> {
     try {
-      const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
-        data: {
-          user_id: userId,
-          lesson_id: lessonId,
-        },
-      });
+      let userToLesson = await prisma.usertoLesson.findUnique({
+        where: {
+          lesson_id_user_id: {
+            user_id: userId,
+            lesson_id: lessonId,
+          }
+        }
+      })
 
-      if (!usertoLessonDb) {
+      if (!userToLesson) {
+        userToLesson = await prisma.usertoLesson.create({
+          data: {
+            user_id: userId,
+            lesson_id: lessonId,
+          },
+        });
+      }
+
+      if (!userToLesson) {
         Logger.error('Failed to create user lesson !');
         throw new NotFoundException('Failed to create user lesson !');
       }
-      return { id: usertoLessonDb.lesson_id } as LessonIdResponse;
+      return { id: userToLesson.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');
