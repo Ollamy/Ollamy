@@ -13,7 +13,7 @@ import {
 } from 'section/section.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import { Lesson, Prisma, Section } from '@prisma/client';
+import { Lesson, LessonStatus, Prisma, Section } from '@prisma/client';
 
 @Injectable()
 export class SectionService {
@@ -152,7 +152,7 @@ export class SectionService {
           id: lesson.id,
           description: lesson.description,
           title: lesson.title,
-          status: userLesson.status,
+          status: userLesson?.status || LessonStatus.NOT_STARTED,
           numberOfQuestions: questionsCount || 0,
           numberOfLectures: lecturesCount || 0,
         };
