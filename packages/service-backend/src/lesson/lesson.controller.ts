@@ -96,8 +96,11 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getLesson(@Param('id') id: string): Promise<LessonModel> {
-    return this.lessonService.getLesson(id);
+  async getLesson(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<LessonModel> {
+    return this.lessonService.getLesson(id, ctx.__user.id);
   }
 
   @ApiOkResponse({
