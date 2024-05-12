@@ -91,12 +91,12 @@ function Login(): JSX.Element {
 
   return (
     <SafeAreaView>
-      <Image source={BACKGROUND} position="absolute" />
+      <Image source={BACKGROUND} position="absolute" alt="background" />
       <Box w="100%" h="100%" paddingX={4} paddingY={16}>
         <Box w="full" h="full" bg="white" opacity={0.97} borderRadius={8} p="24px">
           <VStack w="full">
             <HStack alignItems="center" space="md" w="full">
-              <Image source={Ollamy} w="72px" h="38px" resizeMode="contain" />
+              <Image source={Ollamy} w="72px" h="38px" resizeMode="contain" alt="ollamy" />
               <Heading color="#758EE9" fontWeight="bold" fontSize={24}>
                 Ollamy
               </Heading>

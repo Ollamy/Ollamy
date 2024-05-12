@@ -23,13 +23,20 @@ function Lecture(props: LectureProps) {
 
   const { id: courseId } = useParams();
   const { data: course, isFetching: isLessonLectureFetching } = useGetLessonLectureQuery({ id: lessonId });
-  const { data: userHp, isFetching: isCourseHpFetching } = useGetCourseUserHpQuery(courseId!);
+  const {
+    data: userHp,
+    isFetching: isCourseHpFetching,
+    refetch: refetchHealthPoints,
+  } = useGetCourseUserHpQuery(courseId!);
 
   const { isOpen, onClose, onOpen } = useDisclose();
+  const [next, setNext] = useState<number | undefined>();
 
-  const nextHeartDate = new Date('Wed Apr 11 2024 08:25:23 GMT-0700');
-
-  const [next, setNext] = useState<number>(nextHeartDate.getTime() - Date.now());
+  useEffect(() => {
+    if (userHp?.timer) {
+      setNext(new Date(userHp.timer).getTime() - Date.now());
+    }
+  }, [userHp]);
 
   const handleTakeQuiz = useCallback(() => {
     if (!userHp) return;
@@ -42,12 +49,24 @@ function Lecture(props: LectureProps) {
   }, [onOpen, setLectureState, userHp]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNext(nextHeartDate.getTime() - Date.now());
+    const interval = setInterval(async () => {
+      try {
+        if (userHp?.timer) {
+          const timeBeforeNextLife = new Date(userHp.timer).getTime() - Date.now();
+          if (timeBeforeNextLife < 0) await refetchHealthPoints();
+          setNext(timeBeforeNextLife);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [next]);
+  }, [next, refetchHealthPoints, userHp?.timer]);
+
+  useEffect(() => {
+    if (userHp?.hp && userHp.hp > 0) onClose();
+  }, [onClose, userHp]);
 
   if (isCourseHpFetching || isLessonLectureFetching) return <Text>Loading...</Text>;
   if (!course || !userHp) return <ErrorPage />;
@@ -77,11 +96,11 @@ function Lecture(props: LectureProps) {
         </Text>
         <SafeAreaView style={{ width: '100%' }}>
           <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <Markdown>{course.data}</Markdown>
+            <Markdown>{course[0].data}</Markdown>
           </ScrollView>
         </SafeAreaView>
       </VStack>
-      <HealthModal health={userHp.hp} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />
+      {next && <HealthModal health={userHp.hp} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />}
       <TextButton title="Take the quiz" onPress={handleTakeQuiz} rightIconName="arrow-forward" />
     </VStack>
   );
