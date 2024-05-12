@@ -426,6 +426,12 @@ export interface GetCourseRequest {
      * @memberof GetCourseRequest
      */
     lastSectionId?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetCourseRequest
+     */
+    numberOfUsers: number;
 }
 /**
  * 
@@ -1337,6 +1343,12 @@ export interface UserCourses {
      * @memberof UserCourses
      */
     lastSectionId: string;
+    /**
+     * The number of users enrolled in the course
+     * @type {number}
+     * @memberof UserCourses
+     */
+    numberOfUsers: number;
 }
 /**
  * 
