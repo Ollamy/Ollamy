@@ -11,6 +11,7 @@ import {
   GetUserScoreModel,
   LoginUserModel,
   UpdateUserModel,
+  UserCourses,
   UserCoursesResponse,
   UserIdResponse,
 } from './user.dto';
@@ -138,7 +139,9 @@ export class UserService {
 
   async updateUser(userData: UpdateUserModel, ctx: any): Promise<string> {
     try {
-      userData.password = this.hashPassword(userData.password);
+      if (userData.password) {
+        userData.password = this.hashPassword(userData.password);
+      }
       const userDb: User = await prisma.user.update({
         where: {
           id: ctx.__user.id,
@@ -212,11 +215,15 @@ export class UserService {
       return {
         courses: await Promise.all(
           courses.map(async (course) => {
-            const { last_lesson_id: lastLessonId, last_section_id: lastSectionId } =
-              userDb.UsertoCourse.find((c) => c.course_id === course.id);
+            const {
+              last_lesson_id: lastLessonId,
+              last_section_id: lastSectionId,
+            } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
 
             const isOwner = course.owner_id === ctx.__user.id;
-            const pictureId = await PictureService.getPicture(course.picture_id);
+            const pictureId = await PictureService.getPicture(
+              course.picture_id,
+            );
 
             delete course.owner_id;
             delete course.picture_id;

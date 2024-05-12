@@ -12,10 +12,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CourseModel {
   @ApiProperty()
   @IsUUID()
-  id: string;
-
-  @ApiProperty()
-  @IsUUID()
   ownerId: string;
 
   @ApiProperty()
@@ -32,12 +28,12 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsUUID()
   @IsOptional()
   lastLessonId?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsUUID()
   @IsOptional()
   lastSectionId?: string;
@@ -52,8 +48,9 @@ export class CreateCourseModel {
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   picture?: string;
 }
 
@@ -64,24 +61,25 @@ export class IdCourseModel {
 }
 
 export class UpdateCourseModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  ownerId: string;
+  ownerId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
-  picture: string;
+  picture?: string;
 }
 
 export class CourseIdResponse {

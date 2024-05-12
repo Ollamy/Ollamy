@@ -180,7 +180,6 @@ describe('getCourse', () => {
       });
 
       const expectedCourseModel: GetCourseRequest = {
-        id: mockCourseDb.id,
         ownerId: mockCourseDb.owner_id,
         picture: mockPictureDb.filename,
         title: mockCourseDb.title,
@@ -249,6 +248,7 @@ describe('updateCourse', () => {
           id: courseId,
         },
         data: {
+          owner_id: mockUpdateCourseData.ownerId,
           title: mockUpdateCourseData.title,
           description: mockUpdateCourseData.description,
           picture_id: mockPictureDb.id,

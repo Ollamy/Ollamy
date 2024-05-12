@@ -28,4 +28,6 @@ export interface ValidateAnswerResponse {
   answer: string;
   end: boolean;
   nextQuestionId?: string | undefined;
+  points: number;
+  hp: number;
 }

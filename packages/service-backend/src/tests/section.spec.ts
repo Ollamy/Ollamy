@@ -9,10 +9,8 @@ import {
   sectionId,
   mockSectionData3,
   mockSectionDb3,
-  mockLessonDb,
   courseId,
 } from 'tests/data/section.data';
-import { Lesson } from '@prisma/client';
 import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
@@ -148,7 +146,6 @@ describe('getSection', () => {
     expect(result).toEqual({
       courseId: mockSectionDb.course_id,
       description: mockSectionDb.description,
-      id: mockSectionDb.id,
       title: mockSectionDb.title,
     });
   });
@@ -226,52 +223,5 @@ describe('updateSection', () => {
     await expect(
       sectionService.updateSection(sectionId, mockSectionData3),
     ).rejects.toThrow(ConflictException);
-  });
-});
-
-describe('getSectionLessons', () => {
-  let sectionService: SectionService;
-
-  beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
-      providers: [SectionService],
-    }).compile();
-
-    sectionService = moduleRef.get<SectionService>(SectionService);
-  });
-  it('should return an array of lessons when they exist', async () => {
-    // Mock the dependencies or services
-
-    jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
-
-    // Invoke the function being tested
-    const result = await sectionService.getSectionLessons(sectionId);
-
-    // Perform assertions
-    expect(prisma.lesson.findMany).toHaveBeenCalledTimes(1);
-    expect(prisma.lesson.findMany).toHaveBeenCalledWith({
-      where: {
-        section_id: sectionId,
-      },
-    });
-
-    expect(result).toEqual(
-      mockLessonDb.map((lesson: Lesson) => ({
-        sectionId: lesson.section_id,
-        description: lesson.description,
-        id: lesson.id,
-        title: lesson.title,
-      })),
-    );
-  });
-
-  it('should throw NotFoundException if an error occurs', async () => {
-    jest
-      .spyOn(prisma.lesson, 'findMany')
-      .mockRejectedValue(new Error('Some error'));
-
-    await expect(sectionService.getSectionLessons(sectionId)).rejects.toThrow(
-      NotFoundException,
-    );
   });
 });

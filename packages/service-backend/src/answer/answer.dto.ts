@@ -1,24 +1,44 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class AnswerModel {
+export class QuestionAnswerModel {
   @ApiProperty()
   @IsUUID()
   id: string;
 
-  @ApiProperty()
-  @IsUUID()
-  questionId: string;
-
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
+}
+
+export class AnswerModel {
+  @ApiProperty()
+  @IsUUID()
+  questionId: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  data?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  picture?: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
 }
 
 export class CreateAnswerModel {
@@ -26,11 +46,12 @@ export class CreateAnswerModel {
   @IsUUID()
   questionId: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  data: string;
+  @IsOptional()
+  data?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
@@ -43,17 +64,17 @@ export class IdAnswerModel {
 }
 
 export class UpdateAnswerModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   questionId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   data?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   picture?: string;
@@ -63,4 +84,26 @@ export class AnswerIdResponse {
   @ApiProperty()
   @IsUUID()
   id: string;
+}
+
+export class UpdateAnswerOrderModel {
+  @ApiProperty({
+    description: 'The order after the current order',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  after?: string | null;
+
+  @ApiProperty({
+    description: 'The order before the current order',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  before?: string | null;
+
+  @ApiProperty({ description: 'The origin of the answer' })
+  @IsUUID()
+  origin: string;
 }

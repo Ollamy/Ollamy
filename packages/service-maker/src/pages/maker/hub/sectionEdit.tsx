@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { ReactElement, useEffect, useState } from "react";
-import api from "../../../services/api";
-import { SectionModel } from "services/api/out";
+import styled from 'styled-components';
+import { ReactElement, useEffect, useState } from 'react';
+import api from 'services/api';
+import { SectionModel } from 'services/api/out';
 
 interface SectionEditProps {
   section: SectionModel;

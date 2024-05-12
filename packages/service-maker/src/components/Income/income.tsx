@@ -1,13 +1,12 @@
-import type { IncomeInterface } from "./income.interface";
-
+import { IncomeInterface } from 'components/Income/income.interface';
 import {
   ContainerCenteredTitle,
   ContainerIncome,
   SubTitle,
   Title,
-} from "./income.style";
+} from 'components/Income/income.style';
 
-export function IncomeComponent({ title }: IncomeInterface): React.ReactNode {
+export function IncomeComponent({ title }: IncomeInterface) {
   return (
     <ContainerIncome>
       <Title>{title}</Title>

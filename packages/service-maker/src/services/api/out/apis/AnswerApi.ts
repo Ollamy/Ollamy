@@ -8,6 +8,7 @@ import type {
   CreateAnswerModel,
   IdAnswerModel,
   UpdateAnswerModel,
+  UpdateAnswerOrderModel,
 } from '../models/index';
 
 export interface DeleteAnswerRequest {
@@ -25,6 +26,10 @@ export interface RegisterAnswerRequest {
 export interface UpdateAnswerRequest {
     id: string;
     updateAnswerModel: UpdateAnswerModel;
+}
+
+export interface UpdateAnswerOrderRequest {
+    updateAnswerOrderModel: UpdateAnswerOrderModel;
 }
 
 /**
@@ -150,6 +155,36 @@ export class AnswerApi extends runtime.BaseAPI {
      */
     static updateAnswer(requestParameters: UpdateAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
         return localAnswerApi.updateAnswerRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async updateAnswerOrderRaw(requestParameters: UpdateAnswerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
+        if (requestParameters.updateAnswerOrderModel === null || requestParameters.updateAnswerOrderModel === undefined) {
+            throw new runtime.RequiredError('updateAnswerOrderModel','Required parameter requestParameters.updateAnswerOrderModel was null or undefined when calling updateAnswerOrder.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/answer`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.updateAnswerOrderModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static updateAnswerOrder(requestParameters: UpdateAnswerOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerIdResponse> {
+        return localAnswerApi.updateAnswerOrderRaw(requestParameters, initOverrides);
     }
 
 }

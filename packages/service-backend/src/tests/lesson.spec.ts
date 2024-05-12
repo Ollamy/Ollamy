@@ -136,8 +136,9 @@ describe('getLesson', () => {
     });
 
     expect(result).toEqual({
+      description: mockLesson.description,
       sectionId: mockLesson.section_id,
-      ...mockLesson,
+      title: mockLesson.title,
     });
   });
 

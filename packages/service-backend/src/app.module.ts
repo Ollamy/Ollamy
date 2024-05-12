@@ -13,6 +13,7 @@ import { AlertController } from './alert/alert.controller';
 import { PictureModule } from './picture/picture.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { LectureModule } from './lecture/lecture.module';
+import { AiModule } from './ai/ai.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BadgeModule } from './badge/badge.module';
@@ -28,6 +29,7 @@ import { BadgeModule } from './badge/badge.module';
     PictureModule,
     LectureModule,
     BadgeModule,
+    AiModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',

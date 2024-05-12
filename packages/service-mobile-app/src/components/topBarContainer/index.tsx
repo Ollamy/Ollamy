@@ -1,4 +1,4 @@
-import { Box } from 'native-base';
+import { Box, HStack } from 'native-base';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 interface TopBarContainerProps {
@@ -14,16 +14,15 @@ function TopBarContainer({ children, style }: TopBarContainerProps) {
       borderColor="#BDBDBD"
       borderWidth={1}
       paddingX={5}
+      borderTopWidth={0}
       borderBottomRightRadius={16}
       borderBottomLeftRadius={16}
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      justifyContent="space-between"
       shadow={10}
       style={style}
     >
-      {children}
+      <HStack w="full" h="full" justifyContent="space-between" alignItems="center" space="12px">
+        {children}
+      </HStack>
     </Box>
   );
 }

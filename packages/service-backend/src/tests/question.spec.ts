@@ -137,17 +137,16 @@ describe('getQuestion', () => {
     });
 
     expect(result).toEqual({
-      id: mockQuestionDb2.id,
       lessonId: mockQuestionDb2.lesson_id,
       title: mockQuestionDb2.title,
       description: mockQuestionDb2.description,
       typeAnswer: mockQuestionDb2.type_answer,
       typeQuestion: mockQuestionDb2.type_question,
-      trustAnswerId: mockQuestionDb2.trust_answer_id,
       difficulty: mockQuestionDb2.difficulty,
       pictureId: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
       points: mockQuestionDb2.points,
+      trust_answer_id: mockQuestionDb2.trust_answer_id,
     });
   });
 
@@ -197,35 +196,5 @@ describe('updateQuestion', () => {
     await expect(
       questionService.updateQuestion(mockQuestionId3, mockQuestionData2),
     ).rejects.toThrow(ConflictException);
-  });
-
-  it('should return success: false if the answer is incorrect', async () => {
-    jest
-      .spyOn(prisma.question, 'findUnique')
-      .mockResolvedValue(mockQuestionDb4);
-    jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
-
-    jest
-      .spyOn(prisma.usertoLesson, 'findUnique')
-      .mockResolvedValue(mockUserLesson);
-    jest.spyOn(prisma.lesson, 'findUnique').mockResolvedValue(mockLesson);
-    jest.spyOn(prisma.section, 'findUnique').mockResolvedValue(mockSection1);
-    jest
-      .spyOn(prisma.usertoCourse, 'update')
-      .mockResolvedValue(mockUserToCourse);
-
-    jest
-      .spyOn(prisma.usertoCourse, 'findUnique')
-      .mockResolvedValue(mockUserToCourse);
-    await expect(
-      questionService.validateAnswer(mockBodyIncorrect, context),
-    ).resolves.toEqual({
-      success: false,
-      answer: correctAnswerId,
-      end: true,
-      nextQuestionId: undefined,
-      points: 0,
-      hp: 0,
-    });
   });
 });

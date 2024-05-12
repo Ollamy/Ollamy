@@ -7,21 +7,18 @@ import {
 import {
   CreateLessonModel,
   IdLessonModel,
-  JoinLessonModel,
   LessonModel,
   UpdateLessonModel,
   LessonIdResponse,
 } from './lesson.dto';
-import { LectureModel, QuestionModel } from 'question/question.dto';
+import { LectureModel, LessonLectureModel, QuestionModel } from 'question/question.dto';
 import prisma from 'client';
 import {
   Prisma,
   Question,
   Lesson,
-  UsertoLesson,
   Lecture,
 } from '@prisma/client';
-import { error } from 'console';
 
 @Injectable()
 export class LessonService {
@@ -80,7 +77,7 @@ export class LessonService {
     }
   }
 
-  async getLesson(LessonId: string): Promise<LessonModel> {
+  async getLesson(LessonId: string): Promise<CreateLessonModel> {
     try {
       const lessonDb: Lesson = await prisma.lesson.findFirst({
         where: {
@@ -95,8 +92,9 @@ export class LessonService {
 
       return {
         sectionId: lessonDb.section_id,
-        ...lessonDb,
-      } as LessonModel;
+        title: lessonDb.title,
+        description: lessonDb.description,
+      } as CreateLessonModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not found !');
@@ -113,6 +111,7 @@ export class LessonService {
           id: LessonId,
         },
         data: {
+          section_id: lessonData.sectionId,
           title: lessonData.title,
           description: lessonData.description,
         },
@@ -149,25 +148,19 @@ export class LessonService {
       }
 
       return lessonQuestionsDb.map((question: Question) => {
-        return {
-          id: question.id,
-          lessonId: question.lesson_id,
-          title: question.title,
-          description: question.description,
-          typeAnswer: question.type_answer,
-          typeQuestion: question.type_question,
-          order: question.order,
-        };
-      }) as QuestionModel[];
+        delete question.trust_answer_id;
+        delete question.lesson_id;
+        return question;
+      }) as unknown as QuestionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');
     }
   }
 
-  async getLessonLecture(LessonId: string): Promise<LectureModel> {
+  async getLessonLecture(LessonId: string): Promise<LessonLectureModel[]> {
     try {
-      const lessonlectureDb: Lecture = await prisma.lecture.findFirst({
+      const lessonlectureDb: Lecture[] = await prisma.lecture.findMany({
         where: {
           lesson_id: LessonId,
         },
@@ -175,13 +168,13 @@ export class LessonService {
 
       if (!lessonlectureDb) {
         Logger.error('No lecture for this course !');
-        throw new NotFoundException('No lecture for this course !');
+        return [] as LessonLectureModel[];
       }
 
-      return {
-        lessonId: lessonlectureDb.lesson_id,
-        ...lessonlectureDb,
-      };
+      return lessonlectureDb.map((lecture: Lecture) => {
+        delete lecture.lesson_id;
+        return lecture;
+      }) as LessonLectureModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException(error);
@@ -193,18 +186,29 @@ export class LessonService {
     userId: string,
   ): Promise<LessonIdResponse> {
     try {
-      const usertoLessonDb: UsertoLesson = await prisma.usertoLesson.create({
-        data: {
-          user_id: userId,
-          lesson_id: lessonId,
-        },
-      });
+      let userToLesson = await prisma.usertoLesson.findUnique({
+        where: {
+          lesson_id_user_id: {
+            user_id: userId,
+            lesson_id: lessonId,
+          }
+        }
+      })
 
-      if (!usertoLessonDb) {
+      if (!userToLesson) {
+        userToLesson = await prisma.usertoLesson.create({
+          data: {
+            user_id: userId,
+            lesson_id: lessonId,
+          },
+        });
+      }
+
+      if (!userToLesson) {
         Logger.error('Failed to create user lesson !');
         throw new NotFoundException('Failed to create user lesson !');
       }
-      return { id: usertoLessonDb.lesson_id } as LessonIdResponse;
+      return { id: userToLesson.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');

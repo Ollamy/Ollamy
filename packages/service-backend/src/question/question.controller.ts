@@ -1,15 +1,15 @@
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   CreateQuestionModel,
+  GetQuestionModel,
   IdQuestionModel,
   QuestionIdResponse,
-  QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
 } from 'question/question.dto';
 import { QuestionService } from 'question/question.service';
 
-import { AnswerModel } from '../answer/answer.dto';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 
 import {
   Body,
@@ -32,7 +32,7 @@ import {
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
-import { OllContext } from '../context/context.decorator';
+import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -50,17 +50,13 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          id: 'Question Id',
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Question data',
-          typeAnswer: AnswerType.TEXT,
+          typeAnswer: AnswerType.FREE_ANSWER,
           typeQuestion: QuestionType.TEXT,
-          trustAnswerId: 'TrustAnswer Id',
-          pictureId: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          order: 'a0',
+          points: 0,
         } as CreateQuestionModel,
       },
     },
@@ -98,7 +94,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: QuestionModel,
+    type: GetQuestionModel,
   })
   @ApiParam({
     name: 'id',
@@ -107,7 +103,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getQuestion(@Param('id') id: string): Promise<QuestionModel> {
+  async getQuestion(@Param('id') id: string): Promise<GetQuestionModel> {
     return this.questionService.getQuestion(id);
   }
 
@@ -126,21 +122,14 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          id: 'Question Id',
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Question data',
-          typeAnswer: AnswerType.TEXT,
+          typeAnswer: AnswerType.MULTIPLE_CHOICE,
           typeQuestion: QuestionType.TEXT,
           trustAnswerId: 'TrustAnswer Id',
           pictureId: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          between: {
-            before: 'order id',
-            after: 'order id',
-          },
-          order: '1',
         } as UpdateQuestionModel,
       },
     },
@@ -181,7 +170,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: [AnswerModel],
+    type: [QuestionAnswerModel],
   })
   @ApiParam({
     name: 'id',
@@ -190,7 +179,9 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/answers')
-  async getQuestionAnswers(@Param('id') id: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(
+    @Param('id') id: string,
+  ): Promise<QuestionAnswerModel[]> {
     return this.questionService.getQuestionAnswers(id);
   }
 

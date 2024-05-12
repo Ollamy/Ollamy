@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateAnswerModel,
@@ -10,15 +11,32 @@ import {
   AnswerModel,
   UpdateAnswerModel,
   AnswerIdResponse,
+  UpdateAnswerOrderModel,
 } from './answer.dto';
 import prisma from 'client';
 import { Prisma, Answer } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class AnswerService {
   async postAnswer(answerData: CreateAnswerModel): Promise<AnswerIdResponse> {
     try {
+      const answers = await prisma.answer.findMany({
+        where: {
+          question_id: answerData.questionId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       const answerDb: Answer = await prisma.answer.create({
         data: {
           question_id: answerData.questionId,
@@ -26,6 +44,12 @@ export class AnswerService {
           picture_id: answerData.picture
             ? await PictureService.postPicture(answerData.picture)
             : undefined,
+          order: generateKeyBetween(
+            !answers || !answers.length
+              ? undefined
+              : answers[answers.length - 1].order,
+            undefined,
+          ),
         },
       });
 
@@ -82,7 +106,8 @@ export class AnswerService {
         picture: answerDb.picture_id
           ? await PictureService.getPicture(answerDb.picture_id)
           : undefined,
-      } as AnswerModel;
+        order: answerDb.order,
+      } as unknown as AnswerModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Answer not found !');
@@ -117,5 +142,27 @@ export class AnswerService {
       Logger.error(error);
       throw new ConflictException('Answer not updated !');
     }
+  }
+
+  async updateAnswerOrder(answerData: UpdateAnswerOrderModel): Promise<object> {
+    let order: string;
+    try {
+      order = generateKeyBetween(answerData?.after, answerData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
+    }
+    await prisma.answer.update({
+      where: {
+        id: answerData.origin,
+      },
+      data: {
+        order: order,
+      },
+    });
+
+    return {
+      order: order,
+    };
   }
 }

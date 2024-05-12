@@ -141,9 +141,9 @@ model Lesson {
 }
 
 enum AnswerType {
-  TEXT
-  QUIZ
-  OTHER
+  FREE_ANSWER
+  MULTIPLE_CHOICE
+  SQUARE_CHOICE
 }
 
 enum QuestionType {
@@ -201,6 +201,7 @@ model Answer {
   data        String?
   picture     Picture? @relation(references: [id], fields: [picture_id], onDelete: Cascade)
   picture_id  String?  @db.Uuid
+  order       String
 }
 
 model Discussion {

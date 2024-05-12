@@ -1,13 +1,16 @@
 import { styled } from 'styled-components';
+import { ButtonMakerInterface } from 'components/button/button.interface';
 
-import type { ButtonMakerInterface } from './button.interface';
-
-const ButtonMakerBaseBackgroundColor = 'linear-gradient(180deg, #EA978B 0%, #EF644A 100%)';
+const ButtonMakerBaseBackgroundColor =
+  'linear-gradient(180deg, #EA978B 0%, #EF644A 100%)';
 
 export const ButtonMakerStyled = styled.button<ButtonMakerInterface>`
   height: 50px;
   width: 480px;
-  background: ${(props) => (props.backgroundColor ? props.backgroundColor : `${ButtonMakerBaseBackgroundColor}`)};
+  background: ${(props) =>
+    props.backgroundColor
+      ? props.backgroundColor
+      : `${ButtonMakerBaseBackgroundColor}`};
   padding: 12px;
   text-align: center;
   align-items: center;

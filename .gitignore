@@ -45,6 +45,3 @@ dockerfiles/base/*.yml
 dockerfiles/base/*.json
 dockerfiles/base/*.lock
 dockerfiles/base/packages
-
-**public/
-!public/.gitkeep

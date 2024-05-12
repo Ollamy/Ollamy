@@ -1,73 +1,79 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import {
   MutationCache,
   QueryCache,
   QueryClient,
   QueryClientProvider,
-} from "react-query";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+} from 'react-query';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Login } from 'pages/Auth/Login';
+import { Register } from 'pages/Auth/Register';
+import { SettingPage } from 'pages/Course/Chapter/chapterSettings';
+import { FormationSetting } from 'pages/Course/courseSettings';
+import { ProfilePage } from 'pages/formatter/formatterSettings';
+import HomePage from 'pages/Home';
+import MakerHubPage from 'pages/maker/hub';
+import NewQuiz from 'pages/NewQuiz/quiz';
+import { createGlobalStyle } from 'styled-components';
 
-// eslint-disable-next-line import/no-cycle
-import { Login } from "./pages/Auth/Login";
-import { Register } from "./pages/Auth/Register";
-import { SettingPage } from "./pages/Course/Chapter/chapterSettings";
-import { FormationSetting } from "./pages/Course/courseSettings";
-import { ProfilePage } from "./pages/formatter/formatterSettings";
-// eslint-disable-next-line import/no-cycle
-import { HomePage } from "./pages/Home";
-import MakerHubPage from "./pages/maker/hub";
-import QuizEditor from "./pages/Quiz";
+import '@radix-ui/themes/styles.css';
+import './styles/alertDialog.css';
+import './styles/Dialog.css';
+import './styles/dropdownMenu.css';
+import './styles/form.css';
+import './styles/navigationMenu.css';
+
+import { Theme } from '@radix-ui/themes';
 
 // Router
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Login />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/home",
+    path: '/home',
     element: <HomePage />,
   },
   {
-    path: "/quiz/:id/:sectionId/:lessonId",
-    element: <QuizEditor />,
+    path: '/quiz/:id/section/:sectionId/lesson/:lessonId',
+    element: <NewQuiz />,
   },
   {
-    path: "/profile",
+    path: '/quiz/:id/section/:sectionId/lesson/:lessonId/question/:questionId',
+    element: <NewQuiz />,
+  },
+  {
+    path: '/profile',
     element: <ProfilePage />,
   },
   {
-    path: "/setting",
+    path: '/setting',
     element: <SettingPage />,
   },
   {
-    path: "/formation",
+    path: '/formation',
     element: <FormationSetting />,
   },
   {
-    path: "/course/:id",
+    path: '/course/:id',
     element: <MakerHubPage />,
   },
   {
-    path: "/course/:id/:sectionId",
+    path: '/course/:id/section/:sectionId',
     element: <MakerHubPage />,
   },
   {
-    path: "/course/:id/:sectionId",
-    element: <MakerHubPage />,
-  },
-  {
-    path: "/course/:id/:sectionId/:lessonId",
+    path: '/course/:id/section/:sectionId/lesson/:lessonId',
     element: <MakerHubPage />,
   },
 ]);
@@ -80,7 +86,7 @@ export const queryClient = new QueryClient({
   mutationCache,
   defaultOptions: {
     queries: {
-      notifyOnChangeProps: ["data", "error", "isError", "isLoading"],
+      notifyOnChangeProps: ['data', 'error', 'isError', 'isLoading'],
     },
   },
 });
@@ -110,11 +116,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 // EntryPoint of the app
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <GlobalStyle />
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
+    <Theme>
+      <GlobalStyle />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </Theme>
+  </React.StrictMode>,
 );

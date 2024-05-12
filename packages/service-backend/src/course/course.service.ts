@@ -13,7 +13,7 @@ import {
   GetCourseRequest,
   UserCourseHp,
 } from './course.dto';
-import { SectionModel } from 'section/section.dto';
+import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Section } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
@@ -33,7 +33,9 @@ export class CourseService {
           owner_id: ctx.__user.id,
           title: courseData.title,
           description: courseData.description,
-          picture_id: await PictureService.postPicture(courseData.picture),
+          picture_id: courseData?.picture
+            ? await PictureService.postPicture(courseData.picture)
+            : undefined,
         },
       });
 
@@ -101,7 +103,6 @@ export class CourseService {
       }
 
       return {
-        id: courseDb.id,
         ownerId: courseDb.owner_id,
         title: courseDb.title,
         description: courseDb.description,
@@ -110,7 +111,7 @@ export class CourseService {
           : undefined,
         lastLessonId: userToCourse?.last_lesson_id,
         lastSectionId: userToCourse?.last_section_id,
-      };
+      } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Course does not exists !');
@@ -127,9 +128,12 @@ export class CourseService {
           id: CourseId,
         },
         data: {
-          title: courseData.title,
-          description: courseData.description,
-          picture_id: await PictureService.postPicture(courseData.picture),
+          owner_id: courseData?.ownerId,
+          title: courseData?.title,
+          description: courseData?.description,
+          picture_id: courseData?.picture
+            ? await PictureService.postPicture(courseData.picture)
+            : undefined,
         },
       });
 
@@ -145,7 +149,7 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<SectionModel[]> {
+  async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
     try {
       const courseSectionsDb: Section[] = await prisma.section.findMany({
         where: {
@@ -159,8 +163,10 @@ export class CourseService {
       }
 
       return courseSectionsDb.map((lesson: Section) => ({
-        ...lesson,
-      })) as unknown as SectionModel[];
+        id: lesson.id,
+        title: lesson.title,
+        description: lesson.description,
+      })) as CourseSectionModel[];
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
@@ -196,7 +202,7 @@ export class CourseService {
     userId: string,
   ): Promise<UserCourseHp> {
     try {
-      const { hp } = await prisma.usertoCourse.findFirst({
+      const data = await prisma.usertoCourse.findFirst({
         where: {
           user_id: userId,
           course_id: courseId,
@@ -206,13 +212,19 @@ export class CourseService {
         },
       });
 
+
+      if (!data) {
+        Logger.error('Cannot find userToCourse');
+        throw new NotFoundException('Cannot find userToCourse');
+      }
+
       return {
-        hp: hp,
+        hp: data.hp,
         timer: this.cronService.getHpCron(userId, courseId),
       };
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('User not added to course !');
+      throw new ConflictException('Error while fecthing hp !');
     }
   }
 }
