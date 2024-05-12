@@ -3,6 +3,7 @@ import CourseCard from 'pages/Home/Body/CourseCard/CourseCard';
 import HomeSearchBar from 'pages/Home/Body/SearchBar/HomeSearchBar';
 import api from 'services/api';
 import styled from 'styled-components';
+
 import { Spinner, Text } from '@radix-ui/themes';
 
 function HomeBody() {
@@ -29,7 +30,7 @@ function HomeBody() {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
-      {currentData && currentData.length ? (
+      {currentData?.length ? (
         <Grid>
           {currentData.map(({ id, title, description, pictureId }) => (
             <CourseCard
