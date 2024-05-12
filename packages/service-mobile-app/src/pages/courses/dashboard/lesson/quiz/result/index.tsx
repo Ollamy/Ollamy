@@ -8,7 +8,7 @@ import FAIL from 'assets/icons/fail.png';
 import GOODCHECK from 'assets/icons/goodCheck.png';
 import { Box, HStack, Image, Text, View, VStack } from 'native-base';
 import { useNavigate } from 'react-router-native';
-import TextButton from 'src/components/buttons/textButton';
+import TextButton from 'src/components/Buttons/TextButton';
 import TopBar from 'src/components/layout/TopBar/TopBar';
 
 interface LectureProps {

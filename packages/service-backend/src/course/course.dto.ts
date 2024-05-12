@@ -12,10 +12,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CourseModel {
   @ApiProperty()
   @IsUUID()
-  id: string;
-
-  @ApiProperty()
-  @IsUUID()
   ownerId: string;
 
   @ApiProperty()
@@ -32,12 +28,12 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsUUID()
   @IsOptional()
   lastLessonId?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsUUID()
   @IsOptional()
   lastSectionId?: string;

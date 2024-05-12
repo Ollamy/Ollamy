@@ -26,7 +26,7 @@ import {
   GetCourseRequest,
   UserCourseHp,
 } from 'course/course.dto';
-import { SectionModel } from 'section/section.dto';
+import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
@@ -136,7 +136,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: "course's sections",
-    type: [SectionModel],
+    type: [CourseSectionModel],
   })
   @ApiParam({
     name: 'id',
@@ -145,7 +145,9 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/sections')
-  async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
+  async getCourseSections(
+    @Param('id') id: string,
+  ): Promise<CourseSectionModel[]> {
     return this.courseService.getCourseSections(id);
   }
 

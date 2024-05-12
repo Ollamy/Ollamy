@@ -72,7 +72,8 @@ export class PictureService {
     pictureId: string | null,
   ): Promise<string | undefined> {
     if (!pictureId) {
-      return `${this.backendURL}/default-course.png`;
+      // return `${this.backendURL}/default-course.png`;
+      return undefined;
     }
     try {
       const pictureDb: Picture = await prisma.picture.findFirst({

@@ -1,17 +1,16 @@
-import { UseQueryOptions, useMutation, useQuery } from "react-query";
-
-import { queryClient } from "../../../main";
+import { UseQueryOptions, useMutation, useQuery } from 'react-query';
 import {
   GetSectionLessonsRequest,
   GetSectionRequest,
   LessonModel,
   SectionApi,
   SectionModel,
-} from "../out";
-import { GET_COURSE_SECTIONS_KEY } from "./course";
+} from 'services/api/out';
+import { queryClient } from 'main';
+import { GET_COURSE_SECTIONS_KEY } from 'services/api/routes/course';
 
-export const GET_SECTION_KEY = "getSection";
-export const GET_SECTION_LESSONS_KEY = "getSectionLesson";
+export const GET_SECTION_KEY = 'getSection';
+export const GET_SECTION_LESSONS_KEY = 'getSectionLesson';
 
 export const sectionActions = {
   useSection: (

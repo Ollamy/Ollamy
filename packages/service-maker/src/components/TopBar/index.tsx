@@ -1,17 +1,15 @@
-import type { ReactElement } from "react";
-import styled from "styled-components";
-
-import image from "../../assets/Ollamy.png";
+import type { ReactElement } from 'react';
+import styled from 'styled-components';
 
 interface TopBarProps {
   title: string;
   children?: ReactElement;
 }
 
-function TopBar({ title, children }: TopBarProps): ReactElement {
+function TopBar({ title, children }: TopBarProps) {
   return (
     <Container>
-      <img src={image} alt="Ollamy logo" />
+      <img src={'/assets/Ollamy.png'} alt="Ollamy logo" />
       {children}
     </Container>
   );

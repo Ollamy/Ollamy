@@ -108,11 +108,7 @@ export class UpdateUserModel {
   password?: string;
 }
 
-export class GetUserModel extends BaseUser {
-  @ApiProperty({ description: 'The unique identifier of the user' })
-  @IsUUID()
-  id: string;
-}
+export class GetUserModel extends BaseUser { }
 
 export class GetUserScoreModel {
   @ApiProperty({ description: 'The unique identifier of the user' })

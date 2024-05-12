@@ -7,10 +7,6 @@ export class LessonModel {
   id: string;
 
   @ApiProperty()
-  @IsUUID()
-  sectionId: string;
-
-  @ApiProperty()
   @IsString()
   title: string;
 
@@ -40,20 +36,20 @@ export class IdLessonModel {
 }
 
 export class UpdateLessonModel {
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsUUID()
   @IsOptional()
   sectionId?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 }
 
 export class JoinLessonModel {

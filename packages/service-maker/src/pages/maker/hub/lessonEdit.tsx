@@ -1,11 +1,8 @@
-import styled from "styled-components";
-import { ReactElement, useCallback, useEffect, useState } from "react";
-import api from "../../../services/api";
-import book from "../../../assets/book.png";
-import quiz from "../../../assets/quiz.png";
-
-import { LessonModel } from "services/api/out";
-import { useNavigate, useParams } from "react-router-dom";
+import styled from 'styled-components';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from 'services/api';
+import { LessonModel } from 'services/api/out';
 
 interface LessonEditProps {
   lesson: LessonModel;
@@ -39,7 +36,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   };
 
   const handleEdit = useCallback(() => {
-    navigate(`/quiz/${id}/${sectionId}/${lessonId}`);
+    navigate(`/quiz/${id}/section/${sectionId}/lesson/${lessonId}`);
   }, [id, lessonId, navigate, sectionId]);
 
   return (
@@ -71,11 +68,21 @@ function LessonEdit(props: LessonEditProps): ReactElement {
       </EditBox>
       <SubContainer>
         <ButtonContainer>
-          <img alt="logo book" src={book} width="124" height="105" />
+          <img
+            alt="logo book"
+            src={'/assets/book.png'}
+            width="124"
+            height="105"
+          />
           Edit Lecture
         </ButtonContainer>
         <ButtonContainer onClick={handleEdit}>
-          <img alt="logo Quiz" src={quiz} width="100" height="100" />
+          <img
+            alt="logo Quiz"
+            src={'/assets/quiz.png'}
+            width="100"
+            height="100"
+          />
           Edit Quiz
         </ButtonContainer>
       </SubContainer>

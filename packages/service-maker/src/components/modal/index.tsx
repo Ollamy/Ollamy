@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 interface CreateModalProps {
   title?: string;
@@ -36,7 +36,7 @@ const CreateModal = ({
 };
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
   position: fixed;
   top: 45%;
   left: 45%;
