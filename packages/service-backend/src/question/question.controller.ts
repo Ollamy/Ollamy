@@ -125,7 +125,7 @@ export class QuestionController {
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          typeAnswer: AnswerType.FREE_ANSWER,
+          typeAnswer: AnswerType.MULTIPLE_CHOICE,
           typeQuestion: QuestionType.TEXT,
           trustAnswerId: 'TrustAnswer Id',
           pictureId: 'Question picture',

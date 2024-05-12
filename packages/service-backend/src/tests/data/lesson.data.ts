@@ -79,7 +79,7 @@ export const mockLessonQuestions: Question[] = [
     title: 'Question 2',
     description: 'Description 2',
     trust_answer_id: uuidv4(),
-    type_answer: AnswerType.FREE_ANSWER,
+    type_answer: AnswerType.SQUARE_CHOICE,
     type_question: 'VIDEO',
     difficulty: QuestionDifficulty.ADVANCED,
     picture_id: uuidv4(),
