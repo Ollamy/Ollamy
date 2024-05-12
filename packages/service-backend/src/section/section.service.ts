@@ -113,7 +113,7 @@ export class SectionService {
     }
   }
 
-  async getSectionLessons(SectionId: string): Promise<LessonModel[]> {
+  async getSectionLessons(SectionId: string, ctx: any): Promise<LessonModel[]> {
     try {
       const sectionLessonsDb: Lesson[] = await prisma.lesson.findMany({
         where: {
@@ -126,13 +126,39 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      return sectionLessonsDb.map((lesson: Lesson) => {
+      const lessonPromises: Promise<LessonModel>[] = sectionLessonsDb.map(async (lesson: Lesson) => {
+        const userLesson = await prisma.usertoLesson.findUnique({
+          where: {
+            lesson_id_user_id: {
+              user_id: ctx.__user.id,
+              lesson_id: lesson.id,
+            },
+          },
+        });
+
+        const questionsCount = await prisma.question.count({
+          where: {
+            lesson_id: lesson.id,
+          },
+        });
+
+        const lecturesCount = await prisma.lecture.count({
+          where: {
+            lesson_id: lesson.id,
+          },
+        });
+
         return {
           id: lesson.id,
           description: lesson.description,
           title: lesson.title,
+          status: userLesson?.status || 'NOT_STARTED',
+          numberOfQuestions: questionsCount || 0,
+          numberOfLectures: lecturesCount || 0,
         };
-      }) as LessonModel[];
+      });
+
+      return await Promise.all(lessonPromises);
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');

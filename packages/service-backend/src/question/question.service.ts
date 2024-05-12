@@ -215,14 +215,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-          ({
-            id: answer.id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-            order: answer.order,
-          } as unknown as QuestionAnswerModel),
+        ({
+          id: answer.id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+          order: answer.order,
+        } as unknown as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -289,9 +289,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
     const isValidated = questionDb.trust_answer_id === body.answerId;
@@ -311,6 +311,20 @@ export class QuestionService {
         hp: true,
       },
     });
+
+    if (userLesson.status === LessonStatus.NOT_STARTED) {
+      await prisma.usertoLesson.update({
+        where: {
+          lesson_id_user_id: {
+            user_id: userLesson.user_id,
+            lesson_id: userLesson.lesson_id,
+          },
+        },
+        data: {
+          status: LessonStatus.IN_PROGRESS,
+        },
+      });
+    }
 
     if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
       await prisma.usertoScore.upsert({
@@ -355,6 +369,20 @@ export class QuestionService {
           hp: {
             decrement: 1,
           },
+        },
+      });
+    }
+
+    if (!(nextQuestion !== null)) {
+      await prisma.usertoLesson.update({
+        where: {
+          lesson_id_user_id: {
+            user_id: userLesson.user_id,
+            lesson_id: userLesson.lesson_id,
+          },
+        },
+        data: {
+          status: LessonStatus.COMPLETED,
         },
       });
     }
