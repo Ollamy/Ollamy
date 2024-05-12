@@ -1,4 +1,4 @@
-import { LessonStatus, Question, UsertoLesson } from '@prisma/client';
+import { AnswerType, LessonStatus, Question, UsertoLesson } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateQuestionModel,
@@ -18,7 +18,7 @@ export const mockQuestionData: CreateQuestionModel = {
   lessonId: lessonId,
   title: 'Question Title',
   description: 'Question Description',
-  typeAnswer: 'TEXT',
+  typeAnswer: AnswerType.FREE_ANSWER,
   typeQuestion: 'TEXT',
   trustAnswerId: correctAnswerId,
 };
@@ -31,7 +31,7 @@ export const mockQuestionDb: Question = {
   id: mockQuestionId.id,
   lesson_id: lessonId,
   title: '2',
-  type_answer: 'TEXT',
+  type_answer: AnswerType.FREE_ANSWER,
   type_question: 'TEXT',
   trust_answer_id: correctAnswerId,
   description: '1',
@@ -45,7 +45,7 @@ export const mockQuestionDb2: Question = {
   id: mockQuestionId2,
   lesson_id: lessonId,
   title: '2',
-  type_answer: 'TEXT',
+  type_answer: AnswerType.FREE_ANSWER,
   type_question: 'TEXT',
   trust_answer_id: correctAnswerId,
   description: '1',
@@ -61,7 +61,7 @@ export const mockQuestionData2: UpdateQuestionModel = {
   title: 'test',
   description: 'desc',
   trustAnswerId: correctAnswerId,
-  typeAnswer: 'TEXT',
+  typeAnswer: AnswerType.FREE_ANSWER,
   typeQuestion: 'TEXT',
 };
 
@@ -74,7 +74,7 @@ export const mockQuestionDb3: Question = {
   id: mockBody.questionId,
   lesson_id: lessonId,
   title: '2',
-  type_answer: 'TEXT',
+  type_answer: AnswerType.FREE_ANSWER,
   type_question: 'TEXT',
   trust_answer_id: correctAnswerId,
   description: '1',
@@ -87,12 +87,13 @@ export const mockQuestionDb3: Question = {
 export const mockBodyIncorrect: ValidateAnswerModel = {
   questionId: questionId,
   answerId: incorrectAnswerId,
+  data: 'incorrect',
 };
 export const mockQuestionDb4: Question = {
   id: mockBody.questionId,
   lesson_id: lessonId,
   title: '2',
-  type_answer: 'TEXT',
+  type_answer: AnswerType.FREE_ANSWER,
   type_question: 'TEXT',
   trust_answer_id: correctAnswerId,
   description: '1',
