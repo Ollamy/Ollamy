@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
+import { Image, Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import TextButton from 'src/components/Buttons/TextButton';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
@@ -77,7 +77,11 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
               style={{ borderColor: borderColor(answer.id, selectAnswer, trueAnswer) }}
               onPress={() => setSelectAnswer(answer.id)}
             >
-              <Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
+              {answer.picture ? (
+                <Image w={100} h={100} alt="picture" resizeMode="contain" source={{ uri: answer.picture }} />
+              ) : (
+                <Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
+              )}
             </Pressable>
           ))}
         </ScrollView>

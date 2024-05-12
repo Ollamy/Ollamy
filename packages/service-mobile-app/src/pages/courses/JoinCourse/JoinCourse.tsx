@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Image, Text, VStack } from 'native-base';
+import { Box, Heading, HStack, Image, ScrollView, Text, VStack } from 'native-base';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
@@ -54,19 +54,21 @@ function JoinCourse(): JSX.Element {
 
   return (
     <VStack justifyContent="center" alignItems="center" w="100%" h="100%" space="xl">
-      <Box borderRadius="24px" borderColor="coolGray.200" borderWidth={1} size="xs">
-        <Box w="full" bg="#02539d" py="24px" borderTopRadius="24px">
+      <Box borderRadius="12px" borderColor="coolGray.200" borderWidth={1} size="xs">
+        <Box w="full" bg="#02539d" py="24px" borderTopRadius="12px">
           <Heading textAlign="center" size="lg" color="white">
             {data.title}
           </Heading>
         </Box>
         <Box w="full" flex="1" p="6">
-          <VStack h="100%" w="100%" justifyContent="center" alignItems="center" space="md">
-            <Image w={100} h={100} alt="picture" resizeMode="contain" source={{ uri: data.picture }} />
-            <Text fontSize="md" color="coolGray.900">
-              {data.description}
-            </Text>
-          </VStack>
+          <ScrollView w="full" h="full">
+            <VStack h="100%" w="100%" justifyContent="center" alignItems="center" space="md">
+              <Image w={100} h={100} alt="picture" resizeMode="contain" source={{ uri: data.picture }} />
+              <Text fontSize="md" color="coolGray.900">
+                {data.description}
+              </Text>
+            </VStack>
+          </ScrollView>
         </Box>
       </Box>
       <VStack space="md" alignItems="center">

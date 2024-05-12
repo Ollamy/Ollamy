@@ -27,7 +27,7 @@ function BottomBar() {
       <Button variant="ghost" onPress={() => navigate('/home')}>
         <Image size={35} source={PROGRESS} alt="progress" />
       </Button>
-      <Button variant="ghost" onPress={() => navigate('/course/join/3a43db61-67b7-4ef4-9b58-3fbc87ea80f4')}>
+      <Button variant="ghost" onPress={() => navigate('/course/join/3fc7a876-5036-4314-90d7-a79437928fb6')}>
         <Image size={35} source={EVENT} alt="event" />
       </Button>
       <Button variant="ghost" onPress={() => navigate('/chat')}>
