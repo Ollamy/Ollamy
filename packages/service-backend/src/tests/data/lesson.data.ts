@@ -3,7 +3,7 @@ import {
   IdLessonModel,
   UpdateLessonModel,
 } from '@ollamy/backend/lesson/lesson.dto';
-import { Lesson, Question, QuestionDifficulty } from '@prisma/client';
+import { AnswerType, Lesson, Question, QuestionDifficulty } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
 // Data
@@ -65,7 +65,7 @@ export const mockLessonQuestions: Question[] = [
     title: 'Question 1',
     description: 'Description 1',
     trust_answer_id: uuidv4(),
-    type_answer: 'TEXT',
+    type_answer: AnswerType.FREE_ANSWER,
     type_question: 'TEXT',
     difficulty: QuestionDifficulty.BEGINNER,
     picture_id: uuidv4(),
@@ -79,7 +79,7 @@ export const mockLessonQuestions: Question[] = [
     title: 'Question 2',
     description: 'Description 2',
     trust_answer_id: uuidv4(),
-    type_answer: 'QUIZ',
+    type_answer: AnswerType.FREE_ANSWER,
     type_question: 'VIDEO',
     difficulty: QuestionDifficulty.ADVANCED,
     picture_id: uuidv4(),
