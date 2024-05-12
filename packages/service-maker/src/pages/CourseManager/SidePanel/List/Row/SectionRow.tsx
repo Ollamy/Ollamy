@@ -1,9 +1,10 @@
-import styled from 'styled-components';
-import { Text, Tooltip } from '@radix-ui/themes';
-import { CourseSectionModel } from 'services/api/out';
-import checkDataActive from 'utils/activeData';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import type { CourseSectionModel } from 'services/api/out';
+import styled from 'styled-components';
+import checkDataActive from 'utils/activeData';
+
+import { Text, Tooltip } from '@radix-ui/themes';
 
 interface SectionRowProps {
   id: string;
@@ -13,13 +14,13 @@ interface SectionRowProps {
   description: CourseSectionModel['description'];
 }
 
-const SectionRow = ({
+function SectionRow({
   id,
   index,
   isActive,
   title,
   description,
-}: SectionRowProps) => {
+}: SectionRowProps) {
   const [, setSearchParams] = useSearchParams();
 
   const handleClick = useCallback(() => {
@@ -34,7 +35,7 @@ const SectionRow = ({
       </Container>
     </Tooltip>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

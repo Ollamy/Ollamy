@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
 
@@ -7,16 +7,13 @@ interface QuestionSideBarBodyProps {
 }
 
 function QuestionSideBarBody({ lessonId }: QuestionSideBarBodyProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const questionId = searchParams.get('questionId');
+
   const { data } = lessonActions.useGetLessonQuestions({ id: lessonId! });
 
-  const navigate = useNavigate();
-
-  const { id: courseId, sectionId, questionId } = useParams();
-
   const handleRowClick = (id: string) => () => {
-    navigate(
-      `/course/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`,
-    );
+    setSearchParams({ questionId: id });
   };
 
   return data && data.length ? (
