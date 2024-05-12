@@ -47,6 +47,32 @@ export interface AnswerModel {
 /**
  * 
  * @export
+ * @interface CourseCodeModel
+ */
+export interface CourseCodeModel {
+    /**
+     * Course's sharing code
+     * @type {string}
+     * @memberof CourseCodeModel
+     */
+    code?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseGenerateCode
+ */
+export interface CourseGenerateCode {
+    /**
+     * Code's expiration time
+     * @type {string}
+     * @memberof CourseGenerateCode
+     */
+    duration: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseIdResponse
  */
 export interface CourseIdResponse {
@@ -831,6 +857,19 @@ export interface SectionModel {
      * @memberof SectionModel
      */
     description: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShareCourseCode
+ */
+export interface ShareCourseCode {
+    /**
+     * Course's sharing code
+     * @type {string}
+     * @memberof ShareCourseCode
+     */
+    code: string;
 }
 /**
  * 

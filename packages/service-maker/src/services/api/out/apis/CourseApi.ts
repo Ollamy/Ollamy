@@ -3,22 +3,31 @@
 
 import * as runtime from '../runtime';
 import type {
+  CourseCodeModel,
+  CourseGenerateCode,
   CourseIdResponse,
   CourseSectionModel,
   CourseTrueResponse,
   CreateCourseModel,
   GetCourseRequest,
   IdCourseModel,
+  ShareCourseCode,
   UpdateCourseModel,
   UserCourseHp,
 } from '../models/index';
 
 export interface AddUserToCourseRequest {
     id: string;
+    courseCodeModel: CourseCodeModel;
 }
 
 export interface DeleteCourseRequest {
     idCourseModel: IdCourseModel;
+}
+
+export interface GenerateCodeforCourseRequest {
+    id: string;
+    courseGenerateCode: CourseGenerateCode;
 }
 
 export interface GetCourseOperationRequest {
@@ -53,15 +62,22 @@ export class CourseApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling addUserToCourse.');
         }
 
+        if (requestParameters.courseCodeModel === null || requestParameters.courseCodeModel === undefined) {
+            throw new runtime.RequiredError('courseCodeModel','Required parameter requestParameters.courseCodeModel was null or undefined when calling addUserToCourse.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/course/{id}/user`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: requestParameters.courseCodeModel,
         }, initOverrides);
 
         return response.json();
@@ -101,6 +117,40 @@ export class CourseApi extends runtime.BaseAPI {
      */
     static deleteCourse(requestParameters: DeleteCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseIdResponse> {
         return localCourseApi.deleteCourseRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async generateCodeforCourseRaw(requestParameters: GenerateCodeforCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCourseCode> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling generateCodeforCourse.');
+        }
+
+        if (requestParameters.courseGenerateCode === null || requestParameters.courseGenerateCode === undefined) {
+            throw new runtime.RequiredError('courseGenerateCode','Required parameter requestParameters.courseGenerateCode was null or undefined when calling generateCodeforCourse.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/course/{id}/share`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.courseGenerateCode,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static generateCodeforCourse(requestParameters: GenerateCodeforCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCourseCode> {
+        return localCourseApi.generateCodeforCourseRaw(requestParameters, initOverrides);
     }
 
     /**
