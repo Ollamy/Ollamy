@@ -1,13 +1,14 @@
+import type { MouseEventHandler } from 'react';
+import { useCallback, useState } from 'react';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
-import { MouseEventHandler, useCallback, useState } from 'react';
 
 import 'styles/dropdownMenu.css';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { DotsHorizontalIcon, TrashIcon } from '@radix-ui/react-icons';
 import { IconButton } from '@radix-ui/themes';
-import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
-import { lessonActions } from 'services/api/routes/lesson';
 
 interface OptionDropdownMenuProps {
   lessonId: string;
