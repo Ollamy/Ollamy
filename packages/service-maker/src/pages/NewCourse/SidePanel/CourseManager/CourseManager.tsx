@@ -18,17 +18,25 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import { useNavigate } from 'react-router-dom';
 
 interface CourseManagerProps {
   courseId: string;
 }
 
 function CourseManager({ courseId }: CourseManagerProps) {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
 
   const { data } = courseActions.useCourse({ id: courseId });
+  const { mutateAsync: removeCourse } = courseActions.useRemoveCourse();
 
-  const handleRemoveCourse = useCallback(async () => {}, []);
+  const handleRemoveCourse = useCallback(async () => {
+    await removeCourse({ idCourseModel: { id: courseId } }).then(() => {
+      navigate('/home');
+    });
+  }, []);
 
   return (
     <Container>

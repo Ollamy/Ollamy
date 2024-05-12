@@ -4,7 +4,7 @@ import generateUniqueColorVariables from 'utils/generateUniqueColorVariables';
 
 import { ArrowRightIcon, MixIcon } from '@radix-ui/react-icons';
 import { Heading, IconButton, Text, Tooltip } from '@radix-ui/themes';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 
 interface CourseCardProps {

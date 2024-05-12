@@ -15,7 +15,7 @@ export const userActions = {
       retry: false,
       ...config,
     }),
-  useUserCourses: (config?: UseQueryOptions<UserCoursesResponse>) =>
+  useGetUserCourses: (config?: UseQueryOptions<UserCoursesResponse>) =>
     useQuery({
       queryKey: GET_USER_COURSES_KEY,
       queryFn: () => UserApi.getUserCourses(),

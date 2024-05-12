@@ -5,7 +5,7 @@ import api from 'services/api';
 import styled from 'styled-components';
 
 function HomeBody() {
-  const { data } = api.user.useUserCourses();
+  const { data } = api.user.useGetUserCourses();
   const [searchValue, setSearchValue] = useState<string>('');
 
   const currentData = useMemo(() => {

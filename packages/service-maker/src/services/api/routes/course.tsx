@@ -1,7 +1,7 @@
 import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from 'main';
-import type {
+import {
   CourseSectionModel,
   GetCourseOperationRequest,
   GetCourseRequest,
@@ -39,10 +39,9 @@ export const courseActions = {
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),
-  useUpdateCourse: () =>
-    useMutation(CourseApi.updateCourse, {
+  useRemoveCourse: () =>
+    useMutation(CourseApi.deleteCourse, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_COURSE_KEY);
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),
