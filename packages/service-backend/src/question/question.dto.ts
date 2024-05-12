@@ -296,6 +296,11 @@ export class ValidateAnswerModel {
   @ApiProperty({ description: 'The unique identifier of the answer' })
   @IsUUID()
   answerId: string;
+
+  @ApiProperty({ description: 'The data of the answer', required: false })
+  @IsString()
+  @IsOptional()
+  data?: string;
 }
 
 export class ValidateAnswerResponse {
