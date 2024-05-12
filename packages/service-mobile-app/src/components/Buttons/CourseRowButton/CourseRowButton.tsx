@@ -9,7 +9,7 @@ function CourseRowButton({ course }: { course: UserCourse }) {
   return (
     <Pressable w="100%" onPress={() => navigate(`/course/${course.id}`)}>
       <HStack alignItems="center" w="full" space="10px" p="12px" rounded="md" borderColor="gray.200" borderWidth={1}>
-        <Image size={12} resizeMode="contain" source={{ uri: course.picture }} alt="icon" />
+        <Image size={12} alt="picture" resizeMode="contain" source={{ uri: course.pictureId }} />
         <Text style={{ fontWeight: '600', fontSize: 14 }}>{course.title}</Text>
       </HStack>
     </Pressable>
