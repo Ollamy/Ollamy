@@ -141,9 +141,9 @@ model Lesson {
 }
 
 enum AnswerType {
-  TEXT
-  QUIZ
-  OTHER
+  FREE_ANSWER
+  MULTIPLE_CHOICE
+  SQUARE_CHOICE
 }
 
 enum QuestionType {
