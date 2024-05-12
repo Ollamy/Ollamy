@@ -23,7 +23,7 @@
         "resourceClass": "m-medium"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000/"
+        "EXPO_PUBLIC_BACKEND_URL": "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000"
       }
     },
     "production": {
