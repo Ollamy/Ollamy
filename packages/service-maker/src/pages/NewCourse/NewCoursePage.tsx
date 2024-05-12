@@ -5,20 +5,18 @@ import CourseSidePanel from 'pages/NewCourse/SidePanel/CourseSidePanel';
 import Section from 'pages/NewCourse/Section/Section';
 import { useParams } from 'react-router-dom';
 import { Text } from '@radix-ui/themes';
+import useExtractSectionAndLessonIds from 'hooks/useExtractSectionAndLessonIds';
 
 // eslint-disable-next-line
 interface NewCoursePageProps {}
 
 const NewCoursePage = ({}: NewCoursePageProps) => {
   const { courseId } = useParams();
-  const queryParams = new URLSearchParams(window.location.search);
-  const sectionId = queryParams.get('sectionId');
-  const lessonId = queryParams.get('lessonId');
+  const { lessonId, sectionId } = useExtractSectionAndLessonIds();
 
   useEffect(() => {
-    console.log(queryParams);
     console.log(sectionId, lessonId);
-  }, [lessonId, queryParams, sectionId]);
+  }, [lessonId, sectionId]);
 
   return courseId ? (
     <Container>
@@ -46,8 +44,9 @@ const Container = styled.div`
 const Body = styled.div`
   display: flex;
 
+  flex-grow: 1;
   width: 100%;
-  height: 100%;
+  overflow: hidden;
 `;
 
 export default NewCoursePage;

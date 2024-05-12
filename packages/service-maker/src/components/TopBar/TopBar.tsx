@@ -19,7 +19,7 @@ const Container = styled.div`
   gap: 24px;
 
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   background: white;
   border: 1px solid #e7e7e7;
 
