@@ -11,13 +11,18 @@ import {
   UpdateLessonModel,
   LessonIdResponse,
 } from './lesson.dto';
-import { LectureModel, LessonLectureModel, QuestionModel } from 'question/question.dto';
+import {
+  LectureModel,
+  LessonLectureModel,
+  QuestionModel,
+} from 'question/question.dto';
 import prisma from 'client';
 import {
   Prisma,
   Question,
   Lesson,
   Lecture,
+  UsertoLesson,
 } from '@prisma/client';
 
 @Injectable()
@@ -77,24 +82,48 @@ export class LessonService {
     }
   }
 
-  async getLesson(LessonId: string): Promise<CreateLessonModel> {
+  async getLesson(lessonId: string, userId): Promise<LessonModel> {
     try {
       const lessonDb: Lesson = await prisma.lesson.findFirst({
         where: {
-          id: LessonId,
+          id: lessonId,
         },
       });
 
-      if (!lessonDb) {
+      const userLessonDb: UsertoLesson = await prisma.usertoLesson.findUnique({
+        where: {
+          lesson_id_user_id: {
+            user_id: userId,
+            lesson_id: lessonId,
+          },
+        },
+      });
+
+      if (!lessonDb || !userLessonDb) {
         Logger.error('Lesson does not exists !');
         throw new ConflictException('Lesson does not exists !');
       }
 
+      const questionsCount = await prisma.question.count({
+        where: {
+          lesson_id: lessonId,
+        },
+      });
+
+      const lecturesCount = await prisma.lecture.count({
+        where: {
+          lesson_id: lessonId,
+        },
+      });
+
       return {
-        sectionId: lessonDb.section_id,
+        id: lessonDb.id,
         title: lessonDb.title,
         description: lessonDb.description,
-      } as CreateLessonModel;
+        status: userLessonDb.status,
+        numberOfQuestions: questionsCount,
+        numberOfLectures: lecturesCount,
+      } as LessonModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not found !');
@@ -191,9 +220,9 @@ export class LessonService {
           lesson_id_user_id: {
             user_id: userId,
             lesson_id: lessonId,
-          }
-        }
-      })
+          },
+        },
+      });
 
       if (!userToLesson) {
         userToLesson = await prisma.usertoLesson.create({

@@ -76,7 +76,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    async getLessonRaw(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateLessonModel> {
+    async getLessonRaw(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonModel> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getLesson.');
         }
@@ -97,7 +97,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    static getLesson(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateLessonModel> {
+    static getLesson(requestParameters: GetLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonModel> {
         return localLessonApi.getLessonRaw(requestParameters, initOverrides);
     }
 

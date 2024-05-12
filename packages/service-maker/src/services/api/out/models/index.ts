@@ -47,6 +47,49 @@ export interface AnswerModel {
 /**
  * 
  * @export
+ * @interface BadgeModel
+ */
+export interface BadgeModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BadgeModel
+     */
+    order: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    image_name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    color: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseIdResponse
  */
 export interface CourseIdResponse {
@@ -218,13 +261,13 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeAnswer: string;
+    typeAnswer: CreateQuestionModelTypeAnswerEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeQuestion: string;
+    typeQuestion: CreateQuestionModelTypeQuestionEnum;
     /**
      * 
      * @type {string}
@@ -236,7 +279,7 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    difficulty?: string;
+    difficulty?: CreateQuestionModelDifficultyEnum;
     /**
      * 
      * @type {number}
@@ -250,6 +293,41 @@ export interface CreateQuestionModel {
      */
     trustAnswerId?: string;
 }
+
+
+/**
+ * @export
+ */
+export const CreateQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type CreateQuestionModelTypeAnswerEnum = typeof CreateQuestionModelTypeAnswerEnum[keyof typeof CreateQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const CreateQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type CreateQuestionModelTypeQuestionEnum = typeof CreateQuestionModelTypeQuestionEnum[keyof typeof CreateQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const CreateQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type CreateQuestionModelDifficultyEnum = typeof CreateQuestionModelDifficultyEnum[keyof typeof CreateQuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -378,13 +456,13 @@ export interface GetQuestionModel {
      * @type {string}
      * @memberof GetQuestionModel
      */
-    typeAnswer: string;
+    typeAnswer: GetQuestionModelTypeAnswerEnum;
     /**
      * The type of question
      * @type {string}
      * @memberof GetQuestionModel
      */
-    typeQuestion: string;
+    typeQuestion: GetQuestionModelTypeQuestionEnum;
     /**
      * The unique identifier of the picture
      * @type {string}
@@ -396,7 +474,7 @@ export interface GetQuestionModel {
      * @type {string}
      * @memberof GetQuestionModel
      */
-    difficulty?: string;
+    difficulty?: GetQuestionModelDifficultyEnum;
     /**
      * The order of the question
      * @type {string}
@@ -416,6 +494,41 @@ export interface GetQuestionModel {
      */
     points?: number;
 }
+
+
+/**
+ * @export
+ */
+export const GetQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type GetQuestionModelTypeAnswerEnum = typeof GetQuestionModelTypeAnswerEnum[keyof typeof GetQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const GetQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type GetQuestionModelTypeQuestionEnum = typeof GetQuestionModelTypeQuestionEnum[keyof typeof GetQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const GetQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type GetQuestionModelDifficultyEnum = typeof GetQuestionModelDifficultyEnum[keyof typeof GetQuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -468,10 +581,10 @@ export interface GetUserScoreModel {
 export interface GetUsersBadges {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<BadgeModel>}
      * @memberof GetUsersBadges
      */
-    badges: Array<string>;
+    badges: Array<BadgeModel>;
 }
 /**
  * 
@@ -762,13 +875,13 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
-    typeAnswer: string;
+    typeAnswer: QuestionModelTypeAnswerEnum;
     /**
      * The type of question
      * @type {string}
      * @memberof QuestionModel
      */
-    typeQuestion: string;
+    typeQuestion: QuestionModelTypeQuestionEnum;
     /**
      * The unique identifier of the picture
      * @type {string}
@@ -780,7 +893,7 @@ export interface QuestionModel {
      * @type {string}
      * @memberof QuestionModel
      */
-    difficulty?: string;
+    difficulty?: QuestionModelDifficultyEnum;
     /**
      * The order of the question
      * @type {string}
@@ -794,6 +907,41 @@ export interface QuestionModel {
      */
     points?: number;
 }
+
+
+/**
+ * @export
+ */
+export const QuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type QuestionModelTypeAnswerEnum = typeof QuestionModelTypeAnswerEnum[keyof typeof QuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const QuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type QuestionModelTypeQuestionEnum = typeof QuestionModelTypeQuestionEnum[keyof typeof QuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const QuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type QuestionModelDifficultyEnum = typeof QuestionModelDifficultyEnum[keyof typeof QuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -974,13 +1122,13 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    typeAnswer?: string;
+    typeAnswer?: UpdateQuestionModelTypeAnswerEnum;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    typeQuestion?: string;
+    typeQuestion?: UpdateQuestionModelTypeQuestionEnum;
     /**
      * 
      * @type {string}
@@ -992,7 +1140,7 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    difficulty?: string;
+    difficulty?: UpdateQuestionModelDifficultyEnum;
     /**
      * 
      * @type {number}
@@ -1006,6 +1154,41 @@ export interface UpdateQuestionModel {
      */
     trustAnswerId?: string;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type UpdateQuestionModelTypeAnswerEnum = typeof UpdateQuestionModelTypeAnswerEnum[keyof typeof UpdateQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type UpdateQuestionModelTypeQuestionEnum = typeof UpdateQuestionModelTypeQuestionEnum[keyof typeof UpdateQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type UpdateQuestionModelDifficultyEnum = typeof UpdateQuestionModelDifficultyEnum[keyof typeof UpdateQuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -1211,7 +1394,7 @@ export interface ValidateAnswerModel {
      * @type {string}
      * @memberof ValidateAnswerModel
      */
-    answerId: string;
+    answerId?: string;
     /**
      * The data of the answer
      * @type {string}

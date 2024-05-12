@@ -1,10 +1,17 @@
 import {
   CreateLessonModel,
   IdLessonModel,
+  LessonModel,
   UpdateLessonModel,
 } from '@ollamy/backend/lesson/lesson.dto';
-import { AnswerType, Lesson, Question, QuestionDifficulty } from '@prisma/client';
+import {
+  AnswerType,
+  Lesson,
+  Question,
+  QuestionDifficulty,
+} from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
+import { mockUserLesson } from './question.data';
 
 // Data
 
@@ -49,7 +56,7 @@ export const mockLessonUpdatedData: UpdateLessonModel = {
 export const mockUpdatedLesson: Lesson = {
   id: mockLessonId,
   section_id: uuidv4(),
-  ...mockLessonUpdatedData as { title: string; description: string },
+  ...(mockLessonUpdatedData as { title: string; description: string }),
 };
 
 export const mockLessonData3: UpdateLessonModel = {
@@ -70,7 +77,7 @@ export const mockLessonQuestions: Question[] = [
     difficulty: QuestionDifficulty.BEGINNER,
     picture_id: uuidv4(),
     points: 1,
-    order: "a0",
+    order: 'a0',
     // other question properties
   },
   {
@@ -84,8 +91,17 @@ export const mockLessonQuestions: Question[] = [
     difficulty: QuestionDifficulty.ADVANCED,
     picture_id: uuidv4(),
     points: 2,
-    order: "a1",
+    order: 'a1',
     // other question properties
   },
   // other questions
 ];
+
+export const mockGetLesson: LessonModel = {
+  id: mockLesson.id,
+  title: mockLesson.title,
+  description: mockLesson.description,
+  status: mockUserLesson.status,
+  numberOfLectures: 1,
+  numberOfQuestions: 1,
+};
