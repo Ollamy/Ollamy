@@ -73,6 +73,7 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
                 <TrashIcon />
               </IconButton>
             }
+            actionButtonValue={'Yes, delete section'}
             onAction={handleRemoveSection}
           />
         </EditSectionButtonContainer>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
@@ -17,6 +17,7 @@ import {
   IconButton,
   Tooltip,
 } from '@radix-ui/themes';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 
 interface CourseManagerProps {
   courseId: string;
@@ -26,6 +27,8 @@ function CourseManager({ courseId }: CourseManagerProps) {
   const [open, setOpen] = useState(false);
 
   const { data } = courseActions.useCourse({ id: courseId });
+
+  const handleRemoveCourse = useCallback(async () => {}, []);
 
   return (
     <Container>
@@ -74,9 +77,22 @@ function CourseManager({ courseId }: CourseManagerProps) {
               <Button disabled color={'gray'} variant={'outline'}>
                 Edit
               </Button>
-              <Button color={'red'} variant={'soft'}>
-                Remove
-              </Button>
+              <CustomAlertDialog
+                description={
+                  'This action cannot be undone. This action will permanently delete the entire course from our servers, along with all related sections, quizzes and lectures.'
+                }
+                TriggerButton={
+                  <Button
+                    color={'red'}
+                    variant={'soft'}
+                    style={{ width: '100%' }}
+                  >
+                    Remove
+                  </Button>
+                }
+                actionButtonValue={'Yes, delete course'}
+                onAction={handleRemoveCourse}
+              />
             </ButtonContainer>
           </CustomCollapsibleContent>
         </CustomCard>

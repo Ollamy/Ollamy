@@ -79,6 +79,7 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
                   Remove
                 </Nico>
               }
+              actionButtonValue={'Yes, delete lesson'}
               onAction={handleRemoveLesson}
               onCancel={handleCancelRemoveLesson}
             />

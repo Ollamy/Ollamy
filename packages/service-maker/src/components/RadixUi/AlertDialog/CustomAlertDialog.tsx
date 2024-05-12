@@ -7,6 +7,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog';
 
 interface CustomAlertDialogProps {
   description: string;
+  actionButtonValue: string;
   TriggerButton: React.ReactNode;
   onAction: MouseEventHandler<HTMLButtonElement>;
   onCancel?: MouseEventHandler<HTMLButtonElement>;
@@ -17,6 +18,7 @@ function CustomAlertDialog({
   onAction,
   description,
   TriggerButton,
+  actionButtonValue,
 }: CustomAlertDialogProps) {
   return (
     <Container>
@@ -45,7 +47,7 @@ function CustomAlertDialog({
                   className={'AlertDialogButton red'}
                   onClick={onAction}
                 >
-                  Yes, delete account
+                  {actionButtonValue}
                 </CustomButton>
               </AlertDialog.Action>
             </CustomDiv>
