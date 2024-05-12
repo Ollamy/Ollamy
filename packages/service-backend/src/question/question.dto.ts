@@ -294,7 +294,7 @@ export class ValidateAnswerModel {
   @IsUUID()
   questionId: string;
 
-  @ApiProperty({ description: 'The unique identifier of the answer', required: false})
+  @ApiProperty({ description: 'The unique identifier of the answer', required: false })
   @IsUUID()
   @IsOptional()
   answerId?: string;
