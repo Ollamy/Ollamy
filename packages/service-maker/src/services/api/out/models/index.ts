@@ -639,7 +639,37 @@ export interface LessonModel {
      * @memberof LessonModel
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    status: LessonModelStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof LessonModel
+     */
+    numberOfQuestions: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof LessonModel
+     */
+    numberOfLectures: number;
 }
+
+
+/**
+ * @export
+ */
+export const LessonModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
+
 /**
  * 
  * @export
@@ -1182,6 +1212,12 @@ export interface ValidateAnswerModel {
      * @memberof ValidateAnswerModel
      */
     answerId: string;
+    /**
+     * The data of the answer
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    data?: string;
 }
 /**
  * 
