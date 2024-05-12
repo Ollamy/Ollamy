@@ -14,7 +14,9 @@ import {
   mockLessonUpdatedData,
   mockUpdatedLesson,
   mockLessonData3,
+  mockGetLesson,
 } from 'tests/data/lesson.data';
+import { mockUserLesson } from './data/question.data';
 
 describe('postLesson', () => {
   let lessonService: LessonService;
@@ -125,6 +127,16 @@ describe('getLesson', () => {
 
   it('should return the lesson when it exists', async () => {
     jest.spyOn(prisma.lesson, 'findFirst').mockResolvedValue(mockLesson);
+    jest
+      .spyOn(prisma.usertoLesson, 'findUnique')
+      .mockResolvedValue(mockUserLesson);
+
+    jest
+      .spyOn(prisma.question, 'count')
+      .mockResolvedValue(mockGetLesson.numberOfQuestions);
+    jest
+      .spyOn(prisma.lecture, 'count')
+      .mockResolvedValue(mockGetLesson.numberOfLectures);
 
     // Invoke the function being tested
     const result = await lessonService.getLesson(mockLessonId, userId);
@@ -135,11 +147,7 @@ describe('getLesson', () => {
       where: { id: mockLessonId },
     });
 
-    expect(result).toEqual({
-      description: mockLesson.description,
-      sectionId: mockLesson.section_id,
-      title: mockLesson.title,
-    });
+    expect(result).toEqual(mockGetLesson);
   });
 
   it('should throw ConflictException if the lesson does not exist', async () => {
