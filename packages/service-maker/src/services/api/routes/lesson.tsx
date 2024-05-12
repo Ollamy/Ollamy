@@ -1,7 +1,7 @@
 import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from 'main';
-import {
+import type {
   GetLessonQuestionsRequest,
   GetLessonRequest,
   LessonModel,
