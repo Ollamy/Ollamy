@@ -1,4 +1,5 @@
-import { FormEvent, useCallback, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useCallback, useState } from 'react';
 import type { CreateSectionModel } from 'services/api/out';
 import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
