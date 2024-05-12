@@ -1,23 +1,24 @@
-import styled from 'styled-components';
 import SectionHeader from 'pages/NewCourse/Section/Header/SectionHeader';
 import LessonTable from 'pages/NewCourse/Section/LessonTable/LessonTable';
+import styled from 'styled-components';
+
 import { Separator } from '@radix-ui/themes';
 
 interface SectionProps {
   sectionId: string;
 }
 
-const Section = ({ sectionId }: SectionProps) => {
+function Section({ sectionId }: SectionProps) {
   return (
     <Container>
       <SectionHeader sectionId={sectionId} />
       <Separator style={{ height: '2px' }} size={'4'} />
       <Body>
-        <LessonTable />
+        <LessonTable sectionId={sectionId} />
       </Body>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

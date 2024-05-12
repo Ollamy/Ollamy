@@ -23,7 +23,7 @@ export const sectionActions = {
       queryFn: () => SectionApi.getSection(requestParameters),
       ...config,
     }),
-  useSectionLessons: (
+  useGetSectionLessons: (
     requestParameters: GetSectionLessonsRequest,
     config?: UseQueryOptions<Array<LessonModel>>,
   ) =>
