@@ -1,13 +1,12 @@
-import type { FormEvent } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
 import type { CreateSectionModel } from 'services/api/out';
 import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
 
 import 'styles/dialog.css';
 
-import * as Dialog from '@radix-ui/react-dialog';
-import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { Heading, IconButton } from '@radix-ui/themes';
 
 interface SectionCreatorProps {
@@ -15,25 +14,16 @@ interface SectionCreatorProps {
 }
 
 function SectionCreator({ courseId }: SectionCreatorProps) {
-  const [open, setOpen] = useState(false);
   const { mutateAsync: createNewSection } = sectionActions.useCreateSection();
 
-  const handleSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
-      const formData = new FormData(event.currentTarget as HTMLFormElement);
-      const title = formData.get('title') as string;
-      const description = formData.get('description') as string;
-
-      await createNewSection({
+  const handleCreateSection = useCallback(
+    (title: string, description: string) => {
+      createNewSection({
         createSectionModel: {
           courseId,
           title,
           description,
         },
-      }).then(() => {
-        setOpen(false);
       });
     },
     [courseId, createNewSection],
@@ -42,58 +32,19 @@ function SectionCreator({ courseId }: SectionCreatorProps) {
   return (
     <Container>
       <CustomHeading>Sections</CustomHeading>
-      <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Trigger asChild>
+      <CustomDialogTitleDescription
+        dialogTitle={'Add section'}
+        dialogDescription={
+          'Define the title and description of your new section.'
+        }
+        actionButtonValue={'New section'}
+        TriggerButton={
           <IconButton variant={'soft'}>
             <PlusIcon />
           </IconButton>
-        </Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className={'DialogOverlay'} />
-          <Dialog.Content className={'DialogContent'}>
-            <Dialog.Title className={'DialogTitle'}>Edit profile</Dialog.Title>
-            <Dialog.Description className={'DialogDescription'}>
-              {'Define the title and description of your new section.'}
-            </Dialog.Description>
-            <CustomForm onSubmit={handleSubmit}>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'title'}>
-                  Title
-                </CustomLabel>
-                <CustomInput
-                  required
-                  id={'title'}
-                  name={'title'}
-                  className={'DialogInput'}
-                  placeholder={'Section title'}
-                />
-              </CustomFieldset>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'description'}>
-                  Description
-                </CustomLabel>
-                <TextArea
-                  required
-                  id={'description'}
-                  name={'description'}
-                  className={'DialogTextarea'}
-                  placeholder={'Section description…'}
-                />
-              </CustomFieldset>
-              <ButtonContainer>
-                <CustomButton type={'submit'} className={'DialogButton green'}>
-                  New section
-                </CustomButton>
-              </ButtonContainer>
-            </CustomForm>
-            <Dialog.Close asChild>
-              <CustomButton className={'DialogIconButton'} aria-label={'Close'}>
-                <Cross2Icon />
-              </CustomButton>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+        }
+        createFunction={handleCreateSection}
+      />
     </Container>
   );
 }
@@ -112,25 +63,6 @@ const Container = styled.div`
 const CustomHeading = styled(Heading)`
   color: #3d3d3d;
   font-size: 16px;
-`;
-
-const CustomForm = styled.form``;
-
-const CustomLabel = styled.label``;
-
-const CustomInput = styled.input``;
-
-const CustomFieldset = styled.fieldset``;
-
-const CustomButton = styled.button``;
-
-const TextArea = styled.textarea``;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-
-  margin-top: 25px;
 `;
 
 export default SectionCreator;

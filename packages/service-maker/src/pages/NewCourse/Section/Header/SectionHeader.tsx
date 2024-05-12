@@ -1,16 +1,17 @@
-import styled from 'styled-components';
-import { sectionActions } from 'services/api/routes/section';
-import { Button, Heading, IconButton, Text } from '@radix-ui/themes';
-import { GearIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
-import CustomAlertDialog from 'components/RadixUi/AlertDialog/AlertDialog';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import { sectionActions } from 'services/api/routes/section';
+import styled from 'styled-components';
+
+import { GearIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
+import { Button, Heading, IconButton, Text } from '@radix-ui/themes';
 
 interface SectionHeaderProps {
   sectionId: string;
 }
 
-const SectionHeader = ({ sectionId }: SectionHeaderProps) => {
+function SectionHeader({ sectionId }: SectionHeaderProps) {
   const [, setSearchParams] = useSearchParams();
 
   const { data } = sectionActions.useSection({ id: sectionId });
@@ -20,6 +21,8 @@ const SectionHeader = ({ sectionId }: SectionHeaderProps) => {
     await removeSection({ idSectionModel: { id: sectionId } });
     setSearchParams('sectionId', undefined);
   }, [removeSection, sectionId, setSearchParams]);
+
+  const handleCreateLesson = useCallback(() => {}, []);
 
   return (
     <Container>
@@ -51,7 +54,7 @@ const SectionHeader = ({ sectionId }: SectionHeaderProps) => {
       </Temp>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
