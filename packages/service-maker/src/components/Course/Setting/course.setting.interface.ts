@@ -1,4 +1,4 @@
-import { GetCourseRequest, GetUserModel } from 'services/api/out';
+import type { GetCourseRequest, GetUserModel } from 'services/api/out';
 
 export interface CouseSettingInterface {
   title: string;

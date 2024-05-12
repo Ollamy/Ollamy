@@ -16,7 +16,7 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
     (target: PageType) => {
       setCurrentPage(target);
     },
-    [setCurrentPage],
+    [setCurrentPage]
   );
 
   return (

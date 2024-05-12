@@ -22,7 +22,7 @@ function LessonList(props: LessonListProps) {
     {
       id: sectionId ?? '',
     },
-    { enabled: !!sectionId },
+    { enabled: !!sectionId }
   );
 
   const handleClose = async () => {
@@ -31,13 +31,13 @@ function LessonList(props: LessonListProps) {
   };
 
   const [selectedLessonId, setSelectedLessonId] = useState<string | undefined>(
-    lessonId,
+    lessonId
   );
   useEffect(() => {
     if (selectedLessonId) {
       if (sectionId)
         navigate(
-          `/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`,
+          `/course/${courseId}/section/${sectionId}/lesson/${selectedLessonId}`
         );
     }
   }, [selectedLessonId]);
@@ -100,8 +100,7 @@ const PlusButton = styled.a`
   border-radius: 32px;
 
   text-decoration: none;
-  box-shadow:
-    rgba(0, 0, 0, 0.5) 0 2px 0,
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 0,
     rgba(0, 0, 0, 0.05) 0px -0.5px 0px inset;
 
   cursor: pointer;

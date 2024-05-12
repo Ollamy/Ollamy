@@ -1,12 +1,12 @@
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Dropdown from 'components/dropdown';
+import CreateModal from 'components/modal';
+import LessonList from 'pages/maker/hub/sideBarMenu/lessonList';
+import api from 'services/api';
 import type { GetCourseRequest } from 'services/api/out';
 import styled from 'styled-components';
-import api from 'services/api';
-import CreateModal from 'components/modal';
-import Dropdown from 'components/dropdown';
-import LessonList from 'pages/maker/hub/sideBarMenu/lessonList';
 
 interface SideBarMenuProps {
   course: GetCourseRequest;
@@ -26,7 +26,7 @@ function SideBarMenu(props: SideBarMenuProps): ReactElement {
 
   const { mutateAsync: createSectionMutation } = api.section.useCreateSection();
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    sectionId ?? null,
+    sectionId ?? null
   );
 
   const { data: courseSections } = api.course.useCourseSection({

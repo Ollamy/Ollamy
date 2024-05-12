@@ -124,5 +124,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </Theme>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

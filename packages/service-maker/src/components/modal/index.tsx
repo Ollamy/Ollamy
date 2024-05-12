@@ -12,28 +12,26 @@ interface CreateModalProps {
   children: any;
 }
 
-const CreateModal = ({
+function CreateModal({
   onClose,
   onSubmit,
   isOpen,
   title: modalTitle,
   children,
-}: CreateModalProps) => {
+}: CreateModalProps) {
   return (
-    <>
-      <ModalWrapper isOpen={isOpen}>
-        <ModalContent>
-          <ModalTitle>{modalTitle}</ModalTitle>
-          <ModalBody>{children}</ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={onSubmit}>Create</Button>
-          </ModalFooter>
-        </ModalContent>
-      </ModalWrapper>
-    </>
+    <ModalWrapper isOpen={isOpen}>
+      <ModalContent>
+        <ModalTitle>{modalTitle}</ModalTitle>
+        <ModalBody>{children}</ModalBody>
+        <ModalFooter>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onSubmit}>Create</Button>
+        </ModalFooter>
+      </ModalContent>
+    </ModalWrapper>
   );
-};
+}
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>`
   display: ${(props) => (props.isOpen ? 'block' : 'none')};

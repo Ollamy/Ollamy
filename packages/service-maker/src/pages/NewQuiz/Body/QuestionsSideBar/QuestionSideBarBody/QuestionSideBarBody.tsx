@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import { lessonActions } from 'services/api/routes/lesson';
 import { useNavigate, useParams } from 'react-router-dom';
+import { lessonActions } from 'services/api/routes/lesson';
+import styled from 'styled-components';
 
 interface QuestionSideBarBodyProps {
   lessonId: string;
 }
 
-const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
+function QuestionSideBarBody({ lessonId }: QuestionSideBarBodyProps) {
   const { data } = lessonActions.useGetLessonQuestion({ id: lessonId! });
 
   const navigate = useNavigate();
@@ -15,25 +15,27 @@ const QuestionSideBarBody = ({ lessonId }: QuestionSideBarBodyProps) => {
 
   const handleRowClick = (id: string) => () => {
     navigate(
-      `/quiz/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`,
+      `/quiz/${courseId}/section/${sectionId}/lesson/${lessonId}/question/${id}`
     );
   };
 
   return data && data.length ? (
     <Container>
-      {data.map((elem, index) => {
-        return (
-          <Row isActive={elem.id === questionId} onClick={handleRowClick(elem.id)} key={elem.id}>
-            <RowIndexBadge>{index + 1}</RowIndexBadge>
-            <p>{elem.title}</p>
-          </Row>
-        );
-      })}
+      {data.map((elem, index) => (
+        <Row
+          isActive={elem.id === questionId}
+          onClick={handleRowClick(elem.id)}
+          key={elem.id}
+        >
+          <RowIndexBadge>{index + 1}</RowIndexBadge>
+          <p>{elem.title}</p>
+        </Row>
+      ))}
     </Container>
   ) : (
     <p>No content</p>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

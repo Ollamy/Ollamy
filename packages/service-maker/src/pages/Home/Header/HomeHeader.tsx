@@ -1,8 +1,8 @@
+import { useCallback } from 'react';
+import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
 import { Button } from '@radix-ui/themes';
-import { courseActions } from 'services/api/routes/course';
-import { useCallback } from 'react';
 
 function HomeHeader() {
   const { mutateAsync: createNewCourse } = courseActions.useCreateCourse();

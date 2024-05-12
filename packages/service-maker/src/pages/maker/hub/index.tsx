@@ -1,17 +1,17 @@
-import styled from 'styled-components';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from 'services/api';
-import TopBar from 'components/TopBar';
 import LoadingComponent from 'components/loading/spinner';
-import SideBarMenu from 'pages/maker/hub/sideBarMenu';
-import SectionEdit from 'pages/maker/hub/sectionEdit';
+import TopBar from 'components/TopBar';
 import LessonEdit from 'pages/maker/hub/lessonEdit';
+import SectionEdit from 'pages/maker/hub/sectionEdit';
+import SideBarMenu from 'pages/maker/hub/sideBarMenu';
+import api from 'services/api';
+import styled from 'styled-components';
 
 function MakerHubPage(): ReactElement {
   const navigate = useNavigate();
 
-  let { id, sectionId, lessonId } = useParams();
+  const { id, sectionId, lessonId } = useParams();
   if (!id) {
     navigate('/home');
     return <></>;
@@ -20,11 +20,11 @@ function MakerHubPage(): ReactElement {
   const { data: course } = api.course.useCourse({ id });
   const { data: section } = api.section.useSection(
     { id: sectionId ?? '' },
-    { enabled: sectionId !== undefined },
+    { enabled: sectionId !== undefined }
   );
   const { data: lesson } = api.lesson.useLesson(
     { id: lessonId ?? '' },
-    { enabled: lessonId !== undefined },
+    { enabled: lessonId !== undefined }
   );
 
   if (!course)

@@ -1,4 +1,6 @@
-import { CouseSettingInterface } from 'components/Course/Setting/course.setting.interface';
+import type { CouseSettingInterface } from 'components/Course/Setting/course.setting.interface';
+
+import { ContainerPlacement } from 'components/Carrousel/carrousel.style';
 import {
   ContainerSpaceBetween,
   InputCourse,
@@ -6,7 +8,6 @@ import {
   SubTitle,
   Title,
 } from 'components/Course/Setting/course.setting.style';
-import { ContainerPlacement } from 'components/Carrousel/carrousel.style';
 
 export function CourseSetting({
   title,

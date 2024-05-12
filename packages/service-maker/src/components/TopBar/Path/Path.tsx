@@ -1,5 +1,3 @@
-import { SlashIcon } from '@radix-ui/react-icons';
-import { TabNav } from '@radix-ui/themes';
 import { Fragment, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { courseActions } from 'services/api/routes/course';
@@ -7,6 +5,9 @@ import { lessonActions } from 'services/api/routes/lesson';
 import { questionActions } from 'services/api/routes/question';
 import { sectionActions } from 'services/api/routes/section';
 import { styled } from 'styled-components';
+
+import { SlashIcon } from '@radix-ui/react-icons';
+import { TabNav } from '@radix-ui/themes';
 
 interface PathProps {
   urlParams: {
@@ -29,27 +30,27 @@ interface NavElement {
   value: string;
 }
 
-const Path = ({ urlParams }: PathProps) => {
+function Path({ urlParams }: PathProps) {
   const navigate = useNavigate();
 
   const { data: courseData } = courseActions.useCourse(
     { id: urlParams.id! },
-    { enabled: !!urlParams.id },
+    { enabled: !!urlParams.id }
   );
 
   const { data: sectionData } = sectionActions.useSection(
     { id: urlParams.sectionId! },
-    { enabled: !!urlParams.sectionId },
+    { enabled: !!urlParams.sectionId }
   );
 
   const { data: lessonData } = lessonActions.useLesson(
     { id: urlParams.lessonId! },
-    { enabled: !!urlParams.lessonId },
+    { enabled: !!urlParams.lessonId }
   );
 
   const { data: questionData } = questionActions.useQuestion(
     { id: urlParams.questionId! },
-    { enabled: !!urlParams.questionId },
+    { enabled: !!urlParams.questionId }
   );
 
   const handleClick = (element: ElementType) => {
@@ -66,13 +67,13 @@ const Path = ({ urlParams }: PathProps) => {
       case ElementType.LESSON:
         console.log('lesson');
         navigate(
-          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`,
+          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`
         );
         break;
       case ElementType.QUESTION:
         console.log('question');
         navigate(
-          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`,
+          `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`
         );
         break;
       default:
@@ -82,25 +83,25 @@ const Path = ({ urlParams }: PathProps) => {
   const navData = useMemo<NavElement[]>(() => {
     const data: NavElement[] = [];
 
-    if (!!courseData)
+    if (courseData)
       data.push({
         element: ElementType.COURSE,
         value: courseData.title,
       });
 
-    if (!!sectionData)
+    if (sectionData)
       data.push({
         element: ElementType.SECTION,
         value: sectionData.title,
       });
 
-    if (!!lessonData)
+    if (lessonData)
       data.push({
         element: ElementType.LESSON,
         value: lessonData.title,
       });
 
-    if (!!questionData)
+    if (questionData)
       data.push({
         element: ElementType.QUESTION,
         value: questionData.title,
@@ -110,19 +111,17 @@ const Path = ({ urlParams }: PathProps) => {
 
   return (
     <Container>
-      {navData.map((elem, index) => {
-        return (
-          <Fragment key={elem.element}>
-            <Link onClick={() => handleClick(elem.element)} key={elem.element}>
-              {elem.value}
-            </Link>
-            {index < navData.length - 1 && <SlashIcon color="#9c9c9c" />}
-          </Fragment>
-        );
-      })}
+      {navData.map((elem, index) => (
+        <Fragment key={elem.element}>
+          <Link onClick={() => handleClick(elem.element)} key={elem.element}>
+            {elem.value}
+          </Link>
+          {index < navData.length - 1 && <SlashIcon color="#9c9c9c" />}
+        </Fragment>
+      ))}
     </Container>
   );
-};
+}
 
 const Link = styled.span`
   cursor: pointer;

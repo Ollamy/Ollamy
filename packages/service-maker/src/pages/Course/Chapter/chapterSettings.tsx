@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { GetCourseRequest } from 'services/api/out';
-import TopBar from 'components/TopBar';
-import { Navbar } from 'components/Navbar/navbar';
-import { CourseSetting } from 'components/Course/Setting/course.setting';
-import { CoursePicture } from 'components/Course/Picture/course.picture';
 import { CarrouselMaker } from 'components/Carrousel/carrousel';
+import { CoursePicture } from 'components/Course/Picture/course.picture';
+import { CourseSetting } from 'components/Course/Setting/course.setting';
+import { Navbar } from 'components/Navbar/navbar';
+import TopBar from 'components/TopBar';
+import type { GetCourseRequest } from 'services/api/out';
 import styled from 'styled-components';
 
 export function SettingPage() {

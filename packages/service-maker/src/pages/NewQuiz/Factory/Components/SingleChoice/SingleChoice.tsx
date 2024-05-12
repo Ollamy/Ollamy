@@ -1,9 +1,14 @@
 import type { ChangeEventHandler } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
+import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
 import type { FactoryComponentInterface } from 'pages/NewQuiz/Factory/Components/interface';
+import { answerActions } from 'services/api/routes/answer';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
+import { toBase64 } from 'utils/toBase64';
 
+import { UploadIcon } from '@radix-ui/react-icons';
 import {
   Button,
   Radio,
@@ -11,18 +16,13 @@ import {
   Skeleton,
   TextField,
 } from '@radix-ui/themes';
-import { answerActions } from 'services/api/routes/answer';
-import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
-import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
-import { toBase64 } from 'utils/toBase64';
-import { UploadIcon } from '@radix-ui/react-icons';
 
 type QuestionType = { title: string; description: string };
 
 function SingleChoice({ questionId }: FactoryComponentInterface) {
   const [questionImage, setQuestionImage] = useState<File | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
@@ -84,7 +84,7 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
         },
       });
     },
-    [questionData, questionId, updateQuestion],
+    [questionData, questionId, updateQuestion]
   );
 
   const handleChangeAnswer: ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -100,7 +100,7 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
         },
       });
     },
-    [questionId, updateAnswer],
+    [questionId, updateAnswer]
   );
 
   const handleAddAnswer = useCallback(() => {

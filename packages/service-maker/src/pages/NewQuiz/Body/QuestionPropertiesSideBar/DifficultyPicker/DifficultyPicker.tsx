@@ -13,11 +13,11 @@ const difficultyToNumber: Record<Difficulty, number> = {
   [Difficulty.ADVANCED]: 3,
 };
 
-const DifficultyPicker = ({
+function DifficultyPicker({
   difficulty,
   onClick,
   maxDifficulty = 3,
-}: DifficultyPickerProps) => {
+}: DifficultyPickerProps) {
   return (
     <Container>
       <h2>
@@ -33,8 +33,8 @@ const DifficultyPicker = ({
             onClick={() =>
               onClick(
                 Object.entries(difficultyToNumber).find(
-                  (o) => o[1] === index + 1,
-                )?.[0] as Difficulty,
+                  (o) => o[1] === index + 1
+                )?.[0] as Difficulty
               )
             }
           />
@@ -42,7 +42,7 @@ const DifficultyPicker = ({
       </StarsContainer>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

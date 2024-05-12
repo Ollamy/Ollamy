@@ -5,9 +5,7 @@ import SingleChoice from 'pages/NewQuiz/Factory/Components/SingleChoice/SingleCh
 import { QuestionType } from 'pages/NewQuiz/Factory/factory.types';
 
 export interface Factory {
-  Component: ({
-    questionId,
-  }: FactoryComponentInterface) => ReactElement;
+  Component: ({ questionId }: FactoryComponentInterface) => ReactElement;
   label: string;
 }
 

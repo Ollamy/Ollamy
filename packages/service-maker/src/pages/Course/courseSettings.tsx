@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import TopBar from 'components/TopBar';
-import { Navbar } from 'components/Navbar/navbar';
-import { IncomeComponent } from 'components/Income/income';
 import { AnalyticComponent } from 'components/analytics/analytic';
 import { CarrouselMaker } from 'components/Carrousel/carrousel';
+import { IncomeComponent } from 'components/Income/income';
+import { Navbar } from 'components/Navbar/navbar';
+import TopBar from 'components/TopBar';
 import styled from 'styled-components';
 
 export function FormationSetting() {

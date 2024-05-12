@@ -8,11 +8,7 @@ interface DeleteModalProps {
   onDeleteAnswer: () => void;
 }
 
-const DeleteModal = ({
-  title,
-  description,
-  onDeleteAnswer,
-}: DeleteModalProps) => {
+function DeleteModal({ title, description, onDeleteAnswer }: DeleteModalProps) {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>
@@ -43,6 +39,6 @@ const DeleteModal = ({
       </AlertDialog.Portal>
     </AlertDialog.Root>
   );
-};
+}
 
 export default DeleteModal;

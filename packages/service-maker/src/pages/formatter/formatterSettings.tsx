@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { GetUserModel } from 'services/api/out';
-import api from 'services/api';
-import TopBar from 'components/TopBar';
+import { CoursePicture } from 'components/Course/Picture/course.picture';
 import { Navbar } from 'components/Navbar/navbar';
 import { ProfileInfo } from 'components/profile/profile';
-import { CoursePicture } from 'components/Course/Picture/course.picture';
+import TopBar from 'components/TopBar';
+import api from 'services/api';
+import type { GetUserModel } from 'services/api/out';
 import styled from 'styled-components';
 
 export function ProfilePage() {

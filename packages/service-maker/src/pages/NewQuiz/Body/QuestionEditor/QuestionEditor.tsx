@@ -22,7 +22,7 @@ function QuestionEditor({ questionId }: QuestionEditorProps) {
           <h3>Question {questionId}</h3>
           {React.createElement(
             quizFactory[questionData.typeQuestion as QuestionType].Component,
-            { questionId },
+            { questionId }
           )}
         </Container>
       </Wrapper>

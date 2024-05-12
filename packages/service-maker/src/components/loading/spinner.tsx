@@ -1,12 +1,12 @@
 import styled, { keyframes } from 'styled-components';
 
-const LoadingComponent = () => {
+function LoadingComponent() {
   return (
     <div>
       <Spinner />
     </div>
   );
-};
+}
 
 const spinAnimation = keyframes`
   from {

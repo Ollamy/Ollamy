@@ -1,5 +1,5 @@
+import type { InputMakerInterface } from 'components/input/input.interface';
 import styled from 'styled-components';
-import { InputMakerInterface } from 'components/input/input.interface';
 
 const BaseBorderInputColorMaker = '#876BF6';
 

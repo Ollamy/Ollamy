@@ -1,8 +1,9 @@
-import styled from 'styled-components';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import type { ReactElement } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from 'services/api';
-import { LessonModel } from 'services/api/out';
+import type { LessonModel } from 'services/api/out';
+import styled from 'styled-components';
 
 interface LessonEditProps {
   lesson: LessonModel;
@@ -14,7 +15,7 @@ function LessonEdit(props: LessonEditProps): ReactElement {
   const [description, setDescription] = useState(lesson.description);
   const isDirty = title !== lesson.title || description !== lesson.description;
 
-  let { id, sectionId, lessonId } = useParams();
+  const { id, sectionId, lessonId } = useParams();
 
   const navigate = useNavigate();
 

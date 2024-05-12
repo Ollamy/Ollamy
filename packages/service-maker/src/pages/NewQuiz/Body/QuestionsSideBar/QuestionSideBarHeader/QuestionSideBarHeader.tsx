@@ -41,7 +41,7 @@ function QuestionSideBarHeader({
         },
       });
     },
-    [createQuestion, lessonId],
+    [createQuestion, lessonId]
   );
 
   return (

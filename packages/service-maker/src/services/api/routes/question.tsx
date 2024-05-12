@@ -1,12 +1,13 @@
-import { UseQueryOptions, useMutation, useQuery } from 'react-query';
-import {
+import type { UseQueryOptions } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import { queryClient } from 'main';
+import type {
   GetQuestionAnswersRequest,
   GetQuestionModel,
   GetQuestionRequest,
   QuestionAnswerModel,
-  QuestionApi,
 } from 'services/api/out';
-import { queryClient } from 'main';
+import { QuestionApi } from 'services/api/out';
 import { GET_LESSON_QUESTION_KEY } from 'services/api/routes/lesson';
 
 const GET_QUESTION_KEY = 'getQuestion';
@@ -15,7 +16,7 @@ export const GET_ANSWER_KEY = 'getAnswer';
 export const questionActions = {
   useQuestion: (
     requestParameters: GetQuestionRequest,
-    config?: UseQueryOptions<GetQuestionModel>,
+    config?: UseQueryOptions<GetQuestionModel>
   ) =>
     useQuery({
       queryKey: [GET_QUESTION_KEY, requestParameters.id],
@@ -37,7 +38,7 @@ export const questionActions = {
     }),
   useGetAnswer: (
     requestParameters: GetQuestionAnswersRequest,
-    config?: UseQueryOptions<QuestionAnswerModel[]>,
+    config?: UseQueryOptions<QuestionAnswerModel[]>
   ) =>
     useQuery({
       queryKey: [GET_ANSWER_KEY, requestParameters.id],
