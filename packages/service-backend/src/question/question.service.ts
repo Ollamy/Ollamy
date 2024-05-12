@@ -17,7 +17,7 @@ import {
   GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import { Answer, LessonStatus, Prisma, Question } from '@prisma/client';
+import { Answer, AnswerType, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
@@ -215,14 +215,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-          ({
-            id: answer.id,
-            data: answer.data,
-            picture: answer.picture_id
-              ? await PictureService.getPicture(answer.picture_id)
-              : undefined,
-            order: answer.order,
-          } as unknown as QuestionAnswerModel),
+        ({
+          id: answer.id,
+          data: answer.data,
+          picture: answer.picture_id
+            ? await PictureService.getPicture(answer.picture_id)
+            : undefined,
+          order: answer.order,
+        } as unknown as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -263,6 +263,12 @@ export class QuestionService {
       },
     });
 
+    const answerDb: Answer = await prisma.answer.findUnique({
+      where: {
+        id: body.answerId,
+      },
+    });
+
     const userLesson = await prisma.usertoLesson.findUnique({
       where: {
         lesson_id_user_id: {
@@ -289,12 +295,12 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-        lessonQuestions.findIndex(
-          (question) => question.id === body.questionId,
-        ) + 1
+      lessonQuestions.findIndex(
+        (question) => question.id === body.questionId,
+      ) + 1
       ] ?? null;
 
-    const isValidated = questionDb.trust_answer_id === body.answerId;
+    let isValidated = questionDb.trust_answer_id === body.answerId;
     const questionPoints =
       questionDb.points === undefined ? 0 : questionDb.points;
 
@@ -311,6 +317,20 @@ export class QuestionService {
         hp: true,
       },
     });
+
+    if (userLesson.status === LessonStatus.NOT_STARTED) {
+      await prisma.usertoLesson.update({
+        where: {
+          lesson_id_user_id: {
+            user_id: userLesson.user_id,
+            lesson_id: userLesson.lesson_id,
+          },
+        },
+        data: {
+          status: LessonStatus.IN_PROGRESS,
+        },
+      });
+    }
 
     if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
       await prisma.usertoScore.upsert({
@@ -355,6 +375,24 @@ export class QuestionService {
           hp: {
             decrement: 1,
           },
+        },
+      });
+    }
+
+    if (questionDb.type_answer === AnswerType.FREE_ANSWER) {
+      isValidated = answerDb.data === body.data;
+    }
+
+    if (!(nextQuestion !== null)) {
+      await prisma.usertoLesson.update({
+        where: {
+          lesson_id_user_id: {
+            user_id: userLesson.user_id,
+            lesson_id: userLesson.lesson_id,
+          },
+        },
+        data: {
+          status: LessonStatus.COMPLETED,
         },
       });
     }

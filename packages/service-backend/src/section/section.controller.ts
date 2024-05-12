@@ -25,6 +25,7 @@ import {
 import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { LessonModel } from 'lesson/lesson.dto';
+import { OllContext } from '../context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Section')
@@ -133,7 +134,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Get('/lessons/:id')
-  async getSectionLessons(@Param('id') id: string): Promise<LessonModel[]> {
-    return this.sectionService.getSectionLessons(id);
+  async getSectionLessons(@Param('id') id: string, @OllContext() ctx: any): Promise<LessonModel[]> {
+    return this.sectionService.getSectionLessons(id, ctx);
   }
 }
