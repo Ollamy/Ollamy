@@ -50,7 +50,6 @@ function CustomDialogTitleDescription({
             </Dialog.Title>
             <Dialog.Description className={'DialogDescription'}>
               {dialogDescription}
-              {/* {'Define the title and description of your new section.'} */}
             </Dialog.Description>
             <CustomForm onSubmit={handleSubmit}>
               <CustomFieldset className={'DialogFieldset'}>
@@ -80,7 +79,6 @@ function CustomDialogTitleDescription({
               <ButtonContainer>
                 <CustomButton type={'submit'} className={'DialogButton green'}>
                   {actionButtonValue}
-                  {/* New section */}
                 </CustomButton>
               </ButtonContainer>
             </CustomForm>
