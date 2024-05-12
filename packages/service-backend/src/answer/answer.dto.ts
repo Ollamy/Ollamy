@@ -17,8 +17,8 @@ export class QuestionAnswerModel {
   picture?: string;
 
   @ApiProperty()
-  @IsNumber()
-  order: number;
+  @IsString()
+  order: string;
 }
 
 export class AnswerModel {
