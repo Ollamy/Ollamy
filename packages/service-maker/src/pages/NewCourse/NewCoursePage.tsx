@@ -1,15 +1,13 @@
-import styled from 'styled-components';
-import TopBar from 'components/TopBar/TopBar';
-import { Skeleton, Text } from '@radix-ui/themes';
-import CourseSidePanel from 'pages/NewCourse/SidePanel/CourseSidePanel';
-import Section from 'pages/NewCourse/Section/Section';
 import { useParams } from 'react-router-dom';
+import TopBar from 'components/TopBar/TopBar';
 import useExtractSectionId from 'hooks/useExtractSectionId';
+import Section from 'pages/NewCourse/Section/Section';
+import CourseSidePanel from 'pages/NewCourse/SidePanel/CourseSidePanel';
+import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface NewCoursePageProps {}
+import { Text } from '@radix-ui/themes';
 
-const NewCoursePage = ({}: NewCoursePageProps) => {
+function NewCoursePage() {
   const { courseId } = useParams();
   const { sectionId } = useExtractSectionId();
 
@@ -24,7 +22,7 @@ const NewCoursePage = ({}: NewCoursePageProps) => {
   ) : (
     <Text>Loading...</Text>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

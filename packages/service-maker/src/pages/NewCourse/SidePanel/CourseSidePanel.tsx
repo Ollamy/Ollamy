@@ -3,6 +3,7 @@ import CourseManager from 'pages/NewCourse/SidePanel/CourseManager/CourseManager
 import SectionCreator from 'pages/NewCourse/SidePanel/Creator/SectionCreator';
 import SectionList from 'pages/NewCourse/SidePanel/List/SectionList';
 import SectionSearchBar from 'pages/NewCourse/SidePanel/SearchBar/SectionSearchBar';
+import type { CourseSectionModel } from 'services/api/out';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
@@ -12,11 +13,15 @@ interface CourseSidePanelProps {
   courseId: string;
 }
 
+export interface CustomCourseSectionModel extends CourseSectionModel {
+  realIndex?: number;
+}
+
 function CourseSidePanel({ courseId }: CourseSidePanelProps) {
   const [searchValue, setSearchValue] = useState<string>('');
   const { data } = courseActions.useGetCourseSection({ id: courseId });
 
-  const currentData = useMemo(() => {
+  const currentData = useMemo<CustomCourseSectionModel[] | undefined>(() => {
     if (!data) return undefined;
 
     if (!searchValue) {
@@ -27,7 +32,11 @@ function CourseSidePanel({ courseId }: CourseSidePanelProps) {
       .filter((element) =>
         element.title.toLowerCase().includes(searchValue.toLowerCase()),
       )
-      .sort((a, b) => a.title.localeCompare(b.title));
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map((element) => ({
+        ...element,
+        realIndex: data.findIndex((p) => p.id === element.id),
+      }));
   }, [data, searchValue]);
 
   return (
