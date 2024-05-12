@@ -1,8 +1,9 @@
+import OptionDropdownMenu from 'pages/NewCourse/Section/LessonTable/OptionDropdownMenu/OptionDropdownMenu';
 import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
 
-import { DotsHorizontalIcon, InfoCircledIcon } from '@radix-ui/react-icons';
-import { IconButton, Table, Text, Tooltip } from '@radix-ui/themes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { Table, Text, Tooltip } from '@radix-ui/themes';
 
 interface LessonTableProps {
   sectionId: string;
@@ -50,11 +51,7 @@ function LessonTable({ sectionId }: LessonTableProps) {
                 <Table.Cell justify={'center'}>{numberOfQuestions}</Table.Cell>
                 <Table.Cell justify={'center'}>{numberOfLectures}</Table.Cell>
                 <Table.Cell justify={'center'}>
-                  <ButtonActionContainer>
-                    <IconButton color={'gray'} variant={'outline'}>
-                      <DotsHorizontalIcon />
-                    </IconButton>
-                  </ButtonActionContainer>
+                  <OptionDropdownMenu />
                 </Table.Cell>
               </Table.Row>
             ),
@@ -75,7 +72,5 @@ const LessonNameContainer = styled.div`
 
   gap: 12px;
 `;
-
-const ButtonActionContainer = styled.div``;
 
 export default LessonTable;
