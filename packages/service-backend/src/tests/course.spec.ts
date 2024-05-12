@@ -166,6 +166,7 @@ describe('getCourse', () => {
       jest
         .spyOn(prisma.usertoCourse, 'findFirst')
         .mockResolvedValue(mockUserToCourse);
+      jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(0);
     }
 
     {
