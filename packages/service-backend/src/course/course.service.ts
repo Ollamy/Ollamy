@@ -90,12 +90,15 @@ export class CourseService {
         },
       });
 
-      const userToCourse = await prisma.usertoCourse.findFirst({
+      const UsersToCourse = await prisma.usertoCourse.findMany({
         where: {
-          user_id: ctx.__user.id,
           course_id: courseId,
         },
       });
+
+      const userToCourse = UsersToCourse.find(
+        (course) => course.user_id === ctx.__user.id,
+      );
 
       if (!courseDb) {
         Logger.error('Course does not exists !');
@@ -111,6 +114,7 @@ export class CourseService {
           : undefined,
         lastLessonId: userToCourse?.last_lesson_id,
         lastSectionId: userToCourse?.last_section_id,
+        numberOfUsers: UsersToCourse.length,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);

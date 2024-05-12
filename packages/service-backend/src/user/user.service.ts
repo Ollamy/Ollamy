@@ -226,12 +226,19 @@ export class UserService {
             delete course.owner_id;
             delete course.picture_id;
 
+            const users = await prisma.usertoCourse.findMany({
+              where: {
+                course_id: course.id,
+              },
+            });
+
             return {
               ...course,
               pictureId,
               lastLessonId,
               lastSectionId,
               owner: isOwner,
+              numberOfUsers: users.length,
             };
           }),
         ),
