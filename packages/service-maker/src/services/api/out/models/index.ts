@@ -1394,7 +1394,7 @@ export interface ValidateAnswerModel {
      * @type {string}
      * @memberof ValidateAnswerModel
      */
-    answerId: string;
+    answerId?: string;
     /**
      * The data of the answer
      * @type {string}
