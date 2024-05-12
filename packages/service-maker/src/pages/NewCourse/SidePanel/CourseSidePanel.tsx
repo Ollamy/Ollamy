@@ -1,9 +1,12 @@
+import { useMemo, useState } from 'react';
+import CourseManager from 'pages/NewCourse/SidePanel/CourseManager/CourseManager';
 import SectionCreator from 'pages/NewCourse/SidePanel/Creator/SectionCreator';
 import SectionList from 'pages/NewCourse/SidePanel/List/SectionList';
 import SectionSearchBar from 'pages/NewCourse/SidePanel/SearchBar/SectionSearchBar';
-import styled from 'styled-components';
-import { useMemo, useState } from 'react';
 import { courseActions } from 'services/api/routes/course';
+import styled from 'styled-components';
+
+import { Separator } from '@radix-ui/themes';
 
 interface CourseSidePanelProps {
   courseId: string;
@@ -29,11 +32,13 @@ function CourseSidePanel({ courseId }: CourseSidePanelProps) {
 
   return (
     <Container>
+      <CourseManager courseId={courseId} />
+      <Separator size={'4'} />
+      <SectionCreator courseId={courseId} />
       <SectionSearchBar
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
-      <SectionCreator courseId={courseId} />
       <SectionList data={currentData} />
     </Container>
   );
@@ -53,6 +58,7 @@ const Container = styled.div`
 
   max-height: 100%;
   min-width: 300px;
+  max-width: 300px;
 
   > * {
     padding: 0 20px;
