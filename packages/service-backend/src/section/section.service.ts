@@ -152,7 +152,7 @@ export class SectionService {
           id: lesson.id,
           description: lesson.description,
           title: lesson.title,
-          status: userLesson?.status || 'NOT_STARTED',
+          status: userLesson.status,
           numberOfQuestions: questionsCount || 0,
           numberOfLectures: lecturesCount || 0,
         };

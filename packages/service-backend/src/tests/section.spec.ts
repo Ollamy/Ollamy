@@ -244,7 +244,7 @@ describe('getSectionLessons', () => {
     jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(mockLessonDb);
 
     // Invoke the function being tested
-    const result = await sectionService.getSectionLessons(sectionId);
+    const result = await sectionService.getSectionLessons(sectionId, {} as any);
 
     // Perform assertions
     expect(prisma.lesson.findMany).toHaveBeenCalledTimes(1);
@@ -268,7 +268,7 @@ describe('getSectionLessons', () => {
       .spyOn(prisma.lesson, 'findMany')
       .mockRejectedValue(new Error('Some error'));
 
-    await expect(sectionService.getSectionLessons(sectionId)).rejects.toThrow(
+    await expect(sectionService.getSectionLessons(sectionId, {} as any)).rejects.toThrow(
       NotFoundException,
     );
   });

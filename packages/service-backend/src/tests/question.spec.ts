@@ -204,6 +204,8 @@ describe('updateQuestion', () => {
       .mockResolvedValue(mockQuestionDb4);
     jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
 
+    jest.spyOn(prisma.answer, 'findMany').mockResolvedValue([]);
+
     jest
       .spyOn(prisma.usertoLesson, 'findUnique')
       .mockResolvedValue(mockUserLesson);
