@@ -3,6 +3,7 @@ import CourseCard from 'pages/Home/Body/CourseCard/CourseCard';
 import HomeSearchBar from 'pages/Home/Body/SearchBar/HomeSearchBar';
 import api from 'services/api';
 import styled from 'styled-components';
+import { Spinner, Text } from '@radix-ui/themes';
 
 function HomeBody() {
   const { data } = api.user.useGetUserCourses();
@@ -10,6 +11,11 @@ function HomeBody() {
 
   const currentData = useMemo(() => {
     if (!data) return undefined;
+
+    if (!searchValue) {
+      return data.courses;
+    }
+
     return data.courses
       .filter((element) =>
         element.title.toLowerCase().includes(searchValue.toLowerCase()),
@@ -23,7 +29,7 @@ function HomeBody() {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
-      {currentData ? (
+      {currentData && currentData.length ? (
         <Grid>
           {currentData.map(({ id, title, description, pictureId }) => (
             <CourseCard
@@ -35,8 +41,13 @@ function HomeBody() {
             />
           ))}
         </Grid>
-      ) : (
+      ) : currentData && !currentData.length ? (
         <TextPlaceholder>{"You haven't created a course yet!"}</TextPlaceholder>
+      ) : (
+        <TextPlaceholder>
+          <Spinner />
+          Loading…
+        </TextPlaceholder>
       )}
     </Container>
   );
@@ -65,6 +76,11 @@ const Grid = styled.div`
   overflow: scroll;
 `;
 
-const TextPlaceholder = styled.p``;
+const TextPlaceholder = styled(Text)`
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+`;
 
 export default HomeBody;
