@@ -25,6 +25,10 @@ import {
   CourseIdResponse,
   GetCourseRequest,
   UserCourseHp,
+  CourseGenerateCode,
+  Durationtype,
+  ShareCourseCode,
+  CourseCodeModel,
 } from 'course/course.dto';
 import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -152,6 +156,35 @@ export class CourseController {
   }
 
   @ApiOkResponse({
+    description: 'access code generated',
+    type: ShareCourseCode,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the course',
+    required: true,
+  })
+  @ApiBody({
+    type: CourseGenerateCode,
+    description: 'Code validity model',
+    examples: {
+      template: {
+        value: {
+          duration: Durationtype.FIFTEEN_MINUTES,
+        } as CourseGenerateCode,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Post('/:id/share')
+  async generateCodeforCourse(
+    @Param('id') id: string,
+    @Body() body: CourseGenerateCode,
+  ): Promise<ShareCourseCode> {
+    return this.courseService.generateCodeforCourse(id, body);
+  }
+
+  @ApiOkResponse({
     description: 'user added to course response',
     type: CourseTrueResponse,
   })
@@ -160,13 +193,25 @@ export class CourseController {
     description: 'Id of the course',
     required: true,
   })
+  @ApiBody({
+    type: CourseCodeModel,
+    description: 'Code validity model',
+    examples: {
+      template: {
+        value: {
+          code: 'A1B2',
+        } as CourseCodeModel,
+      },
+    },
+  })
   @LoggedMiddleware(true)
   @Post('/:id/user')
   async addUserToCourse(
     @Param('id') id: string,
+    @Body() body: CourseCodeModel,
     @OllContext() ctx: any,
   ): Promise<CourseTrueResponse> {
-    return this.courseService.addUserToCourse(id, ctx.__user.id);
+    return this.courseService.addUserToCourse(id, body, ctx.__user.id);
   }
 
   @ApiOkResponse({
