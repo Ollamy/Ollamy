@@ -20,9 +20,7 @@ import {
   ApiConsumes,
   ApiResponse,
 } from '@nestjs/swagger';
-import {
-  FileAi, QuestionResponse,
-} from 'ai/ai.dto';
+import { FileAi, QuestionResponse } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
@@ -32,7 +30,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('Ai')
 @Controller('/ai')
 export class AiController {
-  constructor(private readonly aiService: AiService) { }
+  constructor(private readonly aiService: AiService) {}
 
   @ApiBody({
     schema: {
@@ -55,7 +53,8 @@ export class AiController {
   @LoggedMiddleware(true)
   @Post('/generate-question')
   async generateText(
-    @UploadedFile() file: Express.Multer.File): Promise<QuestionResponse> {
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<QuestionResponse> {
     const AiFile: FileAi = {
       data: file.buffer.toString('base64'),
       mimeType: file.mimetype,

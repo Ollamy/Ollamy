@@ -39,10 +39,10 @@ export interface AnswerModel {
     picture?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof AnswerModel
      */
-    order: number;
+    order: string;
 }
 /**
  * 
@@ -685,10 +685,10 @@ export interface QuestionAnswerModel {
     picture?: string;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof QuestionAnswerModel
      */
-    order: number;
+    order: string;
 }
 /**
  * 
