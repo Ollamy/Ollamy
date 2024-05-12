@@ -1,9 +1,15 @@
+export enum AnswerType {
+  FREE_ANSWER = 'FREE_ANSWER',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  SQUARE_CHOICE = 'SQUARE_CHOICE',
+}
+
 export interface GetQuestionResponse {
   id: string;
   lessonId: string;
   title: string;
   description: string;
-  typeAnswer: 'TEXT';
+  typeAnswer: AnswerType;
   typeQuestion: 'TEXT';
   trustAnswerId: string;
   pictureId?: string;

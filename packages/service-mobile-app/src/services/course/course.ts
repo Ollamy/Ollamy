@@ -31,6 +31,7 @@ export const courseApi = api.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['HP'],
+      forceRefetch: () => true,
     }),
   }),
 });

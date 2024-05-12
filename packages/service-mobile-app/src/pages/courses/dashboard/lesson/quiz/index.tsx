@@ -25,10 +25,8 @@ function Quiz({ lessonId }: QuizProps) {
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [isFinish, setIsFinish] = useState<boolean>(false);
 
-  const { data: questions, isFetching: isQuestionsFetching } = useGetLessonQuestionsQuery({ id: lessonId });
-
   const { id: courseId } = useParams();
-
+  const { data: questions, isFetching: isQuestionsFetching } = useGetLessonQuestionsQuery({ id: lessonId });
   const { data: userHp, isFetching: isUserHpFetching } = useGetCourseUserHpQuery(courseId!);
 
   useEffect(() => {
