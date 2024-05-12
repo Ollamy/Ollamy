@@ -1,31 +1,30 @@
-import styled from 'styled-components';
-import { courseActions } from 'services/api/routes/course';
-import { Spinner, Text } from '@radix-ui/themes';
-import SectionRow from 'pages/NewCourse/SidePanel/List/Row/SectionRow';
 import useExtractSectionId from 'hooks/useExtractSectionId';
+import SectionRow from 'pages/NewCourse/SidePanel/List/Row/SectionRow';
+import { courseActions } from 'services/api/routes/course';
+import styled from 'styled-components';
+
+import { Spinner, Text } from '@radix-ui/themes';
 
 interface SectionListProps {
   courseId: string;
 }
 
-const SectionList = ({ courseId }: SectionListProps) => {
+function SectionList({ courseId }: SectionListProps) {
   const { sectionId } = useExtractSectionId();
   const { data } = courseActions.useGetCourseSection({ id: courseId });
 
   return data && data.length ? (
     <Container>
-      {data.map(({ id, title, description }, index) => {
-        return (
-          <SectionRow
-            id={id}
-            key={id}
-            title={title}
-            index={index + 1}
-            description={description}
-            isActive={sectionId === id}
-          />
-        );
-      })}
+      {data.map(({ id, title, description }, index) => (
+        <SectionRow
+          id={id}
+          key={id}
+          title={title}
+          index={index + 1}
+          description={description}
+          isActive={sectionId === id}
+        />
+      ))}
     </Container>
   ) : (
     <LoadingContainer>
@@ -33,7 +32,7 @@ const SectionList = ({ courseId }: SectionListProps) => {
       <Text>Loading…</Text>
     </LoadingContainer>
   );
-};
+}
 
 const LoadingContainer = styled.div`
   display: flex;

@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
 import TopBar from 'components/TopBar/TopBar';
+import { Skeleton, Text } from '@radix-ui/themes';
 import CourseSidePanel from 'pages/NewCourse/SidePanel/CourseSidePanel';
 import Section from 'pages/NewCourse/Section/Section';
 import { useParams } from 'react-router-dom';
-import { Text } from '@radix-ui/themes';
 import useExtractSectionId from 'hooks/useExtractSectionId';
 
 // eslint-disable-next-line
@@ -14,16 +13,12 @@ const NewCoursePage = ({}: NewCoursePageProps) => {
   const { courseId } = useParams();
   const { sectionId } = useExtractSectionId();
 
-  useEffect(() => {
-    console.log(sectionId);
-  }, [sectionId]);
-
   return courseId ? (
     <Container>
       <TopBar />
       <Body>
         <CourseSidePanel courseId={courseId} />
-        <Section />
+        {sectionId && <Section sectionId={sectionId} />}
       </Body>
     </Container>
   ) : (

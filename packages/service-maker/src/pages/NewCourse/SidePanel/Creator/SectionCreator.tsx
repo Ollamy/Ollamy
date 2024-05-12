@@ -44,7 +44,7 @@ function SectionCreator({ courseId }: SectionCreatorProps) {
       <CustomHeading>Sections</CustomHeading>
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Trigger asChild>
-          <IconButton>
+          <IconButton variant={'soft'}>
             <PlusIcon />
           </IconButton>
         </Dialog.Trigger>

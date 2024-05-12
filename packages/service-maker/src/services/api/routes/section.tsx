@@ -16,7 +16,7 @@ export const GET_SECTION_LESSONS_KEY = 'getSectionLesson';
 export const sectionActions = {
   useSection: (
     requestParameters: GetSectionRequest,
-    config?: UseQueryOptions<SectionModel>
+    config?: UseQueryOptions<SectionModel>,
   ) =>
     useQuery({
       queryKey: [GET_SECTION_KEY, requestParameters.id],
@@ -25,7 +25,7 @@ export const sectionActions = {
     }),
   useSectionLessons: (
     requestParameters: GetSectionLessonsRequest,
-    config?: UseQueryOptions<Array<LessonModel>>
+    config?: UseQueryOptions<Array<LessonModel>>,
   ) =>
     useQuery({
       queryKey: [GET_SECTION_LESSONS_KEY, requestParameters.id],
@@ -40,6 +40,13 @@ export const sectionActions = {
     }),
   useUpdateSection: () =>
     useMutation(SectionApi.updateSection, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_SECTION_KEY);
+        queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
+      },
+    }),
+  useRemoveSection: () =>
+    useMutation(SectionApi.deleteSection, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_SECTION_KEY);
         queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);

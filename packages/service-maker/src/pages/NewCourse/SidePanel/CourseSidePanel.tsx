@@ -1,7 +1,7 @@
 import SectionCreator from 'pages/NewCourse/SidePanel/Creator/SectionCreator';
+import SectionList from 'pages/NewCourse/SidePanel/List/SectionList';
 import SectionSearchBar from 'pages/NewCourse/SidePanel/SearchBar/SectionSearchBar';
 import styled from 'styled-components';
-import SectionList from 'pages/NewCourse/SidePanel/List/SectionList';
 
 interface CourseSidePanelProps {
   courseId: string;
@@ -30,7 +30,7 @@ const Container = styled.div`
   box-sizing: border-box;
 
   max-height: 100%;
-  width: 300px;
+  min-width: 300px;
 
   > * {
     padding: 0 20px;
