@@ -34,19 +34,13 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
 
   useEffect(() => {
-    console.log('answers data: ', answerData);
     setCorrectAnswer(questionData?.trust_answer_id);
   }, [questionData]);
 
   const handleUploadImage = async () => {
     try {
-      console.log(questionImage);
       if (!questionImage) return;
-
       const base64 = await toBase64(questionImage);
-
-      console.log('base 64 :', base64?.toString());
-
       if (!base64) throw new Error('Error uploading image');
       updateQuestion({
         id: questionId,

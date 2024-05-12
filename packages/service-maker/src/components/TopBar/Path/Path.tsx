@@ -53,24 +53,19 @@ const Path = ({ urlParams }: PathProps) => {
   );
 
   const handleClick = (element: ElementType) => {
-    console.log('element :', element);
     switch (element) {
       case ElementType.COURSE:
-        console.log('course');
         navigate(`/course/${urlParams.id}`);
         break;
       case ElementType.SECTION:
-        console.log('section');
         navigate(`/course/${urlParams.id}/section/${urlParams.sectionId}`);
         break;
       case ElementType.LESSON:
-        console.log('lesson');
         navigate(
           `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}`,
         );
         break;
       case ElementType.QUESTION:
-        console.log('question');
         navigate(
           `/quiz/${urlParams.id}/section/${urlParams.sectionId}/lesson/${urlParams.lessonId}/question/${urlParams.questionId}`,
         );
