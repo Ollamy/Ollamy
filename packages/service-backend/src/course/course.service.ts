@@ -15,7 +15,7 @@ import {
 } from './course.dto';
 import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import { Course, Prisma, Section } from '@prisma/client';
+import { Course, Prisma, Role, Section } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 
@@ -97,6 +97,15 @@ export class CourseService {
         },
       });
 
+      const users = await prisma.usertoCourse.count({
+        where: {
+          course_id: courseId,
+          role_user: {
+            equals: Role.MEMBER,
+          },
+        },
+      });
+
       if (!courseDb) {
         Logger.error('Course does not exists !');
         throw new ConflictException('Course does not exists !');
@@ -111,6 +120,7 @@ export class CourseService {
           : undefined,
         lastLessonId: userToCourse?.last_lesson_id,
         lastSectionId: userToCourse?.last_section_id,
+        numberOfUsers: users,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);

@@ -37,6 +37,10 @@ export class GetCourseRequest extends CourseModel {
   @IsUUID()
   @IsOptional()
   lastSectionId?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  numberOfUsers: number;
 }
 
 export class CreateCourseModel {

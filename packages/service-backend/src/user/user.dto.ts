@@ -164,6 +164,10 @@ export class UserCourses {
   @ApiProperty({ description: 'The unique identifier of the last section' })
   @IsUUID()
   lastSectionId: string;
+
+  @ApiProperty({ description: 'The number of users enrolled in the course' })
+  @IsNumber()
+  numberOfUsers: number;
 }
 
 export class UserCoursesResponse {
