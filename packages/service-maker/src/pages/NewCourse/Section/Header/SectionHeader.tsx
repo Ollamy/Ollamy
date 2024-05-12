@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 import { GearIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Heading, IconButton, Text } from '@radix-ui/themes';
+import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
+import { lessonActions } from 'services/api/routes/lesson';
 
 interface SectionHeaderProps {
   sectionId: string;
@@ -16,13 +18,25 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
 
   const { data } = sectionActions.useSection({ id: sectionId });
   const { mutateAsync: removeSection } = sectionActions.useRemoveSection();
+  const { mutateAsync: createNewLesson } = lessonActions.useCreateLesson();
 
   const handleRemoveSection = useCallback(async () => {
     await removeSection({ idSectionModel: { id: sectionId } });
     setSearchParams('sectionId', undefined);
   }, [removeSection, sectionId, setSearchParams]);
 
-  const handleCreateLesson = useCallback(() => {}, []);
+  const handleCreateLesson = useCallback(
+    (title: string, description: string) => {
+      createNewLesson({
+        createLessonModel: {
+          sectionId,
+          title,
+          description,
+        },
+      });
+    },
+    [createNewLesson, sectionId],
+  );
 
   return (
     <Container>
@@ -31,10 +45,21 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
         <Description weight={'light'}>{data?.description || ''}</Description>
       </SectionInfos>
       <Temp>
-        <Button color={'green'}>
-          <PlusIcon />
-          Create new lesson
-        </Button>
+        <CustomDialogTitleDescription
+          dialogTitle={'Add lesson'}
+          dialogDescription={
+            'Define the title and description of your new lesson.'
+          }
+          actionButtonValue={'New lesson'}
+          TriggerButton={
+            <Button color={'green'}>
+              <PlusIcon />
+              Create new lesson
+            </Button>
+          }
+          createFunction={handleCreateLesson}
+        />
+
         <EditSectionButtonContainer>
           <IconButton variant={'surface'} color={'orange'}>
             <GearIcon />
