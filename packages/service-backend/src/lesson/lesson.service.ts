@@ -11,14 +11,13 @@ import {
   UpdateLessonModel,
   LessonIdResponse,
 } from './lesson.dto';
-import { LectureModel, LessonLectureModel, QuestionModel } from 'question/question.dto';
-import prisma from 'client';
 import {
-  Prisma,
-  Question,
-  Lesson,
-  Lecture,
-} from '@prisma/client';
+  LectureModel,
+  LessonLectureModel,
+  QuestionModel,
+} from 'question/question.dto';
+import prisma from 'client';
+import { Prisma, Question, Lesson, Lecture } from '@prisma/client';
 
 @Injectable()
 export class LessonService {
@@ -77,7 +76,7 @@ export class LessonService {
     }
   }
 
-  async getLesson(LessonId: string): Promise<CreateLessonModel> {
+  async getLesson(LessonId: string): Promise<LessonModel> {
     try {
       const lessonDb: Lesson = await prisma.lesson.findFirst({
         where: {
@@ -94,7 +93,7 @@ export class LessonService {
         sectionId: lessonDb.section_id,
         title: lessonDb.title,
         description: lessonDb.description,
-      } as CreateLessonModel;
+      } as unknown as LessonModel;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Lesson not found !');
@@ -191,9 +190,9 @@ export class LessonService {
           lesson_id_user_id: {
             user_id: userId,
             lesson_id: lessonId,
-          }
-        }
-      })
+          },
+        },
+      });
 
       if (!userToLesson) {
         userToLesson = await prisma.usertoLesson.create({
