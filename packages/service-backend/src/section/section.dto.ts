@@ -1,73 +1,65 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class CourseSectionModel {
-  @ApiProperty()
+export class BaseSectionModel {
+  @ApiProperty({ description: 'The unique identifier of the section' })
   @IsUUID()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The title of the section' })
   @IsString()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The description of the section' })
   @IsString()
   description: string;
 }
 
-export class SectionModel {
-  @ApiProperty()
+export class SectionModel extends BaseSectionModel {
+  @ApiProperty({ description: 'The unique identifier of the course associated with the section' })
   @IsUUID()
   courseId: string;
-
-  @ApiProperty()
-  @IsString()
-  title: string;
-
-  @ApiProperty()
-  @IsString()
-  description: string;
 }
 
 export class CreateSectionModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the course to which the section belongs' })
   @IsUUID()
   courseId: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The title of the section' })
   @IsString()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The description of the section' })
   @IsString()
   description: string;
 }
 
 export class IdSectionModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the section' })
   @IsUUID()
   id: string;
 }
 
 export class UpdateSectionModel {
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The unique identifier of the course to which the section belongs', required: false })
   @IsUUID()
   @IsOptional()
   courseId?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The title of the section', required: false })
   @IsString()
   @IsOptional()
   title?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'The description of the section', required: false })
   @IsString()
   @IsOptional()
   description?: string;
 }
 
 export class SectionIdResponse {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the section' })
   @IsUUID()
   id: string;
 }

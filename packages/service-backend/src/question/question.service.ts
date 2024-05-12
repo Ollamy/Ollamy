@@ -19,7 +19,7 @@ import {
 import prisma from 'client';
 import { Answer, AnswerType, LessonStatus, Prisma, Question } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
-import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
+import { AnswerModel, BaseAnswerModel } from '../answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
@@ -195,7 +195,7 @@ export class QuestionService {
     };
   }
 
-  async getQuestionAnswers(QuestionId: string): Promise<QuestionAnswerModel[]> {
+  async getQuestionAnswers(QuestionId: string): Promise<BaseAnswerModel[]> {
     try {
       const answersDb: Answer[] = await prisma.answer.findMany({
         where: {
@@ -222,7 +222,7 @@ export class QuestionService {
             ? await PictureService.getPicture(answer.picture_id)
             : undefined,
           order: answer.order,
-        } as unknown as QuestionAnswerModel),
+        } as unknown as BaseAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {

@@ -1,42 +1,37 @@
-import {
-  IsArray,
-  IsNumber,
-  IsString,
-  IsUUID,
-  ValidateNested,
-} from 'class-validator';
-
+import { IsArray, IsNumber, IsString, IsUUID, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
-export class BadgeModel {
-  @ApiProperty()
+export class BaseBadgeModel {
+  @ApiProperty({ description: 'The unique identifier of the badge' })
   @IsUUID()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the badge name' })
   @IsUUID()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The description of the badge' })
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The order of the badge' })
   @IsNumber()
   order: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The name of the badge image' })
   @IsString()
   image_name: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The color of the badge' })
   @IsString()
   color: string;
 }
 
+export class BadgeModel extends BaseBadgeModel { }
+
 export class GetUsersBadges {
-  @ApiProperty()
+  @ApiProperty({ description: 'List of badges associated with the user', type: [BadgeModel] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => BadgeModel)
@@ -44,7 +39,7 @@ export class GetUsersBadges {
 }
 
 export class GetBadgeImageUrl {
-  @ApiProperty()
+  @ApiProperty({ description: 'The URL of the badge image' })
   @IsString()
   url: string;
 }
