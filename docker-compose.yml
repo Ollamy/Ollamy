@@ -75,6 +75,7 @@ services:
       - backend_nt
     volumes:
       - ./packages/service-backend/public:/app/packages/service-backend/public
+      - ~/.config/gcloud:/root/.config/gcloud
     healthcheck:
       test: curl -s -f http://localhost:${BACKEND_PORT}/health
       interval: 2s
