@@ -1,14 +1,33 @@
 import styled from 'styled-components';
+import { MouseEventHandler, useCallback, useState } from 'react';
 
 import 'styles/dropdownMenu.css';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { DotsHorizontalIcon, TrashIcon } from '@radix-ui/react-icons';
 import { IconButton } from '@radix-ui/themes';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 
 function OptionDropdownMenu() {
+  const [open, setOpen] = useState(false);
+
+  const handleRemoveLesson = useCallback(async () => {
+    setOpen(false);
+  }, []);
+
+  const handleCancelRemoveLesson = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const handleOpenRemoveModal: MouseEventHandler<HTMLDivElement> = useCallback(
+    (event) => {
+      event.preventDefault();
+    },
+    [],
+  );
+
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root open={open} onOpenChange={setOpen}>
       <DropdownMenu.Trigger asChild>
         <ButtonActionContainer aria-label={'Customise options'}>
           <IconButton color={'gray'} variant={'outline'}>
@@ -25,19 +44,36 @@ function OptionDropdownMenu() {
           <DropdownMenu.Item className={'DropdownMenuItem'}>
             Open quiz editor
           </DropdownMenu.Item>
-          <DropdownMenu.Item className={'DropdownMenuItem'}>
+          <DropdownMenu.Item disabled className={'DropdownMenuItem'}>
             Open lecture editor
           </DropdownMenu.Item>
           <DropdownMenu.Separator className={'DropdownMenuSeparator'} />
-          <DropdownMenu.Item className={'DropdownMenuItem'}>
+          <DropdownMenu.Item disabled className={'DropdownMenuItem'}>
             Edit Metadata
           </DropdownMenu.Item>
           <DropdownMenu.Separator className={'DropdownMenuSeparator'} />
-          <CustomRemoveRow checked className={'DropdownMenuCheckboxItem'}>
-            <DropdownMenu.ItemIndicator className={'DropdownMenuItemIndicator'}>
-              <TrashIcon />
-            </DropdownMenu.ItemIndicator>
-            Remove
+          <CustomRemoveRow
+            checked
+            className={'DropdownMenuCheckboxItem'}
+            onClick={handleOpenRemoveModal}
+          >
+            <CustomAlertDialog
+              description={
+                'This action cannot be undone. This will permanently delete this lesson and remove your data from our servers.'
+              }
+              TriggerButton={
+                <Nico>
+                  <DropdownMenu.ItemIndicator
+                    className={'DropdownMenuItemIndicator'}
+                  >
+                    <TrashIcon />
+                  </DropdownMenu.ItemIndicator>
+                  Remove
+                </Nico>
+              }
+              onAction={handleRemoveLesson}
+              onCancel={handleCancelRemoveLesson}
+            />
           </CustomRemoveRow>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
@@ -55,5 +91,7 @@ const CustomRemoveRow = styled(DropdownMenu.CheckboxItem)`
     background-color: var(--red-9) !important;
   }
 `;
+
+const Nico = styled.div``;
 
 export default OptionDropdownMenu;

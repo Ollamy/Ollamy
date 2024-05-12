@@ -9,9 +9,11 @@ interface CustomAlertDialogProps {
   description: string;
   TriggerButton: React.ReactNode;
   onAction: MouseEventHandler<HTMLButtonElement>;
+  onCancel?: MouseEventHandler<HTMLButtonElement>;
 }
 
 function CustomAlertDialog({
+  onCancel,
   onAction,
   description,
   TriggerButton,
@@ -31,7 +33,10 @@ function CustomAlertDialog({
             </AlertDialog.Description>
             <CustomDiv>
               <AlertDialog.Cancel asChild>
-                <CustomButton className={'AlertDialogButton mauve'}>
+                <CustomButton
+                  onClick={onCancel}
+                  className={'AlertDialogButton mauve'}
+                >
                   Cancel
                 </CustomButton>
               </AlertDialog.Cancel>
