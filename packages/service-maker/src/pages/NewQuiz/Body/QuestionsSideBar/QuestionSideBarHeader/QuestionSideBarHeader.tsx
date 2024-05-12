@@ -33,7 +33,7 @@ function QuestionSideBarHeader({
           lessonId,
           title,
           description,
-          typeAnswer: 'TEXT',
+          typeAnswer: 'MULTIPLE_CHOICE',
           typeQuestion: 'TEXT',
           picture: '',
           difficulty: 'BEGINNER',

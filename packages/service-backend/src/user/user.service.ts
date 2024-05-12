@@ -221,9 +221,7 @@ export class UserService {
             } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
 
             const isOwner = course.owner_id === ctx.__user.id;
-            const pictureId = await PictureService.getPicture(
-              course.picture_id,
-            );
+            const pictureId = await PictureService.getPicture(course.picture_id);
 
             delete course.owner_id;
             delete course.picture_id;

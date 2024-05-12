@@ -12,6 +12,6 @@ export interface UserCourse {
   id: string;
   title: string;
   description: string;
-  picture: string;
+  pictureId: string;
   owner: boolean;
 }

@@ -27,7 +27,7 @@ export const lessonApi = api.injectEndpoints({
       }),
       providesTags: ['Lesson', 'Question'],
     }),
-    getLessonLecture: build.query<GetLessonLectureRequest, { id: string }>({
+    getLessonLecture: build.query<GetLessonLectureRequest[], { id: string }>({
       query: ({ id }) => ({
         url: `lesson/lecture/${id}`,
         method: 'GET',

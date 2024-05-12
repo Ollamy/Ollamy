@@ -11,7 +11,6 @@ import {
   AnswerType,
   QuestionType,
   QuestionDifficulty,
-  $Enums,
 } from '@prisma/client';
 
 abstract class BaseQuestion {
@@ -28,11 +27,11 @@ abstract class BaseQuestion {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ description: 'The type of answer for the question' })
+  @ApiProperty({ description: 'The type of answer for the question', enum: AnswerType })
   @IsEnum(AnswerType)
   typeAnswer: AnswerType;
 
-  @ApiProperty({ description: 'The type of question' })
+  @ApiProperty({ description: 'The type of question', enum: QuestionType })
   @IsEnum(QuestionType)
   typeQuestion: QuestionType;
 
@@ -47,6 +46,7 @@ abstract class BaseQuestion {
   @ApiProperty({
     description: 'The difficulty level of the question',
     required: false,
+    enum: QuestionDifficulty,
   })
   @IsEnum(QuestionDifficulty)
   @IsOptional()
@@ -62,7 +62,7 @@ abstract class BaseQuestion {
   points?: number;
 }
 
-export class QuestionModel extends BaseQuestion {}
+export class QuestionModel extends BaseQuestion { }
 
 export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @ApiProperty({ description: 'The lesson id of the question' })
@@ -78,11 +78,11 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @IsOptional()
   description: string;
 
-  @ApiProperty({ description: 'The type of answer for the question' })
+  @ApiProperty({ description: 'The type of answer for the question', enum: AnswerType })
   @IsEnum(AnswerType)
   typeAnswer: AnswerType;
 
-  @ApiProperty({ description: 'The type of question' })
+  @ApiProperty({ description: 'The type of question', enum: QuestionType })
   @IsEnum(QuestionType)
   typeQuestion: QuestionType;
 
@@ -97,6 +97,7 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @ApiProperty({
     description: 'The difficulty level of the question',
     required: false,
+    enum: QuestionDifficulty,
   })
   @IsEnum(QuestionDifficulty)
   @IsOptional()
@@ -168,11 +169,11 @@ export class CreateQuestionModel {
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: AnswerType })
   @IsString()
   typeAnswer: AnswerType;
 
-  @ApiProperty()
+  @ApiProperty({ enum: QuestionType })
   @IsString()
   typeQuestion: QuestionType;
 
@@ -180,7 +181,7 @@ export class CreateQuestionModel {
   @IsOptional()
   picture?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, enum: QuestionDifficulty })
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;
@@ -227,12 +228,12 @@ export class UpdateQuestionModel {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, enum: AnswerType })
   @IsString()
   @IsOptional()
   typeAnswer?: AnswerType;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, enum: QuestionType })
   @IsString()
   @IsOptional()
   typeQuestion?: QuestionType;
@@ -241,7 +242,7 @@ export class UpdateQuestionModel {
   @IsOptional()
   picture?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, enum: QuestionDifficulty })
   @IsEnum(QuestionDifficulty)
   @IsOptional()
   difficulty?: QuestionDifficulty;

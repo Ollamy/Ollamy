@@ -17,6 +17,5 @@ export interface GetLessonQuestionsRequest {
 
 export interface GetLessonLectureRequest {
   id: string;
-  lessonId: string;
   data: string;
 }
