@@ -10,8 +10,8 @@ import type {
 import { LessonApi } from 'services/api/out';
 import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
 
-const GET_LESSON_KEY = 'getLesson';
-export const GET_LESSON_QUESTION_KEY = 'getLessonQuestion';
+const GET_LESSON_KEY = 'getLessonKey';
+export const GET_LESSON_QUESTIONS_KEY = 'getLessonQuestionKey';
 
 export const lessonActions = {
   useLesson: (
@@ -23,28 +23,20 @@ export const lessonActions = {
       queryFn: () => LessonApi.getLesson(requestParameters),
       ...config,
     }),
-
+  useGetLessonQuestions: (
+    requestParameters: GetLessonQuestionsRequest,
+    config?: UseQueryOptions<Array<QuestionModel>>,
+  ) =>
+    useQuery({
+      queryKey: [GET_LESSON_QUESTIONS_KEY, requestParameters.id],
+      queryFn: () => LessonApi.getLessonQuestions(requestParameters),
+      ...config,
+    }),
   useCreateLesson: () =>
     useMutation(LessonApi.registerLesson, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
-    }),
-  useUpdateLesson: () =>
-    useMutation(LessonApi.updateLesson, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
-      },
-    }),
-  useGetLessonQuestion: (
-    requestParameters: GetLessonQuestionsRequest,
-    config?: UseQueryOptions<Array<QuestionModel>>,
-  ) =>
-    useQuery({
-      queryKey: GET_LESSON_QUESTION_KEY,
-      queryFn: () => LessonApi.getLessonQuestions(requestParameters),
-      ...config,
     }),
   useRemoveLesson: () =>
     useMutation(LessonApi.deleteLesson, {

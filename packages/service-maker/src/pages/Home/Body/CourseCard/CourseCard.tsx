@@ -1,11 +1,11 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { UserCourses } from 'services/api/out';
 import styled from 'styled-components';
 import generateUniqueColorVariables from 'utils/generateUniqueColorVariables';
 
 import { ArrowRightIcon, MixIcon } from '@radix-ui/react-icons';
 import { Heading, IconButton, Text, Tooltip } from '@radix-ui/themes';
-import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
 
 interface CourseCardProps {
   courseId: UserCourses['id'];

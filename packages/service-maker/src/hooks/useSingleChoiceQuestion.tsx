@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { AnswerInformation } from 'pages/NewQuiz/Factory/factory.types';
+import type { AnswerInformation } from 'pages/QuizEditor/Factory/factory.types';
 
 interface EditAnswerProps {
   index: number;

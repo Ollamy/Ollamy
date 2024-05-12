@@ -10,8 +10,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from 'pages/Auth/Login';
 import { Register } from 'pages/Auth/Register';
 import HomePage from 'pages/Home/HomePage';
-import NewCoursePage from 'pages/NewCourse/NewCoursePage';
-import NewQuiz from 'pages/NewQuiz/quiz';
+import CourseManagerPage from 'pages/CourseManager/CourseManagerPage';
+import QuizEditorPage from 'pages/QuizEditor/QuizEditorPage';
 import { createGlobalStyle } from 'styled-components';
 
 import '@radix-ui/themes/styles.css';
@@ -37,20 +37,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/course/:courseId',
-    element: <NewCoursePage />,
+    element: <CourseManagerPage />,
   },
   {
     path: '/quizEditor/:lessonId',
-    element: <NewQuiz />,
+    element: <QuizEditorPage />,
   },
-  // {
-  //   path: '/course/:id/section/:sectionId/lesson/:lessonId',
-  //   element: <NewQuiz />,
-  // },
-  // {
-  //   path: '/course/:id/section/:sectionId/lesson/:lessonId/question/:questionId',
-  //   element: <NewQuiz />,
-  // },
   // {
   //   path: '/profile',
   //   element: <ProfilePage />,
@@ -62,18 +54,6 @@ const router = createBrowserRouter([
   // {
   //   path: '/formation',
   //   element: <FormationSetting />,
-  // },
-  // {
-  //   path: '/course/:id',
-  //   element: <MakerHubPage />,
-  // },
-  // {
-  //   path: '/course/:id/section/:sectionId',
-  //   element: <MakerHubPage />,
-  // },
-  // {
-  //   path: '/course/:id/section/:sectionId/lesson/:lessonId',
-  //   element: <MakerHubPage />,
   // },
 ]);
 
