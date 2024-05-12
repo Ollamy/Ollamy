@@ -1,7 +1,6 @@
-// @ts-ignore
 import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
-import TextButton from 'src/components/buttons/textButton';
+import React, { useEffect, useState } from 'react';
+import TextButton from 'src/components/Buttons/TextButton';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 
 import QuestionDifficulty from './questionDifficulty';
@@ -9,7 +8,10 @@ import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
-  nextQuestion: (answerId: string, questionId: string) => void;
+  nextQuestion: () => void;
+  setNextQuestionId: (id: string | undefined) => void;
+  setIsEnd: (isEnd: boolean) => void;
+  setCurrentErrorNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: string) {
@@ -22,7 +24,7 @@ function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: 
   return '#D9D9D9';
 }
 
-function Question({ questionId, nextQuestion }: QuestionProps) {
+function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
   const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
@@ -40,7 +42,10 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
   const validateAnswer = async (answerId: string) => {
     try {
       const data = await validate({ answerId, questionId }).unwrap();
+      setNextQuestionId(data.nextQuestionId);
       setTrueAnswer(data.answer);
+      setIsEnd(data.end);
+      if (!data.success) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
     }
@@ -81,10 +86,7 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
         <TextButton
           disabled={selectAnswer === undefined}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
-          onPress={() =>
-            selectAnswer &&
-            (trueAnswer !== undefined ? nextQuestion(selectAnswer, questionId) : validateAnswer(selectAnswer))
-          }
+          onPress={() => selectAnswer && (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer))}
           rightIconName="arrow-forward"
         />
       </View>
