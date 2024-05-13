@@ -37,7 +37,6 @@ function QuestionImageManager({ data, questionId }: QuestionImageManagerProps) {
     await updateQuestion({
       id: questionId,
       updateQuestionModel: {
-        // @ts-expect-error WAIT FOR YOYO - change data model
         picture: null,
       },
     });
