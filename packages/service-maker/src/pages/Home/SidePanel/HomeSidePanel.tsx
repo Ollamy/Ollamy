@@ -38,24 +38,24 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
                 Home
               </LinkNav>
             </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('profile')}>
-              <LinkNav
-                active={currentPage === 'profile'}
-                className={'NavigationMenuLink'}
-              >
-                <PersonIcon />
-                Profile
-              </LinkNav>
-            </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('settings')}>
-              <LinkNav
-                active={currentPage === 'settings'}
-                className={'NavigationMenuLink'}
-              >
-                <GearIcon />
-                Settings
-              </LinkNav>
-            </NavigationMenu.Item>
+            {/* <NavigationMenu.Item onClick={() => handleClick('profile')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'profile'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <PersonIcon /> */}
+            {/*     Profile */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
+            {/* <NavigationMenu.Item onClick={() => handleClick('settings')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'settings'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <GearIcon /> */}
+            {/*     Settings */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
 
             <NavigationMenu.Indicator className={'NavigationMenuIndicator'}>
               <div className={'Arrow'} />
