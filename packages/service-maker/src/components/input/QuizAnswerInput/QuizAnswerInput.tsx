@@ -1,21 +1,24 @@
 import { useCallback, useState } from 'react';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
-import DeleteModal from 'components/modal/DeleteModal/DeleteModal';
 import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 import { answerActions } from 'services/api/routes/answer';
 import styled from 'styled-components';
 
-import { TextField } from '@radix-ui/themes';
+import { IconButton, TextField } from '@radix-ui/themes';
 import type { RootProps } from '@radix-ui/themes/dist/cjs/components/text-field';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import { TrashIcon } from '@radix-ui/react-icons';
 
 interface QuizAnswerInputProps extends RootProps {
   answerId: string;
   questionId: string;
+  takesPictures?: boolean;
 }
 
 function QuizAnswerInput({
   answerId,
   questionId,
+  takesPictures = true,
   ...props
 }: QuizAnswerInputProps) {
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
@@ -46,23 +49,29 @@ function QuizAnswerInput({
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [answerId, deleteAnswer]);
 
   return (
     <Input {...props}>
       <IconsWrapper side={'right'}>
-        <AddImageModal
-          image={droppedImage}
-          setImage={setDroppedImage}
-          onUploadImage={onUploadPicture}
-        />
-
-        <DeleteModal
-          title={'Do you want to delete this answer ?'}
+        {takesPictures && (
+          <AddImageModal
+            image={droppedImage}
+            setImage={setDroppedImage}
+            onUploadImage={onUploadPicture}
+          />
+        )}
+        <CustomAlertDialog
           description={
             'This action cannot be undone. This will permanently delete this answer and remove the data from our servers.'
           }
-          onDeleteAnswer={onDeleteAnswer}
+          actionButtonValue={'Yes, delete answer'}
+          TriggerButton={
+            <IconButton size={'1'} color={'red'} variant={'surface'}>
+              <TrashIcon />
+            </IconButton>
+          }
+          onAction={onDeleteAnswer}
         />
       </IconsWrapper>
     </Input>

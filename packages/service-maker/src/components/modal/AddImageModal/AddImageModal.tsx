@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode } from 'react';
+import { Dispatch, FormEventHandler, ReactNode, useCallback } from 'react';
 import { styled } from 'styled-components';
 
 import 'styles/dialog.css';
@@ -20,11 +20,14 @@ function AddImageModal({
   onUploadImage,
   CustomTriggerButton,
 }: AddImageModalProps) {
-  const handleFileChange: React.FormEventHandler<HTMLDivElement> = (e) => {
-    if ('files' in e.target) {
-      setImage((e.target.files as FileList)[0]);
-    }
-  };
+  const handleFileChange: FormEventHandler<HTMLDivElement> = useCallback(
+    (event) => {
+      if ('files' in event.target) {
+        setImage((event.target.files as FileList)[0]);
+      }
+    },
+    [],
+  );
 
   return (
     <Dialog.Root>

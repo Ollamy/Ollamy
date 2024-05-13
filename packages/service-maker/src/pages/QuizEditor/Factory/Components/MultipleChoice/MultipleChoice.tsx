@@ -70,6 +70,7 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
               name={id}
               answerId={id}
               defaultValue={data}
+              takesPictures={false}
               questionId={questionId}
               onChange={handleChangeAnswerValue}
               placeholder={`Answer ${index + 1}`}
