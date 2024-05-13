@@ -16,27 +16,17 @@ function QuestionEditor({ questionId }: QuestionEditorProps) {
   if (!questionData) return null;
 
   return (
-    <Center>
-      <Wrapper>
-        <Container>
-          <h3>Question {questionId}</h3>
-          {React.createElement(
-            quizFactory[questionData.typeQuestion as QuestionType].Component,
-            { questionId },
-          )}
-        </Container>
-      </Wrapper>
-    </Center>
+    <Wrapper>
+      <Container>
+        <h3>Question {questionId}</h3>
+        {React.createElement(
+          quizFactory[questionData.typeQuestion as QuestionType].Component,
+          { questionId },
+        )}
+      </Container>
+    </Wrapper>
   );
 }
-
-const Center = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  flex: 1;
-`;
 
 const Wrapper = styled.div`
   display: flex;
