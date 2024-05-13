@@ -82,7 +82,7 @@ export class UpdateCourseModel {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, nullable: true, })
   @IsOptional()
   @IsString()
   picture?: string | null;
