@@ -2,21 +2,15 @@ import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Compone
 import styled from 'styled-components';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 
-function MultipleChoice({ questionId }: FactoryComponentInterface) {
+function SquareChoice({ questionId }: FactoryComponentInterface) {
   return (
     <Container>
       <QuizQuestionManager questionId={questionId} />
-      <h1>multiple choice</h1>
+      <h1>Square choice</h1>
     </Container>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled.div``;
 
-  width: 100%;
-  height: 100%;
-`;
-
-export default MultipleChoice;
+export default SquareChoice;

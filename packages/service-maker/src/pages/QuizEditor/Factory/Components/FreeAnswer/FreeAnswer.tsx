@@ -2,11 +2,11 @@ import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Compone
 import styled from 'styled-components';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 
-function MultipleChoice({ questionId }: FactoryComponentInterface) {
+function FreeAnswer({ questionId }: FactoryComponentInterface) {
   return (
     <Container>
       <QuizQuestionManager questionId={questionId} />
-      <h1>multiple choice</h1>
+      <h1>Free answer</h1>
     </Container>
   );
 }
@@ -19,4 +19,4 @@ const Container = styled.div`
   height: 100%;
 `;
 
-export default MultipleChoice;
+export default FreeAnswer;

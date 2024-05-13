@@ -116,7 +116,7 @@ function SingleChoice({ questionId }: FactoryComponentInterface) {
         image={questionImage}
         setImage={setQuestionImage}
         onUploadImage={handleUploadImage}
-        customTriggerButton={
+        CustomTriggerButton={
           questionData.pictureId ? (
             <QuestionImage src={questionData.pictureId} />
           ) : (

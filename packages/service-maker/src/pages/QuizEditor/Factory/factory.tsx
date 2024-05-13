@@ -1,22 +1,27 @@
 import type { ReactElement } from 'react';
+import FreeAnswer from 'pages/QuizEditor/Factory/Components/FreeAnswer/FreeAnswer';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
-import PictureChoice from 'pages/QuizEditor/Factory/Components/PictureChoise/PictureChoice';
-import SingleChoice from 'pages/QuizEditor/Factory/Components/SingleChoice/SingleChoice';
-import { QuestionType } from 'pages/QuizEditor/Factory/factory.types';
+import MultipleChoice from 'pages/QuizEditor/Factory/Components/MultipleChoice/MultipleChoice';
+import SquareChoice from 'pages/QuizEditor/Factory/Components/SquareChoice/SquareChoice';
+import { GetQuestionModelTypeAnswerEnum } from 'services/api/out';
 
 export interface Factory {
   Component: ({ questionId }: FactoryComponentInterface) => ReactElement;
   label: string;
 }
 
-const quizFactory: Record<QuestionType, Factory> = {
-  [QuestionType.TEXT]: {
-    Component: SingleChoice,
-    label: 'Single choice',
+const quizFactory: Record<GetQuestionModelTypeAnswerEnum, Factory> = {
+  [GetQuestionModelTypeAnswerEnum.FreeAnswer]: {
+    Component: FreeAnswer,
+    label: 'Free question',
   },
-  [QuestionType.IMAGE]: {
-    Component: PictureChoice,
-    label: 'Picture choice',
+  [GetQuestionModelTypeAnswerEnum.MultipleChoice]: {
+    Component: MultipleChoice,
+    label: 'Multiple choice question',
+  },
+  [GetQuestionModelTypeAnswerEnum.SquareChoice]: {
+    Component: SquareChoice,
+    label: 'Square question',
   },
 } as const;
 
