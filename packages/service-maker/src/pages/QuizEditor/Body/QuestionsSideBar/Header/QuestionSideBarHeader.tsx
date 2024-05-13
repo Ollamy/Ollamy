@@ -1,7 +1,6 @@
 import type { ReactElement } from 'react';
-import styled from 'styled-components';
-
 import AddQuestion from 'pages/QuizEditor/Body/QuestionsSideBar/Header/AddQuestion/AddQuestion';
+import styled from 'styled-components';
 
 interface QuestionSideBarHeaderProps {
   lessonId: string;
