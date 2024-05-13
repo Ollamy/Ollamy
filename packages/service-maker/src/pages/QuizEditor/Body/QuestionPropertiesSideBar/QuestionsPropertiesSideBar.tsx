@@ -1,35 +1,38 @@
 import type { ReactElement } from 'react';
+import { useCallback } from 'react';
 import DifficultyPicker from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/DifficultyPicker/DifficultyPicker';
-import { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
+import type { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
+import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface QuestionsPropertiesSideBarProps {}
+interface QuestionsPropertiesSideBarProps {
+  questionId: string;
+}
 
-function QuestionsPropertiesSideBar({}: QuestionsPropertiesSideBarProps): ReactElement {
-  const questionData = {
-    id: '6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5',
-    lessonId: 'string',
-    title: 'Hello',
-    description: 'Hello world....',
-    typeAnswer: 'TEXT',
-    typeQuestion: 'TEXT',
-    trustAnswerId: 'string',
-    pictureId: 'string',
-    difficulty: Difficulty.ADVANCED,
-    order: 'a0',
-    points: 1,
-  };
+function QuestionsPropertiesSideBar({
+  questionId,
+}: QuestionsPropertiesSideBarProps): ReactElement {
+  const { data } = questionActions.useQuestion({ id: questionId });
+  const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
-  const handleDifficultyClick = (difficulty: Difficulty) => {
-    console.log(`Updating to difficulty ${difficulty}`);
-  };
+  const handleDifficultyClick = useCallback(
+    async (difficulty: Difficulty) => {
+      await updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          difficulty,
+        },
+      });
+    },
+    [questionId, updateQuestion],
+  );
 
   return (
     <Container>
       <DifficultyPicker
-        difficulty={questionData.difficulty as Difficulty}
+        questionId={questionId}
         onClick={handleDifficultyClick}
+        difficulty={data?.difficulty as Difficulty}
       />
     </Container>
   );

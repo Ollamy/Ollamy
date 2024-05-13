@@ -2,6 +2,7 @@ import { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
 import styled from 'styled-components';
 
 interface DifficultyPickerProps {
+  questionId: string;
   maxDifficulty?: number;
   difficulty: Difficulty;
   onClick: (difficulty: Difficulty) => void;
@@ -14,8 +15,9 @@ const difficultyToNumber: Record<Difficulty, number> = {
 };
 
 function DifficultyPicker({
-  difficulty,
   onClick,
+  difficulty,
+  questionId,
   maxDifficulty = 3,
 }: DifficultyPickerProps) {
   return (
@@ -28,8 +30,8 @@ function DifficultyPicker({
         {Array.from({ length: maxDifficulty }).map((_, index) => (
           <Star
             $isActive={index < difficultyToNumber[difficulty]}
-            src="/star.png"
-            key={index}
+            src={'/star.png'}
+            key={`${questionId}-${index}`}
             onClick={() =>
               onClick(
                 Object.entries(difficultyToNumber).find(
