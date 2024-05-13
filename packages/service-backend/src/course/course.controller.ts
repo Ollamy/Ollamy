@@ -7,6 +7,7 @@ import {
   Put,
   Param,
   Req,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -15,6 +16,7 @@ import {
   ApiHeader,
   ApiParam,
   ApiTags,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   CourseModel,
@@ -164,54 +166,44 @@ export class CourseController {
     description: 'Id of the course',
     required: true,
   })
-  @ApiBody({
-    type: CourseGenerateCode,
-    description: 'Code validity model',
-    examples: {
-      template: {
-        value: {
-          duration: Durationtype.FIFTEEN_MINUTES,
-        } as CourseGenerateCode,
-      },
-    },
+  @ApiQuery({
+    name: 'duration',
+    description: 'Duration of the code',
+    required: false,
+    enum: Durationtype
   })
   @LoggedMiddleware(true)
   @Post('/:id/share')
   async generateCodeforCourse(
     @Param('id') id: string,
-    @Body() body: CourseGenerateCode,
+    @Query('duration') duration: Durationtype,
+    @OllContext() ctx: any,
   ): Promise<ShareCourseCode> {
-    return this.courseService.generateCodeforCourse(id, body);
+    return this.courseService.generateCodeforCourse(id, duration, ctx);
   }
 
   @ApiOkResponse({
     description: 'user added to course response',
     type: CourseTrueResponse,
   })
-  @ApiParam({
+  @ApiQuery({
     name: 'id',
     description: 'Id of the course',
-    required: true,
+    required: false,
   })
-  @ApiBody({
-    type: CourseCodeModel,
+  @ApiQuery({
+    name: 'code',
     description: 'Code validity model',
-    examples: {
-      template: {
-        value: {
-          code: 'A1B2',
-        } as CourseCodeModel,
-      },
-    },
+    required: false,
   })
   @LoggedMiddleware(true)
-  @Post('/:id/user')
+  @Post('/join')
   async addUserToCourse(
-    @Param('id') id: string,
-    @Body() body: CourseCodeModel,
+    @Query('id') id: string,
+    @Query('code') code: string,
     @OllContext() ctx: any,
   ): Promise<CourseTrueResponse> {
-    return this.courseService.addUserToCourse(id, body, ctx.__user.id);
+    return this.courseService.addUserToCourse(id, code, ctx.__user.id);
   }
 
   @ApiOkResponse({
