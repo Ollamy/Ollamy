@@ -19,14 +19,17 @@ function QuestionImageManager({ data, questionId }: QuestionImageManagerProps) {
 
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
-  const updateImage = useCallback(async (pictureBase64: string) => {
-    await updateQuestion({
-      id: questionId,
-      updateQuestionModel: {
-        picture: pictureBase64,
-      },
-    });
-  }, []);
+  const updateImage = useCallback(
+    async (pictureBase64: string) => {
+      await updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          picture: pictureBase64,
+        },
+      });
+    },
+    [questionId, updateQuestion],
+  );
 
   const { onUploadPicture } = useUploadPicture({
     droppedImage,

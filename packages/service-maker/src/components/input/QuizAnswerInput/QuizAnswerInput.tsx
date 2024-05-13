@@ -23,14 +23,17 @@ function QuizAnswerInput({
 
   const [droppedImage, setDroppedImage] = useState<File | null>(null);
 
-  const updateImage = useCallback(async (pictureBase64: string) => {
-    await updateAnswer({
-      id: answerId,
-      updateAnswerModel: {
-        picture: pictureBase64,
-      },
-    });
-  }, []);
+  const updateImage = useCallback(
+    async (pictureBase64: string) => {
+      await updateAnswer({
+        id: answerId,
+        updateAnswerModel: {
+          picture: pictureBase64,
+        },
+      });
+    },
+    [answerId, updateAnswer],
+  );
 
   const { onUploadPicture } = useUploadPicture({
     droppedImage,
