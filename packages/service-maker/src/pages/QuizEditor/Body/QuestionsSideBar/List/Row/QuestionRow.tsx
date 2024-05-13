@@ -18,10 +18,6 @@ function QuestionRow({ index, questionId, title }: QuestionRowProps) {
     setSearchParams({ questionId });
   }, [questionId, setSearchParams]);
 
-  useEffect(() => {
-    console.log(currentQuestionId, questionId);
-  }, [currentQuestionId, questionId]);
-
   return (
     <Container
       onClick={handleClick}
