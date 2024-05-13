@@ -1,6 +1,6 @@
+import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
 import styled from 'styled-components';
-import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 
 function FreeAnswer({ questionId }: FactoryComponentInterface) {
   return (

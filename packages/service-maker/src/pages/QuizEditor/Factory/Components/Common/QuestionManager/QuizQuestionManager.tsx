@@ -1,3 +1,5 @@
+import type { ChangeEvent } from 'react';
+import { useCallback } from 'react';
 import QuestionImageManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/ImageManager/QuestionImageManager';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
@@ -15,15 +17,39 @@ function QuizQuestionManager({ questionId }: QuizQuestionManagerProps) {
 
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
+  const handleInputChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+
+      await updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          [name]: value,
+        },
+      });
+    },
+    [questionId, updateQuestion],
+  );
+
   return (
     <Container>
       <InputContainer>
         <Text weight={'bold'}>Title</Text>
-        <TextField.Root placeholder={'Question title'} />
+        <TextField.Root
+          name={'title'}
+          value={data?.title || ''}
+          onChange={handleInputChange}
+          placeholder={'Question title'}
+        />
       </InputContainer>
       <InputContainer>
         <Text weight={'bold'}>Description</Text>
-        <TextField.Root placeholder={'Question description'} />
+        <TextField.Root
+          name={'description'}
+          onChange={handleInputChange}
+          value={data?.description || ''}
+          placeholder={'Question description'}
+        />
       </InputContainer>
       <Separator size={'4'} />
       <QuestionImageManager questionId={questionId} data={data} />
