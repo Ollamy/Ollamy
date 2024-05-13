@@ -15,7 +15,7 @@ function HomeSearchBar({ searchValue, setSearchValue }: HomeSearchBarProps) {
     (event: ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);
     },
-    [setSearchValue],
+    [setSearchValue]
   );
 
   return (

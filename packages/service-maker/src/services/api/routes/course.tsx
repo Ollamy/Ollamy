@@ -1,17 +1,17 @@
 import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
-import {
-  CourseApi,
+import { queryClient } from 'main';
+import type {
   CourseSectionModel,
   GetCourseOperationRequest,
   GetCourseRequest,
   GetCourseSectionsRequest,
 } from 'services/api/out';
+import { CourseApi } from 'services/api/out';
 import { GET_USER_COURSES_KEY } from 'services/api/routes/user';
-import { queryClient } from 'main';
 
-const GET_COURSE_KEY = 'getCourse';
-export const GET_COURSE_SECTIONS_KEY = 'getCourseSections';
+const GET_COURSE_KEY = 'getCourseKey';
+export const GET_COURSE_SECTIONS_KEY = 'getCourseSectionsKey';
 
 export const courseActions = {
   useCourse: (
@@ -19,30 +19,28 @@ export const courseActions = {
     config?: UseQueryOptions<GetCourseRequest>,
   ) =>
     useQuery({
-      queryKey: GET_COURSE_KEY,
+      queryKey: [GET_COURSE_KEY, requestParameters.id],
       queryFn: () => CourseApi.getCourse(requestParameters),
       ...config,
     }),
-  useCourseSection: (
+  useGetCourseSections: (
     requestParameters: GetCourseSectionsRequest,
     config?: UseQueryOptions<Array<CourseSectionModel>>,
   ) =>
     useQuery({
-      queryKey: GET_COURSE_SECTIONS_KEY,
+      queryKey: [GET_COURSE_SECTIONS_KEY, requestParameters.id],
       queryFn: () => CourseApi.getCourseSections(requestParameters),
       ...config,
     }),
   useCreateCourse: () =>
     useMutation(CourseApi.postCourse, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_COURSE_KEY);
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),
-  useUpdateCourse: () =>
-    useMutation(CourseApi.updateCourse, {
+  useRemoveCourse: () =>
+    useMutation(CourseApi.deleteCourse, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_COURSE_KEY);
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),

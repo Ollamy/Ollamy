@@ -26,7 +26,8 @@ export interface GetAnswerRequest {
 
 export interface ValidateAnswerRequest {
   questionId: string;
-  answerId: string;
+  answerId?: string;
+  data?: string;
 }
 
 export interface ValidateAnswerResponse {

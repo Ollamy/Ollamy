@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { UserCourses } from 'services/api/out';
 import styled from 'styled-components';
 import generateUniqueColorVariables from 'utils/generateUniqueColorVariables';
@@ -18,6 +20,12 @@ function CourseCard({
   description,
   picture,
 }: CourseCardProps) {
+  const navigate = useNavigate();
+
+  const handleClick = useCallback(() => {
+    navigate(`/course/${courseId}`);
+  }, [courseId, navigate]);
+
   return (
     <Container color={generateUniqueColorVariables(courseId)}>
       <Header>
@@ -29,7 +37,12 @@ function CourseCard({
           </Placeholder>
         )}
         <Tooltip content={'See your course'}>
-          <CustomButton variant={'ghost'} color={'gray'} highContrast>
+          <CustomButton
+            highContrast
+            color={'gray'}
+            variant={'ghost'}
+            onClick={handleClick}
+          >
             <ArrowRightIcon width={40} height={40} />
           </CustomButton>
         </Tooltip>

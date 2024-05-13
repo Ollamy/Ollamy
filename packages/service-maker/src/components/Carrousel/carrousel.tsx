@@ -1,4 +1,5 @@
-import { CarrouselMakerInterface } from 'components/Carrousel/carrousel.interface';
+import type { CarrouselMakerInterface } from 'components/Carrousel/carrousel.interface';
+
 import {
   BaseDiv,
   ContainerHeight,

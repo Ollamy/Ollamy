@@ -1,7 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback } from 'react';
-import type { PageType } from 'pages/Home/index';
+import type { PageType } from 'pages/Home/HomePage';
 import styled from 'styled-components';
+
+import 'styles/navigationMenu.css';
 
 import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
@@ -26,11 +28,11 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
       </Header>
       <Body>
         <NavigationMenu.Root>
-          <List className="NavigationMenuList">
+          <List className={'NavigationMenuList'}>
             <NavigationMenu.Item onClick={() => handleClick('home')}>
               <LinkNav
                 active={currentPage === 'home'}
-                className="NavigationMenuLink"
+                className={'NavigationMenuLink'}
               >
                 <HomeIcon />
                 Home
@@ -39,7 +41,7 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
             <NavigationMenu.Item onClick={() => handleClick('profile')}>
               <LinkNav
                 active={currentPage === 'profile'}
-                className="NavigationMenuLink"
+                className={'NavigationMenuLink'}
               >
                 <PersonIcon />
                 Profile
@@ -48,20 +50,20 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
             <NavigationMenu.Item onClick={() => handleClick('settings')}>
               <LinkNav
                 active={currentPage === 'settings'}
-                className="NavigationMenuLink"
+                className={'NavigationMenuLink'}
               >
                 <GearIcon />
                 Settings
               </LinkNav>
             </NavigationMenu.Item>
 
-            <NavigationMenu.Indicator className="NavigationMenuIndicator">
-              <div className="Arrow" />
+            <NavigationMenu.Indicator className={'NavigationMenuIndicator'}>
+              <div className={'Arrow'} />
             </NavigationMenu.Indicator>
           </List>
 
-          <div className="ViewportPosition">
-            <NavigationMenu.Viewport className="NavigationMenuViewport" />
+          <div className={'ViewportPosition'}>
+            <NavigationMenu.Viewport className={'NavigationMenuViewport'} />
           </div>
         </NavigationMenu.Root>
       </Body>

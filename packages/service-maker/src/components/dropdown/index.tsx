@@ -7,7 +7,7 @@ interface DropdownProps {
   setSelectedOption: (v: string | null) => void;
 }
 
-const Dropdown = (props: DropdownProps) => {
+function Dropdown(props: DropdownProps) {
   const { options, selectedOption, setSelectedOption } = props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,7 +36,7 @@ const Dropdown = (props: DropdownProps) => {
       </DropdownContent>
     </DropdownContainer>
   );
-};
+}
 
 const DropdownContainer = styled.div`
   position: relative;

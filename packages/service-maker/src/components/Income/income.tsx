@@ -1,4 +1,5 @@
-import { IncomeInterface } from 'components/Income/income.interface';
+import type { IncomeInterface } from 'components/Income/income.interface';
+
 import {
   ContainerCenteredTitle,
   ContainerIncome,

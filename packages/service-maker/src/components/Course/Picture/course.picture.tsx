@@ -1,10 +1,11 @@
-import { CoursePictureInterface } from 'components/Course/Picture/course.picture.interface';
-import { RightContainerSetting } from 'components/profile/profile.style';
+import type { CoursePictureInterface } from 'components/Course/Picture/course.picture.interface';
+
 import { ContainerPlacement } from 'components/Carrousel/carrousel.style';
 import {
   Title,
   UploadPictureButton,
 } from 'components/Course/Picture/course.picture.style';
+import { RightContainerSetting } from 'components/profile/profile.style';
 
 export function CoursePicture({
   title,

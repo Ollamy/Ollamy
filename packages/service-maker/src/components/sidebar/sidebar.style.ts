@@ -1,5 +1,5 @@
+import type { SideBarMakerInterface } from 'components/sidebar/sidebar.interface';
 import { styled } from 'styled-components';
-import { SideBarMakerInterface } from 'components/sidebar/sidebar.interface';
 
 const SideBarBaseWidth = '40%';
 const SideBarBaseBackgroundColor =
@@ -10,7 +10,7 @@ export const SideBarMakerStyled = styled.div<SideBarMakerInterface>`
   justify-content: center;
   align-items: center;
   height: 100%;
-  width: ${({ width }) => (width ? width : `${SideBarBaseWidth}`)};
+  width: ${({ width }) => width || `${SideBarBaseWidth}`};
   background: ${({ backgroundColor }) =>
-    backgroundColor ? backgroundColor : `${SideBarBaseBackgroundColor}`};
+    backgroundColor || `${SideBarBaseBackgroundColor}`};
 `;
