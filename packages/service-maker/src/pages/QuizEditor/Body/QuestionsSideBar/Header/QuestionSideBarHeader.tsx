@@ -47,7 +47,7 @@ function QuestionSideBarHeader({
   return (
     <Container>
       <Dialog.Root>
-        <Title>Content</Title>
+        <Title>Quiz questions</Title>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <IconButton>
@@ -57,12 +57,12 @@ function QuestionSideBarHeader({
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               side={'right'}
-              className="DropdownMenuContent"
+              className={'DropdownMenuContent'}
               sideOffset={5}
             >
               {Object.entries(currentQuiz).map(([key, elem]) => (
                 <Dialog.Trigger asChild key={key}>
-                  <DropdownMenu.Item className="DropdownMenuItem">
+                  <DropdownMenu.Item className={'DropdownMenuItem'}>
                     {elem.label}
                   </DropdownMenu.Item>
                 </Dialog.Trigger>
@@ -71,11 +71,11 @@ function QuestionSideBarHeader({
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
         <Dialog.Portal>
-          <Dialog.Overlay className="DialogOverlay" />
-          <Dialog.Content className="DialogContent">
-            <Dialog.Title className="DialogTitle">New Question</Dialog.Title>
-            <Form.Root className="FormRoot" onSubmit={handleSubmit}>
-              <Form.Field className="FormField" name="title">
+          <Dialog.Overlay className={'DialogOverlay'} />
+          <Dialog.Content className={'DialogContent'}>
+            <Dialog.Title className={'DialogTitle'}>New Question</Dialog.Title>
+            <Form.Root className={'FormRoot'} onSubmit={handleSubmit}>
+              <Form.Field className={'FormField'} name={'title'}>
                 <div
                   style={{
                     display: 'flex',
@@ -83,22 +83,25 @@ function QuestionSideBarHeader({
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Form.Label className="FormLabel">Title</Form.Label>
-                  <Form.Message className="FormMessage" match="valueMissing">
+                  <Form.Label className={'FormLabel'}>Title</Form.Label>
+                  <Form.Message
+                    className={'FormMessage'}
+                    match={'valueMissing'}
+                  >
                     Please enter your title
                   </Form.Message>
                 </div>
                 <Form.Control asChild>
                   <input
-                    className="Input"
-                    type="text"
+                    className={'Input'}
+                    type={'text'}
                     placeholder={'The title of the question'}
                     required
                   />
                 </Form.Control>
               </Form.Field>
 
-              <Form.Field className="FormField" name="description">
+              <Form.Field className={'FormField'} name={'description'}>
                 <div
                   style={{
                     display: 'flex',
@@ -106,21 +109,24 @@ function QuestionSideBarHeader({
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Form.Label className="FormLabel">Description</Form.Label>
-                  <Form.Message className="FormMessage" match="valueMissing">
+                  <Form.Label className={'FormLabel'}>Description</Form.Label>
+                  <Form.Message
+                    className={'FormMessage'}
+                    match={'valueMissing'}
+                  >
                     Please enter a description
                   </Form.Message>
                 </div>
                 <Form.Control asChild>
                   <textarea
-                    className="Textarea"
+                    className={'Textarea'}
                     placeholder={'The description of the question'}
                     required
                   />
                 </Form.Control>
               </Form.Field>
 
-              <Form.Field className="FormField" name="image">
+              <Form.Field className={'FormField'} name={'image'}>
                 <div
                   style={{
                     display: 'flex',
@@ -128,22 +134,25 @@ function QuestionSideBarHeader({
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Form.Label className="FormLabel">Description</Form.Label>
-                  <Form.Message className="FormMessage" match="valueMissing">
+                  <Form.Label className={'FormLabel'}>Description</Form.Label>
+                  <Form.Message
+                    className={'FormMessage'}
+                    match={'valueMissing'}
+                  >
                     Please enter a description
                   </Form.Message>
                 </div>
                 <Form.Control asChild>
-                  <input type="file" />
+                  <input type={'file'} />
                 </Form.Control>
               </Form.Field>
               <Form.Submit asChild>
-                <button className="Button" style={{ marginTop: 10 }}>
+                <button className={'Button'} style={{ marginTop: 10 }}>
                   Create Question
                 </button>
               </Form.Submit>
               <Form.Submit asChild>
-                <button className="Button" style={{ marginTop: 10 }}>
+                <button className={'Button'} style={{ marginTop: 10 }}>
                   Cancel
                 </button>
               </Form.Submit>
