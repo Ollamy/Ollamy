@@ -11,9 +11,10 @@ export const courseApi = api.injectEndpoints({
       }),
       providesTags: (result) => (result ? [{ type: 'Course', id: result.id }] : [{ type: 'Course', id: 'LIST' }]),
     }),
-    joinCourse: build.mutation<CourseResponse, string>({
-      query: (id) => ({
+    joinCourse: build.mutation<CourseResponse, { id: string; code: string }>({
+      query: ({ id, code }) => ({
         url: `/course/${id}/user`,
+        body: { code },
         method: 'POST',
       }),
       invalidatesTags: [{ type: 'Course', id: 'LIST' }],

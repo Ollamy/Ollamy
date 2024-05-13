@@ -1,27 +1,18 @@
-import { Input, Skeleton, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
-import JoinCourseCard from 'src/components/JoinCourseCard/JoinCourseCard';
-import { useGetCourseByIdQuery } from 'src/services/course/course';
-import type { CourseResponse } from 'src/services/course/course.dto';
+import { Button, Heading, Input, VStack } from 'native-base';
+import { useCallback, useState } from 'react';
 
 function FindCourse() {
   const [course, setCourse] = useState<string>('');
 
-  const [courseData, setCourseData] = useState<CourseResponse | undefined>();
-
-  const { data, isFetching } = useGetCourseByIdQuery(course);
-
-  useEffect(() => {
-    if (data) {
-      setCourseData(data);
-    }
-  }, [data]);
+  const handleClick = useCallback(() => {
+    console.log(course);
+  }, [course]);
 
   return (
-    <VStack space={6} alignItems="center">
-      <Input placeholder="Find a course..." onChangeText={setCourse} />
-      {courseData ? <JoinCourseCard id={course} data={courseData} /> : null}
-      {isFetching ? <Skeleton h="200" w="80" /> : null}
+    <VStack h="100%" space={6} justifyContent="center">
+      <Heading>Course code</Heading>
+      <Input size="2xl" placeholder="ex: KHJR" onChangeText={setCourse} />
+      <Button onPress={handleClick}>Join this course</Button>
     </VStack>
   );
 }

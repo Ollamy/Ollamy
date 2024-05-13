@@ -25,7 +25,7 @@ function JoinCourseCard({ id, data }: JoinCourseCardProps) {
 
   const handleJoinCourse = async () => {
     try {
-      await joinCourse(id!).unwrap();
+      await joinCourse({ id: id!, code: '05JU' }).unwrap();
       showToast({
         type: 'success',
         text1: 'Success',
