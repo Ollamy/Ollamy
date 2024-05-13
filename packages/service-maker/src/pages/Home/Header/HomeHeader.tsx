@@ -25,7 +25,7 @@ function HomeHeader() {
       <Title>All your courses, in the same place</Title>
       <CustomDialogTitleDescription
         dialogTitle={'Create a course'}
-        dialogDescription={'test'}
+        dialogDescription={'Define the title and description of your new course.'}
         actionButtonValue={'Create a course'}
         TriggerButton={
           <CustomButton variant={'soft'}>Create a new course</CustomButton>
