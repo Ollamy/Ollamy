@@ -4,10 +4,10 @@ import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog'
 import type { GetQuestionModel } from 'services/api/out';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
-import { toBase64 } from 'utils/toBase64';
 
 import { TrashIcon, UploadIcon } from '@radix-ui/react-icons';
 import { Button, IconButton } from '@radix-ui/themes';
+import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 
 interface QuestionImageManagerProps {
   questionId: string;
@@ -15,29 +15,23 @@ interface QuestionImageManagerProps {
 }
 
 function QuestionImageManager({ data, questionId }: QuestionImageManagerProps) {
-  const [questionImage, setQuestionImage] = useState<File | null>(null);
+  const [droppedImage, setDroppedImage] = useState<File | null>(null);
 
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
 
-  const handleUploadImage = useCallback(async () => {
-    try {
-      if (!questionImage) {
-        return;
-      }
-      const base64 = await toBase64(questionImage);
-      if (!base64) {
-        throw new Error('Error uploading image');
-      }
-      await updateQuestion({
-        id: questionId,
-        updateQuestionModel: {
-          picture: base64.toString(),
-        },
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [questionId, questionImage, updateQuestion]);
+  const updateImage = useCallback(async (pictureBase64: string) => {
+    await updateQuestion({
+      id: questionId,
+      updateQuestionModel: {
+        picture: pictureBase64,
+      },
+    });
+  }, []);
+
+  const { onUploadPicture } = useUploadPicture({
+    droppedImage,
+    updater: updateImage,
+  });
 
   const handleRemovePicture = useCallback(async () => {
     await updateQuestion({
@@ -52,9 +46,9 @@ function QuestionImageManager({ data, questionId }: QuestionImageManagerProps) {
   return (
     <Container>
       <AddImageModal
-        image={questionImage}
-        setImage={setQuestionImage}
-        onUploadImage={handleUploadImage}
+        image={droppedImage}
+        setImage={setDroppedImage}
+        onUploadImage={onUploadPicture}
         CustomTriggerButton={
           data?.pictureId ? (
             <Image src={data.pictureId} />
