@@ -13,4 +13,4 @@ ENV FRONTEND_PORT=${FRONTEND_PORT}
 
 RUN yarn build
 
-CMD ["yarn", "preview", "--port", "5173", "--host"]
+CMD yarn preview --port ${FRONTEND_PORT} --host
