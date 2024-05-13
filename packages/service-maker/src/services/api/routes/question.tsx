@@ -45,4 +45,11 @@ export const questionActions = {
       queryFn: () => QuestionApi.getQuestionAnswers(requestParameters),
       ...config,
     }),
+  useRemoveQuestion: () =>
+    useMutation(QuestionApi.deleteQuestion, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_LESSON_QUESTIONS_KEY);
+        queryClient.invalidateQueries(GET_QUESTION_KEY);
+      },
+    }),
 };
