@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
+import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 interface HomeSidePanelProps {
@@ -38,24 +38,24 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
                 Home
               </LinkNav>
             </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('profile')}>
-              <LinkNav
-                active={currentPage === 'profile'}
-                className={'NavigationMenuLink'}
-              >
-                <PersonIcon />
-                Profile
-              </LinkNav>
-            </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('settings')}>
-              <LinkNav
-                active={currentPage === 'settings'}
-                className={'NavigationMenuLink'}
-              >
-                <GearIcon />
-                Settings
-              </LinkNav>
-            </NavigationMenu.Item>
+            {/* <NavigationMenu.Item onClick={() => handleClick('profile')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'profile'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <PersonIcon /> */}
+            {/*     Profile */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
+            {/* <NavigationMenu.Item onClick={() => handleClick('settings')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'settings'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <GearIcon /> */}
+            {/*     Settings */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
 
             <NavigationMenu.Indicator className={'NavigationMenuIndicator'}>
               <div className={'Arrow'} />
