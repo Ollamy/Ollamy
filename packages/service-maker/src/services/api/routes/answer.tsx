@@ -9,6 +9,7 @@ export const answerActions = {
   useCreateAnswer: () =>
     useMutation(AnswerApi.registerAnswer, {
       onSuccess: () => {
+        queryClient.invalidateQueries(GET_QUESTION_ANSWERS_KEY);
         queryClient.invalidateQueries(GET_ANSWER_KEY);
       },
     }),
