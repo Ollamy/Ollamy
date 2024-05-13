@@ -319,7 +319,7 @@ INSERT INTO public._prisma_migrations (id, checksum, finished_at, migration_name
 INSERT INTO public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) VALUES ('1fac4135-415b-4736-b78a-37a10be85367', '050c35899e801075d59950134db63f7bcef92db654e5f13de96a5f349f0b4aca', '2024-05-12 18:38:10.924995 +00:00', '20240512081041_answer_type', null, null, '2024-05-12 18:38:10.914172 +00:00', 1);
 
 
-INSERT INTO public."User" (id, firstname, lastname, email, password, communities_id) VALUES ('73284fcd-28f4-415d-b72b-90ca512f52fb', 'alexandre', 'grare', 'alexandre@alexandre.alexandre', 'akre8dWK19PZapHMh1F/bn9ACWPY/Md8F+gY/0zqgnq6euImHG0YcV2GRErKT9QXIvV2i9vd/bPjSiPgTb86ww==', '{}');
+INSERT INTO public."User" (id, firstname, lastname, email, password, communities_id) VALUES ('73284fcd-28f4-415d-b72b-90ca512f52fb', 'alexandre', 'grare', 'alexandre@alexandre.alexandre', 'il+7JzlflhOI6N6gPssVDnDfJSNcmGdw6948CKFoCg3QNNrJr7YRIqNRLCMi/AJsiuwBiSK7HvlFqFgZ1V107A==', '{}');
 
 INSERT INTO public."Course" (id, owner_id, title, description, picture_id) VALUES ('fa2a2aa3-303c-4c23-bf1f-937e1cce37e5', '73284fcd-28f4-415d-b72b-90ca512f52fb', 'Les bases de la photographie', 'Ce cours à pour but d''introduire les bases de la photographie à tout debutant.', null);
 
