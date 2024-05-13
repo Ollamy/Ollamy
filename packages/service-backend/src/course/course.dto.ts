@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import {
   IsBoolean,
+  IsDate,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -110,19 +111,17 @@ export class UserCourseHp {
 }
 
 export enum Durationtype {
-  TEN_MINUTES = 'TEN_MINUTES',
   FIFTEEN_MINUTES = 'FIFTEEN_MINUTES',
   ONE_HOUR = 'ONE_HOUR',
-  TWO_HOURS = 'TWO_HOURS',
+  TWELVE_HOURS = 'TWELVE_HOURS',
   ONE_DAY = 'ONE_DAY',
   ONE_WEEK = 'ONE_WEEK',
 }
 
 export const ExpirationMap: Record<Durationtype, number> = {
-  [Durationtype.TEN_MINUTES]: 10 * 60,
   [Durationtype.FIFTEEN_MINUTES]: 15 * 60,
   [Durationtype.ONE_HOUR]: 60 * 60,
-  [Durationtype.TWO_HOURS]: 2 * 60 * 60,
+  [Durationtype.TWELVE_HOURS]: 12 * 60 * 60,
   [Durationtype.ONE_DAY]: 24 * 60 * 60,
   [Durationtype.ONE_WEEK]: 7 * 24 * 60 * 60,
 };
@@ -137,6 +136,10 @@ export class ShareCourseCode {
   @ApiProperty({ description: `Course's sharing code` })
   @IsString()
   code: string;
+
+  @ApiProperty({ description: `Code's date of expiration`, type: Date})
+  @IsDate()
+  expiresAt: Date;
 }
 
 export class CourseCodeModel {

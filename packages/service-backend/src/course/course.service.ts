@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) {}
+  constructor(private readonly cronService: TasksService) { }
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -194,25 +194,27 @@ export class CourseService {
 
   async addUserToCourse(
     courseId: string,
-    body: CourseCodeModel,
+    code: string,
     userId: string,
   ): Promise<CourseTrueResponse> {
     try {
-      const courseCode: string = (await RedisCacheService.run(
-        'GET',
-        `sharecode:${courseId}`,
-      )) as string;
+      let joinCourseId: string;
 
-      if (courseCode !== undefined) {
-        if ((body?.code && body.code !== courseCode) || !body?.code) {
-          return { success: false } as CourseTrueResponse;
-        }
+      if (code) {
+        joinCourseId = (await RedisCacheService.run(
+          'GET',
+          `sharecode:${code}`,
+        )) as string;
+      }
+
+      if (courseId) {
+        joinCourseId = courseId;
       }
 
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {
           user_id: userId,
-          course_id: courseId,
+          course_id: joinCourseId,
         },
       });
 
@@ -220,6 +222,8 @@ export class CourseService {
         Logger.error('Failed to add user to course !');
         throw new NotFoundException('Failed to add user to course !');
       }
+
+      await RedisCacheService.run('DEL', `sharecode:${code}`);
       this.cronService.createHpCron(userId, courseId);
       return { success: true } as CourseTrueResponse;
     } catch (error) {
@@ -260,31 +264,40 @@ export class CourseService {
 
   async generateCodeforCourse(
     courseId: string,
-    body: CourseGenerateCode,
+    duration: Durationtype,
+    ctx: any,
   ): Promise<ShareCourseCode> {
-    try {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let code = '';
-      for (let i = 0; i < CODE_LENGTH; i++) {
-        code += characters.charAt(
-          Math.floor(Math.random() * characters.length),
-        );
-      }
+    const course = await prisma.course.findFirst({
+      where: {
+        id: courseId,
+        owner_id: ctx.__user.id,
+      },
+    });
 
-      await RedisCacheService.run(
-        'SET',
-        `sharecode:${courseId}`,
-        code,
-        'EX',
-        ExpirationMap[
-          body?.duration ? body.duration : Durationtype.TEN_MINUTES
-        ],
-      );
-
-      return { code } as ShareCourseCode;
-    } catch (error) {
-      Logger.error(error);
-      throw new ConflictException('Course not updated !');
+    if (!course) {
+      throw new ConflictException('Permission denied !');
     }
+
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+
+    for (let i = 0; i < CODE_LENGTH; i++) {
+      code += characters.charAt(
+        Math.floor(Math.random() * characters.length),
+      );
+    }
+
+    await RedisCacheService.run(
+      'SET',
+      `sharecode:${code}`,
+      courseId,
+      'EX',
+      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+    );
+
+    const expirationDate = new Date();
+    expirationDate.setSeconds(expirationDate.getSeconds() + ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES]);
+
+    return { code, expiresAt: expirationDate };
   }
 }
