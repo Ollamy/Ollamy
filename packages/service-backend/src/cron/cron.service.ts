@@ -5,7 +5,7 @@ import prisma from '../client';
 
 @Injectable()
 export class TasksService {
-  constructor(private schedulerRegistry: SchedulerRegistry) {}
+  constructor(private schedulerRegistry: SchedulerRegistry) { }
   private readonly logger = new Logger(TasksService.name);
 
   createHpCron(userId: string, courseId: string) {
@@ -48,7 +48,13 @@ export class TasksService {
   }
 
   getHpCron(userId: string, courseId: string): string {
-    const job = this.schedulerRegistry.getCronJob(`hp_${userId}_${courseId}`);
+    let job;
+    try {
+      job = this.schedulerRegistry.getCronJob(`hp_${userId}_${courseId}`);
+    } catch (e) {
+      this.createHpCron(userId, courseId);
+      job = this.schedulerRegistry.getCronJob(`hp_${userId}_${courseId}`);
+    }
 
     return job.nextDate().toUTC().toString();
   }
