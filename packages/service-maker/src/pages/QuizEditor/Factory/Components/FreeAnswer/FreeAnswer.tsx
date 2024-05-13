@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { Button, RadioGroup, Text } from '@radix-ui/themes';
 
-function MultipleChoice({ questionId }: FactoryComponentInterface) {
+function FreeAnswer({ questionId }: FactoryComponentInterface) {
   const { data: questionData } = questionActions.useQuestion({
     id: questionId,
   });
@@ -23,6 +23,12 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
     handleChangeAnswerValue,
     handleChangeCorrectAnswer,
   } = useManageTextAnswer({ questionId });
+
+  useEffect(() => {
+    if (answerData && !answerData.length && !!handleCreateNewAnswer) {
+      handleCreateNewAnswer();
+    }
+  }, [answerData, handleCreateNewAnswer]);
 
   useEffect(() => {
     if (
@@ -48,16 +54,6 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
     <Container>
       <QuizQuestionManager questionId={questionId} />
       <Text weight={'bold'}>Answer</Text>
-      <ButtonContainer>
-        <CustomButton
-          variant={'ghost'}
-          loading={!answerData}
-          onClick={handleCreateNewAnswer}
-          disabled={answerData && answerData.length >= 4}
-        >
-          Add choices
-        </CustomButton>
-      </ButtonContainer>
       <RadioGroup.Root color={'green'} value={correctAnswer}>
         {answerData?.map(({ id, data }, index) => (
           <AnswerRow key={id}>
@@ -69,6 +65,7 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
               key={id}
               name={id}
               answerId={id}
+              removable={false}
               defaultValue={data}
               takesPictures={false}
               questionId={questionId}
@@ -110,4 +107,4 @@ const CustomButton = styled(Button)`
   margin-right: 0;
 `;
 
-export default MultipleChoice;
+export default FreeAnswer;

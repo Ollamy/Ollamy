@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import QuestionEditor from 'pages/QuizEditor/Body/QuestionEditor/QuestionEditor';
 import QuestionsPropertiesSideBar from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/QuestionsPropertiesSideBar';
 import QuestionsSideBar from 'pages/QuizEditor/Body/QuestionsSideBar/QuestionSideBar';
@@ -8,24 +8,41 @@ interface QuizEditorProps {
   lessonId: string;
 }
 
-export type QuizID = string;
-
 function QuizEditor({ lessonId }: QuizEditorProps) {
-  const { questionId } = useParams();
+  const [searchParams] = useSearchParams();
+  const questionId = searchParams.get('questionId');
 
   return (
     <Container>
       <QuestionsSideBar lessonId={lessonId} />
-      {questionId && <QuestionEditor questionId={questionId} />}
-      <QuestionsPropertiesSideBar />
+      {questionId && (
+        <>
+          <Center>
+            <QuestionEditor questionId={questionId} />
+          </Center>
+          <QuestionsPropertiesSideBar questionId={questionId} />
+        </>
+      )}
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  height: 100%;
+
+  flex-grow: 1;
   width: 100%;
+  overflow: hidden;
+`;
+
+const Center = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: 100%;
+  flex: 1;
 `;
 
 export default QuizEditor;

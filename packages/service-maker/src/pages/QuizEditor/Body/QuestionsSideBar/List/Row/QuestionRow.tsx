@@ -1,39 +1,31 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { CourseSectionModel } from 'services/api/out';
+import type { QuestionModel } from 'services/api/out';
 import styled from 'styled-components';
 import checkDataActive from 'utils/activeData';
 
-import { Text, Tooltip } from '@radix-ui/themes';
-
-interface SectionRowProps {
-  id: string;
+interface QuestionRowProps {
   index: number;
-  isActive: boolean;
-  title: CourseSectionModel['title'];
-  description: CourseSectionModel['description'];
+  questionId: string;
+  title: QuestionModel['title'];
 }
 
-function SectionRow({
-  id,
-  index,
-  isActive,
-  title,
-  description,
-}: SectionRowProps) {
-  const [, setSearchParams] = useSearchParams();
+function QuestionRow({ index, questionId, title }: QuestionRowProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentQuestionId = searchParams.get('questionId');
 
   const handleClick = useCallback(() => {
-    setSearchParams({ sectionId: id });
-  }, [id, setSearchParams]);
+    setSearchParams({ questionId });
+  }, [questionId, setSearchParams]);
 
   return (
-    <Tooltip content={description}>
-      <Container data-active={checkDataActive(isActive)} onClick={handleClick}>
-        <Index>{index}</Index>
-        <Title>{title}</Title>
-      </Container>
-    </Tooltip>
+    <Container
+      onClick={handleClick}
+      data-active={checkDataActive(currentQuestionId === questionId)}
+    >
+      <Index>{index + 1}</Index>
+      <Title>{title}</Title>
+    </Container>
   );
 }
 
@@ -44,7 +36,6 @@ const Container = styled.div`
   gap: 8px;
 
   width: 100%;
-  height: 40px;
   min-height: 40px;
   border-radius: 4px;
 
@@ -53,7 +44,6 @@ const Container = styled.div`
 
   &[data-active] {
     color: white;
-    font-weight: 600;
     background-color: var(--orange-9);
 
     &:hover {
@@ -73,7 +63,7 @@ const Index = styled.div`
   align-items: center;
   justify-content: center;
 
-  height: 100%;
+  height: 24px;
   aspect-ratio: 1 / 1;
 
   font-size: 12px;
@@ -82,6 +72,9 @@ const Index = styled.div`
   background-color: rgba(0, 0, 0, 0.1);
 `;
 
-const Title = styled(Text)``;
+const Title = styled.p`
+  height: 100%;
+  margin: 0;
+`;
 
-export default SectionRow;
+export default QuestionRow;

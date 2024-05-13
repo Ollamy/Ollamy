@@ -1,6 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import TopBar from 'components/TopBar/TopBar';
-import useExtractSectionId from 'hooks/useExtractSectionId';
 import Section from 'pages/CourseManager/Section/Section';
 import CourseSidePanel from 'pages/CourseManager/SidePanel/CourseSidePanel';
 import styled from 'styled-components';
@@ -9,7 +8,9 @@ import { Text } from '@radix-ui/themes';
 
 function CourseManagerPage() {
   const { courseId } = useParams();
-  const { sectionId } = useExtractSectionId();
+
+  const [searchParams] = useSearchParams();
+  const sectionId = searchParams.get('sectionId');
 
   return courseId ? (
     <Container>

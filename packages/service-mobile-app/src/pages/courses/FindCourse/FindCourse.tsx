@@ -1,27 +1,47 @@
-import { Input, Skeleton, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
-import JoinCourseCard from 'src/components/JoinCourseCard/JoinCourseCard';
-import { useGetCourseByIdQuery } from 'src/services/course/course';
-import type { CourseResponse } from 'src/services/course/course.dto';
+import { Button, Heading, Input, VStack } from 'native-base';
+import { useCallback, useState } from 'react';
+import type { ToastShowParams } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
+import { useNavigate } from 'react-router-dom';
+import { useJoinCourseMutation } from 'src/services/course/course';
 
 function FindCourse() {
-  const [course, setCourse] = useState<string>('');
+  const [joinCourse, { isLoading: isJoinCourseLoading }] = useJoinCourseMutation();
+  const [code, setCourse] = useState<string>('');
+  const navigate = useNavigate();
 
-  const [courseData, setCourseData] = useState<CourseResponse | undefined>();
+  const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-  const { data, isFetching } = useGetCourseByIdQuery(course);
+  const handleClick = useCallback(async () => {
+    try {
+      await joinCourse({ code }).unwrap();
 
-  useEffect(() => {
-    if (data) {
-      setCourseData(data);
+      showToast({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Course joined successfully',
+        visibilityTime: 2000,
+        onHide: () => navigate('/home'),
+      });
+    } catch (error) {
+      showToast({
+        type: 'error',
+        text1: 'An error occurred',
+        text2: 'Could not join course',
+        visibilityTime: 2000,
+        onHide: () => navigate('/home'),
+      });
     }
-  }, [data]);
+    console.log(code);
+  }, [code, joinCourse, navigate]);
 
   return (
-    <VStack space={6} alignItems="center">
-      <Input placeholder="Find a course..." onChangeText={setCourse} />
-      {courseData ? <JoinCourseCard id={course} data={courseData} /> : null}
-      {isFetching ? <Skeleton h="200" w="80" /> : null}
+    <VStack h={'100%'} space={6} justifyContent={'center'}>
+      <Heading>Course code</Heading>
+      <Input size={'2xl'} placeholder={'ex: KHJR'} onChangeText={setCourse} />
+      <Button onPress={handleClick} isLoading={isJoinCourseLoading}>
+        Join this course
+      </Button>
     </VStack>
   );
 }
