@@ -52,7 +52,7 @@ function AddQuestion({ lessonId }: AddQuestionProps) {
           points: 0,
         },
       }).finally(() => {
-        setOpen(false);
+        // setOpen(false);
       });
     },
     [createNewQuestion, lessonId],
