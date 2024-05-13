@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
+import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 interface HomeSidePanelProps {
