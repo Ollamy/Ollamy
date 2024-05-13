@@ -17,7 +17,9 @@ function QuizEditor({ lessonId }: QuizEditorProps) {
       <QuestionsSideBar lessonId={lessonId} />
       {questionId && (
         <>
-          <QuestionEditor questionId={questionId} />
+          <Center>
+            <QuestionEditor questionId={questionId} />
+          </Center>
           <QuestionsPropertiesSideBar questionId={questionId} />
         </>
       )}
@@ -31,6 +33,16 @@ const Container = styled.div`
   flex-grow: 1;
   width: 100%;
   overflow: hidden;
+`;
+
+const Center = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: 100%;
+  flex: 1;
 `;
 
 export default QuizEditor;
