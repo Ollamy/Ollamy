@@ -50,7 +50,7 @@ function QuestionSideBarHeader({
         <Title>Quiz questions</Title>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <IconButton>
+            <IconButton variant={'soft'}>
               <PlusIcon />
             </IconButton>
           </DropdownMenu.Trigger>

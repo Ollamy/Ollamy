@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { QuestionModel } from 'services/api/out';
 import styled from 'styled-components';
+import checkDataActive from 'utils/activeData';
 
 interface QuestionRowProps {
   index: number;
@@ -17,40 +18,67 @@ function QuestionRow({ index, questionId, title }: QuestionRowProps) {
     setSearchParams({ questionId });
   }, [questionId, setSearchParams]);
 
+  useEffect(() => {
+    console.log(currentQuestionId, questionId);
+  }, [currentQuestionId, questionId]);
+
   return (
     <Container
       onClick={handleClick}
-      selected={currentQuestionId === questionId}
+      data-active={checkDataActive(currentQuestionId === questionId)}
     >
-      <RowIndexBadge>{index + 1}</RowIndexBadge>
-      <p>{title}</p>
+      <Index>{index + 1}</Index>
+      <Title>{title}</Title>
     </Container>
   );
 }
 
-interface RowProps {
-  selected: boolean;
-}
-
-const Container = styled.div<RowProps>`
+const Container = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
-  background: ${({ selected }) => (selected ? '#ebebeb' : 'white')};
-  cursor: pointer;
+
+  gap: 8px;
+
+  width: 100%;
+  min-height: 40px;
+  border-radius: 4px;
+
+  padding: 10px;
+  box-sizing: border-box;
+
+  &[data-active] {
+    color: white;
+    background-color: var(--orange-9);
+
+    &:hover {
+      background-color: var(--orange-9);
+    }
+  }
 
   &:hover {
-    background: #ebebeb;
+    background-color: var(--gray-3);
   }
+
+  cursor: pointer;
 `;
 
-const RowIndexBadge = styled.p`
-  background: #c86597;
-  width: 80px;
-  text-align: end;
+const Index = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 24px;
+  aspect-ratio: 1 / 1;
+
+  font-size: 12px;
   border-radius: 2px;
-  padding: 6px 8px;
+
+  background-color: rgba(0, 0, 0, 0.1);
+`;
+
+const Title = styled.p`
+  height: 100%;
+  margin: 0;
 `;
 
 export default QuestionRow;
