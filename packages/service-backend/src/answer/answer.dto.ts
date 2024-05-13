@@ -74,10 +74,10 @@ export class UpdateAnswerModel {
   @IsOptional()
   data?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, nullable: true, })
   @IsString()
   @IsOptional()
-  picture?: string;
+  picture?: string | null;
 }
 
 export class AnswerIdResponse {
@@ -90,6 +90,7 @@ export class UpdateAnswerOrderModel {
   @ApiProperty({
     description: 'The order after the current order',
     required: false,
+    nullable: true,
   })
   @IsString()
   @IsOptional()
@@ -98,6 +99,7 @@ export class UpdateAnswerOrderModel {
   @ApiProperty({
     description: 'The order before the current order',
     required: false,
+    nullable: true,
   })
   @IsString()
   @IsOptional()

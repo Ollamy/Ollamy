@@ -119,6 +119,20 @@ export class AnswerService {
     answerData: UpdateAnswerModel,
   ): Promise<AnswerIdResponse> {
     try {
+      if (answerData?.picture === null) {
+        const pictureId = await prisma.answer.findUnique({
+          where: {
+            id: answerId.id,
+          },
+          select: {
+            picture_id: true,
+          }
+        });
+
+        await PictureService.deletePicture(pictureId.picture_id);
+        answerData.picture = undefined;
+      }
+
       const answerDb: Answer = await prisma.answer.update({
         where: {
           id: answerId.id,

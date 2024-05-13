@@ -142,6 +142,20 @@ export class CourseService {
     courseData: UpdateCourseModel,
   ): Promise<CourseIdResponse> {
     try {
+      if (courseData?.picture === null) {
+        const pictureId = await prisma.course.findUnique({
+          where: {
+            id: CourseId,
+          },
+          select: {
+            picture_id: true,
+          }
+        });
+
+        await PictureService.deletePicture(pictureId.picture_id);
+        courseData.picture = undefined;
+      }
+
       const courseDb: Course = await prisma.course.update({
         where: {
           id: CourseId,

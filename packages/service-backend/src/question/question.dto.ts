@@ -145,12 +145,14 @@ export class LectureModel {
 export class betweenOrder {
   @ApiProperty({
     required: false,
+    nullable: true,
   })
   @IsOptional()
   before?: string | null;
 
   @ApiProperty({
     required: false,
+    nullable: true,
   })
   @IsOptional()
   after?: string | null;
@@ -238,9 +240,9 @@ export class UpdateQuestionModel {
   @IsOptional()
   typeQuestion?: QuestionType;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, nullable: true, })
   @IsOptional()
-  picture?: string;
+  picture?: string | null;
 
   @ApiProperty({ required: false, enum: QuestionDifficulty })
   @IsEnum(QuestionDifficulty)
@@ -265,6 +267,7 @@ export class UpdateQuestionOrderModel {
   @ApiProperty({
     description: 'The order after the current order',
     required: false,
+    nullable: true,
   })
   @IsString()
   @IsOptional()
@@ -273,6 +276,7 @@ export class UpdateQuestionOrderModel {
   @ApiProperty({
     description: 'The order before the current order',
     required: false,
+    nullable: true
   })
   @IsString()
   @IsOptional()
