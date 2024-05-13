@@ -77,7 +77,7 @@ export class UpdateAnswerModel {
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  picture?: string;
+  picture?: string | null;
 }
 
 export class AnswerIdResponse {

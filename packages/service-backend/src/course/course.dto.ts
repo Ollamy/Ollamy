@@ -85,7 +85,7 @@ export class UpdateCourseModel {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  picture?: string;
+  picture?: string | null;
 }
 
 export class CourseIdResponse {

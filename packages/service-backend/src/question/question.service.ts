@@ -140,6 +140,20 @@ export class QuestionService {
     questionData: UpdateQuestionModel,
   ): Promise<QuestionIdResponse> {
     try {
+      if (questionData?.picture === null) {
+        const pictureId = await prisma.question.findUnique({
+          where: {
+            id: QuestionId,
+          },
+          select: {
+            picture_id: true,
+          }
+        });
+
+        await PictureService.deletePicture(pictureId.picture_id);
+        questionData.picture = undefined;
+      }
+
       const questionDb: Question = await prisma.question.update({
         where: {
           id: QuestionId,

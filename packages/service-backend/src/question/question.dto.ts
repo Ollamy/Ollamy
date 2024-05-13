@@ -240,7 +240,7 @@ export class UpdateQuestionModel {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  picture?: string;
+  picture?: string | null;
 
   @ApiProperty({ required: false, enum: QuestionDifficulty })
   @IsEnum(QuestionDifficulty)
