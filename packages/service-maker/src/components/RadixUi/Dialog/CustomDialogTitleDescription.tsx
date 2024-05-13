@@ -1,10 +1,18 @@
-import { type FormEvent, useCallback, useState } from 'react';
+import {
+  ChangeEvent,
+  type FormEvent,
+  KeyboardEvent,
+  KeyboardEventHandler,
+  useCallback,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 
 import 'styles/dialog.css';
 
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { ChangeHandler } from 'react-hook-form';
 
 interface CustomDialogTitleDescriptionProps {
   dialogTitle: string;
@@ -24,17 +32,35 @@ function CustomDialogTitleDescription({
   dialogDescription,
 }: CustomDialogTitleDescriptionProps) {
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
-      const formData = new FormData(event.currentTarget as HTMLFormElement);
-      const title = formData.get('title') as string;
-      const description = formData.get('description') as string;
+      event.preventDefault();
 
       createFunction(title, description);
       setOpen(false);
     },
-    [createFunction],
+    [createFunction, description, title],
+  );
+
+  const handleTitleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log('ICI');
+      setTitle(event.target.value);
+    },
+    [],
+  );
+
+  const handleDescriptionChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement>) => {
+      event.preventDefault();
+      setDescription(event.target.value);
+    },
+    [],
   );
 
   const handleOpenChange = useCallback(() => {
@@ -66,6 +92,8 @@ function CustomDialogTitleDescription({
                 required
                 id={'title'}
                 name={'title'}
+                value={title}
+                onChange={handleTitleChange}
                 className={'DialogInput'}
                 placeholder={'Section title'}
               />
@@ -78,6 +106,8 @@ function CustomDialogTitleDescription({
                 required
                 id={'description'}
                 name={'description'}
+                value={description}
+                onChange={handleDescriptionChange}
                 className={'DialogTextarea'}
                 placeholder={'Section description…'}
               />
