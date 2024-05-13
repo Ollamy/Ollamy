@@ -100,6 +100,7 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
               onCancel={handleCancelRemoveLesson}
             />
           </CustomRemoveRow>
+          <DropdownMenu.Arrow className={'DropdownMenuArrow'} />
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

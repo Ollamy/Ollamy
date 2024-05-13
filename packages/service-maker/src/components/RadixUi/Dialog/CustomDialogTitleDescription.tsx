@@ -12,10 +12,12 @@ interface CustomDialogTitleDescriptionProps {
   actionButtonValue: string;
   TriggerButton: React.ReactNode;
   createFunction: (title: string, description: string) => void;
+  onCancel?: () => void;
 }
 
 function CustomDialogTitleDescription({
   dialogTitle,
+  onCancel,
   TriggerButton,
   createFunction,
   actionButtonValue,
@@ -25,8 +27,6 @@ function CustomDialogTitleDescription({
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
       const formData = new FormData(event.currentTarget as HTMLFormElement);
       const title = formData.get('title') as string;
       const description = formData.get('description') as string;
@@ -37,64 +37,67 @@ function CustomDialogTitleDescription({
     [createFunction],
   );
 
+  const handleOpenChange = useCallback(() => {
+    setOpen((prev) => {
+      if (prev && onCancel) {
+        onCancel();
+      }
+
+      return !prev;
+    });
+  }, [onCancel]);
+
   return (
-    <Container>
-      <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Trigger asChild>{TriggerButton}</Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className={'DialogOverlay'} />
-          <Dialog.Content className={'DialogContent'}>
-            <Dialog.Title className={'DialogTitle'}>
-              {dialogTitle}
-              {/* Edit profile */}
-            </Dialog.Title>
-            <Dialog.Description className={'DialogDescription'}>
-              {dialogDescription}
-            </Dialog.Description>
-            <CustomForm onSubmit={handleSubmit}>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'title'}>
-                  Title
-                </CustomLabel>
-                <CustomInput
-                  required
-                  id={'title'}
-                  name={'title'}
-                  className={'DialogInput'}
-                  placeholder={'Section title'}
-                />
-              </CustomFieldset>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'description'}>
-                  Description
-                </CustomLabel>
-                <TextArea
-                  required
-                  id={'description'}
-                  name={'description'}
-                  className={'DialogTextarea'}
-                  placeholder={'Section description…'}
-                />
-              </CustomFieldset>
-              <ButtonContainer>
-                <CustomButton type={'submit'} className={'DialogButton green'}>
-                  {actionButtonValue}
-                </CustomButton>
-              </ButtonContainer>
-            </CustomForm>
-            <Dialog.Close asChild>
-              <CustomButton className={'DialogIconButton'} aria-label={'Close'}>
-                <Cross2Icon />
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
+      <Dialog.Trigger asChild>{TriggerButton}</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className={'DialogOverlay'} />
+        <Dialog.Content className={'DialogContent'}>
+          <Dialog.Title className={'DialogTitle'}>{dialogTitle}</Dialog.Title>
+          <Dialog.Description className={'DialogDescription'}>
+            {dialogDescription}
+          </Dialog.Description>
+          <CustomForm onSubmit={handleSubmit}>
+            <CustomFieldset className={'DialogFieldset'}>
+              <CustomLabel className={'DialogLabel'} htmlFor={'title'}>
+                Title
+              </CustomLabel>
+              <CustomInput
+                required
+                id={'title'}
+                name={'title'}
+                className={'DialogInput'}
+                placeholder={'Section title'}
+              />
+            </CustomFieldset>
+            <CustomFieldset className={'DialogFieldset'}>
+              <CustomLabel className={'DialogLabel'} htmlFor={'description'}>
+                Description
+              </CustomLabel>
+              <TextArea
+                required
+                id={'description'}
+                name={'description'}
+                className={'DialogTextarea'}
+                placeholder={'Section description…'}
+              />
+            </CustomFieldset>
+            <ButtonContainer>
+              <CustomButton type={'submit'} className={'DialogButton green'}>
+                {actionButtonValue}
               </CustomButton>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </Container>
+            </ButtonContainer>
+          </CustomForm>
+          <Dialog.Close asChild>
+            <CustomButton className={'DialogIconButton'} aria-label={'Close'}>
+              <Cross2Icon />
+            </CustomButton>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
-
-const Container = styled.div``;
 
 const CustomForm = styled.form``;
 
