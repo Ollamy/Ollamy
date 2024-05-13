@@ -1,4 +1,4 @@
-import useExtractSectionId from 'hooks/useExtractSectionId';
+import { useSearchParams } from 'react-router-dom';
 import type { CustomCourseSectionModel } from 'pages/CourseManager/SidePanel/CourseSidePanel';
 import SectionRow from 'pages/CourseManager/SidePanel/List/Row/SectionRow';
 import styled from 'styled-components';
@@ -10,7 +10,8 @@ interface SectionListProps {
 }
 
 function SectionList({ data }: SectionListProps) {
-  const { sectionId } = useExtractSectionId();
+  const [searchParams] = useSearchParams();
+  const sectionId = searchParams.get('sectionId');
 
   return data && data.length ? (
     <Container>

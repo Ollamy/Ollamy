@@ -1,7 +1,9 @@
 import { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
 import styled from 'styled-components';
+import { Heading } from '@radix-ui/themes';
 
 interface DifficultyPickerProps {
+  questionId: string;
   maxDifficulty?: number;
   difficulty: Difficulty;
   onClick: (difficulty: Difficulty) => void;
@@ -14,22 +16,20 @@ const difficultyToNumber: Record<Difficulty, number> = {
 };
 
 function DifficultyPicker({
-  difficulty,
   onClick,
+  difficulty,
+  questionId,
   maxDifficulty = 3,
 }: DifficultyPickerProps) {
   return (
     <Container>
-      <h2>
-        <u>Difficulty</u>
-      </h2>
-
+      <Heading>Difficulty</Heading>
       <StarsContainer>
         {Array.from({ length: maxDifficulty }).map((_, index) => (
           <Star
             $isActive={index < difficultyToNumber[difficulty]}
-            src="/star.png"
-            key={index}
+            src={'/star.png'}
+            key={`${questionId}-${index}`}
             onClick={() =>
               onClick(
                 Object.entries(difficultyToNumber).find(
@@ -47,8 +47,10 @@ function DifficultyPicker({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+
   width: 100%;
+
+  gap: 20px;
 `;
 
 const StarsContainer = styled.div`

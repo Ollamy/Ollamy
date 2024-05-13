@@ -1,35 +1,62 @@
 import type { ReactElement } from 'react';
+import { useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import DifficultyPicker from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/DifficultyPicker/DifficultyPicker';
-import { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
+import type { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
+import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface QuestionsPropertiesSideBarProps {}
+import { Button } from '@radix-ui/themes';
 
-function QuestionsPropertiesSideBar({}: QuestionsPropertiesSideBarProps): ReactElement {
-  const questionData = {
-    id: '6d8d128f-1e75-4b2b-9dc6-8a6b3a1b83c5',
-    lessonId: 'string',
-    title: 'Hello',
-    description: 'Hello world....',
-    typeAnswer: 'TEXT',
-    typeQuestion: 'TEXT',
-    trustAnswerId: 'string',
-    pictureId: 'string',
-    difficulty: Difficulty.ADVANCED,
-    order: 'a0',
-    points: 1,
-  };
+interface QuestionsPropertiesSideBarProps {
+  questionId: string;
+}
 
-  const handleDifficultyClick = (difficulty: Difficulty) => {
-    console.log(`Updating to difficulty ${difficulty}`);
-  };
+function QuestionsPropertiesSideBar({
+  questionId,
+}: QuestionsPropertiesSideBarProps): ReactElement {
+  const [, setSearchParams] = useSearchParams();
+  const { data } = questionActions.useQuestion({ id: questionId });
+  const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
+  const { mutateAsync: removeQuestion } = questionActions.useRemoveQuestion();
+
+  const handleDifficultyClick = useCallback(
+    async (difficulty: Difficulty) => {
+      await updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          difficulty,
+        },
+      });
+    },
+    [questionId, updateQuestion],
+  );
+
+  const handleRemoveQuestion = useCallback(async () => {
+    await removeQuestion({ idQuestionModel: { id: questionId } }).then(() =>
+      setSearchParams('questionId', undefined),
+    );
+  }, [questionId, removeQuestion, setSearchParams]);
 
   return (
     <Container>
       <DifficultyPicker
-        difficulty={questionData.difficulty as Difficulty}
+        questionId={questionId}
         onClick={handleDifficultyClick}
+        difficulty={data?.difficulty as Difficulty}
+      />
+      <CustomAlertDialog
+        description={
+          'This action cannot be undone. This will permanently delete this question and remove your data from our servers.'
+        }
+        actionButtonValue={'Yes, delete question'}
+        TriggerButton={
+          <Button style={{ width: '100%' }} color={'red'} variant={'soft'}>
+            Remove question
+          </Button>
+        }
+        onAction={handleRemoveQuestion}
       />
     </Container>
   );
@@ -38,12 +65,14 @@ function QuestionsPropertiesSideBar({}: QuestionsPropertiesSideBarProps): ReactE
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   width: 260px;
+  min-width: 260px;
   padding: 16px;
+  box-sizing: border-box;
 
   background: #ffffff;
-  border: 1px solid #e7e7e7;
 `;
 
 export default QuestionsPropertiesSideBar;

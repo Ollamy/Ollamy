@@ -6,14 +6,12 @@ import {
   Get,
   Put,
   Param,
-  Req,
   Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiOkResponse,
-  ApiHeader,
   ApiParam,
   ApiTags,
   ApiQuery,
@@ -27,12 +25,10 @@ import {
   CourseIdResponse,
   GetCourseRequest,
   UserCourseHp,
-  CourseGenerateCode,
   Durationtype,
   ShareCourseCode,
-  CourseCodeModel,
 } from 'course/course.dto';
-import { CourseSectionModel, SectionModel } from 'section/section.dto';
+import { CourseSectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';

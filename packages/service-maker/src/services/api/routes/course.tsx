@@ -44,4 +44,5 @@ export const courseActions = {
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),
+  useGenerateShareCode: () => useMutation(CourseApi.generateCodeforCourse),
 };
