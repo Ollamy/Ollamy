@@ -79,10 +79,16 @@ function AddQuestion({ lessonId }: AddQuestionProps) {
               {Object.entries(answerTypeMap).map(([key, value]) => (
                 <CustomDialogTitleDescription<MoreOptionsType>
                   key={key}
-                  dialogTitle={'test'}
-                  dialogDescription={'nico'}
-                  actionButtonValue={'hello'}
-                  TriggerButton={<CustomButton>{value}</CustomButton>}
+                  dialogTitle={`Create a ${value} question`}
+                  dialogDescription={
+                    'Define the title, description and picture of your new question.'
+                  }
+                  actionButtonValue={'New question'}
+                  TriggerButton={
+                    <CustomButton color={'gray'} variant={'soft'}>
+                      {value}
+                    </CustomButton>
+                  }
                   createFunction={handleCreate}
                   moreOptions={{
                     typeAnswer: key as CreateQuestionModelTypeAnswerEnum,
