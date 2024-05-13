@@ -53,7 +53,6 @@ function QuizQuestionManager({ questionId }: QuizQuestionManagerProps) {
       </InputContainer>
       <Separator size={'4'} />
       <QuestionImageManager questionId={questionId} data={data} />
-      <Separator size={'4'} />
     </Container>
   );
 }
