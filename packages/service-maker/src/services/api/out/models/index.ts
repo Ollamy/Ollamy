@@ -1041,7 +1041,7 @@ export interface UpdateAnswerModel {
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    picture?: string;
+    picture?: string | null;
 }
 /**
  * 
@@ -1054,13 +1054,13 @@ export interface UpdateAnswerOrderModel {
      * @type {string}
      * @memberof UpdateAnswerOrderModel
      */
-    after?: string;
+    after?: string | null;
     /**
      * The order before the current order
      * @type {string}
      * @memberof UpdateAnswerOrderModel
      */
-    before?: string;
+    before?: string | null;
     /**
      * The origin of the answer
      * @type {string}
@@ -1097,7 +1097,7 @@ export interface UpdateCourseModel {
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    picture?: string;
+    picture?: string | null;
 }
 /**
  * 
@@ -1159,7 +1159,7 @@ export interface UpdateQuestionModel {
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    picture?: string;
+    picture?: string | null;
     /**
      * 
      * @type {string}
@@ -1225,13 +1225,13 @@ export interface UpdateQuestionOrderModel {
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
-    after?: string;
+    after?: string | null;
     /**
      * The order before the current order
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
-    before?: string;
+    before?: string | null;
     /**
      * The origin of the question
      * @type {string}

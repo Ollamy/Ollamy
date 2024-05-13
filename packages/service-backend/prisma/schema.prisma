@@ -114,7 +114,7 @@ model Course {
   owner_id    String         @db.Uuid
   title       String
   description String?
-  picture     Picture?       @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture     Picture?       @relation(references: [id], fields: [picture_id])
   picture_id  String?        @db.Uuid
 }
 
@@ -187,7 +187,7 @@ model Question {
   description     String?
   Answer          Answer[]
   trust_answer_id String?             @db.Uuid
-  picture         Picture?            @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture         Picture?            @relation(references: [id], fields: [picture_id])
   picture_id      String?             @db.Uuid
   points          Int?                @default(0)
   difficulty      QuestionDifficulty?
@@ -199,7 +199,7 @@ model Answer {
   Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
   question_id String   @db.Uuid
   data        String?
-  picture     Picture? @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture     Picture? @relation(references: [id], fields: [picture_id])
   picture_id  String?  @db.Uuid
   order       String
 }
