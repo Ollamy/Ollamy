@@ -21,7 +21,7 @@ const useUploadPicture = ({ droppedImage, updater }: UseUploadPictureProps) => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [droppedImage, updater]);
 
   return { onUploadPicture };
 };
