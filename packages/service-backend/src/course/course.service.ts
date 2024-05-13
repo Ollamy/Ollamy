@@ -238,7 +238,7 @@ export class CourseService {
       }
 
       await RedisCacheService.run('DEL', `sharecode:${code}`);
-      this.cronService.createHpCron(userId, courseId);
+      this.cronService.createHpCron(userId, joinCourseId);
       return { success: true } as CourseTrueResponse;
     } catch (error) {
       Logger.error(error);

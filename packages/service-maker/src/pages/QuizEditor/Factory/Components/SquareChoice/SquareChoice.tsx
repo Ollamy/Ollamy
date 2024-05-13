@@ -26,10 +26,13 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
 
   useEffect(() => {
     if (answerData && !answerData.length && !!handleCreateNewAnswer) {
-      handleCreateNewAnswer();
-      handleCreateNewAnswer();
-      handleCreateNewAnswer();
-      handleCreateNewAnswer();
+      handleCreateNewAnswer().then(() => {
+        handleCreateNewAnswer().then(() => {
+          handleCreateNewAnswer().then(() => {
+            handleCreateNewAnswer();
+          });
+        });
+      });
     }
   }, [answerData, handleCreateNewAnswer]);
 

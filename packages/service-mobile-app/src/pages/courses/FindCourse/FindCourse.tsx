@@ -42,6 +42,7 @@ function FindCourse() {
       <Button onPress={handleClick} isLoading={isJoinCourseLoading}>
         Join this course
       </Button>
+      <Toast />
     </VStack>
   );
 }
