@@ -6,7 +6,9 @@ import styled from 'styled-components';
 
 import * as Collapsible from '@radix-ui/react-collapsible';
 import {
+  CopyIcon,
   Cross2Icon,
+  EyeOpenIcon,
   InfoCircledIcon,
   RowSpacingIcon,
 } from '@radix-ui/react-icons';
@@ -28,15 +30,37 @@ function CourseManager({ courseId }: CourseManagerProps) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [shareCode, setShareCode] = useState<string | undefined>('');
 
   const { data } = courseActions.useCourse({ id: courseId });
   const { mutateAsync: removeCourse } = courseActions.useRemoveCourse();
+  const { mutateAsync: generateShareCode } =
+    courseActions.useGenerateShareCode();
 
   const handleRemoveCourse = useCallback(async () => {
     await removeCourse({ idCourseModel: { id: courseId } }).then(() => {
       navigate('/home');
     });
   }, [courseId, navigate, removeCourse]);
+
+  const handleGenerateCode = useCallback(async () => {
+    const result = await generateShareCode({
+      id: courseId,
+      duration: 'TWELVE_HOURS',
+    });
+
+    setShareCode(result.code);
+  }, [courseId, generateShareCode]);
+
+  const handleCopyShareLink = useCallback(async () => {
+    const temp = `ollamy-app://course/${courseId}/join`;
+    try {
+      await navigator.clipboard.writeText(temp);
+      console.log('Sharing URL copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  }, [courseId]);
 
   return (
     <Container>
@@ -78,6 +102,39 @@ function CourseManager({ courseId }: CourseManagerProps) {
                   <Badge color={'blue'} variant={'soft'} radius={'full'}>
                     {data?.numberOfUsers || 0}
                   </Badge>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item align={'center'}>
+                <DataList.Label minWidth={'88px'}>Link to join</DataList.Label>
+                <DataList.Value>
+                  <IconButton
+                    size={'1'}
+                    variant={'ghost'}
+                    color={'orange'}
+                    onClick={handleCopyShareLink}
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item align={'center'}>
+                <DataList.Label minWidth={'88px'}>Code to join</DataList.Label>
+                <DataList.Value>
+                  <IconButton
+                    size={'1'}
+                    color={'ruby'}
+                    variant={'ghost'}
+                    disabled={!!shareCode}
+                    onClick={handleGenerateCode}
+                  >
+                    {shareCode ? (
+                      <Badge style={{ fontFamily: 'monospace' }}>
+                        {shareCode}
+                      </Badge>
+                    ) : (
+                      <EyeOpenIcon />
+                    )}
+                  </IconButton>
                 </DataList.Value>
               </DataList.Item>
             </DataList.Root>
