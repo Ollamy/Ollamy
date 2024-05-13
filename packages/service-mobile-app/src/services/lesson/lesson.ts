@@ -14,6 +14,12 @@ export const lessonApi = api.injectEndpoints({
       }),
       providesTags: (result, _error, id) => (result ? [{ type: 'Lesson', id }] : [{ type: 'Lesson', id: 'LIST' }]),
     }),
+    joinLesson: build.mutation<unknown, string>({
+      query: (id) => ({
+        url: `/lesson/${id}/join`,
+        method: 'POST',
+      }),
+    }),
     getLessonQuestions: build.query<GetLessonQuestionsRequest[], { id: string }>({
       query: ({ id }) => ({
         url: `lesson/questions/${id}`,
@@ -21,7 +27,7 @@ export const lessonApi = api.injectEndpoints({
       }),
       providesTags: ['Lesson', 'Question'],
     }),
-    getLessonLecture: build.query<GetLessonLectureRequest, { id: string }>({
+    getLessonLecture: build.query<GetLessonLectureRequest[], { id: string }>({
       query: ({ id }) => ({
         url: `lesson/lecture/${id}`,
         method: 'GET',
@@ -31,4 +37,5 @@ export const lessonApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetLessonByIdQuery, useGetLessonQuestionsQuery, useGetLessonLectureQuery } = lessonApi;
+export const { useGetLessonByIdQuery, useJoinLessonMutation, useGetLessonQuestionsQuery, useGetLessonLectureQuery } =
+  lessonApi;

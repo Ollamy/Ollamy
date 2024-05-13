@@ -72,7 +72,8 @@ export class PictureService {
     pictureId: string | null,
   ): Promise<string | undefined> {
     if (!pictureId) {
-      return `${this.backendURL}/default-course.png`;
+      // return `${this.backendURL}/default-course.png`;
+      return undefined;
     }
     try {
       const pictureDb: Picture = await prisma.picture.findFirst({
@@ -87,6 +88,29 @@ export class PictureService {
       }
 
       return `${this.backendURL}/${pictureDb.filename}`;
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Picture not deleted !');
+    }
+  }
+
+  static async deletePicture(pictureId: string): Promise<void> {
+    try {
+      const pictureDb: Picture = await prisma.picture.findFirst({
+        where: {
+          id: pictureId,
+        },
+      });
+
+      if (!pictureDb) {
+        return;
+      }
+
+      await prisma.picture.delete({
+        where: {
+          id: pictureId,
+        },
+      });
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Picture not deleted !');

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const NavLeftContainer = styled.div`
   display: flex;
@@ -74,7 +74,7 @@ export const StatusBar = styled.div`
   position: relative;
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;

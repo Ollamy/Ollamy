@@ -13,9 +13,11 @@ import { AlertController } from './alert/alert.controller';
 import { PictureModule } from './picture/picture.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { LectureModule } from './lecture/lecture.module';
+import { AiModule } from './ai/ai.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
+import { BadgeModule } from './badge/badge.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { MobileAppModule } from './mobileApp/mobileApp.module';
     PictureModule,
     LectureModule,
     MobileAppModule,
+    BadgeModule,
+    AiModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',

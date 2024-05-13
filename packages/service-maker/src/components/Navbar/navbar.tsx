@@ -1,9 +1,6 @@
-import flag from "../../assets/🦆 icon _flag_.svg";
-import people from "../../assets/🦆 icon _people_.svg";
-import pie from "../../assets/🦆 icon _pie chart_.svg";
+import type { NavbarInterface } from 'components/Navbar/navbar.interface';
 
-import type { NavbarInterface } from "./navbar.interface";
-
+import { SubTitle } from 'components/Income/income.style';
 import {
   NavLeftContainer,
   NavLeftContainerNameProps,
@@ -12,9 +9,8 @@ import {
   NavOption,
   NewCourseButton,
   StatusBar,
-  SubTitle,
   Title,
-} from "./navbar.style";
+} from 'components/Navbar/navbar.style';
 
 export function Navbar({ user, profilPercentage }: NavbarInterface) {
   return (
@@ -30,15 +26,15 @@ export function Navbar({ user, profilPercentage }: NavbarInterface) {
       <NavLeftContainerNavigationProps>
         <Title>Navigation</Title>
         <NavOption>
-          <img src={pie} alt="" />
+          <img src={'/assets/🦆 icon _pie chart_.svg'} alt="" />
           <SubTitle>Courses</SubTitle>
         </NavOption>
         <NavOption>
-          <img src={people} alt="" />
+          <img src={'/assets/🦆 icon _people_.svg'} alt="" />
           <SubTitle>Subcriptions</SubTitle>
         </NavOption>
         <NavOption>
-          <img src={flag} alt="" />
+          <img src={'/assets/🦆 icon _flag_.svg'} alt="" />
           <SubTitle>Follower</SubTitle>
         </NavOption>
       </NavLeftContainerNavigationProps>

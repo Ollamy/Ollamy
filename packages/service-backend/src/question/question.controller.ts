@@ -1,15 +1,15 @@
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   CreateQuestionModel,
+  GetQuestionModel,
   IdQuestionModel,
   QuestionIdResponse,
-  QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
 } from 'question/question.dto';
 import { QuestionService } from 'question/question.service';
 
-import { AnswerModel } from '../answer/answer.dto';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 
 import {
   Body,
@@ -28,10 +28,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  validateAnswerModel,
+  ValidateAnswerModel,
   ValidateAnswerResponse,
 } from 'question/question.dto';
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
+import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Question')
@@ -52,12 +53,10 @@ export class QuestionController {
           lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Question data',
-          typeAnswer: AnswerType.TEXT,
+          typeAnswer: AnswerType.FREE_ANSWER,
           typeQuestion: QuestionType.TEXT,
-          picture: 'Question picture',
           difficulty: QuestionDifficulty.BEGINNER,
-          order: 0,
+          points: 0,
         } as CreateQuestionModel,
       },
     },
@@ -95,7 +94,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: QuestionModel,
+    type: GetQuestionModel,
   })
   @ApiParam({
     name: 'id',
@@ -104,7 +103,7 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getQuestion(@Param('id') id: string): Promise<QuestionModel> {
+  async getQuestion(@Param('id') id: string): Promise<GetQuestionModel> {
     return this.questionService.getQuestion(id);
   }
 
@@ -123,11 +122,14 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          lessonId: 'id',
+          lessonId: 'Lesson Id',
           title: 'Question Title',
           description: 'Question decsription',
-          data: 'Data of the question',
-          trustAnswerId: 'id',
+          typeAnswer: AnswerType.MULTIPLE_CHOICE,
+          typeQuestion: QuestionType.TEXT,
+          trustAnswerId: 'TrustAnswer Id',
+          pictureId: 'Question picture',
+          difficulty: QuestionDifficulty.BEGINNER,
         } as UpdateQuestionModel,
       },
     },
@@ -151,8 +153,9 @@ export class QuestionController {
     examples: {
       template: {
         value: {
-          origin: 'Origin id',
-          dest: 'Target id',
+          before: 'order id',
+          after: 'order id',
+          origin: 'question id',
         } as UpdateQuestionOrderModel,
       },
     },
@@ -167,7 +170,7 @@ export class QuestionController {
 
   @ApiOkResponse({
     description: 'question content response',
-    type: QuestionModel,
+    type: [QuestionAnswerModel],
   })
   @ApiParam({
     name: 'id',
@@ -176,7 +179,9 @@ export class QuestionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/answers')
-  async getQuestionAnswers(@Param('id') id: string): Promise<AnswerModel[]> {
+  async getQuestionAnswers(
+    @Param('id') id: string,
+  ): Promise<QuestionAnswerModel[]> {
     return this.questionService.getQuestionAnswers(id);
   }
 
@@ -187,8 +192,9 @@ export class QuestionController {
   @LoggedMiddleware(true)
   @Post('/validate')
   async validateAnswer(
-    @Body() body: validateAnswerModel,
+    @Body() body: ValidateAnswerModel,
+    @OllContext() ctx: any,
   ): Promise<ValidateAnswerResponse> {
-    return this.questionService.validateAnswer(body);
+    return this.questionService.validateAnswer(body, ctx);
   }
 }

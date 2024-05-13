@@ -1,6 +1,4 @@
-import react from "../../assets/react.svg";
-
-import type { CarrouselMakerInterface } from "./carrousel.interface";
+import type { CarrouselMakerInterface } from 'components/Carrousel/carrousel.interface';
 
 import {
   BaseDiv,
@@ -11,26 +9,26 @@ import {
   CourseCard,
   SubTitle,
   Title,
-} from "./carrousel.style";
+} from 'components/Carrousel/carrousel.style';
 
 export function CarrouselMaker({
   title,
   image,
   startPoint = 0,
-}: CarrouselMakerInterface): React.ReactNode {
+}: CarrouselMakerInterface) {
   return (
     <ContainerHeight>
-      <ContainerWidth $width="1040px">
+      <ContainerWidth width="1040px">
         <ContainerPlacement>
           <Title>{title}</Title>
           <ContainerSpaceAroundElement>
-            <BaseDiv>{"<"}</BaseDiv>
+            <BaseDiv>{'<'}</BaseDiv>
             <CourseCard>
               <img
                 src={
                   image[startPoint].imagePathArray !== undefined
                     ? image[startPoint].imagePathArray
-                    : react
+                    : '/assets/react.svg'
                 }
                 alt=""
                 height="100px"
@@ -42,7 +40,7 @@ export function CarrouselMaker({
                 src={
                   image[startPoint].imagePathArray !== undefined
                     ? image[startPoint + 1].imagePathArray
-                    : react
+                    : '/assets/react.svg'
                 }
                 alt=""
                 height="100px"
@@ -54,14 +52,14 @@ export function CarrouselMaker({
                 src={
                   image[startPoint].imagePathArray !== undefined
                     ? image[startPoint + 2].imagePathArray
-                    : react
+                    : '/assets/react.svg'
                 }
                 alt=""
                 height="100px"
               />
               <SubTitle>{image[startPoint + 2].subtitle}</SubTitle>
             </CourseCard>
-            <BaseDiv>{">"}</BaseDiv>
+            <BaseDiv>{'>'}</BaseDiv>
           </ContainerSpaceAroundElement>
         </ContainerPlacement>
       </ContainerWidth>

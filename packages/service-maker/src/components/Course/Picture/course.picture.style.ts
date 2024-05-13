@@ -1,14 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RightContainerSetting = styled.div<{
-  $width: string;
+  width: string;
   $height: string;
 }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: ${(props) => props.$width};
+  width: ${(props) => props.width};
   border-radius: 8px;
   height: ${(props) => props.$height};
   margin: 24px;

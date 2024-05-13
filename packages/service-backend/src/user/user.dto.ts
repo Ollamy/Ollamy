@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsEmail,
   IsOptional,
@@ -9,142 +9,174 @@ import {
   IsArray,
   ValidateNested,
   IsUrl,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsEnum,
+  IsNumber,
 } from 'class-validator';
 
-export class UserModel {
-  @ApiProperty()
+export class SuccessBody {
+  @ApiProperty({ description: 'Result of the request' })
+  @IsBoolean()
+  success: boolean;
+}
+
+abstract class BaseUser {
+  @ApiProperty({ description: 'The first name of the user' })
+  @IsString()
+  firstname: string;
+
+  @ApiProperty({ description: 'The last name of the user' })
+  @IsString()
+  lastname: string;
+
+  @ApiProperty({ description: 'The email address of the user' })
+  @IsEmail()
+  email: string;
+}
+
+export class UserModel extends BaseUser {
+  @ApiProperty({ description: 'The unique identifier of the user' })
   @IsUUID()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The password of the user' })
   @IsString()
-  firstname: string;
-
-  @ApiProperty()
-  @IsString()
-  lastname: string;
-
-  @ApiProperty()
-  @IsEmail()
-  email: string;
-
-  @ApiProperty()
-  @IsString()
+  // @MinLength(8)
+  // @MaxLength(50)
+  // @Matches(/^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z]).{8,}$/, {
+  //   message:
+  //     'Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters',
+  // })
   password: string;
 }
 
-export class CreateUserModel {
-  @ApiProperty()
-  @IsString()
-  firstname: string;
-
-  @ApiProperty()
-  @IsString()
-  lastname: string;
-
-  @ApiProperty()
-  @IsEmail()
-  email: string;
-
+export class CreateUserModel extends BaseUser {
   @ApiProperty({
     description:
       'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
   })
   @IsString()
+  // @MinLength(8)
+  // @MaxLength(50)
+  // @Matches(/^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z]).{8,}$/, {
+  //   message:
+  //     'Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters',
+  // })
   password: string;
 }
 
 export class LoginUserModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The email address of the user' })
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The password of the user' })
   @IsString()
   password: string;
 }
 
 export class UpdateUserModel {
-  @ApiProperty()
+  @ApiProperty({ description: 'The first name of the user', required: false })
+  @IsString()
   @IsOptional()
   firstname?: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The last name of the user', required: false })
+  @IsString()
   @IsOptional()
   lastname?: string;
 
-  @ApiProperty()
-  @IsOptional()
+  @ApiProperty({
+    description: 'The email address of the user',
+    required: false,
+  })
   @IsEmail()
+  @IsOptional()
   email?: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({ description: 'The password of the user', required: false })
   @IsOptional()
+  @IsString()
+  // @MinLength(8)
+  // @MaxLength(50)
+  // @Matches(/^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z]).{8,}$/, {
+  //   message:
+  //     'Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters',
+  // })
   password?: string;
 }
 
-export class GetUserModel {
-  @ApiProperty()
-  @IsString()
-  firstname: string;
+export class GetUserModel extends BaseUser { }
 
-  @ApiProperty()
-  @IsString()
-  lastname: string;
+export class GetUserScoreModel {
+  @ApiProperty({ description: 'The unique identifier of the user' })
+  @IsUUID()
+  userId: string;
 
-  @ApiProperty()
-  @IsEmail()
-  email: string;
+  @ApiProperty({ description: 'The score of the user' })
+  @IsNumber()
+  score: number;
 }
 
 export class UserIdResponse {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the user' })
   @IsUUID()
   id: string;
 }
 
 export class UserTrueResponse {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Indicates if the operation was successful or not',
+  })
   @IsBoolean()
   success: boolean;
 }
 
-
 export class UserCourses {
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the course' })
   @IsUUID()
-  id: string
+  id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The title of the course' })
   @IsString()
-  title: string
+  title: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The description of the course' })
   @IsString()
-  description: string
+  description: string;
 
-  @ApiProperty()
-  @IsUrl()
-  picture: string
+  @ApiProperty({
+    description: 'The URL of the picture representing the course',
+  })
+  @IsUUID()
+  pictureId: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Indicates if the user owns this course' })
   @IsBoolean()
-  owner: boolean
+  owner: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the last lesson' })
   @IsUUID()
-  last_lesson_id: string
+  lastLessonId: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'The unique identifier of the last section' })
   @IsUUID()
-  last_section_id: string
+  lastSectionId: string;
+
+  @ApiProperty({ description: 'The number of users enrolled in the course' })
+  @IsNumber()
+  numberOfUsers: number;
 }
 
 export class UserCoursesResponse {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'List of courses associated with the user',
+    type: [UserCourses],
+  })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => UserCourses)
-  courses: UserCourses[]
+  courses: UserCourses[];
 }

@@ -1,10 +1,17 @@
-import { UseQueryOptions, useMutation, useQuery } from "react-query";
+import type { UseQueryOptions } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import { queryClient } from 'main';
+import type {
+  GetLessonQuestionsRequest,
+  GetLessonRequest,
+  LessonModel,
+  QuestionModel,
+} from 'services/api/out';
+import { LessonApi } from 'services/api/out';
+import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
 
-import { queryClient } from "../../../main";
-import { GetLessonRequest, LessonApi, LessonModel } from "../out";
-import { GET_SECTION_LESSONS_KEY } from "./section";
-
-const GET_LESSON_KEY = "getLesson";
+const GET_LESSON_KEY = 'getLessonKey';
+export const GET_LESSON_QUESTIONS_KEY = 'getLessonQuestionKey';
 
 export const lessonActions = {
   useLesson: (
@@ -16,23 +23,24 @@ export const lessonActions = {
       queryFn: () => LessonApi.getLesson(requestParameters),
       ...config,
     }),
+  useGetLessonQuestions: (
+    requestParameters: GetLessonQuestionsRequest,
+    config?: UseQueryOptions<Array<QuestionModel>>,
+  ) =>
+    useQuery({
+      queryKey: [GET_LESSON_QUESTIONS_KEY, requestParameters.id],
+      queryFn: () => LessonApi.getLessonQuestions(requestParameters),
+      ...config,
+    }),
   useCreateLesson: () =>
     useMutation(LessonApi.registerLesson, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
     }),
-  useUpdateLesson: () =>
-    useMutation(LessonApi.updateLesson, {
+  useRemoveLesson: () =>
+    useMutation(LessonApi.deleteLesson, {
       onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
-        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
-      },
-    }),
-  useGetQuestion: () =>
-    useMutation(LessonApi.getLessonQuestions, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(GET_LESSON_KEY);
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
     }),

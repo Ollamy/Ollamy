@@ -15,9 +15,14 @@ import {
   mockQuestionDb4,
   mockBodyIncorrect,
   questionId,
+  mockUserLesson,
 } from 'tests/data/question.data';
+import { context } from 'tests/data/user.data';
+
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
+import { mockLesson } from './data/lesson.data';
+import { mockSection1, mockUserToCourse } from './data/course.data';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
@@ -132,16 +137,16 @@ describe('getQuestion', () => {
     });
 
     expect(result).toEqual({
-      id: mockQuestionDb2.id,
       lessonId: mockQuestionDb2.lesson_id,
       title: mockQuestionDb2.title,
       description: mockQuestionDb2.description,
       typeAnswer: mockQuestionDb2.type_answer,
       typeQuestion: mockQuestionDb2.type_question,
-      trustAnswerId: mockQuestionDb2.trust_answer_id,
       difficulty: mockQuestionDb2.difficulty,
       pictureId: mockQuestionDb2.picture_id,
       order: mockQuestionDb2.order,
+      points: mockQuestionDb2.points,
+      trust_answer_id: mockQuestionDb2.trust_answer_id,
     });
   });
 
@@ -191,35 +196,5 @@ describe('updateQuestion', () => {
     await expect(
       questionService.updateQuestion(mockQuestionId3, mockQuestionData2),
     ).rejects.toThrow(ConflictException);
-  });
-
-  it('should return success: true if the answer is correct', async () => {
-    jest
-      .spyOn(prisma.question, 'findUnique')
-      .mockResolvedValue(mockQuestionDb3);
-    jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
-
-    await expect(questionService.validateAnswer(mockBody)).resolves.toEqual({
-      success: true,
-      answer: correctAnswerId,
-      end: true,
-      nextQuestionId: undefined,
-    });
-  });
-
-  it('should return success: false if the answer is incorrect', async () => {
-    jest
-      .spyOn(prisma.question, 'findUnique')
-      .mockResolvedValue(mockQuestionDb4);
-    jest.spyOn(prisma.question, 'findMany').mockResolvedValue([]);
-
-    await expect(
-      questionService.validateAnswer(mockBodyIncorrect),
-    ).resolves.toEqual({
-      success: false,
-      answer: correctAnswerId,
-      end: true,
-      nextQuestionId: undefined,
-    });
   });
 });

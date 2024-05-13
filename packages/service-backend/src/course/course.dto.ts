@@ -1,13 +1,17 @@
 // eslint-disable-next-line max-classes-per-file
-import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CourseModel {
-  @ApiProperty()
-  @IsUUID()
-  id: string;
-
   @ApiProperty()
   @IsUUID()
   ownerId: string;
@@ -26,15 +30,19 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   lastLessonId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   lastSectionId?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  numberOfUsers: number;
 }
 
 export class CreateCourseModel {
@@ -46,8 +54,9 @@ export class CreateCourseModel {
   @IsString()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   picture?: string;
 }
 
@@ -58,24 +67,25 @@ export class IdCourseModel {
 }
 
 export class UpdateCourseModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  ownerId: string;
+  ownerId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false, nullable: true, })
+  @IsOptional()
   @IsString()
-  picture: string;
+  picture?: string | null;
 }
 
 export class CourseIdResponse {
@@ -88,4 +98,53 @@ export class CourseTrueResponse {
   @ApiProperty()
   @IsBoolean()
   success: boolean;
+}
+
+export class UserCourseHp {
+  @ApiProperty()
+  @IsNumber()
+  hp: number;
+
+  @ApiProperty()
+  @IsString()
+  timer: string;
+}
+
+export enum Durationtype {
+  FIFTEEN_MINUTES = 'FIFTEEN_MINUTES',
+  ONE_HOUR = 'ONE_HOUR',
+  TWELVE_HOURS = 'TWELVE_HOURS',
+  ONE_DAY = 'ONE_DAY',
+  ONE_WEEK = 'ONE_WEEK',
+}
+
+export const ExpirationMap: Record<Durationtype, number> = {
+  [Durationtype.FIFTEEN_MINUTES]: 15 * 60,
+  [Durationtype.ONE_HOUR]: 60 * 60,
+  [Durationtype.TWELVE_HOURS]: 12 * 60 * 60,
+  [Durationtype.ONE_DAY]: 24 * 60 * 60,
+  [Durationtype.ONE_WEEK]: 7 * 24 * 60 * 60,
+};
+
+export class CourseGenerateCode {
+  @ApiProperty({ description: `Code's expiration time`, enum: Durationtype })
+  @IsEnum(Durationtype)
+  duration: Durationtype;
+}
+
+export class ShareCourseCode {
+  @ApiProperty({ description: `Course's sharing code` })
+  @IsString()
+  code: string;
+
+  @ApiProperty({ description: `Code's date of expiration`, type: Date})
+  @IsDate()
+  expiresAt: Date;
+}
+
+export class CourseCodeModel {
+  @ApiProperty({ description: `Course's sharing code`, required: false })
+  @IsString()
+  @IsOptional()
+  code?: string;
 }

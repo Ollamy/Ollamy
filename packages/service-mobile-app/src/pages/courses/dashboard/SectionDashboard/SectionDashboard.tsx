@@ -1,19 +1,15 @@
 import { ArrowBackIcon, Button, ScrollView, Text, VStack } from 'native-base';
 import { useMemo } from 'react';
+import type { ToastShowParams } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
-import { type Lesson, LessonStatus } from 'src/pages/courses/types';
+import type { Lesson } from 'src/pages/courses/types';
+import { LessonStatus } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
-import type { LessonResponse } from 'src/services/lesson/lesson.dto';
+import { useJoinLessonMutation } from 'src/services/lesson/lesson';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
-
-function getLastLessonIndex(sectionsData: LessonResponse[], lastLessonId: string | undefined) {
-  if (!lastLessonId) return 0;
-  const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastLessonId);
-
-  return lastSectionIndex !== -1 ? lastSectionIndex : 0;
-}
 
 function SectionDashboard() {
   const { id: courseId, sectionId } = useParams();
@@ -21,23 +17,41 @@ function SectionDashboard() {
   const { data: lessonsData, isFetching: isLessonsDataFetching } = useGetSectionLessonsQuery(sectionId!);
   const { data: sectionData, isFetching: isSectionDataFetching } = useGetSectionByIdQuery(sectionId!);
   const { data: courseData, isFetching: isCourseDataFetching } = useGetCourseByIdQuery(courseId!);
+  const [joinLesson] = useJoinLessonMutation();
+
   const navigate = useNavigate();
 
   const lessons = useMemo<Lesson[]>(() => {
     if (!lessonsData) return [];
-    const lastLessonIndex = getLastLessonIndex(lessonsData, courseData?.lastLessonId);
+
+    const lastCompletedLesson = lessonsData.findLastIndex((e) => e.status === LessonStatus.COMPLETED);
 
     return lessonsData.map((s, i) => {
-      if (i > lastLessonIndex) return { ...s, status: LessonStatus.NOT_STARTED };
-      if (i === lastLessonIndex) return { ...s, status: LessonStatus.IN_PROGRESS };
-      return { ...s, status: LessonStatus.NOT_STARTED };
+      if (i === lastCompletedLesson + 1) return { ...s, status: LessonStatus.IN_PROGRESS };
+      if (i > lastCompletedLesson) return { ...s, status: LessonStatus.NOT_STARTED };
+      return { ...s, status: LessonStatus.COMPLETED };
     });
-  }, [courseData, lessonsData]);
+  }, [lessonsData]);
+
+  const showToast = (body: ToastShowParams): void => Toast.show(body);
 
   if (isLessonsDataFetching || isCourseDataFetching || isSectionDataFetching) return <Text>Loading...</Text>;
   if (!lessonsData) return <Text>No lessons found.</Text>;
   if (!courseData) return <Text>No course found.</Text>;
   if (!sectionData) return <Text>Section not found.</Text>;
+
+  const handleJoinLesson = async (id: string) => {
+    try {
+      await joinLesson(id).unwrap();
+      navigate(`lesson/${id}`);
+    } catch (error) {
+      showToast({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occured. Please try again',
+      });
+    }
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -55,12 +69,7 @@ function SectionDashboard() {
 
         <VStack w="full">
           {lessons.map((lesson, index) => (
-            <LessonListItem
-              lesson={lesson}
-              index={index}
-              key={lesson.id}
-              onPress={() => navigate(`lesson/${lesson.id}`)}
-            />
+            <LessonListItem lesson={lesson} index={index} key={lesson.id} onPress={() => handleJoinLesson(lesson.id)} />
           ))}
         </VStack>
       </VStack>

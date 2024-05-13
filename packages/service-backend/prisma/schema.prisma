@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto]
 }
 
 enum Role {
@@ -55,12 +57,14 @@ model User {
   Message         Message[]
   UserDiscussions UserDiscussions[]
   UsertoLesson    UsertoLesson[]
+  UsertoScore     UsertoScore[]
+  UserBadges      UserBadges[]
 }
 
 model UsertoCourse {
-  id      String  @id @default(uuid()) @db.Uuid
-  course  Course  @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user    User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  id      String   @id @default(uuid()) @db.Uuid
+  course  Course   @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
   lesson  Lesson?  @relation(references: [id], fields: [last_lesson_id])
   section Section? @relation(references: [id], fields: [last_section_id])
 
@@ -71,6 +75,8 @@ model UsertoCourse {
   permission_lesson  PermissionLesson[]  @default([])
   course_id          String              @db.Uuid
   user_id            String              @db.Uuid
+  score              Int?                @default(0)
+  hp                 Int?                @default(20)
 
   last_section_id String? @db.Uuid
   last_lesson_id  String? @db.Uuid
@@ -90,7 +96,7 @@ model UsertoLesson {
   user              User         @relation(references: [id], fields: [user_id], onDelete: Cascade)
   lesson_id         String       @db.Uuid
   user_id           String       @db.Uuid
-  points            Int?
+  score             Int?         @default(0)
   complete_lecture  Boolean      @default(false)
   complete_question Boolean      @default(false)
   status            LessonStatus @default(NOT_STARTED)
@@ -101,14 +107,14 @@ model UsertoLesson {
 }
 
 model Course {
-  id              String         @id @default(uuid()) @db.Uuid
-  section         Section[]
-  userlist        UsertoCourse[]
-  user            User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
-  owner_id        String         @db.Uuid
-  title           String
+  id          String         @id @default(uuid()) @db.Uuid
+  section     Section[]
+  userlist    UsertoCourse[]
+  user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id    String         @db.Uuid
+  title       String
   description String?
-  picture     Picture?       @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture     Picture?       @relation(references: [id], fields: [picture_id])
   picture_id  String?        @db.Uuid
 }
 
@@ -135,9 +141,9 @@ model Lesson {
 }
 
 enum AnswerType {
-  TEXT
-  QUIZ
-  OTHER
+  FREE_ANSWER
+  MULTIPLE_CHOICE
+  SQUARE_CHOICE
 }
 
 enum QuestionType {
@@ -162,6 +168,15 @@ model Lecture {
   data      String
 }
 
+model UsertoScore {
+  id      String @id @default(uuid()) @db.Uuid
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id String @db.Uuid
+  score   Int?   @default(0)
+
+  @@unique([user_id])
+}
+
 model Question {
   id              String              @id @default(uuid()) @db.Uuid
   Lesson          Lesson              @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
@@ -172,11 +187,11 @@ model Question {
   description     String?
   Answer          Answer[]
   trust_answer_id String?             @db.Uuid
-  picture         Picture?            @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture         Picture?            @relation(references: [id], fields: [picture_id])
   picture_id      String?             @db.Uuid
-  points          Int?
+  points          Int?                @default(0)
   difficulty      QuestionDifficulty?
-  order           Int
+  order           String
 }
 
 model Answer {
@@ -184,8 +199,9 @@ model Answer {
   Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
   question_id String   @db.Uuid
   data        String?
-  picture     Picture? @relation(references: [id], fields: [picture_id], onDelete: Cascade)
+  picture     Picture? @relation(references: [id], fields: [picture_id])
   picture_id  String?  @db.Uuid
+  order       String
 }
 
 model Discussion {
@@ -203,16 +219,16 @@ model Message {
   created_at    DateTime    @default(now())
   updated_at    DateTime    @updatedAt
   discussion_id String      @db.Uuid
-  Discussion    Discussion? @relation(fields: [discussion_id], references: [id])
+  Discussion    Discussion? @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
   owner_id      String      @db.Uuid
-  user          User        @relation(references: [id], fields: [owner_id])
+  user          User        @relation(references: [id], fields: [owner_id], onDelete: Cascade)
   content       String
 }
 
 model UserDiscussions {
-  user          User       @relation(fields: [user_id], references: [id])
+  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String     @db.Uuid
-  discussion    Discussion @relation(fields: [discussion_id], references: [id])
+  discussion    Discussion @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
   discussion_id String     @db.Uuid
 
   @@id([user_id, discussion_id])
@@ -220,8 +236,29 @@ model UserDiscussions {
 
 model Picture {
   id       String     @id @default(uuid()) @db.Uuid
-  filename  String
+  filename String
   Course   Course[]
   Question Question[]
   Answer   Answer[]
+}
+
+model Badge {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String
+  image_name  String
+  color       String
+  order       Int
+
+  User UserBadges[]
+}
+
+model UserBadges {
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @db.Uuid
+  badge      Badge    @relation(fields: [badge_id], references: [id], onDelete: Cascade)
+  badge_id   String   @db.Uuid
+  created_at DateTime @default(now())
+
+  @@id([user_id, badge_id])
 }

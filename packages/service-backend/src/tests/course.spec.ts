@@ -18,13 +18,15 @@ import {
   mockUpdateCourseData,
   mockUserToCourse,
 } from 'tests/data/course.data';
+import { TasksService } from '../cron/cron.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 describe('postCourse', () => {
   let courseService: CourseService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -89,7 +91,7 @@ describe('deleteCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -150,7 +152,7 @@ describe('getCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -164,6 +166,7 @@ describe('getCourse', () => {
       jest
         .spyOn(prisma.usertoCourse, 'findFirst')
         .mockResolvedValue(mockUserToCourse);
+      jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(0);
     }
 
     {
@@ -178,13 +181,13 @@ describe('getCourse', () => {
       });
 
       const expectedCourseModel: GetCourseRequest = {
-        id: mockCourseDb.id,
         ownerId: mockCourseDb.owner_id,
         picture: mockPictureDb.filename,
         title: mockCourseDb.title,
         description: mockCourseDb.description,
         lastLessonId: mockLastLessonDb.lesson_id,
         lastSectionId: mockLastSectionDb.section_id,
+        numberOfUsers: 0,
       };
       expect(result.picture).toContain('http');
       expect(result.picture).toContain(mockPictureDb.filename);
@@ -222,7 +225,7 @@ describe('updateCourse', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);
@@ -247,6 +250,7 @@ describe('updateCourse', () => {
           id: courseId,
         },
         data: {
+          owner_id: mockUpdateCourseData.ownerId,
           title: mockUpdateCourseData.title,
           description: mockUpdateCourseData.description,
           picture_id: mockPictureDb.id,
@@ -290,7 +294,7 @@ describe('getCourseSections', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CourseService],
+      providers: [CourseService, TasksService, SchedulerRegistry],
     }).compile();
 
     courseService = moduleRef.get<CourseService>(CourseService);

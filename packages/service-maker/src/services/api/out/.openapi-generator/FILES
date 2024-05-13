@@ -1,4 +1,6 @@
+apis/AiApi.ts
 apis/AnswerApi.ts
+apis/BadgeApi.ts
 apis/CourseApi.ts
 apis/DefaultApi.ts
 apis/LectureApi.ts

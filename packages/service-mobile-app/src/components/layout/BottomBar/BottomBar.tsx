@@ -10,9 +10,6 @@ import { Button, HStack, Image } from 'native-base';
 import { useNavigate } from 'react-router-native';
 
 function BottomBar() {
-  const handlePress = () => {
-    console.log('Button Pressed');
-  };
   const navigate = useNavigate();
 
   return (
@@ -30,13 +27,13 @@ function BottomBar() {
       <Button variant="ghost" onPress={() => navigate('/home')}>
         <Image size={35} source={PROGRESS} alt="progress" />
       </Button>
-      <Button variant="ghost" onPress={() => navigate('/course/join/fd73de44-a783-4f31-82f9-c07b60dbf73f')}>
+      <Button variant="ghost" onPress={() => navigate('/course/52d95ae7-c83f-4226-9d3d-2b00f1c6043d/join')}>
         <Image size={35} source={EVENT} alt="event" />
       </Button>
       <Button variant="ghost" onPress={() => navigate('/chat')}>
         <Image size={35} source={COMMUNITY} alt="community" />
       </Button>
-      <Button variant="ghost" onPress={handlePress}>
+      <Button variant="ghost">
         <Image size={35} source={MEDAL} alt="medal" />
       </Button>
     </HStack>

@@ -32,12 +32,12 @@ export class DiscussionModel {
 }
 
 export class CreateDiscussionModel {
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   @IsOptional()
   title?: string;
 
-  @ApiProperty()
+  @ApiProperty({required: false})
   @IsString()
   @IsOptional()
   imageUrl?: string;

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { styled } from "styled-components";
+import React, { useState } from 'react';
+import { styled } from 'styled-components';
 
 interface DropdownProps {
   options: { id: string; label: string }[];
@@ -7,7 +7,7 @@ interface DropdownProps {
   setSelectedOption: (v: string | null) => void;
 }
 
-const Dropdown = (props: DropdownProps) => {
+function Dropdown(props: DropdownProps) {
   const { options, selectedOption, setSelectedOption } = props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,8 +21,8 @@ const Dropdown = (props: DropdownProps) => {
       <DropdownButton onClick={() => setIsOpen(!isOpen)}>
         {selectedOption
           ? options.find((v) => v.id === selectedOption)?.label
-          : "Select"}{" "}
-        <Chevron>{isOpen ? "▼" : "▲"}</Chevron>
+          : 'Select'}{' '}
+        <Chevron>{isOpen ? '▼' : '▲'}</Chevron>
       </DropdownButton>
       <DropdownContent isopen={isOpen}>
         {options.map((option, index) => (
@@ -36,7 +36,7 @@ const Dropdown = (props: DropdownProps) => {
       </DropdownContent>
     </DropdownContainer>
   );
-};
+}
 
 const DropdownContainer = styled.div`
   position: relative;
@@ -61,7 +61,7 @@ const DropdownButton = styled.button`
 `;
 
 const DropdownContent = styled.div<{ isopen: boolean }>`
-  display: ${(props) => (props.isopen ? "block" : "none")};
+  display: ${(props) => (props.isopen ? 'block' : 'none')};
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;

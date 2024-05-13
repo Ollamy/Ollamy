@@ -1,10 +1,11 @@
-import { answerActions } from "./routes/answer";
-import { courseActions } from "./routes/course";
-import { lessonActions } from "./routes/lesson";
-import { mobileAppActions } from "./routes/mobileApp";
-import { questionActions } from "./routes/question";
-import { sectionActions } from "./routes/section";
-import { userActions } from "./routes/user";
+import { answerActions } from 'services/api/routes/answer';
+import { courseActions } from 'services/api/routes/course';
+import { lessonActions } from 'services/api/routes/lesson';
+import { questionActions } from 'services/api/routes/question';
+import { sectionActions } from 'services/api/routes/section';
+import { userActions } from 'services/api/routes/user';
+
+import { mobileAppActions } from './routes/mobileApp';
 
 const api = {
   user: userActions,

@@ -1,4 +1,4 @@
-import type { CouseSettingInterface } from "../Course/Setting/course.setting.interface";
+import type { CouseSettingInterface } from 'components/Course/Setting/course.setting.interface';
 
 import {
   ContainerCenteredTitle,
@@ -7,52 +7,35 @@ import {
   RightContainerSetting,
   SubTitle,
   Title,
-} from "./profile.style";
+} from 'components/profile/profile.style';
 
 export function ProfileInfo({
   title,
   subTitleCourse,
   subTitleInfo,
   subTitlePrice,
-  userProfile,
 }: CouseSettingInterface) {
   return (
-    <RightContainerSetting $width="100%">
+    <RightContainerSetting width={'100%'}>
       <Title>{title}</Title>
       <ContainerSpaceBetween>
         <ContainerCenteredTitle>
           <SubTitle>{subTitleCourse}</SubTitle>
-          <InputCourse
-            $width="350px"
-            defaultValue={userProfile?.firstname}
-            disabled
-          />
+          <InputCourse width={'350px'} disabled />
         </ContainerCenteredTitle>
         <ContainerCenteredTitle>
           <SubTitle>{subTitlePrice}</SubTitle>
-          <InputCourse
-            $width="350px"
-            defaultValue={userProfile?.email}
-            disabled
-          />
+          <InputCourse width={'350px'} disabled />
         </ContainerCenteredTitle>
       </ContainerSpaceBetween>
       <ContainerSpaceBetween>
         <ContainerCenteredTitle>
           <SubTitle>{subTitleInfo}</SubTitle>
-          <InputCourse
-            $width="350px"
-            defaultValue={userProfile?.lastname}
-            disabled
-          />
+          <InputCourse width={'350px'} disabled />
         </ContainerCenteredTitle>
         <ContainerCenteredTitle>
           <SubTitle>{subTitlePrice}</SubTitle>
-          <InputCourse
-            $width="350px"
-            defaultValue={userProfile?.email}
-            disabled
-          />
+          <InputCourse width={'350px'} disabled />
         </ContainerCenteredTitle>
       </ContainerSpaceBetween>
     </RightContainerSetting>

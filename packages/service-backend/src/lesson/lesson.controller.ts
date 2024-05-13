@@ -21,10 +21,15 @@ import {
   JoinLessonModel,
   LessonModel,
   LessonIdResponse,
+  UpdateLessonModel,
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { LectureModel, QuestionModel } from 'question/question.dto';
+import {
+  LectureModel,
+  LessonLectureModel,
+  QuestionModel,
+} from 'question/question.dto';
 import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
@@ -43,9 +48,9 @@ export class LessonController {
     examples: {
       template: {
         value: {
-          section_id: 'Section Id',
+          sectionId: 'Section Id',
           title: 'Lesson Title',
-          description: 'Lesson decsription',
+          description: 'Lesson description',
         } as CreateLessonModel,
       },
     },
@@ -91,8 +96,11 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getLesson(@Param('id') id: string): Promise<LessonModel> {
-    return this.lessonService.getLesson(id);
+  async getLesson(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<LessonModel> {
+    return this.lessonService.getLesson(id, ctx.__user.id);
   }
 
   @ApiOkResponse({
@@ -112,8 +120,8 @@ export class LessonController {
         value: {
           sectionId: 'id',
           title: 'Lesson Title',
-          description: 'Lesson decsription',
-        } as LessonModel,
+          description: 'Lesson description',
+        } as UpdateLessonModel,
       },
     },
   })
@@ -121,7 +129,7 @@ export class LessonController {
   @Put('/:id')
   async updateLesson(
     @Param('id') id: string,
-    @Body() body: LessonModel,
+    @Body() body: UpdateLessonModel,
   ): Promise<LessonIdResponse> {
     return this.lessonService.updateLesson(id, body);
   }
@@ -143,7 +151,7 @@ export class LessonController {
 
   @ApiOkResponse({
     description: "lesson's lecture",
-    type: [QuestionModel],
+    type: [LessonLectureModel],
   })
   @ApiParam({
     name: 'id',
@@ -152,7 +160,9 @@ export class LessonController {
   })
   @LoggedMiddleware(true)
   @Get('/lecture/:id')
-  async getLessonLecture(@Param('id') id: string): Promise<LectureModel> {
+  async getLessonLecture(
+    @Param('id') id: string,
+  ): Promise<LessonLectureModel[]> {
     return this.lessonService.getLessonLecture(id);
   }
 
@@ -160,23 +170,12 @@ export class LessonController {
     description: 'lesson join response',
     type: LessonIdResponse,
   })
-  @ApiBody({
-    type: JoinLessonModel,
-    description: 'user data model',
-    examples: {
-      template: {
-        value: {
-          userId: 'User id',
-        } as JoinLessonModel,
-      },
-    },
-  })
   @LoggedMiddleware(true)
   @Post('/:id/join')
   async joinLesson(
     @Param('id') id: string,
-    @Body() body: JoinLessonModel,
+    @OllContext() ctx: any,
   ): Promise<LessonIdResponse> {
-    return this.lessonService.joinLesson(id, body);
+    return this.lessonService.joinLesson(id, ctx.__user.id);
   }
 }

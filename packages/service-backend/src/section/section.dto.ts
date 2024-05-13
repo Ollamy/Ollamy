@@ -1,11 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class SectionModel {
+export class CourseSectionModel {
   @ApiProperty()
   @IsUUID()
   id: string;
 
+  @ApiProperty()
+  @IsString()
+  title: string;
+
+  @ApiProperty()
+  @IsString()
+  description: string;
+}
+
+export class SectionModel {
   @ApiProperty()
   @IsUUID()
   courseId: string;
@@ -40,20 +50,20 @@ export class IdSectionModel {
 }
 
 export class UpdateSectionModel {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  courseId: string;
+  courseId?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 }
 
 export class SectionIdResponse {

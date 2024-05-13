@@ -24,25 +24,68 @@ export interface AnswerModel {
      * @type {string}
      * @memberof AnswerModel
      */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AnswerModel
-     */
     questionId: string;
     /**
      * 
      * @type {string}
      * @memberof AnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof AnswerModel
      */
-    picture: string;
+    picture?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AnswerModel
+     */
+    order: string;
+}
+/**
+ * 
+ * @export
+ * @interface BadgeModel
+ */
+export interface BadgeModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BadgeModel
+     */
+    order: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    image_name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadgeModel
+     */
+    color: string;
 }
 /**
  * 
@@ -56,6 +99,31 @@ export interface CourseIdResponse {
      * @memberof CourseIdResponse
      */
     id: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseSectionModel
+ */
+export interface CourseSectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseSectionModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseSectionModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseSectionModel
+     */
+    description: string;
 }
 /**
  * 
@@ -87,13 +155,13 @@ export interface CreateAnswerModel {
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof CreateAnswerModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -118,7 +186,7 @@ export interface CreateCourseModel {
      * @type {string}
      * @memberof CreateCourseModel
      */
-    picture: string;
+    picture?: string;
 }
 /**
  * 
@@ -150,7 +218,7 @@ export interface CreateLessonModel {
      * @type {string}
      * @memberof CreateLessonModel
      */
-    section_id: string;
+    sectionId: string;
     /**
      * 
      * @type {string}
@@ -171,19 +239,19 @@ export interface CreateLessonModel {
  */
 export interface CreateQuestionModel {
     /**
-     * 
+     * The unique identifier of the lesson
      * @type {string}
      * @memberof CreateQuestionModel
      */
     lessonId: string;
     /**
-     * 
+     * The title of the question
      * @type {string}
      * @memberof CreateQuestionModel
      */
     title: string;
     /**
-     * 
+     * The description of the question
      * @type {string}
      * @memberof CreateQuestionModel
      */
@@ -193,38 +261,73 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    data: string;
+    typeAnswer: CreateQuestionModelTypeAnswerEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeAnswer: string;
+    typeQuestion: CreateQuestionModelTypeQuestionEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeQuestion: string;
+    picture?: string;
     /**
      * 
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    picture: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    difficulty: string;
+    difficulty?: CreateQuestionModelDifficultyEnum;
     /**
      * 
      * @type {number}
      * @memberof CreateQuestionModel
      */
-    order: number;
+    points?: number;
+    /**
+     * The unique identifier of the trusted answer
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    trustAnswerId?: string;
 }
+
+
+/**
+ * @export
+ */
+export const CreateQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type CreateQuestionModelTypeAnswerEnum = typeof CreateQuestionModelTypeAnswerEnum[keyof typeof CreateQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const CreateQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type CreateQuestionModelTypeQuestionEnum = typeof CreateQuestionModelTypeQuestionEnum[keyof typeof CreateQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const CreateQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type CreateQuestionModelDifficultyEnum = typeof CreateQuestionModelDifficultyEnum[keyof typeof CreateQuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -257,19 +360,19 @@ export interface CreateSectionModel {
  */
 export interface CreateUserModel {
     /**
-     * 
+     * The first name of the user
      * @type {string}
      * @memberof CreateUserModel
      */
     firstname: string;
     /**
-     * 
+     * The last name of the user
      * @type {string}
      * @memberof CreateUserModel
      */
     lastname: string;
     /**
-     * 
+     * The email address of the user
      * @type {string}
      * @memberof CreateUserModel
      */
@@ -287,12 +390,6 @@ export interface CreateUserModel {
  * @interface GetCourseRequest
  */
 export interface GetCourseRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    id: string;
     /**
      * 
      * @type {string}
@@ -322,13 +419,19 @@ export interface GetCourseRequest {
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastLessonId: string;
+    lastLessonId?: string;
     /**
      * 
      * @type {string}
      * @memberof GetCourseRequest
      */
-    lastSectionId: string;
+    lastSectionId?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetCourseRequest
+     */
+    numberOfUsers: number;
 }
 /**
  * 
@@ -346,27 +449,161 @@ export interface GetLastBuildUrlResponse {
 /**
  * 
  * @export
+ * @interface GetQuestionModel
+ */
+export interface GetQuestionModel {
+    /**
+     * The lesson id of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    lessonId: string;
+    /**
+     * The title of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    title: string;
+    /**
+     * The description of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    description?: string;
+    /**
+     * The type of answer for the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    typeAnswer: GetQuestionModelTypeAnswerEnum;
+    /**
+     * The type of question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    typeQuestion: GetQuestionModelTypeQuestionEnum;
+    /**
+     * The unique identifier of the picture
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    pictureId?: string;
+    /**
+     * The difficulty level of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    difficulty?: GetQuestionModelDifficultyEnum;
+    /**
+     * The order of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    trust_answer_id?: string;
+    /**
+     * The order of the question
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    order: string;
+    /**
+     * The points for the question
+     * @type {number}
+     * @memberof GetQuestionModel
+     */
+    points?: number;
+}
+
+
+/**
+ * @export
+ */
+export const GetQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type GetQuestionModelTypeAnswerEnum = typeof GetQuestionModelTypeAnswerEnum[keyof typeof GetQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const GetQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type GetQuestionModelTypeQuestionEnum = typeof GetQuestionModelTypeQuestionEnum[keyof typeof GetQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const GetQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type GetQuestionModelDifficultyEnum = typeof GetQuestionModelDifficultyEnum[keyof typeof GetQuestionModelDifficultyEnum];
+
+/**
+ * 
+ * @export
  * @interface GetUserModel
  */
 export interface GetUserModel {
     /**
-     * 
+     * The first name of the user
      * @type {string}
      * @memberof GetUserModel
      */
     firstname: string;
     /**
-     * 
+     * The last name of the user
      * @type {string}
      * @memberof GetUserModel
      */
     lastname: string;
     /**
-     * 
+     * The email address of the user
      * @type {string}
      * @memberof GetUserModel
      */
     email: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserScoreModel
+ */
+export interface GetUserScoreModel {
+    /**
+     * The unique identifier of the user
+     * @type {string}
+     * @memberof GetUserScoreModel
+     */
+    userId: string;
+    /**
+     * The score of the user
+     * @type {number}
+     * @memberof GetUserScoreModel
+     */
+    score: number;
+}
+/**
+ * 
+ * @export
+ * @interface GetUsersBadges
+ */
+export interface GetUsersBadges {
+    /**
+     * 
+     * @type {Array<BadgeModel>}
+     * @memberof GetUsersBadges
+     */
+    badges: Array<BadgeModel>;
 }
 /**
  * 
@@ -427,7 +664,7 @@ export interface IdLessonModel {
  */
 export interface IdQuestionModel {
     /**
-     * 
+     * The unique identifier of the question
      * @type {string}
      * @memberof IdQuestionModel
      */
@@ -445,19 +682,6 @@ export interface IdSectionModel {
      * @memberof IdSectionModel
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface JoinLessonModel
- */
-export interface JoinLessonModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof JoinLessonModel
-     */
-    userId: string;
 }
 /**
  * 
@@ -507,6 +731,25 @@ export interface LessonIdResponse {
 /**
  * 
  * @export
+ * @interface LessonLectureModel
+ */
+export interface LessonLectureModel {
+    /**
+     * The unique identifier of the lecture
+     * @type {string}
+     * @memberof LessonLectureModel
+     */
+    id: string;
+    /**
+     * The data of the lecture
+     * @type {string}
+     * @memberof LessonLectureModel
+     */
+    data: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonModel
  */
 export interface LessonModel {
@@ -521,12 +764,6 @@ export interface LessonModel {
      * @type {string}
      * @memberof LessonModel
      */
-    sectionId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonModel
-     */
     title: string;
     /**
      * 
@@ -534,7 +771,37 @@ export interface LessonModel {
      * @memberof LessonModel
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    status: LessonModelStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof LessonModel
+     */
+    numberOfQuestions: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof LessonModel
+     */
+    numberOfLectures: number;
 }
+
+
+/**
+ * @export
+ */
+export const LessonModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
+
 /**
  * 
  * @export
@@ -542,13 +809,13 @@ export interface LessonModel {
  */
 export interface LoginUserModel {
     /**
-     * 
+     * The email address of the user
      * @type {string}
      * @memberof LoginUserModel
      */
     email: string;
     /**
-     * 
+     * The password of the user
      * @type {string}
      * @memberof LoginUserModel
      */
@@ -557,11 +824,42 @@ export interface LoginUserModel {
 /**
  * 
  * @export
+ * @interface QuestionAnswerModel
+ */
+export interface QuestionAnswerModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionAnswerModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionAnswerModel
+     */
+    data?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionAnswerModel
+     */
+    picture?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionAnswerModel
+     */
+    order: string;
+}
+/**
+ * 
+ * @export
  * @interface QuestionIdResponse
  */
 export interface QuestionIdResponse {
     /**
-     * 
+     * The unique identifier of the question
      * @type {string}
      * @memberof QuestionIdResponse
      */
@@ -574,66 +872,95 @@ export interface QuestionIdResponse {
  */
 export interface QuestionModel {
     /**
-     * 
+     * The unique identifier of the question
      * @type {string}
      * @memberof QuestionModel
      */
     id: string;
     /**
-     * 
-     * @type {string}
-     * @memberof QuestionModel
-     */
-    lessonId: string;
-    /**
-     * 
+     * The title of the question
      * @type {string}
      * @memberof QuestionModel
      */
     title: string;
     /**
-     * 
+     * The description of the question
      * @type {string}
      * @memberof QuestionModel
      */
-    description: string;
+    description?: string;
     /**
-     * 
+     * The type of answer for the question
      * @type {string}
      * @memberof QuestionModel
      */
-    typeAnswer: string;
+    typeAnswer: QuestionModelTypeAnswerEnum;
     /**
-     * 
+     * The type of question
      * @type {string}
      * @memberof QuestionModel
      */
-    typeQuestion: string;
+    typeQuestion: QuestionModelTypeQuestionEnum;
     /**
-     * 
+     * The unique identifier of the picture
      * @type {string}
      * @memberof QuestionModel
      */
-    trustAnswerId: string;
+    pictureId?: string;
     /**
-     * 
+     * The difficulty level of the question
      * @type {string}
      * @memberof QuestionModel
      */
-    pictureId: string;
+    difficulty?: QuestionModelDifficultyEnum;
     /**
-     * 
+     * The order of the question
      * @type {string}
      * @memberof QuestionModel
      */
-    difficulty: string;
+    order: string;
     /**
-     * 
+     * The points for the question
      * @type {number}
      * @memberof QuestionModel
      */
-    order: number;
+    points?: number;
 }
+
+
+/**
+ * @export
+ */
+export const QuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type QuestionModelTypeAnswerEnum = typeof QuestionModelTypeAnswerEnum[keyof typeof QuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const QuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type QuestionModelTypeQuestionEnum = typeof QuestionModelTypeQuestionEnum[keyof typeof QuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const QuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type QuestionModelDifficultyEnum = typeof QuestionModelDifficultyEnum[keyof typeof QuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -658,12 +985,6 @@ export interface SectionModel {
      * @type {string}
      * @memberof SectionModel
      */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
     courseId: string;
     /**
      * 
@@ -677,6 +998,38 @@ export interface SectionModel {
      * @memberof SectionModel
      */
     description: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShareCourseCode
+ */
+export interface ShareCourseCode {
+    /**
+     * Course's sharing code
+     * @type {string}
+     * @memberof ShareCourseCode
+     */
+    code: string;
+    /**
+     * Code's date of expiration
+     * @type {string}
+     * @memberof ShareCourseCode
+     */
+    expiresAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface SuccessBody
+ */
+export interface SuccessBody {
+    /**
+     * Result of the request
+     * @type {boolean}
+     * @memberof SuccessBody
+     */
+    success: boolean;
 }
 /**
  * 
@@ -689,19 +1042,44 @@ export interface UpdateAnswerModel {
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    questionId: string;
+    questionId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    data: string;
+    data?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateAnswerModel
      */
-    picture: string;
+    picture?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateAnswerOrderModel
+ */
+export interface UpdateAnswerOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    before?: string | null;
+    /**
+     * The origin of the answer
+     * @type {string}
+     * @memberof UpdateAnswerOrderModel
+     */
+    origin: string;
 }
 /**
  * 
@@ -714,25 +1092,25 @@ export interface UpdateCourseModel {
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    ownerId: string;
+    ownerId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    description: string;
+    description?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseModel
      */
-    picture: string;
+    picture?: string | null;
 }
 /**
  * 
@@ -745,13 +1123,13 @@ export interface UpdateLectureModel {
      * @type {string}
      * @memberof UpdateLectureModel
      */
-    lessonId: string;
+    lessonId?: string;
     /**
      * Updated lecture data
      * @type {string}
      * @memberof UpdateLectureModel
      */
-    data: string;
+    data?: string;
 }
 /**
  * 
@@ -760,48 +1138,95 @@ export interface UpdateLectureModel {
  */
 export interface UpdateQuestionModel {
     /**
-     * 
+     * The unique identifier of the lesson
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    lessonId: string;
+    lessonId?: string;
+    /**
+     * The title of the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    title?: string;
+    /**
+     * The description of the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    description?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    title: string;
+    typeAnswer?: UpdateQuestionModelTypeAnswerEnum;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    description: string;
+    typeQuestion?: UpdateQuestionModelTypeQuestionEnum;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    picture: string;
+    picture?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    difficulty?: UpdateQuestionModelDifficultyEnum;
     /**
      * 
      * @type {number}
      * @memberof UpdateQuestionModel
      */
-    points: number;
+    points?: number;
     /**
-     * 
+     * The unique identifier of the trusted answer
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    difficulty: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    trustAnswerId: string;
+    trustAnswerId?: string;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelTypeAnswerEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE'
+} as const;
+export type UpdateQuestionModelTypeAnswerEnum = typeof UpdateQuestionModelTypeAnswerEnum[keyof typeof UpdateQuestionModelTypeAnswerEnum];
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelTypeQuestionEnum = {
+    Text: 'TEXT',
+    Video: 'VIDEO',
+    Image: 'IMAGE',
+    Audio: 'AUDIO',
+    Other: 'OTHER'
+} as const;
+export type UpdateQuestionModelTypeQuestionEnum = typeof UpdateQuestionModelTypeQuestionEnum[keyof typeof UpdateQuestionModelTypeQuestionEnum];
+
+/**
+ * @export
+ */
+export const UpdateQuestionModelDifficultyEnum = {
+    Beginner: 'BEGINNER',
+    Intermediate: 'INTERMEDIATE',
+    Advanced: 'ADVANCED',
+    Master: 'MASTER'
+} as const;
+export type UpdateQuestionModelDifficultyEnum = typeof UpdateQuestionModelDifficultyEnum[keyof typeof UpdateQuestionModelDifficultyEnum];
+
 /**
  * 
  * @export
@@ -809,17 +1234,23 @@ export interface UpdateQuestionModel {
  */
 export interface UpdateQuestionOrderModel {
     /**
-     * 
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateQuestionOrderModel
+     */
+    before?: string | null;
+    /**
+     * The origin of the question
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
     origin: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateQuestionOrderModel
-     */
-    dest: string;
 }
 /**
  * 
@@ -832,19 +1263,19 @@ export interface UpdateSectionModel {
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    courseId: string;
+    courseId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateSectionModel
      */
-    description: string;
+    description?: string;
 }
 /**
  * 
@@ -853,29 +1284,103 @@ export interface UpdateSectionModel {
  */
 export interface UpdateUserModel {
     /**
-     * 
+     * The first name of the user
      * @type {string}
      * @memberof UpdateUserModel
      */
-    firstname: string;
+    firstname?: string;
+    /**
+     * The last name of the user
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    lastname?: string;
+    /**
+     * The email address of the user
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    email?: string;
+    /**
+     * The password of the user
+     * @type {string}
+     * @memberof UpdateUserModel
+     */
+    password?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserCourseHp
+ */
+export interface UserCourseHp {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserCourseHp
+     */
+    hp: number;
     /**
      * 
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UserCourseHp
      */
-    lastname: string;
+    timer: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserCourses
+ */
+export interface UserCourses {
     /**
-     * 
+     * The unique identifier of the course
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UserCourses
      */
-    email: string;
+    id: string;
     /**
-     * 
+     * The title of the course
      * @type {string}
-     * @memberof UpdateUserModel
+     * @memberof UserCourses
      */
-    password: string;
+    title: string;
+    /**
+     * The description of the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    description: string;
+    /**
+     * The URL of the picture representing the course
+     * @type {string}
+     * @memberof UserCourses
+     */
+    pictureId: string;
+    /**
+     * Indicates if the user owns this course
+     * @type {boolean}
+     * @memberof UserCourses
+     */
+    owner: boolean;
+    /**
+     * The unique identifier of the last lesson
+     * @type {string}
+     * @memberof UserCourses
+     */
+    lastLessonId: string;
+    /**
+     * The unique identifier of the last section
+     * @type {string}
+     * @memberof UserCourses
+     */
+    lastSectionId: string;
+    /**
+     * The number of users enrolled in the course
+     * @type {number}
+     * @memberof UserCourses
+     */
+    numberOfUsers: number;
 }
 /**
  * 
@@ -884,11 +1389,11 @@ export interface UpdateUserModel {
  */
 export interface UserCoursesResponse {
     /**
-     * 
-     * @type {Array<string>}
+     * List of courses associated with the user
+     * @type {Array<UserCourses>}
      * @memberof UserCoursesResponse
      */
-    courses: Array<string>;
+    courses: Array<UserCourses>;
 }
 /**
  * 
@@ -897,7 +1402,7 @@ export interface UserCoursesResponse {
  */
 export interface UserIdResponse {
     /**
-     * 
+     * The unique identifier of the user
      * @type {string}
      * @memberof UserIdResponse
      */
@@ -910,7 +1415,7 @@ export interface UserIdResponse {
  */
 export interface UserTrueResponse {
     /**
-     * 
+     * Indicates if the operation was successful or not
      * @type {boolean}
      * @memberof UserTrueResponse
      */
@@ -923,17 +1428,23 @@ export interface UserTrueResponse {
  */
 export interface ValidateAnswerModel {
     /**
-     * 
+     * The unique identifier of the question
      * @type {string}
      * @memberof ValidateAnswerModel
      */
     questionId: string;
     /**
-     * 
+     * The unique identifier of the answer
      * @type {string}
      * @memberof ValidateAnswerModel
      */
-    answerId: string;
+    answerId?: string;
+    /**
+     * The data of the answer
+     * @type {string}
+     * @memberof ValidateAnswerModel
+     */
+    data?: string;
 }
 /**
  * 
@@ -942,27 +1453,39 @@ export interface ValidateAnswerModel {
  */
 export interface ValidateAnswerResponse {
     /**
-     * Boolean if the answer is true or false
+     * Indicates if the answer is true or false
      * @type {boolean}
      * @memberof ValidateAnswerResponse
      */
     success: boolean;
     /**
-     * true answer id
+     * The unique identifier of the true answer
      * @type {string}
      * @memberof ValidateAnswerResponse
      */
     answer: string;
     /**
-     * Boolean if it is the last question or not
+     * Indicates if it is the last question or not
      * @type {boolean}
      * @memberof ValidateAnswerResponse
      */
     end: boolean;
     /**
-     * Id of the next question if it is not the last one
+     * The unique identifier of the next question if it is not the last one
      * @type {string}
      * @memberof ValidateAnswerResponse
      */
-    nextQuestionId: string;
+    nextQuestionId?: string;
+    /**
+     * Points scored in the last question
+     * @type {number}
+     * @memberof ValidateAnswerResponse
+     */
+    points?: number;
+    /**
+     * User's remaining hp
+     * @type {number}
+     * @memberof ValidateAnswerResponse
+     */
+    hp?: number;
 }

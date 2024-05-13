@@ -4,9 +4,10 @@
 import * as runtime from '../runtime';
 import type {
   CreateQuestionModel,
+  GetQuestionModel,
   IdQuestionModel,
+  QuestionAnswerModel,
   QuestionIdResponse,
-  QuestionModel,
   UpdateQuestionModel,
   UpdateQuestionOrderModel,
   ValidateAnswerModel,
@@ -78,7 +79,7 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getQuestionRaw(requestParameters: GetQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    async getQuestionRaw(requestParameters: GetQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetQuestionModel> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestion.');
         }
@@ -99,13 +100,13 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getQuestion(requestParameters: GetQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    static getQuestion(requestParameters: GetQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetQuestionModel> {
         return localQuestionApi.getQuestionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    async getQuestionAnswersRaw(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionAnswerModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getQuestionAnswers.');
         }
@@ -126,7 +127,7 @@ export class QuestionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionModel> {
+    static getQuestionAnswers(requestParameters: GetQuestionAnswersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionAnswerModel>> {
         return localQuestionApi.getQuestionAnswersRaw(requestParameters, initOverrides);
     }
 

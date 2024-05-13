@@ -1,8 +1,10 @@
+import type { LessonStatus } from 'src/pages/courses/types';
+
 export interface LessonResponse {
-  id: string;
-  sectionId: string;
-  title: string;
   description: string;
+  id: string;
+  status: LessonStatus;
+  title: string;
 }
 
 export interface GetLessonQuestionsRequest {
@@ -17,6 +19,5 @@ export interface GetLessonQuestionsRequest {
 
 export interface GetLessonLectureRequest {
   id: string;
-  lessonId: string;
   data: string;
 }

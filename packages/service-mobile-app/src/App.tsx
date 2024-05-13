@@ -4,6 +4,7 @@ import { NativeRouter, Route, Routes } from 'react-router-native';
 import AppSafeArea from 'src/components/layout/AppSafeArea/AppSafeArea';
 import Login from 'src/pages/authentication/login';
 import Register from 'src/pages/authentication/register';
+import BadgeDashboard from 'src/pages/badge';
 import Chat from 'src/pages/chat';
 import CourseRouter from 'src/pages/courses/Routes';
 import Home from 'src/pages/home';
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route element={<AppSafeArea />} errorElement={<Text>Error</Text>}>
               <Route Component={Home} path="home" />
+              <Route Component={BadgeDashboard} path="badges" />
               <Route Component={CourseRouter} path="course/*" />
               <Route Component={Profile} path="profile" />
               <Route Component={Chat} path="chat" />

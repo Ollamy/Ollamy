@@ -5,8 +5,8 @@ import * as runtime from '../runtime';
 import type {
   CreateLessonModel,
   IdLessonModel,
-  JoinLessonModel,
   LessonIdResponse,
+  LessonLectureModel,
   LessonModel,
   QuestionModel,
 } from '../models/index';
@@ -29,7 +29,6 @@ export interface GetLessonQuestionsRequest {
 
 export interface JoinLessonRequest {
     id: string;
-    joinLessonModel: JoinLessonModel;
 }
 
 export interface RegisterLessonRequest {
@@ -104,7 +103,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    async getLessonLectureRaw(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+    async getLessonLectureRaw(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonLectureModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getLessonLecture.');
         }
@@ -125,7 +124,7 @@ export class LessonApi extends runtime.BaseAPI {
 
     /**
      */
-    static getLessonLecture(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<QuestionModel>> {
+    static getLessonLecture(requestParameters: GetLessonLectureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonLectureModel>> {
         return localLessonApi.getLessonLectureRaw(requestParameters, initOverrides);
     }
 
@@ -163,22 +162,15 @@ export class LessonApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinLesson.');
         }
 
-        if (requestParameters.joinLessonModel === null || requestParameters.joinLessonModel === undefined) {
-            throw new runtime.RequiredError('joinLessonModel','Required parameter requestParameters.joinLessonModel was null or undefined when calling joinLesson.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/lesson/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.joinLessonModel,
         }, initOverrides);
 
         return response.json();

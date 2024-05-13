@@ -1,5 +1,5 @@
 import { api } from 'src/services/api';
-import type { CourseResponse } from 'src/services/course/course.dto';
+import type { CourseResponse, GetCourseHpResponse } from 'src/services/course/course.dto';
 import type { SectionResponse } from 'src/services/section/section.dto';
 
 export const courseApi = api.injectEndpoints({
@@ -25,7 +25,16 @@ export const courseApi = api.injectEndpoints({
       }),
       providesTags: (result, _err, arg) => (result ? [{ type: 'Course', id: arg }] : [{ type: 'Course', id: 'LIST' }]),
     }),
+    getCourseUserHp: build.query<GetCourseHpResponse, string>({
+      query: (id) => ({
+        url: `/course/${id}/user/hp`,
+        method: 'GET',
+      }),
+      providesTags: ['HP'],
+      forceRefetch: () => true,
+    }),
   }),
 });
 
-export const { useGetCourseByIdQuery, useJoinCourseMutation, useGetCourseSectionsQuery } = courseApi;
+export const { useGetCourseByIdQuery, useJoinCourseMutation, useGetCourseSectionsQuery, useGetCourseUserHpQuery } =
+  courseApi;

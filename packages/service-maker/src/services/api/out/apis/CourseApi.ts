@@ -4,20 +4,28 @@
 import * as runtime from '../runtime';
 import type {
   CourseIdResponse,
+  CourseSectionModel,
   CourseTrueResponse,
   CreateCourseModel,
   GetCourseRequest,
   IdCourseModel,
-  SectionModel,
+  ShareCourseCode,
   UpdateCourseModel,
+  UserCourseHp,
 } from '../models/index';
 
 export interface AddUserToCourseRequest {
-    id: string;
+    id?: string;
+    code?: string;
 }
 
 export interface DeleteCourseRequest {
     idCourseModel: IdCourseModel;
+}
+
+export interface GenerateCodeforCourseRequest {
+    id: string;
+    duration?: GenerateCodeforCourseDurationEnum;
 }
 
 export interface GetCourseOperationRequest {
@@ -25,6 +33,10 @@ export interface GetCourseOperationRequest {
 }
 
 export interface GetCourseSectionsRequest {
+    id: string;
+}
+
+export interface GetUserToCourseHpRequest {
     id: string;
 }
 
@@ -44,16 +56,20 @@ export class CourseApi extends runtime.BaseAPI {
     /**
      */
     async addUserToCourseRaw(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling addUserToCourse.');
+        const queryParameters: any = {};
+
+        if (requestParameters.id !== undefined) {
+            queryParameters['id'] = requestParameters.id;
         }
 
-        const queryParameters: any = {};
+        if (requestParameters.code !== undefined) {
+            queryParameters['code'] = requestParameters.code;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/course/{id}/user`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/course/join`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -64,7 +80,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static addUserToCourse(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
+    static addUserToCourse(requestParameters: AddUserToCourseRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         return localCourseApi.addUserToCourseRaw(requestParameters, initOverrides);
     }
 
@@ -100,6 +116,37 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
+    async generateCodeforCourseRaw(requestParameters: GenerateCodeforCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCourseCode> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling generateCodeforCourse.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.duration !== undefined) {
+            queryParameters['duration'] = requestParameters.duration;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/course/{id}/share`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static generateCodeforCourse(requestParameters: GenerateCodeforCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCourseCode> {
+        return localCourseApi.generateCodeforCourseRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
     async getCourseRaw(requestParameters: GetCourseOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCourseRequest> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCourse.');
@@ -127,7 +174,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SectionModel>> {
+    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCourseSections.');
         }
@@ -148,8 +195,35 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<SectionModel>> {
+    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
         return localCourseApi.getCourseSectionsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async getUserToCourseHpRaw(requestParameters: GetUserToCourseHpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCourseHp> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserToCourseHp.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/course/{id}/user/hp`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getUserToCourseHp(requestParameters: GetUserToCourseHpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserCourseHp> {
+        return localCourseApi.getUserToCourseHpRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -219,3 +293,15 @@ export class CourseApi extends runtime.BaseAPI {
 }
 
 const localCourseApi = new CourseApi();
+
+/**
+ * @export
+ */
+export const GenerateCodeforCourseDurationEnum = {
+    FifteenMinutes: 'FIFTEEN_MINUTES',
+    OneHour: 'ONE_HOUR',
+    TwelveHours: 'TWELVE_HOURS',
+    OneDay: 'ONE_DAY',
+    OneWeek: 'ONE_WEEK'
+} as const;
+export type GenerateCodeforCourseDurationEnum = typeof GenerateCodeforCourseDurationEnum[keyof typeof GenerateCodeforCourseDurationEnum];

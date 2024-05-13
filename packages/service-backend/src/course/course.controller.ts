@@ -7,6 +7,7 @@ import {
   Put,
   Param,
   Req,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -15,6 +16,7 @@ import {
   ApiHeader,
   ApiParam,
   ApiTags,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   CourseModel,
@@ -24,8 +26,13 @@ import {
   CourseTrueResponse,
   CourseIdResponse,
   GetCourseRequest,
+  UserCourseHp,
+  CourseGenerateCode,
+  Durationtype,
+  ShareCourseCode,
+  CourseCodeModel,
 } from 'course/course.dto';
-import { SectionModel } from 'section/section.dto';
+import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
@@ -135,7 +142,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: "course's sections",
-    type: [SectionModel],
+    type: [CourseSectionModel],
   })
   @ApiParam({
     name: 'id',
@@ -144,13 +151,64 @@ export class CourseController {
   })
   @LoggedMiddleware(true)
   @Get('/:id/sections')
-  async getCourseSections(@Param('id') id: string): Promise<SectionModel[]> {
+  async getCourseSections(
+    @Param('id') id: string,
+  ): Promise<CourseSectionModel[]> {
     return this.courseService.getCourseSections(id);
+  }
+
+  @ApiOkResponse({
+    description: 'access code generated',
+    type: ShareCourseCode,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the course',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'duration',
+    description: 'Duration of the code',
+    required: false,
+    enum: Durationtype
+  })
+  @LoggedMiddleware(true)
+  @Post('/:id/share')
+  async generateCodeforCourse(
+    @Param('id') id: string,
+    @Query('duration') duration: Durationtype,
+    @OllContext() ctx: any,
+  ): Promise<ShareCourseCode> {
+    return this.courseService.generateCodeforCourse(id, duration, ctx);
   }
 
   @ApiOkResponse({
     description: 'user added to course response',
     type: CourseTrueResponse,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'Id of the course',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'code',
+    description: 'Code validity model',
+    required: false,
+  })
+  @LoggedMiddleware(true)
+  @Post('/join')
+  async addUserToCourse(
+    @Query('id') id: string,
+    @Query('code') code: string,
+    @OllContext() ctx: any,
+  ): Promise<CourseTrueResponse> {
+    return this.courseService.addUserToCourse(id, code, ctx.__user.id);
+  }
+
+  @ApiOkResponse({
+    description: 'user added to course response',
+    type: UserCourseHp,
   })
   @ApiParam({
     name: 'id',
@@ -158,11 +216,11 @@ export class CourseController {
     required: true,
   })
   @LoggedMiddleware(true)
-  @Post('/:id/user')
-  async addUserToCourse(
+  @Get('/:id/user/hp')
+  async getUserToCourseHp(
     @Param('id') id: string,
     @OllContext() ctx: any,
-  ): Promise<CourseTrueResponse> {
-    return this.courseService.addUserToCourse(id, ctx.__user.id);
+  ): Promise<UserCourseHp> {
+    return this.courseService.getUserToCourseHp(id, ctx.__user.id);
   }
 }

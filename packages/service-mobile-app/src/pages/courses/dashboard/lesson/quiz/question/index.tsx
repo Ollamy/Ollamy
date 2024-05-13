@@ -1,28 +1,22 @@
-// @ts-ignore
-import { Pressable, ScrollView, Spinner, Text, View, VStack } from 'native-base';
-import { useEffect, useState } from 'react';
-import TextButton from 'src/components/buttons/textButton';
+import { ScrollView, Spinner, View, VStack } from 'native-base';
+import React, { createElement, useEffect, useState } from 'react';
+import TextButton from 'src/components/Buttons/TextButton';
+import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
+import { AnswerType } from 'src/services/question/question.dto';
 
 import QuestionDifficulty from './questionDifficulty';
 import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
-  nextQuestion: (answerId: string, questionId: string) => void;
+  nextQuestion: () => void;
+  setNextQuestionId: (id: string | undefined) => void;
+  setIsEnd: (isEnd: boolean) => void;
+  setCurrentErrorNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function borderColor(currentId: string, selectAnswerId?: string, trueAnswerId?: string) {
-  if (trueAnswerId !== undefined) {
-    if (selectAnswerId !== trueAnswerId && selectAnswerId === currentId) return 'red';
-    if (currentId === trueAnswerId) return 'green';
-  } else if (currentId === selectAnswerId) {
-    return '#876BF6';
-  }
-  return '#D9D9D9';
-}
-
-function Question({ questionId, nextQuestion }: QuestionProps) {
+function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
   const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
@@ -35,12 +29,20 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
     setTrueAnswer(undefined);
     setSelectAnswer(undefined);
   }, [questionId]);
+
   if (question === undefined || answers === undefined) return <Spinner />;
 
-  const validateAnswer = async (answerId: string) => {
+  const validateAnswer = async (answer: string, answerType: AnswerType) => {
     try {
-      const data = await validate({ answerId, questionId }).unwrap();
+      const data = await validate({
+        answerId: answerType === AnswerType.FREE_ANSWER ? undefined : answer,
+        questionId,
+        data: answerType === AnswerType.FREE_ANSWER ? answer : undefined,
+      }).unwrap();
+      setNextQuestionId(data.nextQuestionId);
       setTrueAnswer(data.answer);
+      setIsEnd(data.end);
+      if (!data.success) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
     }
@@ -58,23 +60,11 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
             justifyContent: 'space-between',
           }}
         >
-          {answers.map((answer) => (
-            <Pressable
-              key={answer.id}
-              disabled={trueAnswer !== undefined}
-              width="48%"
-              paddingY="45px"
-              borderRadius={12}
-              borderWidth={4}
-              justifyContent="center"
-              alignItems="center"
-              marginBottom={5}
-              style={{ borderColor: borderColor(answer.id, selectAnswer, trueAnswer) }}
-              onPress={() => setSelectAnswer(answer.id)}
-            >
-              <Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
-            </Pressable>
-          ))}
+          {createElement(quizFactory[question.typeAnswer], {
+            answers,
+            setAnswer: (answer) => setSelectAnswer(answer),
+            correctAnswer: trueAnswer,
+          })}
         </ScrollView>
       </View>
       <View style={{ alignItems: 'center', width: '100%' }}>
@@ -83,7 +73,7 @@ function Question({ questionId, nextQuestion }: QuestionProps) {
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>
             selectAnswer &&
-            (trueAnswer !== undefined ? nextQuestion(selectAnswer, questionId) : validateAnswer(selectAnswer))
+            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer, question.typeAnswer))
           }
           rightIconName="arrow-forward"
         />

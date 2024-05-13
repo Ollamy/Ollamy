@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ContainerAnalytic = styled.div`
   display: flex;
