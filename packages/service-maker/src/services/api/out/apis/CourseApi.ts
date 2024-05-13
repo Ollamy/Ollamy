@@ -3,8 +3,6 @@
 
 import * as runtime from '../runtime';
 import type {
-  CourseCodeModel,
-  CourseGenerateCode,
   CourseIdResponse,
   CourseSectionModel,
   CourseTrueResponse,
@@ -17,8 +15,8 @@ import type {
 } from '../models/index';
 
 export interface AddUserToCourseRequest {
-    id: string;
-    courseCodeModel: CourseCodeModel;
+    id?: string;
+    code?: string;
 }
 
 export interface DeleteCourseRequest {
@@ -27,7 +25,7 @@ export interface DeleteCourseRequest {
 
 export interface GenerateCodeforCourseRequest {
     id: string;
-    courseGenerateCode: CourseGenerateCode;
+    duration?: GenerateCodeforCourseDurationEnum;
 }
 
 export interface GetCourseOperationRequest {
@@ -58,26 +56,23 @@ export class CourseApi extends runtime.BaseAPI {
     /**
      */
     async addUserToCourseRaw(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling addUserToCourse.');
-        }
-
-        if (requestParameters.courseCodeModel === null || requestParameters.courseCodeModel === undefined) {
-            throw new runtime.RequiredError('courseCodeModel','Required parameter requestParameters.courseCodeModel was null or undefined when calling addUserToCourse.');
-        }
-
         const queryParameters: any = {};
+
+        if (requestParameters.id !== undefined) {
+            queryParameters['id'] = requestParameters.id;
+        }
+
+        if (requestParameters.code !== undefined) {
+            queryParameters['code'] = requestParameters.code;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        headerParameters['Content-Type'] = 'application/json';
-
         const response = await this.request({
-            path: `/course/{id}/user`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/course/join`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.courseCodeModel,
         }, initOverrides);
 
         return response.json();
@@ -85,7 +80,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static addUserToCourse(requestParameters: AddUserToCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
+    static addUserToCourse(requestParameters: AddUserToCourseRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         return localCourseApi.addUserToCourseRaw(requestParameters, initOverrides);
     }
 
@@ -126,22 +121,19 @@ export class CourseApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling generateCodeforCourse.');
         }
 
-        if (requestParameters.courseGenerateCode === null || requestParameters.courseGenerateCode === undefined) {
-            throw new runtime.RequiredError('courseGenerateCode','Required parameter requestParameters.courseGenerateCode was null or undefined when calling generateCodeforCourse.');
-        }
-
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+        if (requestParameters.duration !== undefined) {
+            queryParameters['duration'] = requestParameters.duration;
+        }
 
-        headerParameters['Content-Type'] = 'application/json';
+        const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
             path: `/course/{id}/share`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.courseGenerateCode,
         }, initOverrides);
 
         return response.json();
@@ -301,3 +293,15 @@ export class CourseApi extends runtime.BaseAPI {
 }
 
 const localCourseApi = new CourseApi();
+
+/**
+ * @export
+ */
+export const GenerateCodeforCourseDurationEnum = {
+    FifteenMinutes: 'FIFTEEN_MINUTES',
+    OneHour: 'ONE_HOUR',
+    TwelveHours: 'TWELVE_HOURS',
+    OneDay: 'ONE_DAY',
+    OneWeek: 'ONE_WEEK'
+} as const;
+export type GenerateCodeforCourseDurationEnum = typeof GenerateCodeforCourseDurationEnum[keyof typeof GenerateCodeforCourseDurationEnum];
