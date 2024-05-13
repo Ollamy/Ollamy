@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 // @ts-ignore
-import BACKGROUND from 'assets/background.png';
+import BACKGROUND from 'assets/background-big.png';
 // @ts-ignore
 import KNOWLEDGE from 'assets/knowledge.png';
 // @ts-ignore
