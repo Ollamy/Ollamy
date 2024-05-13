@@ -16,6 +16,13 @@ def create_database_structure(cursor: cursor) -> None:
     print_table_data(cursor)
 
 
+def create_demo_database_structure(cursor: cursor) -> None:
+    with open("demo_dump.sql", "r") as sql_file:
+        sql_script = sql_file.read()
+        cursor.execute(sql.SQL(sql_script))
+    print_table_data(cursor)
+
+
 def delete_database_data(cursor: cursor) -> None:
     with open("database_schema_delete.sql", "r") as sql_file:
         sql_script = sql_file.read()
@@ -294,6 +301,11 @@ def main() -> None:
     parser.add_argument(
         "-c", "--create", action="store_true", help="Create database structure"
     )
+
+    parser.add_argument(
+        "-s", "--scenario", action="store_true", help="Create demo database structure"
+    )
+
     parser.add_argument(
         "-d", "--delete", action="store_true", help="Delete database data"
     )
@@ -314,6 +326,7 @@ def main() -> None:
 
     actions: dict[str, tuple] = {
         "create": (create_database_structure, "Database setup complete."),
+        "scenario": (create_demo_database_structure, "Database setup complete."),
         "delete": (delete_database_data, "Database data deleted."),
         "info": (print_table_data, "Database data informations."),
         "test": (test_database_data, "Database data test."),
@@ -323,6 +336,8 @@ def main() -> None:
 
     if args.create:
         selected_action = actions.get("create")
+    if args.scenario:
+        selected_action = actions.get("scenario")
     elif args.delete:
         selected_action = actions.get("delete")
     elif args.info:

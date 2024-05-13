@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -149,7 +149,7 @@ export class CourseService {
           },
           select: {
             picture_id: true,
-          }
+          },
         });
 
         await PictureService.deletePicture(pictureId.picture_id);
@@ -296,9 +296,7 @@ export class CourseService {
     let code = '';
 
     for (let i = 0; i < CODE_LENGTH; i++) {
-      code += characters.charAt(
-        Math.floor(Math.random() * characters.length),
-      );
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
     }
 
     await RedisCacheService.run(
@@ -310,7 +308,10 @@ export class CourseService {
     );
 
     const expirationDate = new Date();
-    expirationDate.setSeconds(expirationDate.getSeconds() + ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES]);
+    expirationDate.setSeconds(
+      expirationDate.getSeconds() +
+        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+    );
 
     return { code, expiresAt: expirationDate };
   }
