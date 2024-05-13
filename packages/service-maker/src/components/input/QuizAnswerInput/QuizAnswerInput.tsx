@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
 import DeleteModal from 'components/modal/DeleteModal/DeleteModal';
+import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 import { answerActions } from 'services/api/routes/answer';
 import styled from 'styled-components';
 
 import { TextField } from '@radix-ui/themes';
 import type { RootProps } from '@radix-ui/themes/dist/cjs/components/text-field';
-import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 
 interface QuizAnswerInputProps extends RootProps {
   answerId: string;

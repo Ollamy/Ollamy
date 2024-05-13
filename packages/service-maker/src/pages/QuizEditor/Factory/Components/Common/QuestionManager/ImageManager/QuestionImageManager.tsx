@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 import type { GetQuestionModel } from 'services/api/out';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
 import { TrashIcon, UploadIcon } from '@radix-ui/react-icons';
 import { Button, IconButton } from '@radix-ui/themes';
-import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 
 interface QuestionImageManagerProps {
   questionId: string;
