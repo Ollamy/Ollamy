@@ -17,6 +17,7 @@ import { createGlobalStyle } from 'styled-components';
 import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
+import LectureEditorPage from 'pages/LectureEditor/LectureEditorPage';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: '/quizEditor/:lessonId',
     element: <QuizEditorPage />,
+  },
+  {
+    path: '/lectureEditor/:lessonId',
+    element: <LectureEditorPage />,
   },
   // {
   //   path: '/profile',

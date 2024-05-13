@@ -2,8 +2,11 @@ import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from 'main';
 import type {
+  GetLessonLectureRequest,
   GetLessonQuestionsRequest,
   GetLessonRequest,
+  LectureModel,
+  LessonLectureModel,
   LessonModel,
   QuestionModel,
 } from 'services/api/out';
@@ -12,6 +15,7 @@ import { GET_SECTION_LESSONS_KEY } from 'services/api/routes/section';
 
 const GET_LESSON_KEY = 'getLessonKey';
 export const GET_LESSON_QUESTIONS_KEY = 'getLessonQuestionKey';
+export const GET_LESSON_LECTURES_KEY = 'getLessonLectureKey';
 
 export const lessonActions = {
   useLesson: (
@@ -43,5 +47,14 @@ export const lessonActions = {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
+    }),
+  useGetLessonLectures: (
+    requestParameters: GetLessonLectureRequest,
+    config?: UseQueryOptions<Array<LessonLectureModel>>,
+  ) =>
+    useQuery({
+      queryKey: [GET_LESSON_LECTURES_KEY, requestParameters.id],
+      queryFn: () => LessonApi.getLessonLecture(requestParameters),
+      ...config,
     }),
 };
