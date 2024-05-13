@@ -1,8 +1,9 @@
 import React from 'react';
 import quizFactory from 'pages/QuizEditor/Factory/factory';
-import type { QuestionType } from 'pages/QuizEditor/Factory/factory.types';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
+
+import { Badge, Heading, Tooltip } from '@radix-ui/themes';
 
 interface QuestionEditorProps {
   questionId: string;
@@ -18,11 +19,17 @@ function QuestionEditor({ questionId }: QuestionEditorProps) {
   return (
     <Wrapper>
       <Container>
-        <h3>Question {questionId}</h3>
-        {React.createElement(
-          quizFactory[questionData.typeQuestion as QuestionType].Component,
-          { questionId },
-        )}
+        <QuestionInfoContainer>
+          <CustomHeading color={'iris'} weight={'medium'} size={'4'}>
+            Question
+          </CustomHeading>
+          <Tooltip content={questionId}>
+            <Badge color={'iris'}>{questionData.typeAnswer}</Badge>
+          </Tooltip>
+        </QuestionInfoContainer>
+        {React.createElement(quizFactory[questionData.typeAnswer].Component, {
+          questionId,
+        })}
       </Container>
     </Wrapper>
   );
@@ -32,21 +39,31 @@ const Wrapper = styled.div`
   display: flex;
   width: 480px;
   height: 100%;
-  padding: 24px 0;
+  padding: 60px 0;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   width: 100%;
   height: 100%;
   padding: 16px;
+  box-sizing: border-box;
 
   background: #ffffff;
-  border: 1px solid #d0d0d0;
-  border-radius: 2px;
+  border-radius: 12px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+`;
+
+const QuestionInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CustomHeading = styled(Heading)`
+  margin: 0;
 `;
 
 export default QuestionEditor;
