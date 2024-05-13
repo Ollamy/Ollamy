@@ -1,13 +1,8 @@
-import {
-  type ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect } from 'react';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
-import { answerActions } from 'services/api/routes/answer';
+import useManageTextAnswer from 'pages/QuizEditor/Factory/hooks/useManageTextAnswer';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
@@ -21,44 +16,13 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
     id: questionId,
   });
 
-  const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(
-    undefined,
-  );
-
-  const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
-  const { mutateAsync: addNewAnswer } = answerActions.useCreateAnswer();
-  const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
-
-  const handleCorrectAnswerChange = async (id: string) => {
-    await updateQuestion({
-      id: questionId,
-      updateQuestionModel: {
-        trustAnswerId: id,
-      },
-    });
-  };
-
-  const handleChangeAnswer: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (e) => {
-      const { name, value } = e.target;
-
-      await updateAnswer({
-        id: name,
-        updateAnswerModel: {
-          questionId,
-          data: value,
-          picture: '',
-        },
-      });
-    },
-    [questionId, updateAnswer],
-  );
-
-  const handleAddAnswer = useCallback(async () => {
-    await addNewAnswer({
-      createAnswerModel: { questionId, data: '', picture: '' },
-    });
-  }, [addNewAnswer, questionId]);
+  const {
+    correctAnswer,
+    setCorrectAnswer,
+    handleCreateNewAnswer,
+    handleChangeAnswerValue,
+    handleChangeCorrectAnswer,
+  } = useManageTextAnswer({ questionId });
 
   useEffect(() => {
     if (
@@ -70,12 +34,13 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
       const newCorrectAnswer = answerData[0].id;
 
       setCorrectAnswer(newCorrectAnswer);
-      handleCorrectAnswerChange(newCorrectAnswer);
+      handleChangeCorrectAnswer(newCorrectAnswer);
     }
   }, [
     answerData,
     correctAnswer,
-    handleCorrectAnswerChange,
+    setCorrectAnswer,
+    handleChangeCorrectAnswer,
     questionData?.trust_answer_id,
   ]);
 
@@ -86,28 +51,28 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
       <ButtonContainer>
         <CustomButton
           variant={'ghost'}
-          onClick={handleAddAnswer}
           loading={!answerData}
+          onClick={handleCreateNewAnswer}
           disabled={answerData && answerData.length >= 4}
         >
           Add choices
         </CustomButton>
       </ButtonContainer>
       <RadioGroup.Root color={'green'} value={correctAnswer}>
-        {answerData?.map((elem, index) => (
-          <AnswerRow key={elem.id}>
+        {answerData?.map(({ id, data }, index) => (
+          <AnswerRow key={id}>
             <RadioGroup.Item
-              value={elem.id}
-              onClick={() => handleCorrectAnswerChange(elem.id)}
+              value={id}
+              onClick={() => handleChangeCorrectAnswer(id)}
             />
             <QuizAnswerInput
-              answerId={elem.id}
+              key={id}
+              name={id}
+              answerId={id}
+              defaultValue={data}
               questionId={questionId}
-              name={elem.id}
-              defaultValue={elem.data}
-              onChange={handleChangeAnswer}
+              onChange={handleChangeAnswerValue}
               placeholder={`Answer ${index + 1}`}
-              key={elem.id}
             />
           </AnswerRow>
         ))}
