@@ -19,8 +19,7 @@ function QuestionSideBarHeader({
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 
   padding: 20px;
   box-sizing: border-box;

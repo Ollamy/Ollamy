@@ -1,5 +1,5 @@
-import QuestionList from 'pages/QuizEditor/Body/QuestionsSideBar/List/QuestionList';
 import QuestionSideBarHeader from 'pages/QuizEditor/Body/QuestionsSideBar/Header/QuestionSideBarHeader';
+import QuestionList from 'pages/QuizEditor/Body/QuestionsSideBar/List/QuestionList';
 import styled from 'styled-components';
 
 interface QuestionsSideBarProps {

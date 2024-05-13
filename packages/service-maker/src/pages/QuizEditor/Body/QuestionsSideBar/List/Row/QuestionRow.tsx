@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { QuestionModel } from 'services/api/out';
 import styled from 'styled-components';

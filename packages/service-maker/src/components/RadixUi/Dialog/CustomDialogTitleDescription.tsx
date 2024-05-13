@@ -6,21 +6,23 @@ import 'styles/dialog.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
-interface CustomDialogTitleDescriptionProps {
+interface CustomDialogTitleDescriptionProps<T> {
   dialogTitle: string;
   dialogDescription: string;
   actionButtonValue: string;
   TriggerButton: React.ReactNode;
-  createFunction: (title: string, description: string) => void;
+  createFunction: (title: string, description: string, moreOptions?: T) => void;
+  moreOptions?: T;
 }
 
-function CustomDialogTitleDescription({
+function CustomDialogTitleDescription<T>({
   dialogTitle,
   TriggerButton,
   createFunction,
   actionButtonValue,
   dialogDescription,
-}: CustomDialogTitleDescriptionProps) {
+  moreOptions,
+}: CustomDialogTitleDescriptionProps<T>) {
   const [open, setOpen] = useState(false);
 
   const handleSubmit = useCallback(
@@ -31,10 +33,10 @@ function CustomDialogTitleDescription({
       const title = formData.get('title') as string;
       const description = formData.get('description') as string;
 
-      createFunction(title, description);
+      createFunction(title, description, moreOptions);
       setOpen(false);
     },
-    [createFunction],
+    [createFunction, moreOptions],
   );
 
   return (

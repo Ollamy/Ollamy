@@ -30,15 +30,18 @@ function QuestionList({ lessonId }: QuestionListProps) {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: block;
 
   width: 100%;
   height: 100%;
 
-  gap: 8px;
-
   overflow: scroll;
+
+  > {
+    :not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
 `;
 
 const LoadingContainer = styled.div`
