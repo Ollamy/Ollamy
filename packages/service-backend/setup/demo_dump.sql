@@ -378,7 +378,7 @@ INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES 
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('8a3a014b-569a-4128-a2a1-1131627dc23e', '4171ed97-d046-46be-831a-f50dc6df7a4f', 'Pour créer des images équilibrées et attrayantes', null, 'a0');
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('7c66d9cc-2323-4256-873a-3248804e2766', '4171ed97-d046-46be-831a-f50dc6df7a4f', 'Pour impressionner ses amis', null, 'a1');
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('d20ed4ef-a155-4e9f-b0b0-5566a9aa16b0', '4171ed97-d046-46be-831a-f50dc6df7a4f', 'Pour suivre les tendances', null, 'a2');
-INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('d20ed4ef-a155-4e9f-b0b0-5566a9af16b0', 'a8e66582-7108-45e2-b18d-1ce7cdde464d', 'Pour devenir super beau', null, 'a3');
+INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('d20ed4ef-a155-4e9f-b0b0-5566a9af16b0', '4171ed97-d046-46be-831a-f50dc6df7a4f', 'Pour devenir super beau', null, 'a3');
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('55b18a91-71eb-4e94-b802-10b8c93fa817', 'c121698e-0db9-4eb1-b978-38fa86e0c964', 'La luminosité de l''image', null, 'a0');
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('aeef50a9-6593-428d-8dea-5aef1da1a82e', 'c121698e-0db9-4eb1-b978-38fa86e0c964', 'La zone de netteté dans une image', null, 'a1');
 INSERT INTO public."Answer" (id, question_id, data, picture_id, "order") VALUES ('c4fd2f1c-6584-451c-b7c7-ed350c8298b7', 'c121698e-0db9-4eb1-b978-38fa86e0c964', 'Le nombre d''objets dans une image', null, 'a2');
