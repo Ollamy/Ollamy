@@ -11,4 +11,6 @@ COPY . .
 ARG FRONTEND_PORT
 ENV FRONTEND_PORT=${FRONTEND_PORT}
 
-RUN yarn dev --port $FRONTEND_PORT --host
+RUN yarn build
+
+CMD ["yarn", "preview", "--port", "5173", "--host"]
