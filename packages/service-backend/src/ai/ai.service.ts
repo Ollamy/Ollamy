@@ -18,7 +18,7 @@ export class AiService {
 
   constructor() {
     AiService.vertexAi = new VertexAI({ project: 'ultimate-opus-422723-q5', location: 'us-central1' });
-    AiService.model = 'gemini-1.5-pro-preview-0409';
+    AiService.model = 'gemini-experimental';
     AiService.generativeModel = AiService.vertexAi.preview.getGenerativeModel({
       model: AiService.model,
       generationConfig: {
@@ -29,19 +29,19 @@ export class AiService {
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
         },
         {
           category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
         },
         {
           category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
         },
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
         }
       ]
     });
