@@ -63,24 +63,18 @@ export class UserController {
   })
   @Post('/register')
   async registerUser(
-    @Req() request,
     @Response() res,
     @Body() body: CreateUserModel,
   ) {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
     res.cookie(
       'session',
       await this.userService.registerUser(body),
-      cookiesParams,
+      {
+        httpOnly: true,
+        maxAge: SessionService.TTL,
+        sameSite: 'none' as const,
+        secure: true,
+      },
     );
     return res.send({ success: true });
   }
@@ -104,24 +98,18 @@ export class UserController {
   })
   @Post('/login')
   async loginUser(
-    @Req() request,
     @Response() res,
     @Body() body: LoginUserModel,
   ): Promise<any> {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
     res.cookie(
       'session',
       await this.userService.loginUser(body),
-      cookiesParams,
+      {
+        httpOnly: true,
+        maxAge: SessionService.TTL,
+        sameSite: 'none' as const,
+        secure: true,
+      },
     );
     return res.send({ success: true });
   }
@@ -158,25 +146,19 @@ export class UserController {
   @LoggedMiddleware(true)
   @Put()
   async updateUser(
-    @Req() request,
     @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
   ): Promise<SuccessBody> {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
     res.cookie(
       'session',
       await this.userService.updateUser(body, ctx),
-      cookiesParams,
+      {
+        httpOnly: true,
+        maxAge: SessionService.TTL,
+        sameSite: 'none' as const,
+        secure: true,
+      },
     );
 
     return res.send({ success: true });
