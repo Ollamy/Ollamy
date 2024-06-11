@@ -261,7 +261,8 @@ export class SectionService {
     if (
       sectionUserToLessonStatuses.every(
         (status) => status === Status.COMPLETED,
-      ) === true
+      ) === true &&
+      sectionUserToLessonStatuses.length === sectionLessonsIds.length
     ) {
       await prisma.usertoSection.update({
         where: {

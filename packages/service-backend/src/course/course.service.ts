@@ -352,7 +352,8 @@ export class CourseService {
     if (
       courseUserToSectionStatuses.every(
         (status) => status === Status.COMPLETED,
-      ) === true
+      ) === true &&
+      courseSectionsIds.length === courseUserToSectionStatuses.length
     ) {
       await prisma.usertoCourse.update({
         where: {
