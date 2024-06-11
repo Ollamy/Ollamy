@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { Status } from '@prisma/client';
+import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CourseSectionModel {
   @ApiProperty()
@@ -27,6 +28,13 @@ export class SectionModel {
   @ApiProperty()
   @IsString()
   description: string;
+}
+
+export class GetSectionModel extends SectionModel {
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class CreateSectionModel {

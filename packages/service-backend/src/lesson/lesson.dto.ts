@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { LessonStatus } from '@prisma/client';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Status } from '@prisma/client';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class LessonModel {
   @ApiProperty()
@@ -15,9 +21,9 @@ export class LessonModel {
   @IsString()
   description: string;
 
-  @ApiProperty({ enum: LessonStatus })
-  @IsString()
-  status: LessonStatus;
+  @ApiProperty({ enum: Status })
+  @IsEnum(Status)
+  status: Status;
 
   @ApiProperty()
   @IsNumber()

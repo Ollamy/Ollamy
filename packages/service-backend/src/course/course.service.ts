@@ -20,7 +20,7 @@ import {
 } from './course.dto';
 import { CourseSectionModel, SectionModel } from 'section/section.dto';
 import prisma from 'client';
-import { Course, Prisma, Role, Section } from '@prisma/client';
+import { Course, Prisma, Role, Section, Status } from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from '../redis/redis.service';
@@ -130,6 +130,10 @@ export class CourseService {
         lastLessonId: userToCourse?.last_lesson_id,
         lastSectionId: userToCourse?.last_section_id,
         numberOfUsers: users,
+        status:
+          ctx.__device.isPhone || ctx.__device.isTablet || ctx.__device.isMobile
+            ? userToCourse?.status
+            : undefined,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
@@ -314,5 +318,51 @@ export class CourseService {
     );
 
     return { code, expiresAt: expirationDate };
+  }
+
+  static async UpdateCourseCompletionFromLesson(
+    sectionId: string,
+    userId: string,
+  ) {
+    const courseId = await prisma.section.findUnique({
+      where: { id: sectionId },
+      select: {
+        course_id: true,
+      },
+    });
+
+    const courseSectionsIds = (
+      await prisma.section.findMany({
+        where: {
+          course_id: courseId.course_id,
+        },
+        select: { id: true },
+      })
+    ).map((lesson) => lesson.id);
+
+    const courseUserToSectionStatuses: Status[] = (
+      await prisma.usertoSection.findMany({
+        where: {
+          id: { in: courseSectionsIds },
+        },
+        select: { status: true },
+      })
+    ).map((userToSectionObject) => userToSectionObject.status);
+
+    if (
+      courseUserToSectionStatuses.every(
+        (status) => status === Status.COMPLETED,
+      ) === true
+    ) {
+      await prisma.usertoCourse.update({
+        where: {
+          course_id_user_id: {
+            course_id: courseId.course_id,
+            user_id: userId,
+          },
+        },
+        data: { status: Status.COMPLETED },
+      });
+    }
   }
 }

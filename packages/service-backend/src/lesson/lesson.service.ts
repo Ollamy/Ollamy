@@ -90,16 +90,19 @@ export class LessonService {
         },
       });
 
-      const userLessonDb: UsertoLesson = await prisma.usertoLesson.findUnique({
+      const userLessonStatusDb = await prisma.usertoLesson.findUnique({
         where: {
           lesson_id_user_id: {
             user_id: userId,
             lesson_id: lessonId,
           },
         },
+        select: {
+          status: true,
+        },
       });
 
-      if (!lessonDb || !userLessonDb) {
+      if (!lessonDb || !userLessonStatusDb) {
         Logger.error('Lesson does not exists !');
         throw new ConflictException('Lesson does not exists !');
       }
@@ -120,7 +123,7 @@ export class LessonService {
         id: lessonDb.id,
         title: lessonDb.title,
         description: lessonDb.description,
-        status: userLessonDb.status,
+        status: userLessonStatusDb.status,
         numberOfQuestions: questionsCount,
         numberOfLectures: lecturesCount,
       } as LessonModel;

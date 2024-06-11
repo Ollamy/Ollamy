@@ -3,6 +3,7 @@ import {
   Lesson,
   Picture,
   Section,
+  Status,
   UsertoCourse,
   UsertoLesson,
 } from '@prisma/client';
@@ -69,6 +70,7 @@ export const mockUserToCourse: UsertoCourse = {
   last_section_id: mockLastSectionDb.section_id,
   score: 0,
   hp: 1,
+  status: Status.IN_PROGRESS,
 };
 
 export const mockUpdateCourseData: UpdateCourseModel = {
