@@ -4,10 +4,10 @@
 import * as runtime from '../runtime';
 import type {
   CourseIdResponse,
-  CourseSectionModel,
   CourseTrueResponse,
   CreateCourseModel,
   GetCourseRequest,
+  GetSectionsModel,
   IdCourseModel,
   ShareCourseCode,
   UpdateCourseModel,
@@ -174,7 +174,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
+    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GetSectionsModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCourseSections.');
         }
@@ -195,7 +195,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
+    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GetSectionsModel>> {
         return localCourseApi.getCourseSectionsRaw(requestParameters, initOverrides);
     }
 

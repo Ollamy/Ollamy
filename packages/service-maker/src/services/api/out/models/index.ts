@@ -103,31 +103,6 @@ export interface CourseIdResponse {
 /**
  * 
  * @export
- * @interface CourseSectionModel
- */
-export interface CourseSectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    description: string;
-}
-/**
- * 
- * @export
  * @interface CourseTrueResponse
  */
 export interface CourseTrueResponse {
@@ -595,6 +570,49 @@ export const GetSectionModelStatusEnum = {
     Completed: 'COMPLETED'
 } as const;
 export type GetSectionModelStatusEnum = typeof GetSectionModelStatusEnum[keyof typeof GetSectionModelStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSectionsModel
+ */
+export interface GetSectionsModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    status?: GetSectionsModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionsModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionsModelStatusEnum = typeof GetSectionsModelStatusEnum[keyof typeof GetSectionsModelStatusEnum];
 
 /**
  * 
@@ -1404,7 +1422,25 @@ export interface UserCourses {
      * @memberof UserCourses
      */
     numberOfUsers: number;
+    /**
+     * course completion status
+     * @type {string}
+     * @memberof UserCourses
+     */
+    status?: UserCoursesStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const UserCoursesStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type UserCoursesStatusEnum = typeof UserCoursesStatusEnum[keyof typeof UserCoursesStatusEnum];
+
 /**
  * 
  * @export

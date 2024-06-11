@@ -18,13 +18,24 @@ import {
   Durationtype,
   CourseCodeModel,
 } from './course.dto';
-import { CourseSectionModel, SectionModel } from 'section/section.dto';
+import {
+  CourseSectionModel,
+  GetSectionModel,
+  GetSectionsModel,
+  SectionModel,
+} from 'section/section.dto';
 import prisma from 'client';
-import { Course, Prisma, Role, Section, Status } from '@prisma/client';
+import {
+  Course,
+  Prisma,
+  Role,
+  Section,
+  Status,
+  UsertoSection,
+} from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from '../redis/redis.service';
-import { courseId } from '../tests/data/course.data';
 
 const CODE_LENGTH: number = 4;
 
@@ -186,7 +197,10 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
+  async getCourseSections(
+    CourseId: string,
+    ctx: any,
+  ): Promise<GetSectionsModel[]> {
     try {
       const courseSectionsDb: Section[] = await prisma.section.findMany({
         where: {
@@ -199,11 +213,32 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => ({
-        id: lesson.id,
-        title: lesson.title,
-        description: lesson.description,
-      })) as CourseSectionModel[];
+      const sectionPromises: Promise<GetSectionsModel>[] = courseSectionsDb.map(
+        async (section: Section) => {
+          const userSection = await prisma.usertoSection.findUnique({
+            where: {
+              section_id_user_id: {
+                user_id: ctx.__user.id,
+                section_id: section.id,
+              },
+            },
+          });
+
+          return {
+            id: section.id,
+            description: section.description,
+            title: section.title,
+            status:
+              ctx.__device.isPhone ||
+              ctx.__device.isTablet ||
+              ctx.__device.isMobile
+                ? userSection?.status || Status.NOT_STARTED
+                : undefined,
+          };
+        },
+      );
+
+      return await Promise.all(sectionPromises);
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');

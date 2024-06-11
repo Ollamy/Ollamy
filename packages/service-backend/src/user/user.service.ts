@@ -19,7 +19,7 @@ import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, Role, User, UsertoScore } from '@prisma/client';
+import { Prisma, Role, Status, User, UsertoScore } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
 
 @Injectable()
@@ -218,6 +218,7 @@ export class UserService {
             const {
               last_lesson_id: lastLessonId,
               last_section_id: lastSectionId,
+              status: status,
             } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
 
             const isOwner = course.owner_id === ctx.__user.id;
@@ -244,6 +245,12 @@ export class UserService {
               lastSectionId,
               owner: isOwner,
               numberOfUsers: users,
+              status:
+                ctx.__device.isPhone ||
+                ctx.__device.isTablet ||
+                ctx.__device.isMobile
+                  ? status || Status.NOT_STARTED
+                  : undefined,
             };
           }),
         ),

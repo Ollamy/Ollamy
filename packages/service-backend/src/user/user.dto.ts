@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '@prisma/client';
 import { Type, Transform } from 'class-transformer';
 import {
   IsEmail,
@@ -108,7 +109,7 @@ export class UpdateUserModel {
   password?: string;
 }
 
-export class GetUserModel extends BaseUser { }
+export class GetUserModel extends BaseUser {}
 
 export class GetUserScoreModel {
   @ApiProperty({ description: 'The unique identifier of the user' })
@@ -168,6 +169,15 @@ export class UserCourses {
   @ApiProperty({ description: 'The number of users enrolled in the course' })
   @IsNumber()
   numberOfUsers: number;
+
+  @ApiProperty({
+    required: false,
+    enum: Status,
+    description: 'course completion status',
+  })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class UserCoursesResponse {

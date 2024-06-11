@@ -28,7 +28,7 @@ import {
   Durationtype,
   ShareCourseCode,
 } from 'course/course.dto';
-import { CourseSectionModel } from 'section/section.dto';
+import { CourseSectionModel, GetSectionsModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
@@ -138,7 +138,7 @@ export class CourseController {
 
   @ApiOkResponse({
     description: "course's sections",
-    type: [CourseSectionModel],
+    type: [GetSectionsModel],
   })
   @ApiParam({
     name: 'id',
@@ -149,8 +149,9 @@ export class CourseController {
   @Get('/:id/sections')
   async getCourseSections(
     @Param('id') id: string,
-  ): Promise<CourseSectionModel[]> {
-    return this.courseService.getCourseSections(id);
+    @OllContext() ctx: any,
+  ): Promise<GetSectionsModel[]> {
+    return this.courseService.getCourseSections(id, ctx);
   }
 
   @ApiOkResponse({
@@ -166,7 +167,7 @@ export class CourseController {
     name: 'duration',
     description: 'Duration of the code',
     required: false,
-    enum: Durationtype
+    enum: Durationtype,
   })
   @LoggedMiddleware(true)
   @Post('/:id/share')

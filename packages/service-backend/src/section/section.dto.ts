@@ -37,6 +37,13 @@ export class GetSectionModel extends SectionModel {
   status?: Status;
 }
 
+export class GetSectionsModel extends CourseSectionModel {
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
+}
+
 export class CreateSectionModel {
   @ApiProperty()
   @IsUUID()
