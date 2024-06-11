@@ -432,7 +432,25 @@ export interface GetCourseRequest {
      * @memberof GetCourseRequest
      */
     numberOfUsers: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    status?: GetCourseRequestStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const GetCourseRequestStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof typeof GetCourseRequestStatusEnum];
+
 /**
  * 
  * @export
@@ -534,6 +552,49 @@ export const GetQuestionModelDifficultyEnum = {
     Master: 'MASTER'
 } as const;
 export type GetQuestionModelDifficultyEnum = typeof GetQuestionModelDifficultyEnum[keyof typeof GetQuestionModelDifficultyEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSectionModel
+ */
+export interface GetSectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    status?: GetSectionModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionModelStatusEnum = typeof GetSectionModelStatusEnum[keyof typeof GetSectionModelStatusEnum];
 
 /**
  * 
@@ -960,31 +1021,6 @@ export interface SectionIdResponse {
      * @memberof SectionIdResponse
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface SectionModel
- */
-export interface SectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    courseId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    description: string;
 }
 /**
  * 
