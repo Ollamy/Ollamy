@@ -308,9 +308,9 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 
@@ -322,9 +322,9 @@ describe('getCourseSections', () => {
     }
 
     {
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 });
