@@ -74,7 +74,7 @@ export class SectionService {
 
   async getSection(sectionId: string, ctx: any): Promise<GetSectionModel> {
     try {
-      const sectionDb: Section = await prisma.section.findFirst({
+      const sectionDb: Section = await prisma.section.findUnique({
         where: {
           id: sectionId,
         },
