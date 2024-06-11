@@ -8735,7 +8735,7 @@ __metadata:
     pbkdf2: ^3.1.2
     pg: ^8.11.3
     prettier: ^2.8.4
-    prisma: latest
+    prisma: 5.15.0
     redis: ^4.6.6
     reflect-metadata: ^0.1.13
     rimraf: ^4.1.2
@@ -18070,7 +18070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:latest":
+"prisma@npm:5.15.0":
   version: 5.15.0
   resolution: "prisma@npm:5.15.0"
   dependencies:
