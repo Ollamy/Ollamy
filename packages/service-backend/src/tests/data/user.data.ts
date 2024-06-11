@@ -15,6 +15,11 @@ export const context = {
   __user: {
     id: uuidv4(),
   },
+  __device: {
+    isPhone: false,
+    isTablet: false,
+    isMobile: false,
+  },
 };
 
 // mock
