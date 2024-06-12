@@ -32,6 +32,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { MODE } from '../setup';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -72,8 +73,8 @@ export class UserController {
       {
         httpOnly: true,
         maxAge: SessionService.TTL,
-        sameSite: 'none' as const,
-        secure: true,
+        sameSite: MODE === 'prod' ? 'none' : undefined,
+        secure: MODE === 'prod',
       },
     );
     return res.send({ success: true });
@@ -107,8 +108,8 @@ export class UserController {
       {
         httpOnly: true,
         maxAge: SessionService.TTL,
-        sameSite: 'none' as const,
-        secure: true,
+        sameSite: MODE === 'prod' ? 'none' : undefined,
+        secure: MODE === 'prod',
       },
     );
     return res.send({ success: true });
@@ -156,8 +157,8 @@ export class UserController {
       {
         httpOnly: true,
         maxAge: SessionService.TTL,
-        sameSite: 'none' as const,
-        secure: true,
+        sameSite: MODE === 'prod' ? 'none' : undefined,
+        secure: MODE === 'prod',
       },
     );
 
