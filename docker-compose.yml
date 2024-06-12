@@ -51,6 +51,7 @@ services:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
+      MODE: ${MODE}
       MAKER_PORT: ${MAKER_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
