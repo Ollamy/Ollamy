@@ -17,13 +17,22 @@ import {
   GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import { Answer, AnswerType, LessonStatus, Prisma, Question } from '@prisma/client';
+import {
+  Answer,
+  AnswerType,
+  LessonStatus,
+  Prisma,
+  Question,
+} from '@prisma/client';
 import { PictureService } from '../picture/picture.service';
 import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
+import { TasksService } from '../cron/cron.service';
 
 @Injectable()
 export class QuestionService {
+  constructor(private readonly cronService: TasksService) {}
+
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
@@ -147,7 +156,7 @@ export class QuestionService {
           },
           select: {
             picture_id: true,
-          }
+          },
         });
 
         await PictureService.deletePicture(pictureId.picture_id);
@@ -229,14 +238,14 @@ export class QuestionService {
 
       const answerPromises = answersDb.map(
         async (answer) =>
-        ({
-          id: answer.id,
-          data: answer.data,
-          picture: answer.picture_id
-            ? await PictureService.getPicture(answer.picture_id)
-            : undefined,
-          order: answer.order,
-        } as unknown as QuestionAnswerModel),
+          ({
+            id: answer.id,
+            data: answer.data,
+            picture: answer.picture_id
+              ? await PictureService.getPicture(answer.picture_id)
+              : undefined,
+            order: answer.order,
+          } as unknown as QuestionAnswerModel),
       );
       return await Promise.all(answerPromises);
     } catch (error) {
@@ -303,9 +312,9 @@ export class QuestionService {
 
     const nextQuestion =
       lessonQuestions[
-      lessonQuestions.findIndex(
-        (question) => question.id === body.questionId,
-      ) + 1
+        lessonQuestions.findIndex(
+          (question) => question.id === body.questionId,
+        ) + 1
       ] ?? null;
 
     let isValidated = questionDb.trust_answer_id === body?.answerId || false;
@@ -346,8 +355,8 @@ export class QuestionService {
         create: {
           user: {
             connect: {
-              id: ctx.__user.id
-            }
+              id: ctx.__user.id,
+            },
           },
           score: questionPoints,
         },
@@ -355,7 +364,7 @@ export class QuestionService {
           score: {
             increment: questionPoints,
           },
-        }
+        },
       });
 
       await prisma.usertoLesson.update({
@@ -385,12 +394,13 @@ export class QuestionService {
           },
         },
       });
+      this.cronService.createHpCron(ctx.__user.id, courseId);
     }
 
     if (questionDb.type_answer === AnswerType.FREE_ANSWER) {
       const answerDb = await prisma.answer.findFirst({
         where: {
-          id: questionDb.trust_answer_id
+          id: questionDb.trust_answer_id,
         },
       });
 
