@@ -61,7 +61,7 @@ describe('deleteQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -108,7 +108,7 @@ describe('getQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -176,7 +176,7 @@ describe('updateQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
