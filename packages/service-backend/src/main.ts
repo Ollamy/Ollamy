@@ -44,6 +44,7 @@ async function bootstrap() {
     // origin: [`http://localhost:19006`], // For dev Mobile
     origin: [
       `${FRONTEND_URL}:${FRONTEND_PORT}`,
+      'https://app.ollamy.com',
       'http://127.0.0.1:5173',
       'http://localhost:19006',
       'http://localhost:5173',
