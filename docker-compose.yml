@@ -99,9 +99,17 @@ services:
         condition: service_healthy
     networks:
       - backend_nt
+    volumes:
+      - maker_dist:/app/packages/service-maker/dist
 
 networks:
   backend_nt:
 
 volumes:
   redis_vlm:
+  maker_dist:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/packages/service-maker/dist
