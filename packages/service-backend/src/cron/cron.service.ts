@@ -37,7 +37,7 @@ export class TasksService {
       });
 
       if (hp >= 19) {
-        job.stop();
+        this.schedulerRegistry.deleteCronJob(`hp_${userId}_${courseId}`);
         return;
       }
     });
