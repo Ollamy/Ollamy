@@ -19,6 +19,7 @@ jobs:
     environment: Docker
     env:
       BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+      MODE: ${{ secrets.MODE }}
       MAKER_PORT: ${{ secrets.MAKER_PORT }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
