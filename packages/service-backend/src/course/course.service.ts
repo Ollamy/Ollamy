@@ -206,6 +206,46 @@ export class CourseService {
     }
   }
 
+  async checkCourseSlots(courseId): Promise<boolean> {
+    const courseOwner = await prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+      select: {
+        owner_id: true,
+      },
+    });
+
+    const subscriptionId = await prisma.userSubscription.findFirst({
+      where: {
+        user_id: courseOwner.owner_id,
+      },
+      select: {
+        subscription_id: true,
+      },
+    });
+
+    const slots = await prisma.subscription.findUnique({
+      where: {
+        id: subscriptionId.subscription_id,
+      },
+      select: {
+        slots: true,
+      },
+    });
+
+    const userCount = await prisma.usertoCourse.count({
+      where: {
+        course_id: courseId,
+        role_user: {
+          equals: Role.MEMBER,
+        },
+      },
+    });
+
+    return userCount <= slots.slots;
+  }
+
   async addUserToCourse(
     courseId: string,
     code: string,
@@ -225,6 +265,11 @@ export class CourseService {
         joinCourseId = courseId;
       }
 
+      if (!(await this.checkCourseSlots(joinCourseId))) {
+        Logger.error('Course is full for subscription plan !');
+        throw new ConflictException('Course is full for subscription plan !');
+      }
+
       const userToCourseDb = await prisma.usertoCourse.create({
         data: {
           user_id: userId,
@@ -241,7 +286,7 @@ export class CourseService {
       return { success: true } as CourseTrueResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('User not added to course !');
+      throw new ConflictException(`User not added to course !${error.nessage}`);
     }
   }
 
