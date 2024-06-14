@@ -45,20 +45,27 @@ enum PermissionLesson {
   PING
 }
 
+enum SubscriptionPlan {
+  BASIC
+  ESSENTIAL
+  MASTER
+}
+
 model User {
-  id              String            @id @default(uuid()) @db.Uuid
-  firstname       String
-  lastname        String
-  email           String            @unique
-  password        String
-  communities_id  String[]          @db.Uuid
-  UsertoCourse    UsertoCourse[]
-  Course          Course[]
-  Message         Message[]
-  UserDiscussions UserDiscussions[]
-  UsertoLesson    UsertoLesson[]
-  UsertoScore     UsertoScore[]
-  UserBadges      UserBadges[]
+  id               String             @id @default(uuid()) @db.Uuid
+  firstname        String
+  lastname         String
+  email            String             @unique
+  password         String
+  communities_id   String[]           @db.Uuid
+  UsertoCourse     UsertoCourse[]
+  Course           Course[]
+  Message          Message[]
+  UserDiscussions  UserDiscussions[]
+  UsertoLesson     UsertoLesson[]
+  UsertoScore      UsertoScore[]
+  UserBadges       UserBadges[]
+  UserSubscribtion UserSubscription[]
 }
 
 model UsertoCourse {
@@ -261,4 +268,25 @@ model UserBadges {
   created_at DateTime @default(now())
 
   @@id([user_id, badge_id])
+}
+
+model Subscription {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  plan  SubscriptionPlan @default(BASIC)
+  slots Int              @default(5)
+
+  UserSubscription UserSubscription[]
+}
+
+model UserSubscription {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  User    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String? @db.Uuid
+
+  Subscription    Subscription @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+  subscription_id String       @db.Uuid
+
+  @@unique([user_id, subscription_id])
 }
