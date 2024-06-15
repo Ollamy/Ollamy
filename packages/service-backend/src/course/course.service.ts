@@ -286,7 +286,7 @@ export class CourseService {
       return { success: true } as CourseTrueResponse;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException(`User not added to course !${error.nessage}`);
+      throw new ConflictException(`User not added to course: ${error.nessage}`);
     }
   }
 
