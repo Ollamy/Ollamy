@@ -9,9 +9,9 @@ interface TopBarContainerProps {
 function TopBarContainer({ children, style }: TopBarContainerProps) {
   return (
     <Box
-      width="100%"
+      width={'100%'}
       height={60}
-      borderColor="#BDBDBD"
+      borderColor={'#BDBDBD'}
       borderWidth={1}
       paddingX={5}
       borderTopWidth={0}
@@ -20,7 +20,7 @@ function TopBarContainer({ children, style }: TopBarContainerProps) {
       shadow={10}
       style={style}
     >
-      <HStack w="full" h="full" justifyContent="space-between" alignItems="center" space="12px">
+      <HStack w={'full'} h={'full'} justifyContent={'space-between'} alignItems={'center'} space={'12px'}>
         {children}
       </HStack>
     </Box>

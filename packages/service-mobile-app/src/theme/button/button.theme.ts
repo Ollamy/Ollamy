@@ -40,6 +40,11 @@ const buttonTheme = {
         color: '#758EE9',
       },
     },
+    purple: {
+      backgroundColor: '#876BF6',
+      borderRadius: '12px',
+      _pressed: { opacity: 0.5 },
+    },
     ghost: {
       _pressed: { background: 'gray.100' },
     },
