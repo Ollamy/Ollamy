@@ -1,0 +1,196 @@
+.
+├── components
+│   ├── analytics
+│   │   ├── analytic.interface.ts
+│   │   ├── analytic.style.ts
+│   │   └── analytic.tsx
+│   ├── button
+│   │   ├── button.interface.ts
+│   │   ├── button.style.ts
+│   │   └── button.tsx
+│   ├── Carrousel
+│   │   ├── carrousel.interface.ts
+│   │   ├── carrousel.style.ts
+│   │   └── carrousel.tsx
+│   ├── Course
+│   │   ├── Picture
+│   │   │   ├── course.picture.interface.ts
+│   │   │   ├── course.picture.style.ts
+│   │   │   └── course.picture.tsx
+│   │   └── Setting
+│   │       ├── course.setting.interface.ts
+│   │       ├── course.setting.style.ts
+│   │       └── course.setting.tsx
+│   ├── dropdown
+│   │   └── index.tsx
+│   ├── form
+│   │   ├── form.interface.ts
+│   │   ├── form.style.ts
+│   │   └── form.tsx
+│   ├── Income
+│   │   ├── income.interface.ts
+│   │   ├── income.style.ts
+│   │   └── income.tsx
+│   ├── input
+│   │   ├── input.interface.ts
+│   │   ├── input.style.ts
+│   │   ├── input.tsx
+│   │   └── QuizAnswerInput
+│   │       └── QuizAnswerInput.tsx
+│   ├── loading
+│   │   └── spinner.tsx
+│   ├── modal
+│   │   ├── AddImageModal
+│   │   │   └── AddImageModal.tsx
+│   │   ├── DeleteModal
+│   │   │   └── DeleteModal.tsx
+│   │   └── index.tsx
+│   ├── Navbar
+│   │   ├── navbar.interface.ts
+│   │   ├── navbar.style.ts
+│   │   └── navbar.tsx
+│   ├── profile
+│   │   ├── profile.interface.ts
+│   │   ├── profile.style.ts
+│   │   └── profile.tsx
+│   ├── RadixUi
+│   │   ├── AlertDialog
+│   │   │   └── CustomAlertDialog.tsx
+│   │   └── Dialog
+│   │       └── CustomDialogTitleDescription.tsx
+│   ├── sidebar
+│   │   ├── sidebar.interface.ts
+│   │   ├── sidebar.style.ts
+│   │   └── sidebar.tsx
+│   └── TopBar
+│       ├── index.tsx
+│       ├── Path
+│       │   └── Path.tsx
+│       └── TopBar.tsx
+├── env.ts
+├── hooks
+│   └── useSingleChoiceQuestion.tsx
+├── main.tsx
+├── pages
+│   ├── Auth
+│   │   ├── Login.tsx
+│   │   └── Register.tsx
+│   ├── CourseManager
+│   │   ├── CourseManagerPage.tsx
+│   │   ├── Section
+│   │   │   ├── Header
+│   │   │   │   └── SectionHeader.tsx
+│   │   │   ├── LessonTable
+│   │   │   │   ├── LessonTable.tsx
+│   │   │   │   └── OptionDropdownMenu
+│   │   │   │       └── OptionDropdownMenu.tsx
+│   │   │   └── Section.tsx
+│   │   └── SidePanel
+│   │       ├── CourseManager
+│   │       │   └── CourseManager.tsx
+│   │       ├── CourseSidePanel.tsx
+│   │       ├── Creator
+│   │       │   └── SectionCreator.tsx
+│   │       ├── List
+│   │       │   ├── Row
+│   │       │   │   └── SectionRow.tsx
+│   │       │   └── SectionList.tsx
+│   │       └── SearchBar
+│   │           └── SectionSearchBar.tsx
+│   ├── Home
+│   │   ├── Body
+│   │   │   ├── CourseCard
+│   │   │   │   └── CourseCard.tsx
+│   │   │   ├── HomeBody.tsx
+│   │   │   └── SearchBar
+│   │   │       └── HomeSearchBar.tsx
+│   │   ├── Header
+│   │   │   └── HomeHeader.tsx
+│   │   ├── HomePage.tsx
+│   │   └── SidePanel
+│   │       └── HomeSidePanel.tsx
+│   ├── LectureEditor
+│   │   ├── Editor
+│   │   │   └── LectueEditor.tsx
+│   │   └── LectureEditorPage.tsx
+│   └── QuizEditor
+│       ├── Body
+│       │   ├── QuestionEditor
+│       │   │   └── QuestionEditor.tsx
+│       │   ├── QuestionPropertiesSideBar
+│       │   │   ├── DifficultyPicker
+│       │   │   │   └── DifficultyPicker.tsx
+│       │   │   └── QuestionsPropertiesSideBar.tsx
+│       │   ├── QuestionsSideBar
+│       │   │   ├── Header
+│       │   │   │   ├── AddQuestion
+│       │   │   │   │   └── AddQuestion.tsx
+│       │   │   │   └── QuestionSideBarHeader.tsx
+│       │   │   ├── List
+│       │   │   │   ├── QuestionList.tsx
+│       │   │   │   └── Row
+│       │   │   │       └── QuestionRow.tsx
+│       │   │   └── QuestionSideBar.tsx
+│       │   └── QuizEditor.tsx
+│       ├── Factory
+│       │   ├── Components
+│       │   │   ├── Common
+│       │   │   │   └── QuestionManager
+│       │   │   │       ├── ImageManager
+│       │   │   │       │   └── QuestionImageManager.tsx
+│       │   │   │       └── QuizQuestionManager.tsx
+│       │   │   ├── FreeAnswer
+│       │   │   │   └── FreeAnswer.tsx
+│       │   │   ├── interface.ts
+│       │   │   ├── MultipleChoice
+│       │   │   │   └── MultipleChoice.tsx
+│       │   │   └── SquareChoice
+│       │   │       └── SquareChoice.tsx
+│       │   ├── factory.tsx
+│       │   ├── factory.types.ts
+│       │   └── hooks
+│       │       ├── useManageTextAnswer.ts
+│       │       └── useUploadPicture.ts
+│       └── QuizEditorPage.tsx
+├── services
+│   └── api
+│       ├── index.tsx
+│       ├── out
+│       │   ├── apis
+│       │   │   ├── AiApi.ts
+│       │   │   ├── AnswerApi.ts
+│       │   │   ├── BadgeApi.ts
+│       │   │   ├── CourseApi.ts
+│       │   │   ├── DefaultApi.ts
+│       │   │   ├── index.ts
+│       │   │   ├── LectureApi.ts
+│       │   │   ├── LessonApi.ts
+│       │   │   ├── QuestionApi.ts
+│       │   │   ├── SectionApi.ts
+│       │   │   └── UserApi.ts
+│       │   ├── index.ts
+│       │   ├── models
+│       │   │   └── index.ts
+│       │   └── runtime.ts
+│       └── routes
+│           ├── answer.tsx
+│           ├── course.tsx
+│           ├── lecture.tsx
+│           ├── lesson.tsx
+│           ├── question.tsx
+│           ├── section.tsx
+│           └── user.tsx
+├── styles
+│   ├── alertDialog.css
+│   ├── collapsible.css
+│   ├── dialog.css
+│   ├── dropdownMenu.css
+│   ├── form.css
+│   └── navigationMenu.css
+├── tree.txt
+└── utils
+    ├── activeData.ts
+    ├── generateUniqueColorVariables.ts
+    └── toBase64.ts
+
+73 directories, 120 files

@@ -28,7 +28,10 @@
     }
   },
   "include": [
-    "src"
-, "src/components/Course/Picture/course.picture.interface.ts"  ],
+    "src",
+    "cypress",
+    "webpack.config.cjs",
+    "cypress.config.cjs"
+, "src/components/Course/Picture/course.picture.interface.ts", "cypress/support/.component.ts"  ],
   "references": [{ "path": "./tsconfig.node.json"}]
 }
