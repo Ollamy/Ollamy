@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { PageType } from 'pages/Home/HomePage';
 import styled from 'styled-components';
 
@@ -8,7 +9,6 @@ import 'styles/navigationMenu.css';
 import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button } from '@radix-ui/themes';
-import { useNavigate } from 'react-router-dom';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
