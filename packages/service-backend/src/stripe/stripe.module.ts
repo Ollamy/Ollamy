@@ -1,26 +1,10 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { STRIPE_PRIVATE_KEY } from '../setup';
+import { Module } from '@nestjs/common';
 import { StripeController } from './stripe.controller';
-import { StripeService } from './stripe.service';
+import { StripeService } from 'stripe/stripe.service';
 
-@Module({})
-export class StripeModule {
-
-  static forRootAsync(): DynamicModule {
-    return {
-      module: StripeModule,
-      controllers: [StripeController],
-      imports: [ConfigModule.forRoot()],
-      providers: [
-        StripeService,
-        {
-          provide: STRIPE_PRIVATE_KEY,
-          useFactory: async (configService: ConfigService) =>
-            configService.get(STRIPE_PRIVATE_KEY),
-          inject: [ConfigService],
-        },
-      ],
-    };
-  }
-}
+@Module({
+  imports: [],
+  controllers: [StripeController],
+  providers: [StripeService],
+})
+export class StripeModule {}

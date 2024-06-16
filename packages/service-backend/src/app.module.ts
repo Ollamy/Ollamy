@@ -31,7 +31,7 @@ import { StripeModule } from './stripe/stripe.module';
     LectureModule,
     BadgeModule,
     AiModule,
-    StripeModule.forRootAsync(),
+    StripeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
