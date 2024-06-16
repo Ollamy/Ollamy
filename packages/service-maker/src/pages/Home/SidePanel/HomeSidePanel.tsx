@@ -5,8 +5,10 @@ import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
+import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { Button } from '@radix-ui/themes';
+import { useNavigate } from 'react-router-dom';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
@@ -14,12 +16,18 @@ interface HomeSidePanelProps {
 }
 
 function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
+  const navigate = useNavigate();
+
   const handleClick = useCallback(
     (target: PageType) => {
       setCurrentPage(target);
     },
     [setCurrentPage],
   );
+
+  const handleLogout = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
 
   return (
     <Container>
@@ -38,24 +46,24 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
                 Home
               </LinkNav>
             </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('profile')}>
-              <LinkNav
-                active={currentPage === 'profile'}
-                className={'NavigationMenuLink'}
-              >
-                <PersonIcon />
-                Profile
-              </LinkNav>
-            </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('settings')}>
-              <LinkNav
-                active={currentPage === 'settings'}
-                className={'NavigationMenuLink'}
-              >
-                <GearIcon />
-                Settings
-              </LinkNav>
-            </NavigationMenu.Item>
+            {/* <NavigationMenu.Item onClick={() => handleClick('profile')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'profile'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <PersonIcon /> */}
+            {/*     Profile */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
+            {/* <NavigationMenu.Item onClick={() => handleClick('settings')}> */}
+            {/*   <LinkNav */}
+            {/*     active={currentPage === 'settings'} */}
+            {/*     className={'NavigationMenuLink'} */}
+            {/*   > */}
+            {/*     <GearIcon /> */}
+            {/*     Settings */}
+            {/*   </LinkNav> */}
+            {/* </NavigationMenu.Item> */}
 
             <NavigationMenu.Indicator className={'NavigationMenuIndicator'}>
               <div className={'Arrow'} />
@@ -66,6 +74,14 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
             <NavigationMenu.Viewport className={'NavigationMenuViewport'} />
           </div>
         </NavigationMenu.Root>
+        <Button
+          color={'red'}
+          variant={'soft'}
+          onClick={handleLogout}
+          style={{ width: '100%' }}
+        >
+          Logout
+        </Button>
       </Body>
     </Container>
   );
@@ -94,6 +110,10 @@ const Header = styled.div`
 `;
 
 const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   width: 100%;
   height: 100%;
 

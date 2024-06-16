@@ -18,7 +18,7 @@ export class AiService {
 
   constructor() {
     AiService.vertexAi = new VertexAI({ project: 'ultimate-opus-422723-q5', location: 'us-central1' });
-    AiService.model = 'gemini-1.5-pro-preview-0409';
+    AiService.model = 'gemini-experimental';
     AiService.generativeModel = AiService.vertexAi.preview.getGenerativeModel({
       model: AiService.model,
       generationConfig: {

@@ -8,22 +8,10 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
-      }
-    },
-    "ios-dev": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      }
-    },
-    "preview": {
-      "distribution": "internal",
-      "ios": {
-        "resourceClass": "m-medium"
       },
-      "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000"
+      "android": {
+        "image": "latest",
+        "buildType": "apk"
       }
     },
     "production": {

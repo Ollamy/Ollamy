@@ -82,7 +82,7 @@ export class UpdateCourseModel {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ required: false, nullable: true, })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
   picture?: string | null;
@@ -107,7 +107,8 @@ export class UserCourseHp {
 
   @ApiProperty()
   @IsString()
-  timer: string;
+  @IsOptional()
+  timer?: string;
 }
 
 export enum Durationtype {
@@ -137,7 +138,7 @@ export class ShareCourseCode {
   @IsString()
   code: string;
 
-  @ApiProperty({ description: `Code's date of expiration`, type: Date})
+  @ApiProperty({ description: `Code's date of expiration`, type: Date })
   @IsDate()
   expiresAt: Date;
 }

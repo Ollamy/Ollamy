@@ -9,7 +9,8 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "!packages/service-mobile-app"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.21.0",

@@ -1,13 +1,16 @@
 // @ts-ignore
 import PROFILE from 'assets/icons/user-pp.png';
-import { Box, Text } from 'native-base';
+import { Box, Button, Text } from 'native-base';
 import { Image, StyleSheet, View } from 'react-native';
+import RCTNetworking from 'react-native/Libraries/Network/RCTNetworking';
+import { useNavigate } from 'react-router-native';
 import { useGetUserQuery } from 'src/services/user/user';
 
 const styles = StyleSheet.create({
   body: {
     flex: 1,
     margin: 24,
+    justifyContent: 'space-between',
   },
   profileContainer: {
     width: '100%',
@@ -30,6 +33,7 @@ const styles = StyleSheet.create({
 });
 
 function Profile() {
+  const navigate = useNavigate();
   const { data: user } = useGetUserQuery();
 
   if (!user) return <Box />;
@@ -45,6 +49,16 @@ function Profile() {
         </Text>
         <Text>{user.email}</Text>
       </Box>
+      <Button
+        variant={'red'}
+        onPress={() =>
+          RCTNetworking.clearCookies(() => {
+            navigate('/login');
+          })
+        }
+      >
+        log out
+      </Button>
     </View>
   );
 }

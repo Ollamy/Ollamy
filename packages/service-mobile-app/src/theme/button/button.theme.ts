@@ -45,6 +45,15 @@ const buttonTheme = {
       borderRadius: '12px',
       _pressed: { opacity: 0.5 },
     },
+    red: {
+      backgroundColor: '#F4ADAD',
+      borderRadius: '5px',
+      _pressed: { backgroundColor: '#FFFFFF' },
+      _text: {
+        fontWeight: 700,
+        color: 'white',
+      },
+    },
     ghost: {
       _pressed: { background: 'gray.100' },
     },

@@ -1,3 +1,5 @@
+// @ts-ignore
+import FAVICON from 'assets/favicon.png';
 import { HStack, Image, Pressable } from 'native-base';
 import { Text } from 'react-native';
 import { useNavigate } from 'react-router-native';
@@ -17,7 +19,11 @@ function CourseRowButton({ course }: { course: UserCourse }) {
         borderColor={'gray.200'}
         borderWidth={1}
       >
-        <Image size={12} alt={'picture'} resizeMode={'contain'} source={{ uri: course.pictureId }} />
+        {course.pictureId ? (
+          <Image size={12} alt={'picture'} resizeMode={'contain'} source={{ uri: course.pictureId }} />
+        ) : (
+          <Image size={12} resizeMode={'contain'} source={FAVICON} alt={'fav-icon'} />
+        )}
         <Text style={{ fontWeight: '600', fontSize: 14 }}>{course.title}</Text>
       </HStack>
     </Pressable>

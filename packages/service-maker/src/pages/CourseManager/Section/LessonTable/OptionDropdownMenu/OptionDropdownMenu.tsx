@@ -41,7 +41,7 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
     (target: 'quizEditor' | 'lectureEditor') => {
       navigate(`/${target}/${lessonId}?courseId=${courseId}`);
     },
-    [lessonId, navigate],
+    [courseId, lessonId, navigate],
   );
 
   return (
@@ -66,7 +66,6 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
             Open in quiz editor
           </DropdownMenu.Item>
           <DropdownMenu.Item
-            disabled
             className={'DropdownMenuItem'}
             onClick={() => handleOpenIn('lectureEditor')}
           >
