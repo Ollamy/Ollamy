@@ -36,7 +36,6 @@ import { StripeModule } from './stripe/stripe.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
-    StripeModule,
   ],
   controllers: [AppController, AlertController],
   providers: [
