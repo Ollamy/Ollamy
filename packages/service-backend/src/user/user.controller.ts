@@ -194,4 +194,29 @@ export class UserController {
   async getUserScore(@OllContext() ctx: any): Promise<GetUserScoreModel> {
     return this.userService.getUserScore(ctx);
   }
+
+  @ApiCookieAuth()
+  @ApiOkResponse({
+    description: 'success body',
+    type: SuccessBody,
+  })
+  @LoggedMiddleware(true)
+  @Post('/logout')
+  async logoutUser(
+    @Response() res,
+    @OllContext() ctx: any,
+  ): Promise<SuccessBody> {
+    res.cookie(
+      'session',
+      await this.userService.logoutUser(ctx),
+      {
+        httpOnly: true,
+        maxAge: 0,
+        sameSite: MODE === 'prod' ? 'none' : undefined,
+        secure: MODE === 'prod',
+      },
+    );
+
+    return res.send({ success: true });
+  }
 }
