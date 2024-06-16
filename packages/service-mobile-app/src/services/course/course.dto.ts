@@ -20,5 +20,5 @@ export interface CourseInfo {
 
 export interface GetCourseHpResponse {
   hp: number;
-  timer: string;
+  timer?: string;
 }

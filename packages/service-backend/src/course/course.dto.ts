@@ -113,7 +113,8 @@ export class UserCourseHp {
 
   @ApiProperty()
   @IsString()
-  timer: string;
+  @IsOptional()
+  timer?: string;
 }
 
 export enum Durationtype {

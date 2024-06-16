@@ -18,13 +18,16 @@ import {
 } from './question.dto';
 import prisma from 'client';
 import { Answer, AnswerType, Status, Prisma, Question } from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
-import { QuestionAnswerModel } from '../answer/answer.dto';
+import { PictureService } from 'picture/picture.service';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
-import { SectionService } from '../section/section.service';
+import { SectionService } from 'section/section.service';
+import { TasksService } from 'cron/cron.service';
 
 @Injectable()
 export class QuestionService {
+  constructor(private readonly cronService: TasksService) {}
+
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
@@ -386,6 +389,7 @@ export class QuestionService {
           },
         },
       });
+      this.cronService.createHpCron(ctx.__user.id, courseId);
     }
 
     if (questionDb.type_answer === AnswerType.FREE_ANSWER) {

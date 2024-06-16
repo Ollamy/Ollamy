@@ -23,13 +23,15 @@ import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
 import { mockLesson } from './data/lesson.data';
 import { mockSection1, mockUserToCourse } from './data/course.data';
+import { TasksService } from '../cron/cron.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -59,7 +61,7 @@ describe('deleteQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -106,7 +108,7 @@ describe('getQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -174,7 +176,7 @@ describe('updateQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [QuestionService],
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);

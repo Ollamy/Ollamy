@@ -40,6 +40,15 @@ const buttonTheme = {
         color: '#758EE9',
       },
     },
+    red: {
+      backgroundColor: '#F4ADAD',
+      borderRadius: '5px',
+      _pressed: { backgroundColor: '#FFFFFF' },
+      _text: {
+        fontWeight: 700,
+        color: 'white',
+      },
+    },
     ghost: {
       _pressed: { background: 'gray.100' },
     },

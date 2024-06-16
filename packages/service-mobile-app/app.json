@@ -34,9 +34,6 @@
         "projectId": "969b5b48-a26a-4885-8aa8-767c139c4d18"
       }
     },
-    "owner": "ollamy",
-    "plugins": [
-      "expo-secure-store"
-    ]
+    "owner": "ollamy"
   }
 }
