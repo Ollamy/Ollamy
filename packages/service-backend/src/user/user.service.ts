@@ -74,8 +74,10 @@ export class UserService {
   }
 
   async registerUser(userData: CreateUserModel): Promise<string> {
+    const platform = userData.platform;
     userData.password = this.hashPassword(userData.password);
 
+    delete userData.platform;
     try {
       const userDb: User = await prisma.user.create({
         data: {
@@ -84,7 +86,7 @@ export class UserService {
         },
       });
 
-      return await this.createToken(userDb.id, userData.platform);
+      return await this.createToken(userDb.id, platform);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
