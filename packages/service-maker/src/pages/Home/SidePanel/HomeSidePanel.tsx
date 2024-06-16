@@ -28,9 +28,8 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   );
 
   const handleLogout = useCallback(() => {
-    mutateAsync({}).then(() => {
-      navigate('/');
-    });
+    mutateAsync({});
+    navigate('/');
   }, [mutateAsync, navigate]);
 
   return (

@@ -31,7 +31,7 @@ export function Login() {
 
   useEffect(() => {
     if (data) {
-      navigate('/home');
+      // navigate('/home');
     }
   }, [data, navigate]);
 
