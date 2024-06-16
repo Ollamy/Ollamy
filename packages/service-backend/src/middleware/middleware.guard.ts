@@ -8,32 +8,8 @@ import {
 import prisma from 'client';
 import { Reflector } from '@nestjs/core';
 import { MIDDLEWARE_KEY } from './middleware.decorator';
-import SessionService from '../redis/session/session.service';
-
-const detectDevice = (userAgent: string) => {
-  const isMobile = /Mobile|Android|iP(hone|od)/.test(userAgent);
-  const isTablet = /iPad|Tablet/.test(userAgent);
-  const isPhone = isMobile && !isTablet;
-  const os = /Windows/.test(userAgent)
-    ? 'Windows'
-    : /Macintosh/.test(userAgent)
-    ? 'Mac'
-    : /Android/.test(userAgent)
-    ? 'Android'
-    : /Linux/.test(userAgent)
-    ? 'Linux'
-    : /iPhone|iPad|iPod/.test(userAgent)
-    ? 'iOS'
-    : 'Unknown';
-
-  return {
-    isPhone,
-    isTablet,
-    isMobile: isPhone || isTablet,
-    os,
-    userAgent,
-  };
-};
+import SessionService from 'redis/session/session.service';
+import { PlatformEnum } from 'user/user.dto';
 
 @Injectable()
 export class MiddlewareGuard implements CanActivate {
@@ -77,7 +53,7 @@ export class MiddlewareGuard implements CanActivate {
 
     req.__user = user;
 
-    req.__device = detectDevice(req.headers['user-agent']);
+    req.__device.isMaker = data.platform === PlatformEnum.MAKER;
 
     const userToCourse = await prisma.usertoCourse.findMany({
       where: {

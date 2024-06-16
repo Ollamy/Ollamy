@@ -1,4 +1,4 @@
-import { LoginUserModel } from 'user/user.dto';
+import { LoginUserModel, PlatformEnum } from 'user/user.dto';
 import { User } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,6 +9,7 @@ export const userId = uuidv4();
 export const loginUserData: LoginUserModel = {
   email: 'test@example.com',
   password: 'hashedPassword',
+  platform: PlatformEnum.MAKER,
 };
 
 export const context = {
@@ -16,9 +17,7 @@ export const context = {
     id: uuidv4(),
   },
   __device: {
-    isPhone: false,
-    isTablet: false,
-    isMobile: false,
+    isMaker: true,
   },
 };
 

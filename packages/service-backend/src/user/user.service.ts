@@ -11,9 +11,9 @@ import {
   GetUserScoreModel,
   LoginUserModel,
   UpdateUserModel,
-  UserCourses,
   UserCoursesResponse,
   UserIdResponse,
+  PlatformEnum,
 } from './user.dto';
 import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
@@ -36,10 +36,11 @@ export class UserService {
       .toString('hex');
   }
 
-  async createToken(id: string): Promise<string> {
+  async createToken(id: string, platform: PlatformEnum): Promise<string> {
     const session: string = UserService.generateSessionId();
     const res = await SessionService.set(session, {
       id,
+      platform,
     });
 
     if (res !== 'OK') {
@@ -83,7 +84,7 @@ export class UserService {
         },
       });
 
-      return await this.createToken(userDb.id);
+      return await this.createToken(userDb.id, userData.platform);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -111,7 +112,7 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    return this.createToken(userDb.id);
+    return this.createToken(userDb.id, userData.platform);
   }
 
   async getUser(ctx: any): Promise<GetUserModel> {
@@ -215,28 +216,38 @@ export class UserService {
       return {
         courses: await Promise.all(
           courses.map(async (course) => {
+            const isOwner = course.owner_id === ctx.__user.id;
+
+            delete course.owner_id;
+
+            let pictureId: string = undefined;
+            let users: number = undefined;
+
+            if (!ctx.__device.isMaker) {
+              pictureId = await PictureService.getPicture(course.picture_id);
+              users = await prisma.usertoCourse.count({
+                where: {
+                  course_id: course.id,
+                  role_user: {
+                    equals: Role.MEMBER,
+                  },
+                },
+              });
+            }
+
+            delete course.picture_id;
+
             const {
               last_lesson_id: lastLessonId,
               last_section_id: lastSectionId,
               status: status,
-            } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
-
-            const isOwner = course.owner_id === ctx.__user.id;
-            const pictureId = await PictureService.getPicture(
-              course.picture_id,
-            );
-
-            delete course.owner_id;
-            delete course.picture_id;
-
-            const users = await prisma.usertoCourse.count({
-              where: {
-                course_id: course.id,
-                role_user: {
-                  equals: Role.MEMBER,
-                },
-              },
-            });
+            } = !ctx.__device.isMaker
+              ? userDb.UsertoCourse.find((c) => c.course_id === course.id)
+              : {
+                  last_lesson_id: undefined,
+                  last_section_id: undefined,
+                  status: undefined,
+                };
 
             return {
               ...course,
@@ -245,12 +256,9 @@ export class UserService {
               lastSectionId,
               owner: isOwner,
               numberOfUsers: users,
-              status:
-                ctx.__device.isPhone ||
-                ctx.__device.isTablet ||
-                ctx.__device.isMobile
-                  ? status || Status.NOT_STARTED
-                  : undefined,
+              status: !ctx.__device.isMaker
+                ? status ?? Status.NOT_STARTED
+                : undefined,
             };
           }),
         ),

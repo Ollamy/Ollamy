@@ -23,6 +23,7 @@ import {
   Lesson,
   Lecture,
   UsertoLesson,
+  Status,
 } from '@prisma/client';
 
 @Injectable()
@@ -82,27 +83,25 @@ export class LessonService {
     }
   }
 
-  async getLesson(lessonId: string, userId): Promise<LessonModel> {
+  async getLesson(lessonId: string, ctx: any): Promise<LessonModel> {
     try {
-      const lessonDb: Lesson = await prisma.lesson.findFirst({
+      const lessonDb = await prisma.lesson.findFirst({
         where: {
           id: lessonId,
         },
-      });
-
-      const userLessonStatusDb = await prisma.usertoLesson.findUnique({
-        where: {
-          lesson_id_user_id: {
-            user_id: userId,
-            lesson_id: lessonId,
+        include: {
+          UsertoLesson: {
+            select: {
+              status: true,
+            },
+            where: {
+              user_id: ctx.__user.id,
+            },
           },
         },
-        select: {
-          status: true,
-        },
       });
 
-      if (!lessonDb || !userLessonStatusDb) {
+      if (!lessonDb || lessonDb.UsertoLesson.length === 0) {
         Logger.error('Lesson does not exists !');
         throw new ConflictException('Lesson does not exists !');
       }
@@ -123,7 +122,9 @@ export class LessonService {
         id: lessonDb.id,
         title: lessonDb.title,
         description: lessonDb.description,
-        status: userLessonStatusDb.status,
+        status: ctx.__device._isMaker
+          ? lessonDb?.UsertoLesson[0]?.status ?? Status.NOT_STARTED
+          : undefined,
         numberOfQuestions: questionsCount,
         numberOfLectures: lecturesCount,
       } as LessonModel;

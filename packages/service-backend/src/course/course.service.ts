@@ -202,9 +202,16 @@ export class CourseService {
     ctx: any,
   ): Promise<GetSectionsModel[]> {
     try {
-      const courseSectionsDb: Section[] = await prisma.section.findMany({
+      const courseSectionsDb = await prisma.section.findMany({
         where: {
           course_id: CourseId,
+        },
+        include: {
+          UsertoSection: {
+            where: {
+              user_id: ctx.__user.id,
+            },
+          },
         },
       });
 
@@ -214,26 +221,14 @@ export class CourseService {
       }
 
       const sectionPromises: Promise<GetSectionsModel>[] = courseSectionsDb.map(
-        async (section: Section) => {
-          const userSection = await prisma.usertoSection.findUnique({
-            where: {
-              section_id_user_id: {
-                user_id: ctx.__user.id,
-                section_id: section.id,
-              },
-            },
-          });
-
+        async (section) => {
           return {
             id: section.id,
             description: section.description,
             title: section.title,
-            status:
-              ctx.__device.isPhone ||
-              ctx.__device.isTablet ||
-              ctx.__device.isMobile
-                ? userSection?.status || Status.NOT_STARTED
-                : undefined,
+            status: !ctx.__device.isMaker
+              ? section?.UsertoSection[0]?.status ?? Status.NOT_STARTED
+              : undefined,
           };
         },
       );
@@ -359,37 +354,36 @@ export class CourseService {
     sectionId: string,
     userId: string,
   ) {
-    const courseId = await prisma.section.findUnique({
-      where: { id: sectionId },
-      select: {
-        course_id: true,
+    const remainingLessons = await prisma.section.count({
+      where: {
+        OR: [
+          {
+            id: sectionId,
+            UsertoSection: {
+              none: {
+                status: {
+                  not: 'COMPLETED',
+                },
+              },
+            },
+          },
+          {
+            id: sectionId,
+            UsertoSection: {
+              none: {},
+            },
+          },
+        ],
       },
     });
 
-    const courseSectionsIds = (
-      await prisma.section.findMany({
-        where: {
-          course_id: courseId.course_id,
+    if (remainingLessons === 0) {
+      const courseId = await prisma.section.findUnique({
+        where: { id: sectionId },
+        select: {
+          course_id: true,
         },
-        select: { id: true },
-      })
-    ).map((lesson) => lesson.id);
-
-    const courseUserToSectionStatuses: Status[] = (
-      await prisma.usertoSection.findMany({
-        where: {
-          id: { in: courseSectionsIds },
-        },
-        select: { status: true },
-      })
-    ).map((userToSectionObject) => userToSectionObject.status);
-
-    if (
-      courseUserToSectionStatuses.every(
-        (status) => status === Status.COMPLETED,
-      ) === true &&
-      courseSectionsIds.length === courseUserToSectionStatuses.length
-    ) {
+      });
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {

@@ -85,24 +85,26 @@ export class SectionService {
         throw new ConflictException('Section does not exists !');
       }
 
-      const userToSection = await prisma.usertoSection.findUnique({
-        where: {
-          section_id_user_id: {
-            section_id: sectionId,
-            user_id: ctx.__user.id,
-          },
-        },
-        select: {
-          status: true,
-        },
-      });
+      const userToSection = !ctx.__device.isMaker
+        ? await prisma.usertoSection.findUnique({
+            where: {
+              section_id_user_id: {
+                section_id: sectionId,
+                user_id: ctx.__user.id,
+              },
+            },
+            select: {
+              status: true,
+            },
+          })
+        : undefined;
 
       return {
         courseId: sectionDb.course_id,
         title: sectionDb.title,
         description: sectionDb.description,
         status:
-          ctx.__device.isPhone || ctx.__device.isTablet || ctx.__device.isMobile
+          !ctx.__device.isMaker && userToSection
             ? userToSection?.status
             : undefined,
       } as GetSectionModel;
@@ -142,47 +144,50 @@ export class SectionService {
 
   async getSectionLessons(sectionId: string, ctx: any): Promise<LessonModel[]> {
     try {
-      const sectionLessonsDb: Lesson[] = await prisma.lesson.findMany({
+      const sectionLessonsDb = await prisma.lesson.findMany({
         where: {
           section_id: sectionId,
+        },
+        include: {
+          UsertoLesson: {
+            where: {
+              user_id: ctx.__user.id,
+            },
+          },
         },
       });
 
       if (!sectionLessonsDb) {
-        Logger.error('No chapters for this course !');
-        throw new NotFoundException('No chapters for this course !');
+        Logger.error('No lesson for this section !');
+        throw new NotFoundException('No lesson for this section !');
       }
 
       const lessonPromises: Promise<LessonModel>[] = sectionLessonsDb.map(
-        async (lesson: Lesson) => {
-          const userLesson = await prisma.usertoLesson.findUnique({
-            where: {
-              lesson_id_user_id: {
-                user_id: ctx.__user.id,
+        async (lesson) => {
+          let questionsCount = undefined;
+          let lecturesCount = undefined;
+
+          if (!ctx.__device.isMaker) {
+            questionsCount = await prisma.question.count({
+              where: {
                 lesson_id: lesson.id,
               },
-            },
-          });
+            });
 
-          const questionsCount = await prisma.question.count({
-            where: {
-              lesson_id: lesson.id,
-            },
-          });
-
-          const lecturesCount = await prisma.lecture.count({
-            where: {
-              lesson_id: lesson.id,
-            },
-          });
+            lecturesCount = await prisma.lecture.count({
+              where: {
+                lesson_id: lesson.id,
+              },
+            });
+          }
 
           return {
             id: lesson.id,
             description: lesson.description,
             title: lesson.title,
-            status: userLesson?.status || Status.NOT_STARTED,
-            numberOfQuestions: questionsCount || 0,
-            numberOfLectures: lecturesCount || 0,
+            status: lesson?.UsertoLesson[0]?.status ?? Status.NOT_STARTED,
+            numberOfQuestions: questionsCount ?? 0,
+            numberOfLectures: lecturesCount ?? 0,
           };
         },
       );
@@ -199,24 +204,13 @@ export class SectionService {
     userId: string,
   ): Promise<SectionIdResponse> {
     try {
-      let userToSection = await prisma.usertoSection.findUnique({
-        where: {
-          section_id_user_id: {
-            user_id: userId,
-            section_id: sectionId,
-          },
+      const userToSection = await prisma.usertoSection.create({
+        data: {
+          user_id: userId,
+          section_id: sectionId,
+          status: Status.IN_PROGRESS,
         },
       });
-
-      if (!userToSection) {
-        userToSection = await prisma.usertoSection.create({
-          data: {
-            user_id: userId,
-            section_id: sectionId,
-            status: Status.IN_PROGRESS,
-          },
-        });
-      }
 
       if (!userToSection) {
         Logger.error('Failed to create user section !');
@@ -233,37 +227,36 @@ export class SectionService {
     lessonId: string,
     userId: string,
   ) {
-    const sectionId = await prisma.lesson.findUnique({
-      where: { id: lessonId },
-      select: {
-        section_id: true,
+    const remainingLessons = await prisma.lesson.count({
+      where: {
+        OR: [
+          {
+            id: lessonId,
+            UsertoLesson: {
+              none: {
+                status: {
+                  not: 'COMPLETED',
+                },
+              },
+            },
+          },
+          {
+            id: lessonId,
+            UsertoLesson: {
+              none: {},
+            },
+          },
+        ],
       },
     });
 
-    const sectionLessonsIds = (
-      await prisma.lesson.findMany({
-        where: {
-          section_id: sectionId.section_id,
+    if (remainingLessons === 0) {
+      const sectionId = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+        select: {
+          section_id: true,
         },
-        select: { id: true },
-      })
-    ).map((lesson) => lesson.id);
-
-    const sectionUserToLessonStatuses: Status[] = (
-      await prisma.usertoLesson.findMany({
-        where: {
-          id: { in: sectionLessonsIds },
-        },
-        select: { status: true },
-      })
-    ).map((userToLessonObject) => userToLessonObject.status);
-
-    if (
-      sectionUserToLessonStatuses.every(
-        (status) => status === Status.COMPLETED,
-      ) === true &&
-      sectionUserToLessonStatuses.length === sectionLessonsIds.length
-    ) {
+      });
       await prisma.usertoSection.update({
         where: {
           section_id_user_id: {

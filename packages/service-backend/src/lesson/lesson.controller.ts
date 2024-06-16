@@ -100,7 +100,7 @@ export class LessonController {
     @Param('id') id: string,
     @OllContext() ctx: any,
   ): Promise<LessonModel> {
-    return this.lessonService.getLesson(id, ctx.__user.id);
+    return this.lessonService.getLesson(id, ctx);
   }
 
   @ApiOkResponse({

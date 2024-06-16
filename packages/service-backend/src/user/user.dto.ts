@@ -9,13 +9,14 @@ import {
   IsBoolean,
   IsArray,
   ValidateNested,
-  IsUrl,
-  MinLength,
-  MaxLength,
-  Matches,
   IsEnum,
   IsNumber,
 } from 'class-validator';
+
+export enum PlatformEnum {
+  MOBILE = 'MOBILE',
+  MAKER = 'MAKER',
+}
 
 export class SuccessBody {
   @ApiProperty({ description: 'Result of the request' })
@@ -59,13 +60,15 @@ export class CreateUserModel extends BaseUser {
       'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
   })
   @IsString()
-  // @MinLength(8)
-  // @MaxLength(50)
-  // @Matches(/^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z]).{8,}$/, {
-  //   message:
-  //     'Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters',
-  // })
   password: string;
+
+  @ApiProperty({
+    description: 'Platform user tries to access',
+    required: true,
+    enum: PlatformEnum,
+  })
+  @IsEnum(PlatformEnum)
+  platform: PlatformEnum;
 }
 
 export class LoginUserModel {
@@ -76,6 +79,14 @@ export class LoginUserModel {
   @ApiProperty({ description: 'The password of the user' })
   @IsString()
   password: string;
+
+  @ApiProperty({
+    description: 'Platform user tries to login',
+    required: true,
+    enum: PlatformEnum,
+  })
+  @IsEnum(PlatformEnum)
+  platform: PlatformEnum;
 }
 
 export class UpdateUserModel {
@@ -158,17 +169,26 @@ export class UserCourses {
   @IsBoolean()
   owner: boolean;
 
-  @ApiProperty({ description: 'The unique identifier of the last lesson' })
+  @ApiProperty({
+    description: 'The unique identifier of the last lesson',
+    required: false,
+  })
   @IsUUID()
-  lastLessonId: string;
+  lastLessonId?: string;
 
-  @ApiProperty({ description: 'The unique identifier of the last section' })
+  @ApiProperty({
+    description: 'The unique identifier of the last section',
+    required: false,
+  })
   @IsUUID()
-  lastSectionId: string;
+  lastSectionId?: string;
 
-  @ApiProperty({ description: 'The number of users enrolled in the course' })
+  @ApiProperty({
+    description: 'The number of users enrolled in the course',
+    required: false,
+  })
   @IsNumber()
-  numberOfUsers: number;
+  numberOfUsers?: number;
 
   @ApiProperty({
     required: false,
