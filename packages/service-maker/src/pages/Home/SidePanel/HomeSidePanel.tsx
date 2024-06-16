@@ -9,6 +9,7 @@ import 'styles/navigationMenu.css';
 import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button } from '@radix-ui/themes';
+import { userActions } from 'services/api/routes/user';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
@@ -17,6 +18,7 @@ interface HomeSidePanelProps {
 
 function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   const navigate = useNavigate();
+  const { mutateAsync } = userActions.useLogout();
 
   const handleClick = useCallback(
     (target: PageType) => {
@@ -26,8 +28,10 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   );
 
   const handleLogout = useCallback(() => {
-    navigate('/');
-  }, [navigate]);
+    mutateAsync({}).then(() => {
+      navigate('/');
+    });
+  }, [mutateAsync, navigate]);
 
   return (
     <Container>

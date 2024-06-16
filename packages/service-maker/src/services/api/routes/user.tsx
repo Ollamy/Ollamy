@@ -7,6 +7,7 @@ export const GET_USER_COURSES_KEY = 'getUserCoursesKey';
 const GET_USER_KEY = 'getUserKey';
 
 export const userActions = {
+  useLogout: () => useMutation(UserApi.logoutUser),
   useGetUser: (config?: UseQueryOptions<GetUserModel>) =>
     useQuery({
       queryKey: GET_USER_KEY,
