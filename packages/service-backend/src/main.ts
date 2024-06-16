@@ -10,6 +10,7 @@ import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
+import * as express from "express";
 
 function buildSwagger(
   app: INestApplication,
@@ -56,7 +57,13 @@ async function bootstrap() {
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
   app.use(cookieParser());
-  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use((req, res, next) => {
+    if (req.path === '/stripe/webhook') {
+      next();
+    } else {
+      bodyParser.json({ limit: '10mb' })(req, res, next);
+    }
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
@@ -67,16 +74,6 @@ async function bootstrap() {
     }),
   );
 
-  // use rawBody for /stripe/webhook
-  app.use('/stripe/webhook', (req, res, next) => {
-    req.rawBody = '';
-    req.on('data', (chunk) => {
-      req.rawBody += chunk;
-    });
-    req.on('end', () => {
-      next();
-    });
-  });
 
   await app.listen(BACKEND_PORT);
 }

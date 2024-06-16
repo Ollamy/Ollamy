@@ -29,10 +29,8 @@ export class StripeController {
 
   @Post('webhook')
   async handleWebhook(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string,) {
-    let rawBody = req.rawBody;
-    console.log(rawBody);
     try {
-      await this.stripeService.handleWebhook(rawBody, signature);
+      await this.stripeService.handleWebhook(req.rawBody, signature);
       return 'Webhook received';
     } catch (err) {
       return 'Webhook error';

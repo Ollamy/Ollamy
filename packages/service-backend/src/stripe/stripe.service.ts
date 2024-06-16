@@ -12,19 +12,23 @@ export class StripeService {
   }
 
   async createPaymentIntent(amount: number, currency: CurrencyType) {
-    const paymentIntent = await this.stripe.paymentIntents.create({
-      amount,
-      currency,
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-    return paymentIntent;
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount,
+        currency,
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+      return paymentIntent;
+    } catch (err) {
+      throw err;
+    }
   }
 
-  async handleWebhook(body: Buffer, signature: string) {
+  async handleWebhook(body: Buffer | string, signature: string) {
 
-    let event: any = body;
+    let event: Stripe.Event;
 
     try {
       event = this.stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
@@ -35,14 +39,20 @@ export class StripeService {
 
     switch (event.type) {
       case 'payment_intent.succeeded':
-        console.log('💰 Payment received!');
+        console.debug('💰 Payment received!');
+        break;
+      case 'payment_intent.created':
+        console.debug('🔔 Payment intent created');
+        break;
+      case 'charge.updated':
+        console.debug('🔔 Charge updated');
+        break;
+      case 'charge.succeeded':
+        console.debug('💰 Charge succeeded');
         break;
       // ... other event handlers
       default:
-      // console.log(`Unhandled event type ${event.type}`);
+        console.debug(`🤷‍♀️ Unhandled event type: ${event.type}`);
     }
-  } catch(err) {
-    // console.error('Webhook error:', err.message);
-    throw err;
   }
 }
