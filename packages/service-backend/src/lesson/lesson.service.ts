@@ -130,7 +130,7 @@ export class LessonService {
       } as LessonModel;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Lesson not found !');
+      throw new ConflictException(`Lesson not found ! ${error.message}`);
     }
   }
 
