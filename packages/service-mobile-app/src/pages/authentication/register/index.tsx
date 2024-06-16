@@ -110,7 +110,6 @@ function Register(): JSX.Element {
 
               <VStack w={'full'} justifyContent={'center'} space={6} alignItems={'center'} px={5}>
                 {currentStep === RegisterSteps.WELCOME && (
-                  // <VStack alignItems={'center'} justifyContent={'center'} w={'full'} h={'full'} space={'md'}>
                   <>
                     <Image source={KNOWLEDGE} w={'190px'} h={'160px'} resizeMode={'contain'} alt={'knowledge'} />
                     <Heading size={'xl'} fontWeight={'bold'} textAlign={'center'}>
@@ -125,7 +124,6 @@ function Register(): JSX.Element {
                       I ALREADY HAVE AN ACCOUNT
                     </Button>
                   </>
-                  // </VStack>
                 )}
 
                 {currentStep === RegisterSteps.FIRSTNAME_LASTNAME && (
