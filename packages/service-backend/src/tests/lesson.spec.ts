@@ -137,12 +137,22 @@ describe('getLesson', () => {
       .mockResolvedValue(mockGetLesson.numberOfLectures);
 
     // Invoke the function being tested
-    const result = await lessonService.getLesson(mockLessonId, userId);
+    const result = await lessonService.getLesson(mockLessonId, context);
 
     // Perform assertions
     expect(prisma.lesson.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.lesson.findFirst).toHaveBeenCalledWith({
       where: { id: mockLessonId },
+      include: {
+        UsertoLesson: {
+          select: {
+            status: true,
+          },
+          where: {
+            user_id: context.__user.id,
+          },
+        },
+      },
     });
 
     expect(result).toEqual(mockGetLesson);

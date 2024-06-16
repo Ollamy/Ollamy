@@ -56,7 +56,7 @@ export const mockLessonExtended = {
   description: 'desc',
   UsertoLesson: [
     {
-      status: Status.COMPLETED,
+      status: mockUserLesson.status,
     },
   ],
 };

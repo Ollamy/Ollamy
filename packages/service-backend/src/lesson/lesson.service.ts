@@ -122,7 +122,7 @@ export class LessonService {
         id: lessonDb.id,
         title: lessonDb.title,
         description: lessonDb.description,
-        status: ctx.__device._isMaker
+        status: !ctx.__device._isMaker
           ? lessonDb?.UsertoLesson[0]?.status ?? Status.NOT_STARTED
           : undefined,
         numberOfQuestions: questionsCount,
