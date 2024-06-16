@@ -38,6 +38,10 @@ export function Login() {
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
+        <OllamyContainer>
+          <Logo src={'/assets/Ollamy.svg'} />
+          Ollamy
+        </OllamyContainer>
         <Title>Login</Title>
         <InputContainer>
           <Label htmlFor={'email'}>Email</Label>
@@ -81,9 +85,12 @@ export function Login() {
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 100vh;
+
+  padding: 20px;
+  box-sizing: border-box;
 
   background-size: cover;
   background-position: center;
@@ -92,12 +99,46 @@ const Container = styled.div`
 `;
 
 const Form = styled.form`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  height: 100%;
+  width: 100%;
+
+  padding: 84px;
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  @media screen and (min-width: 600px) {
+    width: 700px;
+  }
+`;
+
+const OllamyContainer = styled.div`
+  position: absolute;
+  top: 84px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+
+  width: 100%;
+  font-size: 40px;
+  font-weight: 700;
+  color: #876bf6;
+`;
+
+const Logo = styled.img`
+  height: 60px;
 `;
 
 const Title = styled.h1`
