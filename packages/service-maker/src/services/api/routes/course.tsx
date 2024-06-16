@@ -38,6 +38,13 @@ export const courseActions = {
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
       },
     }),
+  useUpdateCourse: () =>
+    useMutation(CourseApi.updateCourse, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_USER_COURSES_KEY);
+        queryClient.invalidateQueries(GET_COURSE_KEY);
+      },
+    }),
   useRemoveCourse: () =>
     useMutation(CourseApi.deleteCourse, {
       onSuccess: () => {

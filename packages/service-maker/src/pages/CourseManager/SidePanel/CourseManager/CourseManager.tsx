@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
@@ -33,9 +34,20 @@ function CourseManager({ courseId }: CourseManagerProps) {
   const [shareCode, setShareCode] = useState<string | undefined>('');
 
   const { data } = courseActions.useCourse({ id: courseId });
+  const { mutateAsync: updateCourse } = courseActions.useUpdateCourse();
   const { mutateAsync: removeCourse } = courseActions.useRemoveCourse();
   const { mutateAsync: generateShareCode } =
     courseActions.useGenerateShareCode();
+
+  const handleEditCourse = useCallback(
+    async (title: string, description: string) => {
+      await updateCourse({
+        id: courseId,
+        updateCourseModel: { title, description },
+      });
+    },
+    [updateCourse, courseId],
+  );
 
   const handleRemoveCourse = useCallback(async () => {
     await removeCourse({ idCourseModel: { id: courseId } }).then(() => {
@@ -139,9 +151,25 @@ function CourseManager({ courseId }: CourseManagerProps) {
               </DataList.Item>
             </DataList.Root>
             <ButtonContainer>
-              <Button disabled color={'gray'} variant={'outline'}>
-                Edit
-              </Button>
+              <CustomDialogTitleDescription
+                dialogTitle={'Edit course'}
+                dialogDescription={
+                  'Edit the title and description of your current course.'
+                }
+                defaultTitle={data?.title}
+                defaultDescription={data?.description}
+                actionButtonValue={'Update'}
+                TriggerButton={
+                  <Button
+                    color={'gray'}
+                    variant={'outline'}
+                    style={{ width: '100%' }}
+                  >
+                    Edit
+                  </Button>
+                }
+                createFunction={handleEditCourse}
+              />
               <CustomAlertDialog
                 description={
                   'This action cannot be undone. This action will permanently delete the entire course from our servers, along with all related sections, quizzes and lectures.'
