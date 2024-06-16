@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { STRIPE_PRIVATE_KEY, STRIPE_WEBHOOK_SECRET } from '../setup';
+import { STRIPE_PRIVATE_KEY, STRIPE_WEBHOOK_SECRET } from 'setup';
 import { CurrencyType } from './stripe.dto';
 
 @Injectable()
@@ -27,11 +27,14 @@ export class StripeService {
   }
 
   async handleWebhook(body: Buffer | string, signature: string) {
-
     let event: Stripe.Event;
 
     try {
-      event = this.stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
+      event = this.stripe.webhooks.constructEvent(
+        body,
+        signature,
+        STRIPE_WEBHOOK_SECRET,
+      );
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`, err.message);
       throw err;
