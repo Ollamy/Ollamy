@@ -1,8 +1,7 @@
 // @ts-ignore
 import PROFILE from 'assets/icons/user-pp.png';
-import { Box, Button, Text } from 'native-base';
+import { Box, Text } from 'native-base';
 import { Image, StyleSheet, View } from 'react-native';
-import { useNavigate } from 'react-router-native';
 import { useGetUserQuery } from 'src/services/user/user';
 
 const styles = StyleSheet.create({
@@ -32,11 +31,6 @@ const styles = StyleSheet.create({
 
 function Profile() {
   const { data: user } = useGetUserQuery();
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/login');
-  };
 
   if (!user) return <Box />;
 
@@ -50,7 +44,6 @@ function Profile() {
           {user.firstname} {user.lastname}
         </Text>
         <Text>{user.email}</Text>
-        <Button onPress={handleClick} />
       </Box>
     </View>
   );
