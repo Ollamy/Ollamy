@@ -271,7 +271,7 @@ model UserBadges {
 }
 
 model Subscription {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   plan  SubscriptionPlan @unique @default(BASIC)
   slots Int              @default(5)
@@ -280,10 +280,10 @@ model Subscription {
 }
 
 model UserSubscription {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  User    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id String? @unique @db.Uuid
+  User            User?        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         String?      @unique @db.Uuid
 
   Subscription    Subscription @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
   subscription_id String       @db.Uuid

@@ -20,6 +20,8 @@ import {
 } from 'tests/data/course.data';
 import { TasksService } from '../cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import { v4 as uuidv4 } from 'uuid';
+import { SubscriptionPlan } from '@prisma/client';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -326,5 +328,138 @@ describe('getCourseSections', () => {
         NotFoundException,
       );
     }
+  });
+});
+
+describe('checkCourseSlots', () => {
+  let courseService: CourseService;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [CourseService, TasksService, SchedulerRegistry],
+    }).compile();
+
+    courseService = moduleRef.get<CourseService>(CourseService);
+  });
+
+  it('should return true when slots are available', async () => {
+    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.userSubscription, 'findFirst').mockResolvedValue({
+      id: uuidv4(),
+      user_id: context.__user.id,
+      subscription_id: uuidv4(),
+    });
+    jest.spyOn(prisma.subscription, 'findUnique').mockResolvedValue({
+      id: uuidv4(),
+      plan: SubscriptionPlan.BASIC,
+      slots: 5,
+    });
+    jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(5);
+
+    const result = await courseService.checkCourseSlots(courseId);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false when slots are not available', async () => {
+    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
+    jest
+      .spyOn(prisma.subscription, 'findUnique')
+      .mockResolvedValue({
+        id: uuidv4(),
+        plan: SubscriptionPlan.BASIC,
+        slots: 5,
+      });
+    jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(6);
+
+    const result = await courseService.checkCourseSlots(courseId);
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('addUserToCourse', () => {
+  let courseService: CourseService;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [CourseService, TasksService, SchedulerRegistry],
+    }).compile();
+
+    courseService = moduleRef.get<CourseService>(CourseService);
+  });
+
+  it('should add user to course successfully', async () => {
+    const code = 'sharecode-123';
+    const userId = context.__user.id;
+    const joinCourseId = courseId;
+
+    // Use prisma.course.findUnique to simulate Redis cache value
+    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
+    jest
+      .spyOn(prisma.usertoCourse, 'create')
+      .mockResolvedValue(mockUserToCourse);
+    jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);
+
+    const result = await courseService.addUserToCourse(courseId, code, userId);
+
+    expect(result).toEqual({ success: true });
+    expect(prisma.course.findUnique).toHaveBeenCalledWith({
+      where: { id: courseId },
+      select: { owner_id: true },
+    });
+    expect(prisma.usertoCourse.create).toHaveBeenCalledWith({
+      data: {
+        user_id: userId,
+        course_id: joinCourseId,
+      },
+    });
+    expect(prisma.course.findUnique).toHaveBeenCalledWith({
+      where: { id: courseId },
+      select: { owner_id: true },
+    });
+  });
+
+  it('should throw ConflictException if course is full', async () => {
+    const code = 'sharecode-123';
+    const userId = context.__user.id;
+    const joinCourseId = courseId;
+
+    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
+    jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(false);
+
+    await expect(
+      courseService.addUserToCourse(courseId, code, userId),
+    ).rejects.toThrow(ConflictException);
+
+    expect(prisma.course.findUnique).toHaveBeenCalledWith({
+      where: { id: courseId },
+      select: { owner_id: true },
+    });
+  });
+
+  it('should throw ConflictException if user to course creation fails', async () => {
+    const code = 'sharecode-123';
+    const userId = context.__user.id;
+    const joinCourseId = courseId;
+
+    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
+    jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue(null);
+    jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);
+
+    await expect(
+      courseService.addUserToCourse(courseId, code, userId),
+    ).rejects.toThrow(ConflictException);
+
+    expect(prisma.course.findUnique).toHaveBeenCalledWith({
+      where: { id: courseId },
+      select: { owner_id: true },
+    });
+    expect(prisma.usertoCourse.create).toHaveBeenCalledWith({
+      data: {
+        user_id: userId,
+        course_id: joinCourseId,
+      },
+    });
   });
 });

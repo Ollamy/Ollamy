@@ -25,6 +25,8 @@ import { PictureService } from '../picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from '../redis/redis.service';
 import { courseId } from '../tests/data/course.data';
+import { SubscriptionPlan } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 const CODE_LENGTH: number = 4;
 
@@ -37,6 +39,37 @@ export class CourseService {
     ctx: any,
   ): Promise<CourseIdResponse> {
     try {
+      // const existingUser = await prisma.user.findUnique({
+      //   where: { id: ctx.__user.id },
+      // });
+  
+      // if (!existingUser) {
+      //   console.error(`User with id ${ctx.__user.id} does not exist`);
+      //   throw new NotFoundException('User not found');
+      // }
+
+      // const userSubscription = await prisma.userSubscription.findFirst({
+      //   where: {
+      //     user_id: ctx.__user.id,
+      //   },
+      // });
+
+      // if (!userSubscription) {
+      //   const basicSubscription = await prisma.subscription.create({
+      //     data: {
+      //       plan: SubscriptionPlan.BASIC,
+      //       slots: 5,
+      //     }
+      //   });
+
+      //   await prisma.userSubscription.create({
+      //     data: {
+      //       user_id: ctx.__user.id,
+      //       subscription_id: basicSubscription.id,
+      //     },
+      //   });
+      // }
+
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
@@ -64,6 +97,7 @@ export class CourseService {
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
+      console.log(error, ctx.__user.id);
       throw new ConflictException('Course not created !');
     }
   }
