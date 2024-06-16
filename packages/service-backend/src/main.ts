@@ -24,18 +24,18 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', 'static'));
 
-  if (MODE === 'dev') {
-    const config = new DocumentBuilder()
-      .setTitle('Ollamy API')
-      .setDescription('So insane API')
-      .setVersion('1.0')
-      .addCookieAuth('session')
-      .build();
+  // if (MODE === 'dev') {
+  const config = new DocumentBuilder()
+    .setTitle('Ollamy API')
+    .setDescription('So insane API')
+    .setVersion('1.0')
+    .addCookieAuth('session')
+    .build();
 
-    app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
-    buildSwagger(app, config);
-    Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
-  }
+  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
+  buildSwagger(app, config);
+  Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
+  // }
 
   await RedisCacheService.connect();
   Logger.debug('Redis Connected!');
