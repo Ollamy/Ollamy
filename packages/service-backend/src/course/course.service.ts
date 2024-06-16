@@ -39,36 +39,26 @@ export class CourseService {
     ctx: any,
   ): Promise<CourseIdResponse> {
     try {
-      // const existingUser = await prisma.user.findUnique({
-      //   where: { id: ctx.__user.id },
-      // });
-  
-      // if (!existingUser) {
-      //   console.error(`User with id ${ctx.__user.id} does not exist`);
-      //   throw new NotFoundException('User not found');
-      // }
+      const userSubscription = await prisma.userSubscription.findFirst({
+        where: {
+          user_id: ctx.__user.id,
+        },
+      });
 
-      // const userSubscription = await prisma.userSubscription.findFirst({
-      //   where: {
-      //     user_id: ctx.__user.id,
-      //   },
-      // });
+      if (!userSubscription) {
+        const basicSubscription = await prisma.subscription.findFirst({
+          where: {
+            plan: SubscriptionPlan.BASIC,
+          }
+        });
 
-      // if (!userSubscription) {
-      //   const basicSubscription = await prisma.subscription.create({
-      //     data: {
-      //       plan: SubscriptionPlan.BASIC,
-      //       slots: 5,
-      //     }
-      //   });
-
-      //   await prisma.userSubscription.create({
-      //     data: {
-      //       user_id: ctx.__user.id,
-      //       subscription_id: basicSubscription.id,
-      //     },
-      //   });
-      // }
+        await prisma.userSubscription.create({
+          data: {
+            user_id: ctx.__user.id,
+            subscription_id: basicSubscription.id,
+          },
+        });
+      }
 
       const courseDb = await prisma.course.create({
         data: {
@@ -97,7 +87,6 @@ export class CourseService {
       return { id: courseDb.id } as CourseIdResponse;
     } catch (error) {
       Logger.error(error);
-      console.log(error, ctx.__user.id);
       throw new ConflictException('Course not created !');
     }
   }

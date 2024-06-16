@@ -3,6 +3,9 @@ import {
   Lesson,
   Picture,
   Section,
+  Subscription,
+  SubscriptionPlan,
+  UserSubscription,
   UsertoCourse,
   UsertoLesson,
 } from '@prisma/client';
@@ -39,6 +42,18 @@ export const mockPictureDb: Picture = {
   id: uuidv4(),
   filename: 'data',
 };
+
+export const mockSubscriptionDb: Subscription = {
+  id: uuidv4(),
+  plan: SubscriptionPlan.BASIC,
+  slots: 5
+}
+
+export const mockUserSubscriptionDb: UserSubscription = {
+  id: uuidv4(),
+  user_id: context.__user.id,
+  subscription_id: uuidv4(),
+}
 
 export const mockCourseDb: Course = {
   id: courseId,
