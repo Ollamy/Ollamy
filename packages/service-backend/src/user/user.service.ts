@@ -280,4 +280,14 @@ export class UserService {
       Logger.error(error);
     }
   }
+
+  async logoutUser(ctx: any) {
+    try {
+      console.log(ctx.cookies.session);
+      await SessionService.delete(ctx.cookies.session);
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not logged out !');
+    }
+  }
 }
