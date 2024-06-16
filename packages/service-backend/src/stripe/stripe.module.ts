@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { STRIPE_PUBLIC_KEY } from '../setup';
+import { STRIPE_PRIVATE_KEY } from '../setup';
 import { StripeController } from './stripe.controller';
 import { StripeService } from './stripe.service';
 
@@ -15,9 +15,9 @@ export class StripeModule {
       providers: [
         StripeService,
         {
-          provide: STRIPE_PUBLIC_KEY,
+          provide: STRIPE_PRIVATE_KEY,
           useFactory: async (configService: ConfigService) =>
-            configService.get(STRIPE_PUBLIC_KEY),
+            configService.get(STRIPE_PRIVATE_KEY),
           inject: [ConfigService],
         },
       ],

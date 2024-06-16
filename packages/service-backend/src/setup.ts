@@ -22,5 +22,6 @@ export const REDIS_USERNAME = get('REDIS_USERNAME').required().asString();
 
 export const STRIPE_PUBLIC_KEY = get('STRIPE_PUBLIC_KEY').asString();
 export const STRIPE_PRIVATE_KEY = get('STRIPE_PRIVATE_KEY').asString();
+export const STRIPE_WEBHOOK_SECRET = get('STRIPE_WEBHOOK_SECRET').asString();
 
 Logger.log(`Env variables Loaded`);

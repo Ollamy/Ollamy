@@ -21,7 +21,9 @@ function buildSwagger(
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   app.useStaticAssets(join(__dirname, '..', 'static'));
 
   if (MODE === 'dev') {
@@ -64,6 +66,17 @@ async function bootstrap() {
       },
     }),
   );
+
+  // use rawBody for /stripe/webhook
+  app.use('/stripe/webhook', (req, res, next) => {
+    req.rawBody = '';
+    req.on('data', (chunk) => {
+      req.rawBody += chunk;
+    });
+    req.on('end', () => {
+      next();
+    });
+  });
 
   await app.listen(BACKEND_PORT);
 }
