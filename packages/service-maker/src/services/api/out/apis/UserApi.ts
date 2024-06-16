@@ -154,6 +154,29 @@ export class UserApi extends runtime.BaseAPI {
 
     /**
      */
+    async logoutUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SuccessBody> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/user/logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static logoutUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SuccessBody> {
+        return localUserApi.logoutUserRaw(initOverrides);
+    }
+
+    /**
+     */
     async registerUserRaw(requestParameters: RegisterUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTrueResponse> {
         if (requestParameters.createUserModel === null || requestParameters.createUserModel === undefined) {
             throw new runtime.RequiredError('createUserModel','Required parameter requestParameters.createUserModel was null or undefined when calling registerUser.');
