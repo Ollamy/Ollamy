@@ -8,6 +8,7 @@ import {
 } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from 'pages/Auth/Login';
+import ProtectedRoute from 'pages/Auth/ProtectedRoute';
 import { Register } from 'pages/Auth/Register';
 import CourseManagerPage from 'pages/CourseManager/CourseManagerPage';
 import HomePage from 'pages/Home/HomePage';
@@ -18,7 +19,6 @@ import { createGlobalStyle } from 'styled-components';
 import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
-import ProtectedRoute from 'pages/Auth/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -43,15 +43,27 @@ const router = createBrowserRouter([
   },
   {
     path: '/course/:courseId',
-    element: <CourseManagerPage />,
+    element: (
+      <ProtectedRoute>
+        <CourseManagerPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/quizEditor/:lessonId',
-    element: <QuizEditorPage />,
+    element: (
+      <ProtectedRoute>
+        <QuizEditorPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/lectureEditor/:lessonId',
-    element: <LectureEditorPage />,
+    element: (
+      <ProtectedRoute>
+        <LectureEditorPage />
+      </ProtectedRoute>
+    ),
   },
   // {
   //   path: '/profile',
