@@ -195,8 +195,6 @@ export class UserController {
     return this.userService.getUserScore(ctx);
   }
 
-
-  // create logout endpoint
   @ApiCookieAuth()
   @ApiOkResponse({
     description: 'success body',
