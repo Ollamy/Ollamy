@@ -283,7 +283,6 @@ export class UserService {
 
   async logoutUser(ctx: any) {
     try {
-      console.log(ctx.cookies.session);
       await SessionService.delete(ctx.cookies.session);
     } catch (error) {
       Logger.error(error);
