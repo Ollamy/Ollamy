@@ -9,15 +9,16 @@ import {
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from 'pages/Auth/Login';
 import { Register } from 'pages/Auth/Register';
-import HomePage from 'pages/Home/HomePage';
 import CourseManagerPage from 'pages/CourseManager/CourseManagerPage';
+import HomePage from 'pages/Home/HomePage';
+import LectureEditorPage from 'pages/LectureEditor/LectureEditorPage';
 import QuizEditorPage from 'pages/QuizEditor/QuizEditorPage';
 import { createGlobalStyle } from 'styled-components';
 
 import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
-import LectureEditorPage from 'pages/LectureEditor/LectureEditorPage';
+import ProtectedRoute from 'pages/Auth/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/home',
-    element: <HomePage />,
+    element: (
+      <ProtectedRoute>
+        <HomePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/course/:courseId',
