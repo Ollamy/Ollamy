@@ -150,7 +150,7 @@ export class UserService {
         data: userData,
       });
 
-      return await this.createToken(userDb.id);
+      return await this.createToken(userDb.id, ctx.__device.platform);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -8,7 +8,6 @@ import {
 import {
   CreateQuestionModel,
   IdQuestionModel,
-  QuestionModel,
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,

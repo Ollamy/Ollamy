@@ -358,7 +358,24 @@ export interface CreateUserModel {
      * @memberof CreateUserModel
      */
     password: string;
+    /**
+     * Platform user tries to access
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    platform: CreateUserModelPlatformEnum;
 }
+
+
+/**
+ * @export
+ */
+export const CreateUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type CreateUserModelPlatformEnum = typeof CreateUserModelPlatformEnum[keyof typeof CreateUserModelPlatformEnum];
+
 /**
  * 
  * @export
@@ -886,7 +903,24 @@ export interface LoginUserModel {
      * @memberof LoginUserModel
      */
     password: string;
+    /**
+     * Platform user tries to login
+     * @type {string}
+     * @memberof LoginUserModel
+     */
+    platform: LoginUserModelPlatformEnum;
 }
+
+
+/**
+ * @export
+ */
+export const LoginUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type LoginUserModelPlatformEnum = typeof LoginUserModelPlatformEnum[keyof typeof LoginUserModelPlatformEnum];
+
 /**
  * 
  * @export
@@ -1409,19 +1443,19 @@ export interface UserCourses {
      * @type {string}
      * @memberof UserCourses
      */
-    lastLessonId: string;
+    lastLessonId?: string;
     /**
      * The unique identifier of the last section
      * @type {string}
      * @memberof UserCourses
      */
-    lastSectionId: string;
+    lastSectionId?: string;
     /**
      * The number of users enrolled in the course
      * @type {number}
      * @memberof UserCourses
      */
-    numberOfUsers: number;
+    numberOfUsers?: number;
     /**
      * course completion status
      * @type {string}

@@ -53,7 +53,10 @@ export class MiddlewareGuard implements CanActivate {
 
     req.__user = user;
 
-    req.__device.isMaker = data.platform === PlatformEnum.MAKER;
+    req.__device = {
+      isMaker: data.platform === PlatformEnum.MAKER,
+      platform: data.platform,
+    };
 
     const userToCourse = await prisma.usertoCourse.findMany({
       where: {
