@@ -16,9 +16,11 @@ import {
   mockUserSubscriptionDb,
   mockUpdateCourseData,
   mockUserToCourse,
+  sharecode,
 } from 'tests/data/course.data';
 import { TasksService } from '../cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import RedisCacheService from '../redis/redis.service';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -389,17 +391,21 @@ describe('addUserToCourse', () => {
   });
 
   it('should add user to course successfully', async () => {
-    const code = 'sharecode-123';
     const userId = mockUserSubscriptionDb.user_id;
 
-    // Use prisma.course.findUnique to simulate Redis cache value
+    jest.spyOn(RedisCacheService, 'run').mockResolvedValue(sharecode);
+
     jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
     jest
       .spyOn(prisma.usertoCourse, 'create')
       .mockResolvedValue(mockUserToCourse);
     jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);
 
-    const result = await courseService.addUserToCourse(courseId, code, userId);
+    const result = await courseService.addUserToCourse(
+      courseId,
+      sharecode,
+      userId,
+    );
 
     expect(result).toEqual({ success: true });
     expect(prisma.course.findUnique).toHaveBeenCalledWith({
@@ -415,14 +421,13 @@ describe('addUserToCourse', () => {
   });
 
   it('should throw ConflictException if course is full', async () => {
-    const code = 'sharecode-123';
     const userId = mockUserSubscriptionDb.user_id;
 
     jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
     jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(false);
 
     await expect(
-      courseService.addUserToCourse(courseId, code, userId),
+      courseService.addUserToCourse(courseId, sharecode, userId),
     ).rejects.toThrow(ConflictException);
 
     expect(prisma.course.findUnique).toHaveBeenCalledWith({
@@ -432,7 +437,6 @@ describe('addUserToCourse', () => {
   });
 
   it('should throw ConflictException if user to course creation fails', async () => {
-    const code = 'sharecode-123';
     const userId = mockUserSubscriptionDb.user_id;
 
     jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
@@ -440,7 +444,7 @@ describe('addUserToCourse', () => {
     jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);
 
     await expect(
-      courseService.addUserToCourse(courseId, code, userId),
+      courseService.addUserToCourse(courseId, sharecode, userId),
     ).rejects.toThrow(ConflictException);
 
     expect(prisma.course.findUnique).toHaveBeenCalledWith({

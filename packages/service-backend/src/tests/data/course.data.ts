@@ -22,6 +22,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const courseId = uuidv4();
 
+export const sharecode = 'sharecode-123';
+
 export const createCourseData: CreateCourseModel = {
   title: 'title',
   description: 'desc',
@@ -46,14 +48,14 @@ export const mockPictureDb: Picture = {
 export const mockSubscriptionDb: Subscription = {
   id: uuidv4(),
   plan: SubscriptionPlan.BASIC,
-  slots: 5
-}
+  slots: 5,
+};
 
 export const mockUserSubscriptionDb: UserSubscription = {
   id: uuidv4(),
   user_id: context.__user.id,
   subscription_id: uuidv4(),
-}
+};
 
 export const mockCourseDb: Course = {
   id: courseId,
