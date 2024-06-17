@@ -17,12 +17,12 @@ function ErrorPage({ customMessage = 'Sorry, an unexpected error has occurred.' 
   }, [navigate]);
 
   return (
-    <VStack height="100%" justifyContent="center" alignItems="center">
-      <Box height="100px" width="200px" marginBottom={100}>
-        <Image style={{ height: '100%', width: '100%' }} source={OLLAMY} alt="Ollamy" />
+    <VStack height={'100%'} justifyContent={'center'} alignItems={'center'}>
+      <Box height={'100px'} width={'200px'} marginBottom={100}>
+        <Image style={{ height: '100%', width: '100%' }} source={OLLAMY} alt={'Ollamy'} />
       </Box>
       <Text marginBottom={5}>{customMessage}</Text>
-      <TextButton title="Go back home" onPress={handleClick} />
+      <TextButton title={'Go back home'} onPress={handleClick} />
     </VStack>
   );
 }

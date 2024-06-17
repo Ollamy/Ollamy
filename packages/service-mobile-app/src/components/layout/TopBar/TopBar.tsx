@@ -16,25 +16,25 @@ function TopBar() {
 
   return (
     <HStack
-      w="full"
+      w={'full'}
       h={60}
-      borderColor="#BDBDBD"
+      borderColor={'#BDBDBD'}
       borderWidth={1}
       px={2.5}
       borderBottomRightRadius={16}
       borderBottomLeftRadius={16}
       borderTopWidth={0}
-      alignItems="center"
-      justifyContent="space-between"
+      alignItems={'center'}
+      justifyContent={'space-between'}
     >
       <CustomIconButton onPress={navigateToPath('/home')}>
-        <Box height="30px" width="30px">
+        <Box height={'30px'} width={'30px'}>
           <Image style={{ height: '100%', width: '100%' }} source={EARTH} />
         </Box>
       </CustomIconButton>
-      <HStack justifyContent="space-between" alignItems="center">
+      <HStack justifyContent={'space-between'} alignItems={'center'}>
         <CustomIconButton onPress={navigateToPath('/badges')}>
-          <Box height="35px" width="35px">
+          <Box height={'35px'} width={'35px'}>
             <Image style={{ height: '100%', width: '100%' }} source={TRESOR} />
           </Box>
         </CustomIconButton>
@@ -48,7 +48,7 @@ function TopBar() {
           }}
         />
         <CustomIconButton onPress={navigateToPath('/profile')}>
-          <Box height="35px" width="35px">
+          <Box height={'35px'} width={'35px'}>
             <Image style={{ height: '100%', width: '100%' }} source={PROFILE} />
           </Box>
         </CustomIconButton>

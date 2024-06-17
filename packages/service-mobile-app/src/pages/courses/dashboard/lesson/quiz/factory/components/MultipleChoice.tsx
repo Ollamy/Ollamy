@@ -4,7 +4,7 @@ import type { FactoryComponentInterface } from 'src/pages/courses/dashboard/less
 function MultipleChoice({ answers, correctAnswer, setAnswer }: FactoryComponentInterface) {
   return (
     <VStack space={12}>
-      <Radio.Group name="answers" onChange={(value: string) => setAnswer(value)}>
+      <Radio.Group name={'answers'} onChange={(value: string) => setAnswer(value)}>
         {answers.map((answer) => (
           <Radio value={answer.id} my={1} key={answer.id}>
             {answer.data}
@@ -15,7 +15,7 @@ function MultipleChoice({ answers, correctAnswer, setAnswer }: FactoryComponentI
       {correctAnswer && (
         <Text bold fontSize={24}>
           Correct answer:{' '}
-          <Text color="green.500" bold>
+          <Text color={'green.500'} bold>
             {answers.find((a) => a.id === correctAnswer)?.data}
           </Text>
         </Text>
