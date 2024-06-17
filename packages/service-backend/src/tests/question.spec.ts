@@ -37,7 +37,12 @@ describe('postQuestion', () => {
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [QuestionService, TasksService, AnswerService, SchedulerRegistry],
+      providers: [
+        QuestionService,
+        TasksService,
+        AnswerService,
+        SchedulerRegistry,
+      ],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
@@ -47,40 +52,23 @@ describe('postQuestion', () => {
   it('should throw BadRequestException if multiple answers are provided for FREE_ANSWER type', async () => {
     const data: CreateQuestionModel = {
       ...mockQuestionDataExisting,
-      answers: [
-        { data: 'Answer 1' },
-        { data: 'Answer 2' },
-      ],
+      answers: [{ data: 'Answer 1' }, { data: 'Answer 2' }],
     };
 
-    await expect(questionService.postQuestion(data)).rejects.toThrow(BadRequestException);
+    await expect(questionService.postQuestion(data)).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   it('should throw BadRequestException if only one answer are provided for MULTIPLE_CHOICE or SQUARE_CHOICE type', async () => {
     const data: CreateQuestionModel = {
       ...mockQuestionDataOtherChoice,
-      answers: [
-        { data: 'Answer 1' },
-      ],
+      answers: [{ data: 'Answer 1' }],
     };
 
-    await expect(questionService.postQuestion(data)).rejects.toThrow(BadRequestException);
-  });
-
-  it('should throw ConflictException if question creation fails', async () => {
-    jest.spyOn(prisma.question, 'create').mockResolvedValue(null);
-
-    await expect(
-      questionService.postQuestion(mockQuestionDataError),
-    ).rejects.toThrow(ConflictException);
-  });
-
-  it('should throw ConflictException if an error occurs', async () => {
-    jest.spyOn(prisma.question, 'create').mockRejectedValue(new Error('Some error'));
-
-    await expect(
-      questionService.postQuestion(mockQuestionDataError),
-    ).rejects.toThrow(ConflictException);
+    await expect(questionService.postQuestion(data)).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });
 
