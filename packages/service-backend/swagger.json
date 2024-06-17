@@ -71,8 +71,12 @@
                 "template": {
                   "value": {
                     "email": "test@test.test",
+<<<<<<< HEAD
                     "password": "1234aaBB@",
                     "platform": "MAKER"
+=======
+                    "password": "1234aaBB@"
+>>>>>>> development
                   }
                 }
               }
@@ -390,7 +394,11 @@
               "application/json": {
                 "schema": {
                   "type": "array",
+<<<<<<< HEAD
                   "items": { "$ref": "#/components/schemas/GetSectionsModel" }
+=======
+                  "items": { "$ref": "#/components/schemas/CourseSectionModel" }
+>>>>>>> development
                 }
               }
             }
@@ -580,7 +588,11 @@
             "description": "section content response",
             "content": {
               "application/json": {
+<<<<<<< HEAD
                 "schema": { "$ref": "#/components/schemas/GetSectionModel" }
+=======
+                "schema": { "$ref": "#/components/schemas/SectionModel" }
+>>>>>>> development
               }
             }
           },
@@ -660,6 +672,7 @@
         "tags": ["Section"]
       }
     },
+<<<<<<< HEAD
     "/section/{id}/join": {
       "post": {
         "operationId": "SectionController_joinLesson",
@@ -685,6 +698,8 @@
         "tags": ["Section"]
       }
     },
+=======
+>>>>>>> development
     "/lesson": {
       "post": {
         "operationId": "LessonController_registerLesson",
@@ -1468,6 +1483,47 @@
         },
         "tags": ["Ai"]
       }
+<<<<<<< HEAD
+=======
+    },
+    "/stripe/create-payment-intent": {
+      "get": {
+        "operationId": "StripeController_createPaymentIntent",
+        "parameters": [
+          {
+            "name": "amount",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "currency",
+            "required": true,
+            "in": "query",
+            "schema": { "enum": ["usd", "eur", "gbp"], "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Payment intent created successfully" }
+        },
+        "tags": ["stripe"]
+      }
+    },
+    "/stripe/webhook": {
+      "post": {
+        "operationId": "StripeController_handleWebhook",
+        "parameters": [
+          {
+            "name": "stripe-signature",
+            "required": true,
+            "in": "header",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "201": { "description": "" } },
+        "tags": ["stripe"]
+      }
+>>>>>>> development
     }
   },
   "info": {
@@ -1501,6 +1557,7 @@
           "password": {
             "type": "string",
             "description": "Password must contain at least 8 characters, 2 numbers and 2 uppercase letters"
+<<<<<<< HEAD
           },
           "platform": {
             "type": "string",
@@ -1509,6 +1566,11 @@
           }
         },
         "required": ["firstname", "lastname", "email", "password", "platform"]
+=======
+          }
+        },
+        "required": ["firstname", "lastname", "email", "password"]
+>>>>>>> development
       },
       "UserTrueResponse": {
         "type": "object",
@@ -1530,6 +1592,7 @@
           "password": {
             "type": "string",
             "description": "The password of the user"
+<<<<<<< HEAD
           },
           "platform": {
             "type": "string",
@@ -1538,6 +1601,11 @@
           }
         },
         "required": ["email", "password", "platform"]
+=======
+          }
+        },
+        "required": ["email", "password"]
+>>>>>>> development
       },
       "GetUserModel": {
         "type": "object",
@@ -1632,6 +1700,7 @@
           "numberOfUsers": {
             "type": "number",
             "description": "The number of users enrolled in the course"
+<<<<<<< HEAD
           },
           "status": {
             "type": "string",
@@ -1640,6 +1709,20 @@
           }
         },
         "required": ["id", "title", "description", "pictureId", "owner"]
+=======
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "pictureId",
+          "owner",
+          "lastLessonId",
+          "lastSectionId",
+          "numberOfUsers"
+        ]
+>>>>>>> development
       },
       "UserCoursesResponse": {
         "type": "object",
@@ -1691,11 +1774,15 @@
           "picture": { "type": "string" },
           "lastLessonId": { "type": "string" },
           "lastSectionId": { "type": "string" },
+<<<<<<< HEAD
           "numberOfUsers": { "type": "number" },
           "status": {
             "type": "string",
             "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]
           }
+=======
+          "numberOfUsers": { "type": "number" }
+>>>>>>> development
         },
         "required": [
           "ownerId",
@@ -1714,16 +1801,24 @@
           "picture": { "type": "string", "nullable": true }
         }
       },
+<<<<<<< HEAD
       "GetSectionsModel": {
+=======
+      "CourseSectionModel": {
+>>>>>>> development
         "type": "object",
         "properties": {
           "id": { "type": "string" },
           "title": { "type": "string" },
+<<<<<<< HEAD
           "description": { "type": "string" },
           "status": {
             "type": "string",
             "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]
           }
+=======
+          "description": { "type": "string" }
+>>>>>>> development
         },
         "required": ["id", "title", "description"]
       },
@@ -1771,16 +1866,24 @@
         "properties": { "id": { "type": "string" } },
         "required": ["id"]
       },
+<<<<<<< HEAD
       "GetSectionModel": {
+=======
+      "SectionModel": {
+>>>>>>> development
         "type": "object",
         "properties": {
           "courseId": { "type": "string" },
           "title": { "type": "string" },
+<<<<<<< HEAD
           "description": { "type": "string" },
           "status": {
             "type": "string",
             "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"]
           }
+=======
+          "description": { "type": "string" }
+>>>>>>> development
         },
         "required": ["courseId", "title", "description"]
       },

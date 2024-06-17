@@ -19,7 +19,14 @@ import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, Role, Status, User, UsertoScore } from '@prisma/client';
+import {
+  Prisma,
+  Role,
+  Status
+  SubscriptionPlan,
+  User,
+  UsertoScore,
+} from '@prisma/client';
 import SessionService from 'redis/session/session.service';
 
 @Injectable()
@@ -83,6 +90,13 @@ export class UserService {
         data: {
           ...userData,
           communities_id: [],
+        },
+      });
+
+      await prisma.userSubscription.create({
+        data: {
+          user_id: userDb.id,
+          subscription_plan: SubscriptionPlan.BASIC,
         },
       });
 

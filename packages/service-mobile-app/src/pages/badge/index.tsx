@@ -19,19 +19,19 @@ function BadgeDashboard() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <VStack w="full" space="md">
+      <VStack w={'full'} space={'md'}>
         <SectionHeader
-          title="Badges"
+          title={'Badges'}
           description={"Explore your badge collection and learn how to unlock the ones you're missing."}
           icon={TRESOR}
           colorStyle={{ bg: '#FFE5CF', borderColor: '#E57E25', titleColor: '#E6674F', descriptionColor: '#DB8878' }}
         />
 
-        <VStack w="full">
+        <VStack w={'full'}>
           {badges.map((badge, index) => (
             <BadgeListItem badge={badge} index={index} key={badge.id} />
           ))}
-          <BadgeListItem index={badges.length} key="last-id" />
+          <BadgeListItem index={badges.length} key={'last-id'} />
         </VStack>
       </VStack>
     </ScrollView>

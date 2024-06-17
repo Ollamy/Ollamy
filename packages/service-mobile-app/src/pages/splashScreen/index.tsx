@@ -30,7 +30,7 @@ function SplashScreen() {
   }).start(handleAnimationCallback);
 
   return (
-    <Center flex="1">
+    <Center flex={'1'}>
       <Animated.Image source={OLLAMY} style={{ width: 200, height: 100, transform: [{ scale: imageScale }] }} />
     </Center>
   );

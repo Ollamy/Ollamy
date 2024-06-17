@@ -48,10 +48,10 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
     }
   };
   return (
-    <VStack height="100%" space="32px" marginTop={23} paddingX="20px">
-      <QuestionDifficulty difficulty={2} />
+    <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
+      {question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />}
       <QuestionTitle title={question.title} />
-      <View maxHeight="35%">
+      <View maxHeight={'35%'}>
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -75,7 +75,7 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
             selectAnswer &&
             (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer, question.typeAnswer))
           }
-          rightIconName="arrow-forward"
+          rightIconName={'arrow-forward'}
         />
       </View>
     </VStack>

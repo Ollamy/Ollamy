@@ -158,13 +158,13 @@ function Chat() {
                   <IconButton
                     style={styles.deleteButton}
                     styleIcon={styles.deleteButton}
-                    iconName="edit"
+                    iconName={'edit'}
                     onPress={() => editMessage(msg.id)}
                   />
                   <IconButton
                     style={styles.deleteButton}
                     styleIcon={styles.deleteButton}
-                    iconName="delete"
+                    iconName={'delete'}
                     onPress={() => deleteMessage(msg.id)}
                   />
                 </View>
@@ -178,7 +178,7 @@ function Chat() {
           <IconButton
             style={styles.deleteButton}
             styleIcon={styles.deleteButton}
-            iconName="close"
+            iconName={'close'}
             onPress={() => setEditId(undefined)}
           />
           <Text>Edit</Text>
@@ -188,11 +188,11 @@ function Chat() {
         <TextInput
           value={tempMessage}
           onChangeText={setTempMessage}
-          inputMode="text"
+          inputMode={'text'}
           style={styles.input}
-          placeholder="Message..."
+          placeholder={'Message...'}
         />
-        <IconButton iconName="arrow-right" onPress={sendMessage} />
+        <IconButton iconName={'arrow-right'} onPress={sendMessage} />
       </Box>
     </>
   );

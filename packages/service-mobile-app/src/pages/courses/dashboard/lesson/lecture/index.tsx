@@ -1,16 +1,16 @@
-import { ScrollView, Text, useDisclose, VStack } from 'native-base';
+import { Button, Heading, ScrollView, Text, useDisclose, VStack } from 'native-base';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import Markdown from 'react-native-markdown-display';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigate, useParams } from 'react-router-native';
 import IconButton from 'src/components/Buttons/IconButton/IconButton';
-import TextButton from 'src/components/Buttons/TextButton';
 import ErrorPage from 'src/components/ErrorPage/ErrorPage';
 import HealthPoints from 'src/components/HealthPoints';
 import HealthModal from 'src/components/Modal/HealthModal';
 import TopBarContainer from 'src/components/topBarContainer';
 import { useGetCourseUserHpQuery } from 'src/services/course/course';
-import { useGetLessonLectureQuery } from 'src/services/lesson/lesson';
+import { useGetLessonByIdQuery, useGetLessonLectureQuery } from 'src/services/lesson/lesson';
 
 interface LectureProps {
   lessonId: string;
@@ -28,6 +28,8 @@ function Lecture(props: LectureProps) {
     isFetching: isCourseHpFetching,
     refetch: refetchHealthPoints,
   } = useGetCourseUserHpQuery(courseId!);
+
+  const { data: lessonData, isFetching: isLessonDataFetching } = useGetLessonByIdQuery(lessonId);
 
   const { isOpen, onClose, onOpen } = useDisclose();
   const [next, setNext] = useState<number | undefined>();
@@ -68,41 +70,48 @@ function Lecture(props: LectureProps) {
     if (userHp?.hp && userHp.hp > 0) onClose();
   }, [onClose, userHp]);
 
-  if (isCourseHpFetching || isLessonLectureFetching) return <Text>Loading...</Text>;
-  if (!course || !userHp) return <ErrorPage />;
+  if (isCourseHpFetching || isLessonLectureFetching || isLessonDataFetching) return <Text>Loading...</Text>;
+  if (!course || !userHp || !lessonData) return <ErrorPage />;
 
   return (
-    <VStack width="100%" height="100%" alignItems="center">
+    <>
       <TopBarContainer>
-        <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
+        <IconButton onPress={() => navigate('/home')} iconName={'close'} style={{}} />
+        <Heading>{lessonData.title}</Heading>
         <HealthPoints health={userHp.hp} />
       </TopBarContainer>
-      <VStack
-        borderRadius={8}
-        borderColor="#BDBDBD"
-        borderWidth={1}
-        shadow={10}
-        padding={28}
-        paddingBottom={95}
-        space={34}
-        justifyContent="flex-start"
-        alignItems="center"
-        height="65%"
-        width="80%"
-        marginY={10}
-      >
-        <Text color="#876BF6" fontSize={24} fontWeight={700}>
-          Lecture
-        </Text>
-        <SafeAreaView style={{ width: '100%' }}>
-          <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <Markdown>{course[0].data}</Markdown>
-          </ScrollView>
-        </SafeAreaView>
+      <VStack width={'100%'} height={'100%'} alignItems={'center'} px={4} paddingBottom={4}>
+        <VStack
+          paddingBottom={95}
+          space={34}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'65%'}
+          width={'full'}
+          px={4}
+          marginY={10}
+        >
+          <Text color={'#876BF6'} fontSize={24} fontWeight={700}>
+            Lecture
+          </Text>
+          <SafeAreaView style={{ width: '100%' }}>
+            <ScrollView contentInsetAdjustmentBehavior={'automatic'}>
+              <Markdown>{course[0].data}</Markdown>
+            </ScrollView>
+          </SafeAreaView>
+        </VStack>
+        {next && <HealthModal health={userHp.hp} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />}
+        <Button
+          size={'lg'}
+          w={'full'}
+          variant={'purple'}
+          onPress={handleTakeQuiz}
+          rightIcon={<Icon name={'arrow-forward'} style={{ fontSize: 24, color: 'white' }} />}
+        >
+          Take the quiz
+        </Button>
       </VStack>
-      {next && <HealthModal health={userHp.hp} nextHeartDate={next} isOpen={isOpen} onClose={onClose} />}
-      <TextButton title="Take the quiz" onPress={handleTakeQuiz} rightIconName="arrow-forward" />
-    </VStack>
+    </>
   );
 }
 
