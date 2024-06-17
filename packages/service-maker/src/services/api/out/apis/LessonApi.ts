@@ -9,6 +9,7 @@ import type {
   LessonLectureModel,
   LessonModel,
   QuestionModel,
+  UpdateLessonModel,
 } from '../models/index';
 
 export interface DeleteLessonRequest {
@@ -37,7 +38,7 @@ export interface RegisterLessonRequest {
 
 export interface UpdateLessonRequest {
     id: string;
-    lessonModel: LessonModel;
+    updateLessonModel: UpdateLessonModel;
 }
 
 /**
@@ -219,8 +220,8 @@ export class LessonApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateLesson.');
         }
 
-        if (requestParameters.lessonModel === null || requestParameters.lessonModel === undefined) {
-            throw new runtime.RequiredError('lessonModel','Required parameter requestParameters.lessonModel was null or undefined when calling updateLesson.');
+        if (requestParameters.updateLessonModel === null || requestParameters.updateLessonModel === undefined) {
+            throw new runtime.RequiredError('updateLessonModel','Required parameter requestParameters.updateLessonModel was null or undefined when calling updateLesson.');
         }
 
         const queryParameters: any = {};
@@ -234,7 +235,7 @@ export class LessonApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.lessonModel,
+            body: requestParameters.updateLessonModel,
         }, initOverrides);
 
         return response.json();
