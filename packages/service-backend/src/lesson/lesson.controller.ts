@@ -113,7 +113,7 @@ export class LessonController {
     required: true,
   })
   @ApiBody({
-    type: LessonModel,
+    type: UpdateLessonModel,
     description: 'user data model',
     examples: {
       template: {
