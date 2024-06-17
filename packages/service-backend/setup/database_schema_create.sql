@@ -240,7 +240,7 @@ INSERT INTO "Lecture" (id, lesson_id, data) VALUES
 
 
 -- Subscriptions plans
-INSERT INTO "Subscription" (id, plan, slots) VALUES
-    ('aaed0f14-ef84-4d14-81ce-b2169db6a013', 'BASIC', 5),
-    ('d369e00b-7e10-4b52-aca4-02be0eaeb804', 'ESSENTIAL', 100),
-    ('1bfd23ba-ea5b-4a45-b2f9-2e4d8627b32b', 'MASTER', 9999999);
+INSERT INTO "Subscription" (plan, slots) VALUES
+    ('BASIC', 5),
+    ('ESSENTIAL', 100),
+    ('MASTER', 9999999);

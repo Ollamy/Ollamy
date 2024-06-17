@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
   HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   CreateQuestionModel,
   IdQuestionModel,
-  QuestionModel,
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,
@@ -24,57 +24,109 @@ import {
   Prisma,
   Question,
 } from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
-import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
+import { PictureService } from 'picture/picture.service';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
-import { TasksService } from '../cron/cron.service';
+import { TasksService } from 'cron/cron.service';
 
 @Injectable()
 export class QuestionService {
   constructor(private readonly cronService: TasksService) {}
 
+  answerDataCheck(questionData: CreateQuestionModel): boolean {
+    if (
+      questionData.typeAnswer === 'FREE_ANSWER' &&
+      questionData.answers.length > 1
+    ) {
+      Logger.error(
+        `${questionData.typeAnswer} type must have at least 2 different answers`,
+      );
+      throw new BadRequestException(
+        'FREE_ANSWER type can only have one answer',
+      );
+    }
+    if (
+      questionData.typeAnswer !== 'FREE_ANSWER' &&
+      questionData.answers.length < 2
+    ) {
+      Logger.error(
+        `${questionData.typeAnswer} type must have at least 2 different answers`,
+      );
+      throw new BadRequestException(
+        `${questionData.typeAnswer} type must have at least 2 different answers`,
+      );
+    }
+    return true;
+  }
+
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
+    if (!this.answerDataCheck(questionData)) return undefined;
+
+    const lessonQuestions = await prisma.question.findMany({
+      where: { lesson_id: questionData.lessonId },
+      select: { order: true },
+      orderBy: { order: 'asc' },
+    });
+
     try {
-      const lessonQuestions = await prisma.question.findMany({
-        where: {
-          lesson_id: questionData.lessonId,
-        },
-        select: {
-          order: true,
-          id: true,
-        },
-        orderBy: [
-          {
-            order: 'asc',
+      const result = await prisma.$transaction(async (prisma) => {
+        const questionDb = await prisma.question.create({
+          data: {
+            lesson_id: questionData.lessonId,
+            title: questionData.title,
+            description: questionData.description,
+            type_answer: questionData.typeAnswer,
+            type_question: questionData.typeQuestion,
+            difficulty: questionData?.difficulty,
+            order: generateKeyBetween(
+              !lessonQuestions || !lessonQuestions.length
+                ? undefined
+                : lessonQuestions[lessonQuestions.length - 1].order,
+              undefined,
+            ),
+            points: questionData?.points,
           },
-        ],
+        });
+
+        const answersPromises = questionData.answers.map(
+          async (answerData, i) => {
+            const answer = await prisma.answer.create({
+              data: {
+                question_id: questionDb.id,
+                data: answerData.data,
+                picture_id: answerData.picture
+                  ? await PictureService.postPicture(answerData.picture)
+                  : undefined,
+                order: generateKeyBetween(undefined, undefined),
+              },
+            });
+
+            if (i === 0) {
+              await prisma.question.update({
+                where: {
+                  id: questionDb.id,
+                },
+                data: {
+                  trust_answer_id: answer.id,
+                },
+              });
+            }
+          },
+        );
+
+        await Promise.all(answersPromises);
+
+        return questionDb;
       });
 
-      const questionDb: Question = await prisma.question.create({
-        data: {
-          lesson_id: questionData.lessonId,
-          title: questionData.title,
-          description: questionData.description,
-          type_answer: questionData.typeAnswer,
-          type_question: questionData.typeQuestion,
-          difficulty: questionData?.difficulty,
-          order: generateKeyBetween(
-            !lessonQuestions || !lessonQuestions.length
-              ? undefined
-              : lessonQuestions[lessonQuestions.length - 1].order,
-            undefined,
-          ),
-          points: questionData?.points,
-        },
-      });
-
-      if (!questionDb) {
+      if (!result) {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-      return { id: questionDb.id } as QuestionIdResponse;
+
+      return { id: result.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException(`Cant create Question : ${error.stack}!`);

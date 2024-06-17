@@ -292,6 +292,12 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     trustAnswerId?: string;
+    /**
+     * The list of answers
+     * @type {Array<CreateAnswerModel>}
+     * @memberof CreateQuestionModel
+     */
+    answers: Array<CreateAnswerModel>;
 }
 
 

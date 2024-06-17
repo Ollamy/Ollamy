@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
+  ArrayMinSize,
   IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from 'class-validator';
 import {
   AnswerType,
@@ -158,6 +161,18 @@ export class betweenOrder {
   after?: string | null;
 }
 
+export class CreateAnswerModel {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  data?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  picture?: string;
+}
+
 export class CreateQuestionModel {
   @ApiProperty({ description: 'The unique identifier of the lesson' })
   @IsUUID()
@@ -200,6 +215,12 @@ export class CreateQuestionModel {
   @IsUUID()
   @IsOptional()
   trustAnswerId: string;
+
+  @ApiProperty({ description: 'The list of answers', type: [CreateAnswerModel] })
+  @ValidateNested({ each: true })
+  @Type(() => CreateAnswerModel)
+  @ArrayMinSize(1)
+  answers: CreateAnswerModel[];
 }
 
 export class IdQuestionModel {
