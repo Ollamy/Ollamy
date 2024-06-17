@@ -7,23 +7,30 @@ import { IconButton, Table, Text, Tooltip } from '@radix-ui/themes';
 import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
 import { useCallback } from 'react';
 import { lessonActions } from 'services/api/routes/lesson';
+import { CreateQuestionModelTypeAnswerEnum } from 'services/api/out';
 
 interface LessonTableProps {
   sectionId: string;
 }
+
+type MoreOptionsType = { lessonId: string };
 
 function LessonTable({ sectionId }: LessonTableProps) {
   const { data } = sectionActions.useGetSectionLessons({ id: sectionId });
   const { mutateAsync: updateLesson } = lessonActions.useUpdateLesson();
 
   const handleEditLesson = useCallback(
-    async (title: string, description: string) => {
-      // await updateLesson({
-      //   id: sectionId,
-      //   uodateLessonModel: { title, description },
-      // });
+    async (
+      title: string,
+      description: string,
+      moreOptions?: MoreOptionsType,
+    ) => {
+      await updateLesson({
+        id: moreOptions?.lessonId as string,
+        updateLessonModel: { title, description },
+      });
     },
-    [updateLesson, sectionId],
+    [updateLesson],
   );
 
   return data && data.length ? (
@@ -66,7 +73,7 @@ function LessonTable({ sectionId }: LessonTableProps) {
                 <Table.Cell justify={'center'}>{numberOfLectures}</Table.Cell>
                 <Table.Cell justify={'center'}>
                   <ActionsContainer>
-                    <CustomDialogTitleDescription
+                    <CustomDialogTitleDescription<MoreOptionsType>
                       dialogTitle={'Edit section'}
                       dialogDescription={
                         'Edit the title and description of your current section.'
@@ -80,6 +87,7 @@ function LessonTable({ sectionId }: LessonTableProps) {
                         </IconButton>
                       }
                       createFunction={handleEditLesson}
+                      moreOptions={{ lessonId: id }}
                     />
                     <OptionDropdownMenu lessonId={id} />
                   </ActionsContainer>
