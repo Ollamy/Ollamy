@@ -65,6 +65,21 @@ export const mockCourseDb: Course = {
   picture_id: mockPictureDb.id,
 };
 
+export const mockCourseSlotsDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userlist: 2,
+  },
+};
+
 export const mockLastLessonDb = {
   lesson_id: uuidv4(),
 } as UsertoLesson;
