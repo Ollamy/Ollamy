@@ -46,7 +46,6 @@ export const mockPictureDb: Picture = {
 };
 
 export const mockSubscriptionDb: Subscription = {
-  id: uuidv4(),
   plan: SubscriptionPlan.BASIC,
   slots: 5,
 };
@@ -54,7 +53,7 @@ export const mockSubscriptionDb: Subscription = {
 export const mockUserSubscriptionDb: UserSubscription = {
   id: uuidv4(),
   user_id: context.__user.id,
-  subscription_id: uuidv4(),
+  subscription_plan: SubscriptionPlan.BASIC,
 };
 
 export const mockCourseDb: Course = {
@@ -65,7 +64,7 @@ export const mockCourseDb: Course = {
   picture_id: mockPictureDb.id,
 };
 
-export const mockCourseSlotsDb = {
+export const mockCourseSlotsAvailableDb = {
   user: {
     UserSubscription: [
       {
@@ -77,6 +76,21 @@ export const mockCourseSlotsDb = {
   },
   _count: {
     userlist: 2,
+  },
+};
+
+export const mockCourseSlotsFullDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userlist: 6,
   },
 };
 

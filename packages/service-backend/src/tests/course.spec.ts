@@ -17,12 +17,12 @@ import {
   mockUpdateCourseData,
   mockUserToCourse,
   sharecode,
-  mockCourseSlotsDb,
+  mockCourseSlotsFullDb,
+  mockCourseSlotsAvailableDb,
 } from 'tests/data/course.data';
 import { TasksService } from '../cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import RedisCacheService from '../redis/redis.service';
-import { Prisma } from '@prisma/client';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -356,7 +356,7 @@ describe('checkCourseSlots', () => {
   it('should return true when slots are available', async () => {
     jest
       .spyOn(prisma.course, 'findUnique')
-      .mockResolvedValue(mockCourseSlotsDb);
+      .mockResolvedValue(mockCourseSlotsAvailableDb as any);
 
     const result = await courseService.checkCourseSlots(courseId);
 
@@ -366,7 +366,7 @@ describe('checkCourseSlots', () => {
   it('should return false when slots are not available', async () => {
     jest
       .spyOn(prisma.course, 'findUnique')
-      .mockResolvedValue(mockCourseSlotsDb);
+      .mockResolvedValue(mockCourseSlotsFullDb as any);
     jest
       .spyOn(prisma.subscription, 'findUnique')
       .mockResolvedValue(mockSubscriptionDb);
