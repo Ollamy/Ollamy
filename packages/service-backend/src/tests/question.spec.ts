@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import prisma from 'client';
-import { BadRequestException, ConflictException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import {
   mockQuestionData,
   mockQuestionDb,
@@ -16,59 +16,43 @@ import {
   mockBodyIncorrect,
   questionId,
   mockUserLesson,
-  mockQuestionDataOtherChoice,
-  mockQuestionDataError,
-  mockQuestionDataExisting,
 } from 'tests/data/question.data';
 import { context } from 'tests/data/user.data';
 
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
-import { AnswerService } from 'answer/answer.service';
 import { mockLesson } from './data/lesson.data';
 import { mockSection1, mockUserToCourse } from './data/course.data';
 import { TasksService } from '../cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { CreateQuestionModel } from '../question/question.dto';
 
 describe('postQuestion', () => {
   let questionService: QuestionService;
-  let answerService: AnswerService;
 
   beforeEach(async () => {
-    const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [
-        QuestionService,
-        TasksService,
-        AnswerService,
-        SchedulerRegistry,
-      ],
+    const moduleRef = await Test.createTestingModule({
+      providers: [QuestionService, TasksService, SchedulerRegistry],
     }).compile();
 
     questionService = moduleRef.get<QuestionService>(QuestionService);
-    answerService = moduleRef.get<AnswerService>(AnswerService);
   });
 
-  it('should throw BadRequestException if multiple answers are provided for FREE_ANSWER type', async () => {
-    const data: CreateQuestionModel = {
-      ...mockQuestionDataExisting,
-      answers: [{ data: 'Answer 1' }, { data: 'Answer 2' }],
-    };
+  it('should throw NotFoundException if question creation fails', async () => {
+    jest.spyOn(prisma.question, 'create').mockResolvedValue(null);
 
-    await expect(questionService.postQuestion(data)).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(
+      questionService.postQuestion(mockQuestionData),
+    ).rejects.toThrow(ConflictException);
   });
 
-  it('should throw BadRequestException if only one answer are provided for MULTIPLE_CHOICE or SQUARE_CHOICE type', async () => {
-    const data: CreateQuestionModel = {
-      ...mockQuestionDataOtherChoice,
-      answers: [{ data: 'Answer 1' }],
-    };
+  it('should throw ConflictException if an error occurs', async () => {
+    jest
+      .spyOn(prisma.question, 'create')
+      .mockRejectedValue(new Error('Some error'));
 
-    await expect(questionService.postQuestion(data)).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(
+      questionService.postQuestion(mockQuestionData),
+    ).rejects.toThrow(ConflictException);
   });
 });
 

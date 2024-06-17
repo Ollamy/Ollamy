@@ -6,9 +6,9 @@ import {
   CreateAnswerModel,
   IdAnswerModel,
   UpdateAnswerModel,
-} from '../answer/answer.dto';
-import { AnswerService } from '../answer/answer.service';
-import { PictureService } from 'picture/picture.service';
+} from './answer.dto';
+import { AnswerService } from './answer.service';
+import { PictureService } from '../picture/picture.service';
 
 describe('postAnswer', () => {
   let answerService: AnswerService;
