@@ -218,8 +218,6 @@ export class SectionService {
       }
       return { id: userToSection.section_id } as SectionIdResponse;
     } catch (error) {
-      Logger.error(error);
-      throw new ConflictException('User Section not created !');
     }
   }
 
@@ -227,36 +225,26 @@ export class SectionService {
     lessonId: string,
     userId: string,
   ) {
-    const remainingLessons = await prisma.lesson.count({
-      where: {
-        OR: [
-          {
-            id: lessonId,
-            UsertoLesson: {
-              none: {
-                status: {
-                  not: 'COMPLETED',
-                },
-              },
-            },
-          },
-          {
-            id: lessonId,
-            UsertoLesson: {
-              none: {},
-            },
-          },
-        ],
+    const sectionId = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      select: {
+        section_id: true,
       },
     });
 
-    if (remainingLessons === 0) {
-      const sectionId = await prisma.lesson.findUnique({
-        where: { id: lessonId },
-        select: {
-          section_id: true,
-        },
-      });
+    const remainingLessons = await prisma.$queryRaw`
+      select count(*) as nb_left
+      from "Lesson" as L
+      where section_id = ${sectionId.section_id}::uuid
+      and not exists(
+          select 1
+          from  "UsertoLesson" utl
+          where utl.lesson_id = L.id
+              and utl.status = 'COMPLETED'
+              and utl.user_id = ${userId}::uuid
+      )`;
+
+    if (remainingLessons[0].nb_left === BigInt(0)) {
       await prisma.usertoSection.update({
         where: {
           section_id_user_id: {
