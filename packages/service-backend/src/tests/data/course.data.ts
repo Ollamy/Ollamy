@@ -48,12 +48,15 @@ export const mockPictureDb: Picture = {
 export const mockSubscriptionDb: Subscription = {
   plan: SubscriptionPlan.BASIC,
   slots: 5,
+  price: 0,
 };
 
 export const mockUserSubscriptionDb: UserSubscription = {
   id: uuidv4(),
   user_id: context.__user.id,
   subscription_plan: SubscriptionPlan.BASIC,
+  start_date: undefined,
+  end_date: undefined,
 };
 
 export const mockCourseDb: Course = {
