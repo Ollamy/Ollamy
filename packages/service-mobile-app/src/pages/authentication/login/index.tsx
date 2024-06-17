@@ -91,13 +91,13 @@ function Login(): JSX.Element {
 
   return (
     <SafeAreaView>
-      <Image source={BACKGROUND} position="absolute" alt="background" />
-      <Box w="100%" h="100%" paddingX={4} paddingY={16}>
-        <Box w="full" h="full" bg="white" opacity={0.97} borderRadius={8} p="24px">
-          <VStack w="full">
-            <HStack alignItems="center" space="md" w="full">
-              <Image source={Ollamy} w="72px" h="38px" resizeMode="contain" alt="ollamy" />
-              <Heading color="#758EE9" fontWeight="bold" fontSize={24}>
+      <Image source={BACKGROUND} position={'absolute'} alt={'background'} />
+      <VStack w={'100%'} h={'100%'} paddingY={16} justifyContent={'flex-end'}>
+        <Box w={'full'} h={'full'} bg={'white'} opacity={0.97} borderRadius={8} p={'24px'}>
+          <VStack w={'full'}>
+            <HStack alignItems={'center'} space={'md'} w={'full'}>
+              <Image source={Ollamy} w={'72px'} h={'38px'} resizeMode={'contain'} alt={'ollamy'} />
+              <Heading color={'#758EE9'} fontWeight={'bold'} fontSize={24}>
                 Ollamy
               </Heading>
             </HStack>
@@ -109,22 +109,22 @@ function Login(): JSX.Element {
                 height: '100%',
               }}
             >
-              <VStack flex="1" justifyContent="center" space={6} alignItems="center" px={5}>
+              <VStack flex={'1'} justifyContent={'center'} space={6} alignItems={'center'} px={5}>
                 <Controller
                   control={control}
-                  name="email"
+                  name={'email'}
                   rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <FormControl isInvalid={!!errors.email}>
-                      <Heading variant="label">Email</Heading>
+                      <Heading variant={'label'}>Email</Heading>
                       <Input
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
-                        type="text"
-                        placeholder="Your email"
+                        type={'text'}
+                        placeholder={'Your email'}
                         InputRightElement={
-                          <Icon size={5} mr={2} color="muted.400" as={<MaterialIcons name="alternate-email" />} />
+                          <Icon size={5} mr={2} color={'muted.400'} as={<MaterialIcons name={'alternate-email'} />} />
                         }
                       />
                       {errors.email?.type === 'required' && (
@@ -135,24 +135,24 @@ function Login(): JSX.Element {
                 />
                 <Controller
                   control={control}
-                  name="password"
+                  name={'password'}
                   rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <FormControl isInvalid={!!errors.password}>
-                      <Heading variant="label">Password</Heading>
+                      <Heading variant={'label'}>Password</Heading>
                       <Input
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="********"
+                        placeholder={'********'}
                         InputRightElement={
                           <Pressable onPress={() => setShowPassword(!showPassword)}>
                             <Icon
                               as={<MaterialIcons name={showPassword ? 'visibility' : 'visibility-off'} />}
                               size={5}
                               mr={2}
-                              color="muted.400"
+                              color={'muted.400'}
                             />
                           </Pressable>
                         }
@@ -164,15 +164,15 @@ function Login(): JSX.Element {
                   )}
                 />
                 <DotStepper currentStep={3} stepsNumber={3} goToStep={() => {}} />
-                <Button variant="yellow" isLoading={isLoading} onPress={handleSubmit(onSubmit)} w="full">
+                <Button variant={'yellow'} isLoading={isLoading} onPress={handleSubmit(onSubmit)} w={'full'}>
                   LOG IN
                 </Button>
 
-                <HStack alignItems="center" space={2}>
+                <HStack alignItems={'center'} space={2}>
                   <Text fontSize={16} fontWeight={600}>
                     Don't have an account ?
                   </Text>
-                  <Text onPress={() => navigate('/register')} color="#FF8D4D" fontSize={16} fontWeight={600}>
+                  <Text onPress={() => navigate('/register')} color={'#FF8D4D'} fontSize={16} fontWeight={600}>
                     Register
                   </Text>
                 </HStack>
@@ -181,7 +181,7 @@ function Login(): JSX.Element {
             </ScrollView>
           </VStack>
         </Box>
-      </Box>
+      </VStack>
     </SafeAreaView>
   );
 }

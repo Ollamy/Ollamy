@@ -21,12 +21,12 @@ function SquareChoice({ answers, correctAnswer, setAnswer }: FactoryComponentInt
         <Pressable
           key={answer.id}
           disabled={correctAnswer !== undefined}
-          width="48%"
-          paddingY="45px"
+          width={'48%'}
+          paddingY={'45px'}
           borderRadius={12}
           borderWidth={4}
-          justifyContent="center"
-          alignItems="center"
+          justifyContent={'center'}
+          alignItems={'center'}
           marginBottom={5}
           style={{ borderColor: borderColor(answer.id, selectAnswer, correctAnswer) }}
           onPress={() => {
@@ -35,7 +35,7 @@ function SquareChoice({ answers, correctAnswer, setAnswer }: FactoryComponentInt
           }}
         >
           {answer.picture ? (
-            <Image w={100} h={100} alt="picture" resizeMode="contain" source={{ uri: answer.picture }} />
+            <Image w={100} h={100} alt={'picture'} resizeMode={'contain'} source={{ uri: answer.picture }} />
           ) : (
             <Text style={{ fontWeight: '500', fontSize: 20 }}>{answer.data}</Text>
           )}

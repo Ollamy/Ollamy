@@ -18,26 +18,26 @@ function Home() {
   if (isFetching) return <Text>Loading...</Text>;
 
   return (
-    <VStack w="100%" flex="1" space="4">
+    <VStack w={'100%'} flex={'1'} space={'4'}>
       <Input
-        py="12px"
-        fontSize="md"
-        placeholder="Search for a course"
+        py={'12px'}
+        fontSize={'md'}
+        placeholder={'Search for a course'}
         value={inputValue}
         onChangeText={setInputValue}
       />
-      <Button variant="secondary" onPress={() => navigate('/course/find')}>
+      <Button variant={'secondary'} onPress={() => navigate('/course/find')}>
         Join a new course
       </Button>
 
       <Heading>My courses</Heading>
 
       <ScrollView>
-        <VStack w="100%" flex="1" space="4">
+        <VStack w={'100%'} flex={'1'} space={'4'}>
           {filteredCourseData.length > 0 ? (
             filteredCourseData.map((course) => <CourseRowButton key={course.id} course={course} />)
           ) : (
-            <Text fontSize="md" color="coolGray.700">
+            <Text fontSize={'md'} color={'coolGray.700'}>
               No course found.
             </Text>
           )}

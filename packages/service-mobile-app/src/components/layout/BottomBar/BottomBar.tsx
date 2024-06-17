@@ -14,27 +14,27 @@ function BottomBar() {
 
   return (
     <HStack
-      w="full"
-      borderColor="#BDBDBD"
+      w={'full'}
+      borderColor={'#BDBDBD'}
       borderWidth={1}
-      px="2.5"
+      px={'2.5'}
       borderTopRightRadius={16}
       borderTopLeftRadius={16}
       borderBottomWidth={0}
-      alignItems="center"
-      justifyContent="space-between"
+      alignItems={'center'}
+      justifyContent={'space-between'}
     >
-      <Button variant="ghost" onPress={() => navigate('/home')}>
-        <Image size={35} source={PROGRESS} alt="progress" />
+      <Button variant={'ghost'} onPress={() => navigate('/home')}>
+        <Image size={35} source={PROGRESS} alt={'progress'} />
       </Button>
-      <Button variant="ghost" onPress={() => navigate('/course/09a06f0b-eb2d-4ac8-b68b-333642e38282/join')}>
-        <Image size={35} source={EVENT} alt="event" />
+      <Button variant={'ghost'} onPress={() => navigate('/course/09a06f0b-eb2d-4ac8-b68b-333642e38282/join')}>
+        <Image size={35} source={EVENT} alt={'event'} />
       </Button>
-      <Button variant="ghost" onPress={() => navigate('/chat')}>
-        <Image size={35} source={COMMUNITY} alt="community" />
+      <Button variant={'ghost'} onPress={() => navigate('/chat')}>
+        <Image size={35} source={COMMUNITY} alt={'community'} />
       </Button>
-      <Button variant="ghost">
-        <Image size={35} source={MEDAL} alt="medal" />
+      <Button variant={'ghost'}>
+        <Image size={35} source={MEDAL} alt={'medal'} />
       </Button>
     </HStack>
   );

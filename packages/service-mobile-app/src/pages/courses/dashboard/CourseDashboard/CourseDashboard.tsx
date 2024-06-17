@@ -36,23 +36,23 @@ function CourseDashboard(): JSX.Element {
   if (!isCourseDataFetching && !courseData) return <Text>Course not found</Text>;
 
   return (
-    <VStack flex="1" w="100%" space="8">
+    <VStack flex={'1'} w={'100%'} space={'8'}>
       <Button
         onPress={() => navigate('/home')}
-        bg="coolGray.100"
+        bg={'coolGray.100'}
         leftIcon={<ArrowBackIcon />}
-        alignSelf="flex-start"
-        variant="unstyled"
+        alignSelf={'flex-start'}
+        variant={'unstyled'}
       >
         <Text bold>Go back</Text>
       </Button>
-      {courseData && <Heading size="lg">{courseData?.title}</Heading>}
+      {courseData && <Heading size={'lg'}>{courseData?.title}</Heading>}
       <ScrollView showsVerticalScrollIndicator={false}>
         <VStack mt={4}>
           {sections.map((section, idx) => (
             <LessonListItem
               key={section.id}
-              itemName="Section"
+              itemName={'Section'}
               index={idx}
               lesson={section}
               onPress={() => navigate(`/course/${id}/section/${section.id}`)}

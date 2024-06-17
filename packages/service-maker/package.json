@@ -11,6 +11,7 @@
     "client:generate": "/bin/bash -c 'source .env && ./../../script/openapi/backend-client-generator.sh http://localhost:$BACKEND_PORT src/services/api/out ./../../script/openapi/ollamy-openapi-generator-cli.jar'"
   },
   "dependencies": {
+    "@mdxeditor/editor": "^3.4.2",
     "@ollamy/design-system": "*",
     "@ollamy/utils": "*",
     "@radix-ui/colors": "^3.0.0",

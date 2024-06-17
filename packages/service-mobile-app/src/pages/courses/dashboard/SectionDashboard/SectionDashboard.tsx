@@ -55,19 +55,19 @@ function SectionDashboard() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <VStack w="full" space="md">
+      <VStack w={'full'} space={'md'}>
         <Button
           onPress={() => navigate(`/course/${courseId}`)}
-          bg="coolGray.100"
+          bg={'coolGray.100'}
           leftIcon={<ArrowBackIcon />}
-          alignSelf="flex-start"
-          variant="unstyled"
+          alignSelf={'flex-start'}
+          variant={'unstyled'}
         >
           <Text bold>Go back</Text>
         </Button>
         <SectionHeader title={sectionData.title} description={sectionData.description} />
 
-        <VStack w="full">
+        <VStack w={'full'}>
           {lessons.map((lesson, index) => (
             <LessonListItem lesson={lesson} index={index} key={lesson.id} onPress={() => handleJoinLesson(lesson.id)} />
           ))}

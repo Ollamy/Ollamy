@@ -41,7 +41,7 @@ function Profile() {
   return (
     <View style={styles.body}>
       <Box style={styles.profileContainer}>
-        <Box height="100px" width="100px">
+        <Box height={'100px'} width={'100px'}>
           <Image style={{ height: '100%', width: '100%' }} source={PROFILE} />
         </Box>
         <Text style={styles.nameContainer}>
