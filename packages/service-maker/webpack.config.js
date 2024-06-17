@@ -9,13 +9,20 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
-  module: {
+  module: {  
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+       test: /\.tsx?$/,
+       exclude: [/node_modules/],
+       use: [
+        {
+         loader: "ts-loader",
+         options: {
+          transpileOnly: true,
+         },
+        },
+       ],
       },
     ],
-  },
+  }
 };

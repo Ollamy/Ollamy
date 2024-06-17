@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["cypress"],
     "moduleSuffixes": [
       ".web",
       ""
@@ -30,8 +31,8 @@
   "include": [
     "src",
     "cypress",
-    "webpack.config.cjs",
+    "webpack.config.js",
     "cypress.config.cjs"
-, "src/components/Course/Picture/course.picture.interface.ts", "cypress/support/.component.ts"  ],
+, "src/components/Course/Picture/course.picture.interface.ts", "cypress/support/component.ts", "cypress/support/commands.ts"  ],
   "references": [{ "path": "./tsconfig.node.json"}]
 }
