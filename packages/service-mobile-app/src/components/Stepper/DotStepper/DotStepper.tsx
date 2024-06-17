@@ -8,10 +8,10 @@ interface DotStepperProps {
 
 function DotStepper({ currentStep = 1, stepsNumber, goToStep }: DotStepperProps) {
   return (
-    <HStack space="xs">
+    <HStack space={'xs'}>
       {Array.from({ length: stepsNumber }, (_, index) => (
         <Pressable onPress={() => goToStep(index + 1)} key={index}>
-          <Box bg={currentStep === index + 1 ? '#758EE9' : '#D6E0E5'} rounded="full" boxSize={2} />
+          <Box bg={currentStep === index + 1 ? '#758EE9' : '#D6E0E5'} rounded={'full'} boxSize={2} />
         </Pressable>
       ))}
     </HStack>

@@ -4,6 +4,13 @@ export enum AnswerType {
   SQUARE_CHOICE = 'SQUARE_CHOICE',
 }
 
+export enum QuestionDifficulty {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+  MASTER = 'MASTER',
+}
+
 export interface GetQuestionResponse {
   id: string;
   lessonId: string;
@@ -13,7 +20,7 @@ export interface GetQuestionResponse {
   typeQuestion: 'TEXT';
   trustAnswerId: string;
   pictureId?: string;
-  difficulty?: string;
+  difficulty?: QuestionDifficulty;
   order: number;
 }
 

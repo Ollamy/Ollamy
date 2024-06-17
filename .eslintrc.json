@@ -10,7 +10,7 @@
   // Parser & parser options
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./packages/service-maker/tsconfig.json"
+    "project": "./packages/**/tsconfig.json"
   },
   // Configs used
   "extends": [
