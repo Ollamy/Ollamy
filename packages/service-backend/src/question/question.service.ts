@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
   HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   CreateQuestionModel,
@@ -36,45 +37,63 @@ export class QuestionService {
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
+    if (questionData.typeAnswer === 'FREE_ANSWER' && questionData.answers.length > 1) {
+      throw new BadRequestException('FREE_ANSWER type can only have one answer');
+    }
+    if (questionData.typeAnswer !== 'FREE_ANSWER' && questionData.answers.length < 2) {
+      throw new BadRequestException(`${questionData.typeAnswer} type must have at least 2 different answers`);
+    }
+
+    const lessonQuestions = await prisma.question.findMany({
+      where: { lesson_id: questionData.lessonId },
+      select: { order: true, id: true },
+      orderBy: { order: 'asc' },
+    });
+
     try {
-      const lessonQuestions = await prisma.question.findMany({
-        where: {
-          lesson_id: questionData.lessonId,
-        },
-        select: {
-          order: true,
-          id: true,
-        },
-        orderBy: [
-          {
-            order: 'asc',
+      const result = await prisma.$transaction(async (prisma) => {
+        const questionDb = await prisma.question.create({
+          data: {
+            lesson_id: questionData.lessonId,
+            title: questionData.title,
+            description: questionData.description,
+            type_answer: questionData.typeAnswer,
+            type_question: questionData.typeQuestion,
+            difficulty: questionData?.difficulty,
+            order: generateKeyBetween(
+              !lessonQuestions || !lessonQuestions.length
+                ? undefined
+                : lessonQuestions[lessonQuestions.length - 1].order,
+              undefined,
+            ),
+            points: questionData?.points,
           },
-        ],
+        });
+
+        const answersPromises = questionData.answers.map(async (answerData) =>
+          prisma.answer.create({
+            data: {
+              question_id: questionDb.id,
+              data: answerData.data,
+              picture_id: answerData.picture
+                ? await PictureService.postPicture(answerData.picture)
+                : undefined,
+              order: generateKeyBetween(undefined, undefined),
+            },
+          })
+        );
+  
+        await Promise.all(answersPromises);
+  
+        return questionDb;
       });
 
-      const questionDb: Question = await prisma.question.create({
-        data: {
-          lesson_id: questionData.lessonId,
-          title: questionData.title,
-          description: questionData.description,
-          type_answer: questionData.typeAnswer,
-          type_question: questionData.typeQuestion,
-          difficulty: questionData?.difficulty,
-          order: generateKeyBetween(
-            !lessonQuestions || !lessonQuestions.length
-              ? undefined
-              : lessonQuestions[lessonQuestions.length - 1].order,
-            undefined,
-          ),
-          points: questionData?.points,
-        },
-      });
-
-      if (!questionDb) {
+      if (!result) {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-      return { id: questionDb.id } as QuestionIdResponse;
+
+      return { id: result.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException(`Cant create Question : ${error.stack}!`);
