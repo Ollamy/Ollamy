@@ -273,6 +273,7 @@ model UserBadges {
 model Subscription {
   plan  SubscriptionPlan @id @unique @default(BASIC)
   slots Int              @default(5)
+  price Int              @default(0)
 
   UserSubscription UserSubscription[]
 }
@@ -285,6 +286,9 @@ model UserSubscription {
 
   Subscription      Subscription     @relation(fields: [subscription_plan], references: [plan], onDelete: Cascade)
   subscription_plan SubscriptionPlan
+
+  start_date DateTime  @default(now())
+  end_date   DateTime?
 
   @@unique([user_id, subscription_plan])
 }

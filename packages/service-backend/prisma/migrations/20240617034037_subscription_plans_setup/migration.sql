@@ -5,6 +5,7 @@ CREATE TYPE "SubscriptionPlan" AS ENUM ('BASIC', 'ESSENTIAL', 'MASTER');
 CREATE TABLE "Subscription" (
     "plan" "SubscriptionPlan" NOT NULL DEFAULT 'BASIC',
     "slots" INTEGER NOT NULL DEFAULT 5,
+    "price" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Subscription_pkey" PRIMARY KEY ("plan")
 );
@@ -14,6 +15,8 @@ CREATE TABLE "UserSubscription" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "user_id" UUID,
     "subscription_plan" "SubscriptionPlan" NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "end_date" TIMESTAMP(3),
 
     CONSTRAINT "UserSubscription_pkey" PRIMARY KEY ("id")
 );
