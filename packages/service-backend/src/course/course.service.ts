@@ -12,19 +12,17 @@ import {
   CourseTrueResponse,
   GetCourseRequest,
   UserCourseHp,
-  CourseGenerateCode,
   ShareCourseCode,
   ExpirationMap,
   Durationtype,
-  CourseCodeModel,
 } from './course.dto';
-import { CourseSectionModel, SectionModel } from 'section/section.dto';
+import { CourseSectionModel } from 'section/section.dto';
 import prisma from 'client';
 import { Course, Prisma, Role, Section } from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
+import { PictureService } from 'picture/picture.service';
 import { TasksService } from 'cron/cron.service';
-import RedisCacheService from '../redis/redis.service';
-import { courseId } from '../tests/data/course.data';
+import RedisCacheService from 'redis/redis.service';
+import { SubscriptionPlan } from '@prisma/client';
 
 const CODE_LENGTH: number = 4;
 
@@ -206,43 +204,70 @@ export class CourseService {
     }
   }
 
+  async checkCourseSlots(courseId): Promise<boolean> {
+    const result = await prisma.course.findUnique({
+      where: { id: courseId },
+      select: {
+        user: {
+          select: {
+            UserSubscription: {
+              select: {
+                Subscription: {
+                  select: { slots: true },
+                },
+              },
+            },
+          },
+        },
+        _count: {
+          select: { userlist: { where: { role_user: Role.MEMBER } } },
+        },
+      },
+    });
+
+    const subscriptionSlots =
+      result.user?.UserSubscription?.[0]?.Subscription?.slots ?? 0;
+
+    return result._count.userlist <= subscriptionSlots;
+  }
+
   async addUserToCourse(
     courseId: string,
     code: string,
     userId: string,
   ): Promise<CourseTrueResponse> {
-    try {
-      let joinCourseId: string;
+    let joinCourseId: string;
 
-      if (code) {
-        joinCourseId = (await RedisCacheService.run(
-          'GET',
-          `sharecode:${code}`,
-        )) as string;
-      }
-
-      if (courseId) {
-        joinCourseId = courseId;
-      }
-
-      const userToCourseDb = await prisma.usertoCourse.create({
-        data: {
-          user_id: userId,
-          course_id: joinCourseId,
-        },
-      });
-
-      if (!userToCourseDb) {
-        Logger.error('Failed to add user to course !');
-        throw new NotFoundException('Failed to add user to course !');
-      }
-
-      await RedisCacheService.run('DEL', `sharecode:${code}`);
-      return { success: true } as CourseTrueResponse;
-    } catch (error) {
-      Logger.error(error);
-      throw new ConflictException('User not added to course !');
+    if (code) {
+      joinCourseId = (await RedisCacheService.run(
+        'GET',
+        `sharecode:${code}`,
+      )) as string;
     }
+
+    if (courseId) {
+      joinCourseId = courseId;
+    }
+
+    if (!(await this.checkCourseSlots(joinCourseId))) {
+      Logger.error('Course is full for subscription plan !');
+      throw new ConflictException('Course is full for subscription plan !');
+    }
+
+    const userToCourseDb = await prisma.usertoCourse.create({
+      data: {
+        user_id: userId,
+        course_id: joinCourseId,
+      },
+    });
+
+    if (!userToCourseDb) {
+      Logger.error('Failed to add user to course !');
+      throw new ConflictException('Failed to add user to course !');
+    }
+
+    await RedisCacheService.run('DEL', `sharecode:${code}`);
+    return { success: true } as CourseTrueResponse;
   }
 
   async getUserToCourseHp(

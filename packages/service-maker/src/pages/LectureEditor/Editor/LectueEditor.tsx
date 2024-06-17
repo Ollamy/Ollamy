@@ -1,17 +1,39 @@
-import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import { lectureActions } from 'services/api/routes/lecture';
 import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
 
 import {
+  MDXEditor,
+  headingsPlugin,
+  toolbarPlugin,
+  linkPlugin,
+  imagePlugin,
+  listsPlugin,
+  quotePlugin,
+  linkDialogPlugin,
+  thematicBreakPlugin,
+  AdmonitionDirectiveDescriptor,
+  directivesPlugin,
+  tablePlugin,
+  markdownShortcutPlugin,
+  diffSourcePlugin,
+  KitchenSinkToolbar,
+  codeMirrorPlugin,
+  frontmatterPlugin,
+  MDXEditorMethods,
+} from '@mdxeditor/editor';
+import '@mdxeditor/editor/style.css';
+
+import {
   Badge,
   Button,
+  Flex,
   Heading,
+  ScrollArea,
   Separator,
   Text,
-  TextArea,
 } from '@radix-ui/themes';
 
 interface LectureEditorProps {
@@ -26,16 +48,16 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
 
   const [value, setValue] = useState('');
 
-  const handleChangeLocalLectureValue = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement>) => {
-      setValue(event.target.value);
-    },
-    [],
-  );
+  const mdxEditorRef = useRef<MDXEditorMethods>(null);
+
+  const handleChangeLocalLectureValue = useCallback((value: string) => {
+    setValue(value);
+  }, []);
 
   useEffect(() => {
     if (data && data.length) {
       setValue(data[0].data);
+      mdxEditorRef.current?.setMarkdown(data[0].data);
     }
   }, [data]);
 
@@ -55,7 +77,7 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
       await updateLecture({
         id: lectureId,
         updateLectureModel: {
-          data: value,
+          data: mdxEditorRef.current?.getMarkdown(),
         },
       });
     }
@@ -76,18 +98,37 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
   return (
     <Container>
       {data && data.length ? (
-        <>
+        <Flex direction={'column'} gap={'4'}>
           <Heading align={'center'}>Lecture editor</Heading>
           <Separator size={'4'} />
           <Badge style={{ width: '40px' }}>Data</Badge>
-          <TextArea
-            size={'2'}
-            value={value}
-            resize={'vertical'}
-            style={{ maxHeight: '300px' }}
-            placeholder={'Reply to comment…'}
-            onChange={handleChangeLocalLectureValue}
-          />
+          <ScrollArea style={{height: 460, width: '100%'}}>
+          <MDXEditor
+            ref={mdxEditorRef}
+            markdown={'# Hello world'}
+            plugins={[
+              headingsPlugin(),
+              linkPlugin(),
+              imagePlugin({}),
+              listsPlugin(),
+              quotePlugin(),
+              headingsPlugin(),
+              linkDialogPlugin(),
+              frontmatterPlugin(),
+              thematicBreakPlugin(),
+              tablePlugin(),
+              markdownShortcutPlugin(),
+              diffSourcePlugin(),
+              codeMirrorPlugin(),
+              directivesPlugin({
+                directiveDescriptors: [AdmonitionDirectiveDescriptor],
+              }),
+              toolbarPlugin({
+                toolbarContents: () => <KitchenSinkToolbar />,
+              }),
+            ]}
+            />
+            </ScrollArea>
           <Button color={'green'} onClick={handleUpdateLectureValue}>
             Update Lecture
           </Button>
@@ -107,7 +148,7 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
             }
             onAction={handleRemoveLecture}
           />
-        </>
+        </Flex>
       ) : data && !data.length ? (
         <Button onClick={handleCreateLecture}>Create lecture</Button>
       ) : (
@@ -122,9 +163,12 @@ const Container = styled.div`
   flex-direction: column;
 
   gap: 24px;
+  margin: 24px;
 
-  width: 400px;
-  height: 600px;
+  width: 100%;
+  height: 700px;
+
+  background-color: white;
 
   padding: 16px;
   box-sizing: border-box;

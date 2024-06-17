@@ -38,7 +38,7 @@ function Quiz({ lessonId }: QuizProps) {
 
   if (isQuestionsFetching || questions === undefined || currentQuestionId === undefined) return <Spinner />;
 
-  if (!userHp && !isUserHpFetching) return <ErrorPage customMessage="Unexpected error loading user health points" />;
+  if (!userHp && !isUserHpFetching) return <ErrorPage customMessage={'Unexpected error loading user health points'} />;
 
   const handleNext = async () => {
     try {
@@ -56,7 +56,7 @@ function Quiz({ lessonId }: QuizProps) {
   return (
     <View>
       <TopBarContainer>
-        <IconButton onPress={() => navigate('/home')} iconName="close" style={{}} />
+        <IconButton onPress={() => navigate('/home')} iconName={'close'} style={{}} />
         <ProgressBar
           progress={currentQuestionOrder / numberQuestion}
           nextProgress={(currentQuestionOrder + 1) / numberQuestion}

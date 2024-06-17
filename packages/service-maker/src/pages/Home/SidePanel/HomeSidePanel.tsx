@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { PageType } from 'pages/Home/HomePage';
 import styled from 'styled-components';
 
@@ -8,7 +9,7 @@ import 'styles/navigationMenu.css';
 import { HomeIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button } from '@radix-ui/themes';
-import { useNavigate } from 'react-router-dom';
+import { userActions } from 'services/api/routes/user';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
@@ -17,6 +18,7 @@ interface HomeSidePanelProps {
 
 function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   const navigate = useNavigate();
+  const { mutateAsync } = userActions.useLogout();
 
   const handleClick = useCallback(
     (target: PageType) => {
@@ -26,8 +28,9 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   );
 
   const handleLogout = useCallback(() => {
+    mutateAsync({});
     navigate('/');
-  }, [navigate]);
+  }, [mutateAsync, navigate]);
 
   return (
     <Container>

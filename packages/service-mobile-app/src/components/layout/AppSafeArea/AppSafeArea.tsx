@@ -13,7 +13,7 @@ function AppSafeArea(): JSX.Element {
       {!disableBars ? (
         <>
           <TopBar />
-          <VStack flex="1" w="100%" p="24px" space="8">
+          <VStack flex={'1'} w={'100%'} p={'24px'} space={'8'}>
             <Outlet />
           </VStack>
           <BottomBar />

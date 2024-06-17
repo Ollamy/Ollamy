@@ -1121,6 +1121,31 @@ export interface UpdateLectureModel {
 /**
  * 
  * @export
+ * @interface UpdateLessonModel
+ */
+export interface UpdateLessonModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    sectionId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    description?: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateQuestionModel
  */
 export interface UpdateQuestionModel {

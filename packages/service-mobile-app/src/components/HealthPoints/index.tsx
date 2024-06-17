@@ -9,12 +9,12 @@ interface HealthPointsProps {
 
 function HealthPoints({ health }: HealthPointsProps) {
   return (
-    <Box bg="white" shadow="3" px="8px" py="4px" borderRadius={8}>
-      <HStack alignItems="center" space="12px">
-        <Text fontWeight="medium" fontSize={20}>
+    <Box bg={'white'} shadow={'3'} px={'8px'} py={'4px'} borderRadius={8}>
+      <HStack alignItems={'center'} space={'12px'}>
+        <Text fontWeight={'medium'} fontSize={20}>
           {health}
         </Text>
-        <Box height="32px" width="32px">
+        <Box height={'32px'} width={'32px'}>
           <Image style={{ height: '100%', width: '100%' }} source={HEART} />
         </Box>
       </HStack>

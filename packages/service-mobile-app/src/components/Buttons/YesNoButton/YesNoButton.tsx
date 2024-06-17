@@ -34,15 +34,15 @@ function YesNoButton({ variant, label, ...props }: YesNoButtonProps): JSX.Elemen
   return (
     <Button
       bg={variants[variant].bg}
-      py="12px"
-      px="32px"
-      rounded="full"
+      py={'12px'}
+      px={'32px'}
+      rounded={'full'}
       borderWidth={1}
       borderColor={variants[variant].borderColor}
       _pressed={{ bg: variants[variant].bg }}
       {...props}
     >
-      <Text fontSize="xl" color={variants[variant].color}>
+      <Text fontSize={'xl'} color={variants[variant].color}>
         {label ?? variant}
       </Text>
     </Button>

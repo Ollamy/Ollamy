@@ -6,7 +6,7 @@ interface QuestionTitleProps {
 
 function QuestionTitle({ title }: QuestionTitleProps) {
   return (
-    <Text alignSelf="center" color="#876BF6" fontWeight="bold" fontSize={24} lineHeight={24}>
+    <Text alignSelf={'center'} color={'#876BF6'} fontWeight={'bold'} fontSize={24} lineHeight={24}>
       {title}
     </Text>
   );

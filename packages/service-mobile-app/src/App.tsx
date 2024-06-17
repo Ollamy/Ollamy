@@ -20,16 +20,16 @@ function App() {
         <Provider store={store}>
           <Routes>
             <Route element={<AppSafeArea />} errorElement={<Text>Error</Text>}>
-              <Route Component={Home} path="home" />
-              <Route Component={BadgeDashboard} path="badges" />
-              <Route Component={CourseRouter} path="course/*" />
-              <Route Component={Profile} path="profile" />
-              <Route Component={Chat} path="chat" />
+              <Route Component={Home} path={'home'} />
+              <Route Component={BadgeDashboard} path={'badges'} />
+              <Route Component={CourseRouter} path={'course/*'} />
+              <Route Component={Profile} path={'profile'} />
+              <Route Component={Chat} path={'chat'} />
             </Route>
 
-            <Route Component={SplashScreen} path="/" />
-            <Route Component={Register} path="register" />
-            <Route Component={Login} path="login" />
+            <Route Component={SplashScreen} path={'/'} />
+            <Route Component={Register} path={'register'} />
+            <Route Component={Login} path={'login'} />
           </Routes>
         </Provider>
       </NativeRouter>

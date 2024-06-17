@@ -4,7 +4,7 @@ import Profile from 'src/pages/profile';
 function ProfileRoutes() {
   return (
     <Routes>
-      <Route path="profile" Component={Profile} />
+      <Route path={'profile'} Component={Profile} />
     </Routes>
   );
 }
