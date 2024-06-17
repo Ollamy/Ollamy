@@ -8,3 +8,4 @@ DELETE FROM "User" WHERE email IN
     );
 DELETE FROM "Discussion";
 DELETE FROM "Picture";
+DELETE FROM "Subscription";
