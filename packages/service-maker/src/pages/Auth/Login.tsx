@@ -22,9 +22,11 @@ export function Login() {
 
   const onSubmit = useCallback(
     (values: IFormInputs) => {
-      loginMutation({ loginUserModel: values }).then(() => {
-        navigate('/home');
-      });
+      loginMutation({ loginUserModel: { ...values, platform: 'MAKER' } }).then(
+        () => {
+          navigate('/home');
+        },
+      );
     },
     [loginMutation, navigate],
   );
