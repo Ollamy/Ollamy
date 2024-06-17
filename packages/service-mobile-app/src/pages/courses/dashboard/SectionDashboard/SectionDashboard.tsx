@@ -1,9 +1,12 @@
 import { ArrowBackIcon, Button, ScrollView, Text, VStack } from 'native-base';
+import { useMemo } from 'react';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
+import type { Lesson } from 'src/pages/courses/types';
+import { Status } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
 import { useJoinLessonMutation } from 'src/services/lesson/lesson';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
@@ -18,10 +21,24 @@ function SectionDashboard() {
 
   const navigate = useNavigate();
 
+  const lessons = useMemo<Lesson[]>(() => {
+    if (!lessonsData) return [];
+
+    const lastIdx = lessonsData.findIndex((e) => e.status !== Status.COMPLETED);
+
+    if (lastIdx !== -1) {
+      const tmp = lessonsData.concat();
+      tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS };
+      return tmp;
+    }
+
+    return lessonsData;
+  }, [lessonsData]);
+
   const showToast = (body: ToastShowParams): void => Toast.show(body);
 
   if (isLessonsDataFetching || isCourseDataFetching || isSectionDataFetching) return <Text>Loading...</Text>;
-  if (!lessonsData) return <Text>No lessons found.</Text>;
+  if (!lessons) return <Text>No lessons found.</Text>;
   if (!courseData) return <Text>No course found.</Text>;
   if (!sectionData) return <Text>Section not found.</Text>;
 
@@ -53,7 +70,7 @@ function SectionDashboard() {
         <SectionHeader title={sectionData.title} description={sectionData.description} />
 
         <VStack w={'full'}>
-          {lessonsData.map((lesson, index) => (
+          {lessons.map((lesson, index) => (
             <LessonListItem lesson={lesson} index={index} key={lesson.id} onPress={() => handleJoinLesson(lesson.id)} />
           ))}
         </VStack>
