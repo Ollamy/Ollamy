@@ -80,7 +80,7 @@ function Lecture(props: LectureProps) {
         <Heading>{lessonData.title}</Heading>
         <HealthPoints health={userHp.hp} />
       </TopBarContainer>
-      <VStack width={'100%'} height={'100%'} alignItems={'center'} px={4}>
+      <VStack width={'100%'} height={'100%'} alignItems={'center'} px={4} paddingBottom={4}>
         <VStack
           paddingBottom={95}
           space={34}
