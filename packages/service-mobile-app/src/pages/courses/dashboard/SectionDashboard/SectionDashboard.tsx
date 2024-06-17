@@ -1,12 +1,9 @@
 import { ArrowBackIcon, Button, ScrollView, Text, VStack } from 'native-base';
-import { useMemo } from 'react';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
-import type { Lesson } from 'src/pages/courses/types';
-import { LessonStatus } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery } from 'src/services/course/course';
 import { useJoinLessonMutation } from 'src/services/lesson/lesson';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
@@ -20,18 +17,6 @@ function SectionDashboard() {
   const [joinLesson] = useJoinLessonMutation();
 
   const navigate = useNavigate();
-
-  const lessons = useMemo<Lesson[]>(() => {
-    if (!lessonsData) return [];
-
-    const lastCompletedLesson = lessonsData.findLastIndex((e) => e.status === LessonStatus.COMPLETED);
-
-    return lessonsData.map((s, i) => {
-      if (i === lastCompletedLesson + 1) return { ...s, status: LessonStatus.IN_PROGRESS };
-      if (i > lastCompletedLesson) return { ...s, status: LessonStatus.NOT_STARTED };
-      return { ...s, status: LessonStatus.COMPLETED };
-    });
-  }, [lessonsData]);
 
   const showToast = (body: ToastShowParams): void => Toast.show(body);
 
@@ -68,7 +53,7 @@ function SectionDashboard() {
         <SectionHeader title={sectionData.title} description={sectionData.description} />
 
         <VStack w={'full'}>
-          {lessons.map((lesson, index) => (
+          {lessonsData.map((lesson, index) => (
             <LessonListItem lesson={lesson} index={index} key={lesson.id} onPress={() => handleJoinLesson(lesson.id)} />
           ))}
         </VStack>
