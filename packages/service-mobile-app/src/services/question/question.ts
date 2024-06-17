@@ -29,7 +29,7 @@ export const lessonApi = api.injectEndpoints({
         body,
         method: 'POST',
       }),
-      invalidatesTags: ['User', 'HP'],
+      invalidatesTags: ['User', 'HP', 'Course', 'Lesson'],
     }),
   }),
 });
