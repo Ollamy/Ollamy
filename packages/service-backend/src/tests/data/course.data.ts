@@ -3,6 +3,9 @@ import {
   Lesson,
   Picture,
   Section,
+  Subscription,
+  SubscriptionPlan,
+  UserSubscription,
   UsertoCourse,
   UsertoLesson,
 } from '@prisma/client';
@@ -18,6 +21,8 @@ import { v4 as uuidv4 } from 'uuid';
 // Data
 
 export const courseId = uuidv4();
+
+export const sharecode = 'sharecode-123';
 
 export const createCourseData: CreateCourseModel = {
   title: 'title',
@@ -40,12 +45,56 @@ export const mockPictureDb: Picture = {
   filename: 'data',
 };
 
+export const mockSubscriptionDb: Subscription = {
+  plan: SubscriptionPlan.BASIC,
+  slots: 5,
+  price: 0,
+};
+
+export const mockUserSubscriptionDb: UserSubscription = {
+  id: uuidv4(),
+  user_id: context.__user.id,
+  subscription_plan: SubscriptionPlan.BASIC,
+  start_date: undefined,
+  end_date: undefined,
+};
+
 export const mockCourseDb: Course = {
   id: courseId,
   owner_id: context.__user.id,
   title: createCourseData.title,
   description: createCourseData.description,
   picture_id: mockPictureDb.id,
+};
+
+export const mockCourseSlotsAvailableDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userlist: 2,
+  },
+};
+
+export const mockCourseSlotsFullDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userlist: 6,
+  },
 };
 
 export const mockLastLessonDb = {

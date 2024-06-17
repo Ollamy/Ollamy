@@ -237,3 +237,10 @@ INSERT INTO "Lecture" (id, lesson_id, data) VALUES
     ('5a8a0bd8-25f4-4a4d-9104-55e2c4d3f7e7', '8722bf34-6868-4a8b-988d-3b18fdbc384f', 'This lecture provides an overview of various programming languages and factors to consider when choosing one.'),
     ('f3a86e04-cd5e-4bf3-8bf3-3611397871e1', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'In this lecture, we explore techniques for working with strings and numbers in programming.'),
     ('6c0d816d-13b2-491d-8ef8-5b1468b7d5f3', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', 'Learn the fundamental concepts of object-oriented programming, including classes and objects.');
+
+
+-- Subscriptions plans
+INSERT INTO "Subscription" (id, plan, slots) VALUES
+    ('aaed0f14-ef84-4d14-81ce-b2169db6a013', 'BASIC', 5),
+    ('d369e00b-7e10-4b52-aca4-02be0eaeb804', 'ESSENTIAL', 100),
+    ('1bfd23ba-ea5b-4a45-b2f9-2e4d8627b32b', 'MASTER', 9999999);
