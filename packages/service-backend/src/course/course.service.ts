@@ -16,31 +16,12 @@ import {
   ExpirationMap,
   Durationtype,
 } from './course.dto';
-import {
-  CourseSectionModel,
-  GetSectionModel,
-  GetSectionsModel,
-  SectionModel,
-} from 'section/section.dto';
+import { GetSectionsModel } from 'section/section.dto';
+import { Course, Prisma, Role, Status } from '@prisma/client';
 import prisma from 'client';
-import {
-  Course,
-  Prisma,
-  Role,
-  Section,
-  Status,
-  UsertoSection,
-} from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
-import { TasksService } from 'cron/cron.service';
-import RedisCacheService from '../redis/redis.service';
-import { CourseSectionModel } from 'section/section.dto';
-import prisma from 'client';
-import { Course, Prisma, Role, Section } from '@prisma/client';
 import { PictureService } from 'picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from 'redis/redis.service';
-import { SubscriptionPlan } from '@prisma/client';
 
 const CODE_LENGTH: number = 4;
 

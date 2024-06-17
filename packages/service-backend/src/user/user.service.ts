@@ -22,10 +22,10 @@ import * as pbkdf2 from 'pbkdf2';
 import {
   Prisma,
   Role,
-  Status
-  SubscriptionPlan,
+  Status,
   User,
   UsertoScore,
+  SubscriptionPlan,
 } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
 
