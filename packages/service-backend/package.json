@@ -28,6 +28,7 @@
   "dependencies": {
     "@google-cloud/vertexai": "^1.1.0",
     "@nestjs/common": "^9.4.0",
+    "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^9.4.0",
     "@nestjs/platform-express": "^9.4.0",
     "@nestjs/platform-socket.io": "^10.2.4",
@@ -59,6 +60,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.1.2",
     "rxjs": "^7.8.0",
+    "stripe": "^15.11.0",
     "webpack": "^5.82.0"
   },
   "devDependencies": {
