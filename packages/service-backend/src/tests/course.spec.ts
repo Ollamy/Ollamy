@@ -363,13 +363,11 @@ describe('checkCourseSlots', () => {
 
   it('should return false when slots are not available', async () => {
     jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
-    jest
-      .spyOn(prisma.subscription, 'findUnique')
-      .mockResolvedValue({
-        id: uuidv4(),
-        plan: SubscriptionPlan.BASIC,
-        slots: 5,
-      });
+    jest.spyOn(prisma.subscription, 'findUnique').mockResolvedValue({
+      id: uuidv4(),
+      plan: SubscriptionPlan.BASIC,
+      slots: 5,
+    });
     jest.spyOn(prisma.usertoCourse, 'count').mockResolvedValue(6);
 
     const result = await courseService.checkCourseSlots(courseId);
