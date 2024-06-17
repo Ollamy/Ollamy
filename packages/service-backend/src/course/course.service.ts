@@ -35,21 +35,6 @@ export class CourseService {
     ctx: any,
   ): Promise<CourseIdResponse> {
     try {
-      const userSubscription = await prisma.userSubscription.findFirst({
-        where: {
-          user_id: ctx.__user.id,
-        },
-      });
-
-      if (!userSubscription) {
-        await prisma.userSubscription.create({
-          data: {
-            user_id: ctx.__user.id,
-            subscription_plan: SubscriptionPlan.BASIC,
-          },
-        });
-      }
-
       const courseDb = await prisma.course.create({
         data: {
           owner_id: ctx.__user.id,
