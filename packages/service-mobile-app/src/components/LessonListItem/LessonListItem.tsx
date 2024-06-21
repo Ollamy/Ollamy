@@ -27,7 +27,7 @@ function LessonListItem({ lesson, index, onPress, itemName }: LessonItemProps) {
   return (
     <HStack w={'full'} justifyContent={'start'} mt={'-2px'}>
       <VerticalProgressBar status={lesson.status} index={index} />
-      <Pressable flex={'1'} py={4} pl={4} h={'full'} onPress={onPress}>
+      <Pressable flex={'1'} py={4} pl={4} h={'full'} disabled={lesson.status === Status.NOT_STARTED} onPress={onPress}>
         <Box borderWidth={2} borderRadius={8} borderColor={STATUS_COLORS[lesson.status]} h={'68px'}>
           <HStack flex={'1'} alignItems={'center'} justifyContent={'space-between'} px={4}>
             <HStack space={4}>
