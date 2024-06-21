@@ -72,10 +72,6 @@ function OptionDropdownMenu({ lessonId }: OptionDropdownMenuProps) {
             Open in lecture editor
           </DropdownMenu.Item>
           <DropdownMenu.Separator className={'DropdownMenuSeparator'} />
-          <DropdownMenu.Item disabled className={'DropdownMenuItem'}>
-            Edit Metadata
-          </DropdownMenu.Item>
-          <DropdownMenu.Separator className={'DropdownMenuSeparator'} />
           <CustomRemoveRow
             checked
             className={'DropdownMenuCheckboxItem'}
