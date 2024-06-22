@@ -103,31 +103,6 @@ export interface CourseIdResponse {
 /**
  * 
  * @export
- * @interface CourseSectionModel
- */
-export interface CourseSectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    description: string;
-}
-/**
- * 
- * @export
  * @interface CourseTrueResponse
  */
 export interface CourseTrueResponse {
@@ -292,12 +267,6 @@ export interface CreateQuestionModel {
      * @memberof CreateQuestionModel
      */
     trustAnswerId?: string;
-    /**
-     * The list of answers
-     * @type {Array<CreateAnswerModel>}
-     * @memberof CreateQuestionModel
-     */
-    answers: Array<CreateAnswerModel>;
 }
 
 
@@ -389,7 +358,24 @@ export interface CreateUserModel {
      * @memberof CreateUserModel
      */
     password: string;
+    /**
+     * Platform user tries to access
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    platform: CreateUserModelPlatformEnum;
 }
+
+
+/**
+ * @export
+ */
+export const CreateUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type CreateUserModelPlatformEnum = typeof CreateUserModelPlatformEnum[keyof typeof CreateUserModelPlatformEnum];
+
 /**
  * 
  * @export
@@ -422,23 +408,29 @@ export interface GetCourseRequest {
     picture: string;
     /**
      * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastLessonId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastSectionId?: string;
-    /**
-     * 
      * @type {number}
      * @memberof GetCourseRequest
      */
     numberOfUsers: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    status?: GetCourseRequestStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const GetCourseRequestStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof typeof GetCourseRequestStatusEnum];
+
 /**
  * 
  * @export
@@ -540,6 +532,104 @@ export const GetQuestionModelDifficultyEnum = {
     Master: 'MASTER'
 } as const;
 export type GetQuestionModelDifficultyEnum = typeof GetQuestionModelDifficultyEnum[keyof typeof GetQuestionModelDifficultyEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSectionModel
+ */
+export interface GetSectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    order: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    status?: GetSectionModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionModelStatusEnum = typeof GetSectionModelStatusEnum[keyof typeof GetSectionModelStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSectionsModel
+ */
+export interface GetSectionsModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    order: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    status?: GetSectionsModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionsModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionsModelStatusEnum = typeof GetSectionsModelStatusEnum[keyof typeof GetSectionsModelStatusEnum];
 
 /**
  * 
@@ -772,6 +862,12 @@ export interface LessonModel {
     status: LessonModelStatusEnum;
     /**
      * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    order: string;
+    /**
+     * 
      * @type {number}
      * @memberof LessonModel
      */
@@ -813,7 +909,24 @@ export interface LoginUserModel {
      * @memberof LoginUserModel
      */
     password: string;
+    /**
+     * Platform user tries to login
+     * @type {string}
+     * @memberof LoginUserModel
+     */
+    platform: LoginUserModelPlatformEnum;
 }
+
+
+/**
+ * @export
+ */
+export const LoginUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type LoginUserModelPlatformEnum = typeof LoginUserModelPlatformEnum[keyof typeof LoginUserModelPlatformEnum];
+
 /**
  * 
  * @export
@@ -966,31 +1079,6 @@ export interface SectionIdResponse {
      * @memberof SectionIdResponse
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface SectionModel
- */
-export interface SectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    courseId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    description: string;
 }
 /**
  * 
@@ -1152,6 +1240,31 @@ export interface UpdateLessonModel {
 /**
  * 
  * @export
+ * @interface UpdateLessonOrderModel
+ */
+export interface UpdateLessonOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    origin: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateQuestionModel
  */
 export interface UpdateQuestionModel {
@@ -1264,7 +1377,7 @@ export interface UpdateQuestionOrderModel {
      */
     before?: string | null;
     /**
-     * The origin of the question
+     * Object's id
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
@@ -1294,6 +1407,31 @@ export interface UpdateSectionModel {
      * @memberof UpdateSectionModel
      */
     description?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateSectionOrderModel
+ */
+export interface UpdateSectionOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    origin: string;
 }
 /**
  * 
@@ -1382,24 +1520,30 @@ export interface UserCourses {
      */
     owner: boolean;
     /**
-     * The unique identifier of the last lesson
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastLessonId: string;
-    /**
-     * The unique identifier of the last section
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastSectionId: string;
-    /**
      * The number of users enrolled in the course
      * @type {number}
      * @memberof UserCourses
      */
-    numberOfUsers: number;
+    numberOfUsers?: number;
+    /**
+     * course completion status
+     * @type {string}
+     * @memberof UserCourses
+     */
+    status?: UserCoursesStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const UserCoursesStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type UserCoursesStatusEnum = typeof UserCoursesStatusEnum[keyof typeof UserCoursesStatusEnum];
+
 /**
  * 
  * @export

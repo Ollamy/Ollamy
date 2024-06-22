@@ -1,9 +1,9 @@
-import type { LessonStatus } from 'src/pages/courses/types';
+import type { Status } from 'src/pages/courses/types';
 
 export interface LessonResponse {
   description: string;
   id: string;
-  status: LessonStatus;
+  status: Status;
   title: string;
 }
 

@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { UserController } from 'user/user.controller';
 import { UserService } from 'user/user.service';
-import { CreateUserModel, LoginUserModel } from 'user/user.dto';
+import { CreateUserModel, LoginUserModel, PlatformEnum } from 'user/user.dto';
 import prisma from 'client';
 import {
   BadRequestException,
@@ -9,7 +9,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { context, loginUserData, mockUserDb } from 'tests/data/user.data';
+import {
+  context,
+  loginUserData,
+  mockUserDb,
+  userId,
+} from 'tests/data/user.data';
 
 describe('UserController', () => {
   let userService: UserService;
@@ -88,7 +93,10 @@ describe('loginUser', () => {
       expect(userService.hashPassword).toHaveBeenCalledWith(expect.any(String));
 
       expect(userService.createToken).toHaveBeenCalledTimes(1);
-      expect(userService.createToken).toHaveBeenCalledWith(expect.any(String));
+      expect(userService.createToken).toHaveBeenCalledWith(
+        userId,
+        PlatformEnum.MAKER,
+      );
 
       expect(loginResult).toBe('mockToken');
     }

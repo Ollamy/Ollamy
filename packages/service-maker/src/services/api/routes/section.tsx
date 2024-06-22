@@ -38,6 +38,13 @@ export const sectionActions = {
         queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
       },
     }),
+  useUpdateSection: () =>
+    useMutation(SectionApi.updateSection, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_SECTION_KEY);
+        queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
+      },
+    }),
   useRemoveSection: () =>
     useMutation(SectionApi.deleteSection, {
       onSuccess: () => {

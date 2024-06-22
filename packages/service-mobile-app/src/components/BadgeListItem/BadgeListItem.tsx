@@ -11,7 +11,7 @@ interface LessonItemProps {
   index: number;
 }
 
-function LessonListItem({ badge, index }: LessonItemProps) {
+function BadgeListItem({ badge, index }: LessonItemProps) {
   const isEvenIdx = !(index % 2);
 
   return (
@@ -51,4 +51,4 @@ function LessonListItem({ badge, index }: LessonItemProps) {
   );
 }
 
-export default LessonListItem;
+export default BadgeListItem;

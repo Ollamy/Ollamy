@@ -41,52 +41,22 @@ export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 
   @ApiOkResponse({
-    description: 'Question creation response',
+    description: 'question create response',
     type: QuestionIdResponse,
   })
   @ApiBody({
     type: CreateQuestionModel,
-    description: 'Question data model',
+    description: 'user data model',
     examples: {
       template: {
         value: {
-          lessonId: '5b52bb6c-2c4e-11ef-89ca-279ba2efb65c',
-          title: 'Free Answer Question title',
-          description: 'This is a sample description for the question.',
+          lessonId: 'Lesson Id',
+          title: 'Question Title',
+          description: 'Question decsription',
           typeAnswer: AnswerType.FREE_ANSWER,
           typeQuestion: QuestionType.TEXT,
           difficulty: QuestionDifficulty.BEGINNER,
-          points: 10,
-          answers: [
-            {
-              data: 'Answer Data',
-            },
-          ],
-        } as CreateQuestionModel,
-      },
-      multipleChoice: {
-        value: {
-          lessonId: '5b52bb6c-2c4e-11ef-89ca-279ba2efb65c',
-          title: 'Multiple Choice Question title',
-          description: 'This is a description for a multiple choice question.',
-          typeAnswer: AnswerType.MULTIPLE_CHOICE,
-          typeQuestion: QuestionType.TEXT,
-          difficulty: QuestionDifficulty.INTERMEDIATE,
-          points: 20,
-          answers: [
-            {
-              data: 'Answer 1',
-            },
-            {
-              data: 'Answer 2',
-            },
-            {
-              data: 'Answer 3',
-            },
-            {
-              data: 'Answer 4',
-            },
-          ],
+          points: 0,
         } as CreateQuestionModel,
       },
     },
@@ -179,7 +149,7 @@ export class QuestionController {
   })
   @ApiBody({
     type: UpdateQuestionOrderModel,
-    description: 'user data model',
+    description: 'update question order data model',
     examples: {
       template: {
         value: {
@@ -191,7 +161,7 @@ export class QuestionController {
     },
   })
   @LoggedMiddleware(true)
-  @Put()
+  @Put('/order')
   async updateQuestionOrder(
     @Body() body: UpdateQuestionOrderModel,
   ): Promise<object> {

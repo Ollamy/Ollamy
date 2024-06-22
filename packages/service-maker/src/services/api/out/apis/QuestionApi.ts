@@ -209,7 +209,7 @@ export class QuestionApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/question`,
+            path: `/question/order`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,

@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
   HttpException,
-  BadRequestException,
 } from '@nestjs/common';
 import {
   CreateQuestionModel,
@@ -17,13 +16,8 @@ import {
   GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import {
-  Answer,
-  AnswerType,
-  LessonStatus,
-  Prisma,
-  Question,
-} from '@prisma/client';
+import { Answer, AnswerType, Status, Prisma, Question } from '@prisma/client';
+import { SectionService } from 'section/section.service';
 import { PictureService } from 'picture/picture.service';
 import { QuestionAnswerModel } from 'answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
@@ -33,100 +27,48 @@ import { TasksService } from 'cron/cron.service';
 export class QuestionService {
   constructor(private readonly cronService: TasksService) {}
 
-  answerDataCheck(questionData: CreateQuestionModel): boolean {
-    if (
-      questionData.typeAnswer === 'FREE_ANSWER' &&
-      questionData.answers.length > 1
-    ) {
-      Logger.error(
-        `${questionData.typeAnswer} type must have at least 2 different answers`,
-      );
-      throw new BadRequestException(
-        'FREE_ANSWER type can only have one answer',
-      );
-    }
-    if (
-      questionData.typeAnswer !== 'FREE_ANSWER' &&
-      questionData.answers.length < 2
-    ) {
-      Logger.error(
-        `${questionData.typeAnswer} type must have at least 2 different answers`,
-      );
-      throw new BadRequestException(
-        `${questionData.typeAnswer} type must have at least 2 different answers`,
-      );
-    }
-    return true;
-  }
-
   async postQuestion(
     questionData: CreateQuestionModel,
   ): Promise<QuestionIdResponse> {
-    if (!this.answerDataCheck(questionData)) return undefined;
-
-    const lessonQuestions = await prisma.question.findMany({
-      where: { lesson_id: questionData.lessonId },
-      select: { order: true },
-      orderBy: { order: 'asc' },
-    });
-
     try {
-      const result = await prisma.$transaction(async (prisma) => {
-        const questionDb = await prisma.question.create({
-          data: {
-            lesson_id: questionData.lessonId,
-            title: questionData.title,
-            description: questionData.description,
-            type_answer: questionData.typeAnswer,
-            type_question: questionData.typeQuestion,
-            difficulty: questionData?.difficulty,
-            order: generateKeyBetween(
-              !lessonQuestions || !lessonQuestions.length
-                ? undefined
-                : lessonQuestions[lessonQuestions.length - 1].order,
-              undefined,
-            ),
-            points: questionData?.points,
+      const lessonQuestions = await prisma.question.findMany({
+        where: {
+          lesson_id: questionData.lessonId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
           },
-        });
-
-        const answersPromises = questionData.answers.map(
-          async (answerData, i) => {
-            const answer = await prisma.answer.create({
-              data: {
-                question_id: questionDb.id,
-                data: answerData.data,
-                picture_id: answerData.picture
-                  ? await PictureService.postPicture(answerData.picture)
-                  : undefined,
-                order: generateKeyBetween(undefined, undefined),
-              },
-            });
-
-            if (i === 0) {
-              await prisma.question.update({
-                where: {
-                  id: questionDb.id,
-                },
-                data: {
-                  trust_answer_id: answer.id,
-                },
-              });
-            }
-          },
-        );
-
-        await Promise.all(answersPromises);
-
-        return questionDb;
+        ],
       });
 
-      if (!result) {
+      const questionDb: Question = await prisma.question.create({
+        data: {
+          lesson_id: questionData.lessonId,
+          title: questionData.title,
+          description: questionData.description,
+          type_answer: questionData.typeAnswer,
+          type_question: questionData.typeQuestion,
+          difficulty: questionData?.difficulty,
+          order: generateKeyBetween(
+            !lessonQuestions || !lessonQuestions.length
+              ? undefined
+              : lessonQuestions[lessonQuestions.length - 1].order,
+            undefined,
+          ),
+          points: questionData?.points,
+        },
+      });
+
+      if (!questionDb) {
         Logger.error('Failed to create question !');
         throw new NotFoundException('Failed to create question !');
       }
-
-      return { id: result.id } as QuestionIdResponse;
+      return { id: questionDb.id } as QuestionIdResponse;
     } catch (error) {
       Logger.error(error);
       throw new ConflictException(`Cant create Question : ${error.stack}!`);
@@ -387,7 +329,7 @@ export class QuestionService {
       },
     });
 
-    if (userLesson.status === LessonStatus.NOT_STARTED) {
+    if (userLesson.status === Status.NOT_STARTED) {
       await prisma.usertoLesson.update({
         where: {
           lesson_id_user_id: {
@@ -396,12 +338,12 @@ export class QuestionService {
           },
         },
         data: {
-          status: LessonStatus.IN_PROGRESS,
+          status: Status.IN_PROGRESS,
         },
       });
     }
 
-    if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
+    if (isValidated === true && userLesson.status !== Status.COMPLETED) {
       await prisma.usertoScore.upsert({
         where: { user_id: ctx.__user.id },
         create: {
@@ -468,9 +410,14 @@ export class QuestionService {
           },
         },
         data: {
-          status: LessonStatus.COMPLETED,
+          status: Status.COMPLETED,
         },
       });
+
+      await SectionService.UpdateSectionCompletionFromLesson(
+        userLesson.lesson_id,
+        userLesson.user_id,
+      );
     }
 
     return {
@@ -479,7 +426,7 @@ export class QuestionService {
       end: !(nextQuestion !== null),
       nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
       points:
-        isValidated && userLesson.status !== LessonStatus.COMPLETED
+        isValidated && userLesson.status !== Status.COMPLETED
           ? questionPoints
           : 0,
       hp: hp - 1,

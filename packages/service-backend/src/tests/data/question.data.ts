@@ -1,4 +1,4 @@
-import { AnswerType, LessonStatus, Question, UsertoLesson } from '@prisma/client';
+import { AnswerType, Status, Question, UsertoLesson } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateQuestionModel,
@@ -6,14 +6,12 @@ import {
   UpdateQuestionModel,
   ValidateAnswerModel,
 } from '@ollamy/backend/question/question.dto';
-import { AnswerService } from '@ollamy/backend/answer/answer.service';
 import { context } from './user.data';
 
 export const questionId = uuidv4();
 export const correctAnswerId = uuidv4();
 const incorrectAnswerId = uuidv4();
 const lessonId = uuidv4();
-const existingLessonId = '7fe0b554-1c69-4ee5-9e24-553f4b24d3c9';
 export const mockQuestionId2 = uuidv4();
 
 export const mockQuestionData: CreateQuestionModel = {
@@ -23,48 +21,6 @@ export const mockQuestionData: CreateQuestionModel = {
   typeAnswer: AnswerType.FREE_ANSWER,
   typeQuestion: 'TEXT',
   trustAnswerId: correctAnswerId,
-  answers: [
-    { data: 'Sample Answer Data' },
-  ],
-};
-
-export const mockQuestionDataExisting: CreateQuestionModel = {
-  lessonId: existingLessonId,
-  title: 'Question Title',
-  description: 'Question Description',
-  typeAnswer: AnswerType.FREE_ANSWER,
-  typeQuestion: 'TEXT',
-  trustAnswerId: correctAnswerId,
-  answers: [
-    { data: 'Sample Answer Data' },
-  ],
-};
-
-export const mockQuestionDataError: CreateQuestionModel = {
-  lessonId: lessonId,
-  title: 'Question Title',
-  description: 'Question Description',
-  typeAnswer: AnswerType.FREE_ANSWER,
-  typeQuestion: 'TEXT',
-  trustAnswerId: correctAnswerId,
-  answers: [
-    { data: 'Sample Answer Data' },
-  ],
-};
-
-export const mockQuestionDataOtherChoice: CreateQuestionModel = {
-  lessonId: existingLessonId,
-  title: 'Question Title',
-  description: 'Question Description',
-  typeAnswer: AnswerType.MULTIPLE_CHOICE,
-  typeQuestion: 'TEXT',
-  trustAnswerId: correctAnswerId,
-  answers: [
-    { data: 'Answer 1' },
-    { data: 'Answer 2' },
-    { data: 'Answer 3' },
-    { data: 'Answer 4' },
-  ],
 };
 
 export const mockQuestionId: IdQuestionModel = {
@@ -154,7 +110,7 @@ export const mockUserLesson: UsertoLesson = {
   score: 1,
   complete_lecture: false,
   complete_question: false,
-  status: LessonStatus.NOT_STARTED,
+  status: Status.NOT_STARTED,
   created_at: new Date(),
   updated_at: new Date(),
 };

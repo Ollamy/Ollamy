@@ -16,13 +16,12 @@ import {
   ExpirationMap,
   Durationtype,
 } from './course.dto';
-import { CourseSectionModel } from 'section/section.dto';
+import { GetSectionsModel } from 'section/section.dto';
+import { Course, Prisma, Role, Status } from '@prisma/client';
 import prisma from 'client';
-import { Course, Prisma, Role, Section } from '@prisma/client';
 import { PictureService } from 'picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from 'redis/redis.service';
-import { SubscriptionPlan } from '@prisma/client';
 
 const CODE_LENGTH: number = 4;
 
@@ -104,14 +103,18 @@ export class CourseService {
         },
       });
 
-      const users = await prisma.usertoCourse.count({
-        where: {
-          course_id: courseId,
-          role_user: {
-            equals: Role.MEMBER,
+      let userCount: number = undefined;
+
+      if (ctx.__device.isMaker) {
+        userCount = await prisma.usertoCourse.count({
+          where: {
+            course_id: courseId,
+            role_user: {
+              equals: Role.MEMBER,
+            },
           },
-        },
-      });
+        });
+      }
 
       if (!courseDb) {
         Logger.error('Course does not exists !');
@@ -125,9 +128,10 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        lastLessonId: userToCourse?.last_lesson_id,
-        lastSectionId: userToCourse?.last_section_id,
-        numberOfUsers: users,
+        numberOfUsers: userCount,
+        status: !ctx.__device.isMaker
+          ? userToCourse?.status ?? Status.NOT_STARTED
+          : undefined,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
@@ -180,11 +184,26 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
+  async getCourseSections(
+    CourseId: string,
+    ctx: any,
+  ): Promise<GetSectionsModel[]> {
     try {
-      const courseSectionsDb: Section[] = await prisma.section.findMany({
+      const courseSectionsDb = await prisma.section.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           course_id: CourseId,
+        },
+        include: {
+          UsertoSection: {
+            where: {
+              user_id: ctx.__user.id,
+            },
+          },
         },
       });
 
@@ -193,11 +212,21 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => ({
-        id: lesson.id,
-        title: lesson.title,
-        description: lesson.description,
-      })) as CourseSectionModel[];
+      const sectionPromises: GetSectionsModel[] = courseSectionsDb.map(
+        (section) => {
+          return {
+            id: section.id,
+            description: section.description,
+            title: section.title,
+            order: section.order,
+            status: !ctx.__device.isMaker
+              ? section?.UsertoSection[0]?.status ?? Status.NOT_STARTED
+              : undefined,
+          };
+        },
+      );
+
+      return sectionPromises;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
@@ -220,7 +249,7 @@ export class CourseService {
           },
         },
         _count: {
-          select: { userlist: { where: { role_user: Role.MEMBER } } },
+          select: { userToCourse: { where: { role_user: Role.MEMBER } } },
         },
       },
     });
@@ -228,7 +257,7 @@ export class CourseService {
     const subscriptionSlots =
       result.user?.UserSubscription?.[0]?.Subscription?.slots ?? 0;
 
-    return result._count.userlist <= subscriptionSlots;
+    return result._count.userToCourse <= subscriptionSlots;
   }
 
   async addUserToCourse(
@@ -338,5 +367,41 @@ export class CourseService {
     );
 
     return { code, expiresAt: expirationDate };
+  }
+
+  static async UpdateCourseCompletionFromLesson(
+    sectionId: string,
+    userId: string,
+  ) {
+    const course = await prisma.section.findUnique({
+      where: { id: sectionId },
+      select: {
+        course_id: true,
+      },
+    });
+
+    const remainingSection = await prisma.$queryRaw`
+      select count(*) as nb_left
+      from "Section" as s
+      where s.course_id = ${course.course_id}::uuid
+      and not exists(
+          select 1
+          from "UsertoSection" uts
+          where uts.section_id = s.id
+              and uts.status = 'COMPLETED'
+              and uts.user_id = ${userId}::uuid
+    )`;
+
+    if (remainingSection[0].nb_left === BigInt(0)) {
+      await prisma.usertoCourse.update({
+        where: {
+          course_id_user_id: {
+            course_id: course.course_id,
+            user_id: userId,
+          },
+        },
+        data: { status: Status.COMPLETED },
+      });
+    }
   }
 }
