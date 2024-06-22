@@ -32,7 +32,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { MODE } from '../setup';
+import { MODE } from 'setup';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -63,20 +63,13 @@ export class UserController {
     },
   })
   @Post('/register')
-  async registerUser(
-    @Response() res,
-    @Body() body: CreateUserModel,
-  ) {
-    res.cookie(
-      'session',
-      await this.userService.registerUser(body),
-      {
-        httpOnly: true,
-        maxAge: SessionService.TTL,
-        sameSite: MODE === 'prod' ? 'none' : undefined,
-        secure: MODE === 'prod',
-      },
-    );
+  async registerUser(@Response() res, @Body() body: CreateUserModel) {
+    res.cookie('session', await this.userService.registerUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
     return res.send({ success: true });
   }
 
@@ -98,20 +91,13 @@ export class UserController {
     },
   })
   @Post('/login')
-  async loginUser(
-    @Response() res,
-    @Body() body: LoginUserModel,
-  ): Promise<any> {
-    res.cookie(
-      'session',
-      await this.userService.loginUser(body),
-      {
-        httpOnly: true,
-        maxAge: SessionService.TTL,
-        sameSite: MODE === 'prod' ? 'none' : undefined,
-        secure: MODE === 'prod',
-      },
-    );
+  async loginUser(@Response() res, @Body() body: LoginUserModel): Promise<any> {
+    res.cookie('session', await this.userService.loginUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
     return res.send({ success: true });
   }
 
@@ -151,16 +137,12 @@ export class UserController {
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
   ): Promise<SuccessBody> {
-    res.cookie(
-      'session',
-      await this.userService.updateUser(body, ctx),
-      {
-        httpOnly: true,
-        maxAge: SessionService.TTL,
-        sameSite: MODE === 'prod' ? 'none' : undefined,
-        secure: MODE === 'prod',
-      },
-    );
+    res.cookie('session', await this.userService.updateUser(body, ctx), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
 
     return res.send({ success: true });
   }
@@ -206,16 +188,12 @@ export class UserController {
     @Response() res,
     @OllContext() ctx: any,
   ): Promise<SuccessBody> {
-    res.cookie(
-      'session',
-      await this.userService.logoutUser(ctx),
-      {
-        httpOnly: true,
-        maxAge: 0,
-        sameSite: MODE === 'prod' ? 'none' : undefined,
-        secure: MODE === 'prod',
-      },
-    );
+    res.cookie('session', await this.userService.logoutUser(ctx), {
+      httpOnly: true,
+      maxAge: 0,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
 
     return res.send({ success: true });
   }

@@ -166,7 +166,7 @@ export class CourseController {
     name: 'duration',
     description: 'Duration of the code',
     required: false,
-    enum: Durationtype
+    enum: Durationtype,
   })
   @LoggedMiddleware(true)
   @Post('/:id/share')

@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateSectionModel,
@@ -14,16 +15,41 @@ import {
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
 import { Lesson, LessonStatus, Prisma, Section } from '@prisma/client';
+import { UpdateQuestionOrderModel } from 'question/question.dto';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class SectionService {
-  async postSection(sectionData: CreateSectionModel): Promise<SectionIdResponse> {
+  async postSection(
+    sectionData: CreateSectionModel,
+  ): Promise<SectionIdResponse> {
     try {
+      const courseSections = await prisma.section.findMany({
+        where: {
+          course_id: sectionData.courseId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       const sectionDb: Section = await prisma.section.create({
         data: {
           course_id: sectionData.courseId,
           title: sectionData.title,
           description: sectionData.description,
+          order: generateKeyBetween(
+            !courseSections || !courseSections.length
+              ? undefined
+              : courseSections[courseSections.length - 1].order,
+            undefined,
+          ),
         },
       });
 
@@ -78,6 +104,7 @@ export class SectionService {
         courseId: sectionDb.course_id,
         title: sectionDb.title,
         description: sectionDb.description,
+        order: sectionDb.order,
       } as SectionModel;
     } catch (error) {
       Logger.error(error);
@@ -116,6 +143,11 @@ export class SectionService {
   async getSectionLessons(SectionId: string, ctx: any): Promise<LessonModel[]> {
     try {
       const sectionLessonsDb: Lesson[] = await prisma.lesson.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           section_id: SectionId,
         },
@@ -126,42 +158,69 @@ export class SectionService {
         throw new NotFoundException('No chapters for this course !');
       }
 
-      const lessonPromises: Promise<LessonModel>[] = sectionLessonsDb.map(async (lesson: Lesson) => {
-        const userLesson = await prisma.usertoLesson.findUnique({
-          where: {
-            lesson_id_user_id: {
-              user_id: ctx.__user.id,
+      const lessonPromises: Promise<LessonModel>[] = sectionLessonsDb.map(
+        async (lesson: Lesson) => {
+          const userLesson = await prisma.usertoLesson.findUnique({
+            where: {
+              lesson_id_user_id: {
+                user_id: ctx.__user.id,
+                lesson_id: lesson.id,
+              },
+            },
+          });
+
+          const questionsCount = await prisma.question.count({
+            where: {
               lesson_id: lesson.id,
             },
-          },
-        });
+          });
 
-        const questionsCount = await prisma.question.count({
-          where: {
-            lesson_id: lesson.id,
-          },
-        });
+          const lecturesCount = await prisma.lecture.count({
+            where: {
+              lesson_id: lesson.id,
+            },
+          });
 
-        const lecturesCount = await prisma.lecture.count({
-          where: {
-            lesson_id: lesson.id,
-          },
-        });
-
-        return {
-          id: lesson.id,
-          description: lesson.description,
-          title: lesson.title,
-          status: userLesson?.status || LessonStatus.NOT_STARTED,
-          numberOfQuestions: questionsCount || 0,
-          numberOfLectures: lecturesCount || 0,
-        };
-      });
+          return {
+            id: lesson.id,
+            description: lesson.description,
+            title: lesson.title,
+            status: userLesson?.status ?? LessonStatus.NOT_STARTED,
+            order: lesson.order,
+            numberOfQuestions: questionsCount ?? 0,
+            numberOfLectures: lecturesCount ?? 0,
+          };
+        },
+      );
 
       return await Promise.all(lessonPromises);
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Lessons not found !');
     }
+  }
+
+  async updateSectionOrder(
+    sectionData: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    let order: string;
+    try {
+      order = generateKeyBetween(sectionData?.after, sectionData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
+    }
+    await prisma.section.update({
+      where: {
+        id: sectionData.origin,
+      },
+      data: {
+        order: order,
+      },
+    });
+
+    return {
+      order: order,
+    };
   }
 }

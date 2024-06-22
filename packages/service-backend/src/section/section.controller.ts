@@ -21,11 +21,12 @@ import {
   SectionModel,
   UpdateSectionModel,
   SectionIdResponse,
+  UpdateSectionOrderModel,
 } from 'section/section.dto';
 import { SectionService } from 'section/section.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { LessonModel } from 'lesson/lesson.dto';
-import { OllContext } from '../context/context.decorator';
+import { OllContext } from 'context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Section')
@@ -52,7 +53,9 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Post()
-  async registerSection(@Body() body: CreateSectionModel): Promise<SectionIdResponse> {
+  async registerSection(
+    @Body() body: CreateSectionModel,
+  ): Promise<SectionIdResponse> {
     return this.sectionService.postSection(body);
   }
 
@@ -73,7 +76,9 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Delete()
-  async deleteSection(@Body() body: IdSectionModel): Promise<SectionIdResponse> {
+  async deleteSection(
+    @Body() body: IdSectionModel,
+  ): Promise<SectionIdResponse> {
     return this.sectionService.deleteSection(body);
   }
 
@@ -90,6 +95,31 @@ export class SectionController {
   @Get('/:id')
   async getSection(@Param('id') id: string): Promise<SectionModel> {
     return this.sectionService.getSection(id);
+  }
+
+  @ApiOkResponse({
+    description: 'Question order changed',
+    type: SectionIdResponse,
+  })
+  @ApiBody({
+    type: UpdateSectionOrderModel,
+    description: 'update question order data model',
+    examples: {
+      template: {
+        value: {
+          before: 'order id',
+          after: 'order id',
+          origin: 'section id',
+        } as UpdateSectionOrderModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Put('/order')
+  async updateSectionOrder(
+    @Body() body: UpdateSectionOrderModel,
+  ): Promise<object> {
+    return this.sectionService.updateSectionOrder(body);
   }
 
   @ApiOkResponse({
@@ -134,7 +164,10 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Get('/lessons/:id')
-  async getSectionLessons(@Param('id') id: string, @OllContext() ctx: any): Promise<LessonModel[]> {
+  async getSectionLessons(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<LessonModel[]> {
     return this.sectionService.getSectionLessons(id, ctx);
   }
 }

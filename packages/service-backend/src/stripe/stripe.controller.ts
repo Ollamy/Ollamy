@@ -1,13 +1,22 @@
-import { Controller, Get, Post, Query, Headers, Req, RawBodyRequest, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Headers,
+  Req,
+  RawBodyRequest,
+  Body,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StripeService } from './stripe.service';
 import { CurrencyType } from './stripe.dto';
-import { LoggedMiddleware } from '../middleware/middleware.decorator';
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
 
 @ApiTags('stripe')
 @Controller('stripe')
 export class StripeController {
-  constructor(private stripeService: StripeService) { }
+  constructor(private stripeService: StripeService) {}
 
   @ApiOkResponse({
     description: 'Payment intent created successfully',
@@ -24,11 +33,14 @@ export class StripeController {
     @Query('amount') amount: number,
     @Query('currency') currency: CurrencyType,
   ) {
-    return await this.stripeService.createPaymentIntent(amount, currency)
+    return await this.stripeService.createPaymentIntent(amount, currency);
   }
 
   @Post('webhook')
-  async handleWebhook(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string,) {
+  async handleWebhook(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('stripe-signature') signature: string,
+  ) {
     try {
       await this.stripeService.handleWebhook(req.rawBody, signature);
       return 'Webhook received';
