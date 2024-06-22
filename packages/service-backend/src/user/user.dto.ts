@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '@prisma/client';
 import { Type, Transform } from 'class-transformer';
 import {
   IsEmail,
@@ -8,13 +9,14 @@ import {
   IsBoolean,
   IsArray,
   ValidateNested,
-  IsUrl,
-  MinLength,
-  MaxLength,
-  Matches,
   IsEnum,
   IsNumber,
 } from 'class-validator';
+
+export enum PlatformEnum {
+  MOBILE = 'MOBILE',
+  MAKER = 'MAKER',
+}
 
 export class SuccessBody {
   @ApiProperty({ description: 'Result of the request' })
@@ -58,13 +60,15 @@ export class CreateUserModel extends BaseUser {
       'Password must contain at least 8 characters, 2 numbers and 2 uppercase letters',
   })
   @IsString()
-  // @MinLength(8)
-  // @MaxLength(50)
-  // @Matches(/^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z]).{8,}$/, {
-  //   message:
-  //     'Password must contain at least 8 characters, 2 numbers, and 2 uppercase letters',
-  // })
   password: string;
+
+  @ApiProperty({
+    description: 'Platform user tries to access',
+    required: true,
+    enum: PlatformEnum,
+  })
+  @IsEnum(PlatformEnum)
+  platform: PlatformEnum;
 }
 
 export class LoginUserModel {
@@ -75,6 +79,14 @@ export class LoginUserModel {
   @ApiProperty({ description: 'The password of the user' })
   @IsString()
   password: string;
+
+  @ApiProperty({
+    description: 'Platform user tries to login',
+    required: true,
+    enum: PlatformEnum,
+  })
+  @IsEnum(PlatformEnum)
+  platform: PlatformEnum;
 }
 
 export class UpdateUserModel {
@@ -108,7 +120,7 @@ export class UpdateUserModel {
   password?: string;
 }
 
-export class GetUserModel extends BaseUser { }
+export class GetUserModel extends BaseUser {}
 
 export class GetUserScoreModel {
   @ApiProperty({ description: 'The unique identifier of the user' })
@@ -157,17 +169,21 @@ export class UserCourses {
   @IsBoolean()
   owner: boolean;
 
-  @ApiProperty({ description: 'The unique identifier of the last lesson' })
-  @IsUUID()
-  lastLessonId: string;
-
-  @ApiProperty({ description: 'The unique identifier of the last section' })
-  @IsUUID()
-  lastSectionId: string;
-
-  @ApiProperty({ description: 'The number of users enrolled in the course' })
+  @ApiProperty({
+    description: 'The number of users enrolled in the course',
+    required: false,
+  })
   @IsNumber()
-  numberOfUsers: number;
+  numberOfUsers?: number;
+
+  @ApiProperty({
+    required: false,
+    enum: Status,
+    description: 'course completion status',
+  })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class UserCoursesResponse {

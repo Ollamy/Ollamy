@@ -15,8 +15,8 @@ import {
   mockUpdatedLesson,
   mockLessonData3,
   mockGetLesson,
+  mockLessonExtended,
 } from 'tests/data/lesson.data';
-import { mockUserLesson } from './data/question.data';
 
 describe('postLesson', () => {
   let lessonService: LessonService;
@@ -129,11 +129,9 @@ describe('getLesson', () => {
   });
 
   it('should return the lesson when it exists', async () => {
-    jest.spyOn(prisma.lesson, 'findFirst').mockResolvedValue(mockLesson);
     jest
-      .spyOn(prisma.usertoLesson, 'findUnique')
-      .mockResolvedValue(mockUserLesson);
-
+      .spyOn(prisma.lesson, 'findFirst')
+      .mockResolvedValue(mockLessonExtended);
     jest
       .spyOn(prisma.question, 'count')
       .mockResolvedValue(mockGetLesson.numberOfQuestions);
@@ -142,7 +140,7 @@ describe('getLesson', () => {
       .mockResolvedValue(mockGetLesson.numberOfLectures);
 
     // Invoke the function being tested
-    const result = await lessonService.getLesson(mockLessonId, userId);
+    const result = await lessonService.getLesson(mockLessonId, context);
 
     // Perform assertions
     expect(prisma.lesson.findFirst).toHaveBeenCalledTimes(1);
@@ -153,6 +151,16 @@ describe('getLesson', () => {
         },
       ],
       where: { id: mockLessonId },
+      include: {
+        UsertoLesson: {
+          select: {
+            status: true,
+          },
+          where: {
+            user_id: context.__user.id,
+          },
+        },
+      },
     });
 
     expect(result).toEqual(mockGetLesson);

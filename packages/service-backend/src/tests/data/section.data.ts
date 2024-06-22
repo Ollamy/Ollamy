@@ -1,10 +1,11 @@
-import { Lesson, Prisma, Section } from '@prisma/client';
+import { Lesson, Prisma, Section, Status, UsertoSection } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateSectionModel,
   IdSectionModel,
   UpdateSectionModel,
 } from '@ollamy/backend/section/section.dto';
+import { userId } from './user.data';
 
 export const courseId = uuidv4();
 
@@ -21,6 +22,15 @@ export const mockSectionDb: Section = {
   title: mockSectionData.title,
   description: mockSectionData.description,
   order: 'a0',
+};
+
+export const mockUserToSectionDb: UsertoSection = {
+  id: sectionId,
+  user_id: userId,
+  section_id: sectionId,
+  status: Status.IN_PROGRESS,
+  updated_at: new Date(),
+  created_at: new Date(),
 };
 
 export const mockSectionData2: IdSectionModel = {

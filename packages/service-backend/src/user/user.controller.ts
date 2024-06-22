@@ -6,6 +6,7 @@ import {
   GetUserModel,
   GetUserScoreModel,
   LoginUserModel,
+  PlatformEnum,
   SuccessBody,
   UpdateUserModel,
   UserCoursesResponse,
@@ -58,6 +59,7 @@ export class UserController {
           lastname: 'lastname',
           email: 'test@test.test',
           password: '1234aaBB@',
+          platform: PlatformEnum.MAKER,
         } as CreateUserModel,
       },
     },
@@ -86,6 +88,7 @@ export class UserController {
         value: {
           email: 'test@test.test',
           password: '1234aaBB@',
+          platform: PlatformEnum.MAKER,
         } as LoginUserModel,
       },
     },

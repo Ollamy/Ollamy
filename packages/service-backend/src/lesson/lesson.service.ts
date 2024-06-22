@@ -25,6 +25,7 @@ import {
   Lesson,
   Lecture,
   UsertoLesson,
+  Status,
 } from '@prisma/client';
 import { generateKeyBetween } from 'order/order.service';
 
@@ -106,9 +107,9 @@ export class LessonService {
     }
   }
 
-  async getLesson(lessonId: string, userId): Promise<LessonModel> {
+  async getLesson(lessonId: string, ctx: any): Promise<LessonModel> {
     try {
-      const lessonDb: Lesson = await prisma.lesson.findFirst({
+      const lessonDb = await prisma.lesson.findFirst({
         orderBy: [
           {
             order: 'asc',
@@ -117,18 +118,19 @@ export class LessonService {
         where: {
           id: lessonId,
         },
-      });
-
-      const userLessonDb: UsertoLesson = await prisma.usertoLesson.findUnique({
-        where: {
-          lesson_id_user_id: {
-            user_id: userId,
-            lesson_id: lessonId,
+        include: {
+          UsertoLesson: {
+            select: {
+              status: true,
+            },
+            where: {
+              user_id: ctx.__user.id,
+            },
           },
         },
       });
 
-      if (!lessonDb || !userLessonDb) {
+      if (!lessonDb || lessonDb.UsertoLesson.length === 0) {
         Logger.error('Lesson does not exists !');
         throw new ConflictException('Lesson does not exists !');
       }
@@ -149,14 +151,16 @@ export class LessonService {
         id: lessonDb.id,
         title: lessonDb.title,
         description: lessonDb.description,
-        status: userLessonDb.status,
+        status: !ctx.__device._isMaker
+          ? lessonDb?.UsertoLesson[0]?.status ?? Status.NOT_STARTED
+          : undefined,
         numberOfQuestions: questionsCount,
         numberOfLectures: lecturesCount,
         order: lessonDb.order,
       } as LessonModel;
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Lesson not found !');
+      throw new ConflictException(`Lesson not found ! ${error.message}`);
     }
   }
 
@@ -245,28 +249,14 @@ export class LessonService {
     userId: string,
   ): Promise<LessonIdResponse> {
     try {
-      let userToLesson = await prisma.usertoLesson.findUnique({
-        where: {
-          lesson_id_user_id: {
-            user_id: userId,
-            lesson_id: lessonId,
-          },
+      const userToLesson = await prisma.usertoLesson.create({
+        data: {
+          user_id: userId,
+          lesson_id: lessonId,
+          status: Status.IN_PROGRESS,
         },
       });
 
-      if (!userToLesson) {
-        userToLesson = await prisma.usertoLesson.create({
-          data: {
-            user_id: userId,
-            lesson_id: lessonId,
-          },
-        });
-      }
-
-      if (!userToLesson) {
-        Logger.error('Failed to create user lesson !');
-        throw new NotFoundException('Failed to create user lesson !');
-      }
       return { id: userToLesson.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);

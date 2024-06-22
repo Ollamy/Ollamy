@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '@prisma/client';
 
 export class CourseModel {
   @ApiProperty()
@@ -30,19 +31,14 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastLessonId?: string;
-
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastSectionId?: string;
-
   @ApiProperty()
   @IsNumber()
   numberOfUsers: number;
+
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class CreateCourseModel {

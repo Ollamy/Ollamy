@@ -1,4 +1,4 @@
-import { AnswerType, LessonStatus, Question, UsertoLesson } from '@prisma/client';
+import { AnswerType, Status, Question, UsertoLesson } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateQuestionModel,
@@ -110,7 +110,7 @@ export const mockUserLesson: UsertoLesson = {
   score: 1,
   complete_lecture: false,
   complete_question: false,
-  status: LessonStatus.NOT_STARTED,
+  status: Status.NOT_STARTED,
   created_at: new Date(),
   updated_at: new Date(),
 };

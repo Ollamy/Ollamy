@@ -9,6 +9,7 @@ import {
   Lesson,
   Question,
   QuestionDifficulty,
+  Status,
 } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { mockUserLesson } from './question.data';
@@ -49,6 +50,19 @@ export const mockLesson: Lesson = {
   title: 'title',
   description: 'desc',
   order: 'a0',
+};
+
+export const mockLessonExtended = {
+  id: mockLessonId,
+  section_id: uuidv4(),
+  title: 'title',
+  description: 'desc',
+  order: 'a0',
+  UsertoLesson: [
+    {
+      status: mockUserLesson.status,
+    },
+  ],
 };
 
 export const mockLessonUpdatedData: UpdateLessonModel = {

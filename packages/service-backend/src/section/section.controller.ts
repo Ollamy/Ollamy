@@ -18,9 +18,9 @@ import {
 import {
   CreateSectionModel,
   IdSectionModel,
-  SectionModel,
   UpdateSectionModel,
   SectionIdResponse,
+  GetSectionModel,
   UpdateSectionOrderModel,
 } from 'section/section.dto';
 import { SectionService } from 'section/section.service';
@@ -84,7 +84,7 @@ export class SectionController {
 
   @ApiOkResponse({
     description: 'section content response',
-    type: SectionModel,
+    type: GetSectionModel,
   })
   @ApiParam({
     name: 'id',
@@ -93,8 +93,11 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Get('/:id')
-  async getSection(@Param('id') id: string): Promise<SectionModel> {
-    return this.sectionService.getSection(id);
+  async getSection(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<GetSectionModel> {
+    return this.sectionService.getSection(id, ctx);
   }
 
   @ApiOkResponse({
@@ -169,5 +172,18 @@ export class SectionController {
     @OllContext() ctx: any,
   ): Promise<LessonModel[]> {
     return this.sectionService.getSectionLessons(id, ctx);
+  }
+
+  @ApiOkResponse({
+    description: 'section join response',
+    type: SectionIdResponse,
+  })
+  @LoggedMiddleware(true)
+  @Post('/:id/join')
+  async joinLesson(
+    @Param('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<SectionIdResponse> {
+    return this.sectionService.joinSection(id, ctx.__user.id);
   }
 }

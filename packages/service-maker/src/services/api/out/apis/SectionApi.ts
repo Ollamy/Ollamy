@@ -4,10 +4,10 @@
 import * as runtime from '../runtime';
 import type {
   CreateSectionModel,
+  GetSectionModel,
   IdSectionModel,
   LessonModel,
   SectionIdResponse,
-  SectionModel,
   UpdateSectionModel,
   UpdateSectionOrderModel,
 } from '../models/index';
@@ -21,6 +21,10 @@ export interface GetSectionRequest {
 }
 
 export interface GetSectionLessonsRequest {
+    id: string;
+}
+
+export interface JoinLessonRequest {
     id: string;
 }
 
@@ -73,7 +77,7 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getSectionRaw(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionModel> {
+    async getSectionRaw(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSectionModel> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSection.');
         }
@@ -94,7 +98,7 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getSection(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionModel> {
+    static getSection(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSectionModel> {
         return localSectionApi.getSectionRaw(requestParameters, initOverrides);
     }
 
@@ -123,6 +127,33 @@ export class SectionApi extends runtime.BaseAPI {
      */
     static getSectionLessons(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
         return localSectionApi.getSectionLessonsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async joinLessonRaw(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinLesson.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/section/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static joinLesson(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        return localSectionApi.joinLessonRaw(requestParameters, initOverrides);
     }
 
     /**

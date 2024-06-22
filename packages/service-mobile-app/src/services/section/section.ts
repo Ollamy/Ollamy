@@ -19,7 +19,14 @@ export const sectionApi = api.injectEndpoints({
       }),
       providesTags: (result) => (result ? [{ type: 'Section', id: result.id }] : [{ type: 'Section', id: 'LIST' }]),
     }),
+    joinSection: build.mutation<unknown, string>({
+      query: (id) => ({
+        url: `/section/${id}/join`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Course'],
+    }),
   }),
 });
 
-export const { useGetSectionLessonsQuery, useGetSectionByIdQuery } = sectionApi;
+export const { useGetSectionLessonsQuery, useGetSectionByIdQuery, useJoinSectionMutation } = sectionApi;

@@ -9,8 +9,6 @@ import {
   createCourseData,
   deleteCourseId,
   mockCourseDb,
-  mockLastLessonDb,
-  mockLastSectionDb,
   mockPictureDb,
   mockSubscriptionDb,
   mockUserSubscriptionDb,
@@ -198,8 +196,6 @@ describe('getCourse', () => {
         picture: mockPictureDb.filename,
         title: mockCourseDb.title,
         description: mockCourseDb.description,
-        lastLessonId: mockLastLessonDb.lesson_id,
-        lastSectionId: mockLastSectionDb.section_id,
         numberOfUsers: 0,
       };
       expect(result.picture).toContain('http');
@@ -321,9 +317,9 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 
@@ -335,9 +331,9 @@ describe('getCourseSections', () => {
     }
 
     {
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 });
