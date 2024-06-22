@@ -103,14 +103,18 @@ export class CourseService {
         },
       });
 
-      const users = await prisma.usertoCourse.count({
-        where: {
-          course_id: courseId,
-          role_user: {
-            equals: Role.MEMBER,
+      let userCount: number = undefined;
+
+      if (ctx.__device.isMaker) {
+        userCount = await prisma.usertoCourse.count({
+          where: {
+            course_id: courseId,
+            role_user: {
+              equals: Role.MEMBER,
+            },
           },
-        },
-      });
+        });
+      }
 
       if (!courseDb) {
         Logger.error('Course does not exists !');
@@ -124,11 +128,10 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        numberOfUsers: users,
-        status:
-          ctx.__device.isPhone || ctx.__device.isTablet || ctx.__device.isMobile
-            ? userToCourse?.status
-            : undefined,
+        numberOfUsers: userCount,
+        status: !ctx.__device.isMaker
+          ? userToCourse?.status ?? Status.NOT_STARTED
+          : undefined,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
@@ -204,8 +207,8 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      const sectionPromises: Promise<GetSectionsModel>[] = courseSectionsDb.map(
-        async (section) => {
+      const sectionPromises: GetSectionsModel[] = courseSectionsDb.map(
+        (section) => {
           return {
             id: section.id,
             description: section.description,
@@ -217,7 +220,7 @@ export class CourseService {
         },
       );
 
-      return await Promise.all(sectionPromises);
+      return sectionPromises;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
@@ -240,7 +243,7 @@ export class CourseService {
           },
         },
         _count: {
-          select: { userlist: { where: { role_user: Role.MEMBER } } },
+          select: { userToCourse: { where: { role_user: Role.MEMBER } } },
         },
       },
     });
@@ -248,7 +251,7 @@ export class CourseService {
     const subscriptionSlots =
       result.user?.UserSubscription?.[0]?.Subscription?.slots ?? 0;
 
-    return result._count.userlist <= subscriptionSlots;
+    return result._count.userToCourse <= subscriptionSlots;
   }
 
   async addUserToCourse(
@@ -364,40 +367,30 @@ export class CourseService {
     sectionId: string,
     userId: string,
   ) {
-    const remainingLessons = await prisma.section.count({
-      where: {
-        OR: [
-          {
-            id: sectionId,
-            UsertoSection: {
-              none: {
-                status: {
-                  not: 'COMPLETED',
-                },
-              },
-            },
-          },
-          {
-            id: sectionId,
-            UsertoSection: {
-              none: {},
-            },
-          },
-        ],
+    const course = await prisma.section.findUnique({
+      where: { id: sectionId },
+      select: {
+        course_id: true,
       },
     });
 
-    if (remainingLessons === 0) {
-      const courseId = await prisma.section.findUnique({
-        where: { id: sectionId },
-        select: {
-          course_id: true,
-        },
-      });
+    const remainingSection = await prisma.$queryRaw`
+      select count(*) as nb_left
+      from "Section" as s
+      where s.course_id = ${course.course_id}::uuid
+      and not exists(
+          select 1
+          from "UsertoSection" uts
+          where uts.section_id = s.id
+              and uts.status = 'COMPLETED'
+              and uts.user_id = ${userId}::uuid
+    )`;
+
+    if (remainingSection[0].nb_left === BigInt(0)) {
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {
-            course_id: courseId.course_id,
+            course_id: course.course_id,
             user_id: userId,
           },
         },

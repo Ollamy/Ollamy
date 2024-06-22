@@ -127,15 +127,15 @@ model UsertoLesson {
 }
 
 model Course {
-  id          String         @id @default(uuid()) @db.Uuid
-  section     Section[]
-  userlist    UsertoCourse[]
-  user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
-  owner_id    String         @db.Uuid
-  title       String
-  description String?
-  picture     Picture?       @relation(references: [id], fields: [picture_id])
-  picture_id  String?        @db.Uuid
+  id           String         @id @default(uuid()) @db.Uuid
+  section      Section[]
+  userToCourse UsertoCourse[]
+  user         User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id     String         @db.Uuid
+  title        String
+  description  String?
+  picture      Picture?       @relation(references: [id], fields: [picture_id])
+  picture_id   String?        @db.Uuid
 }
 
 model Section {
