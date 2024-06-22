@@ -103,40 +103,6 @@ export interface CourseIdResponse {
 /**
  * 
  * @export
-<<<<<<< HEAD
-=======
- * @interface CourseSectionModel
- */
-export interface CourseSectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    order: string;
-}
-/**
- * 
- * @export
->>>>>>> development
  * @interface CourseTrueResponse
  */
 export interface CourseTrueResponse {
@@ -596,6 +562,12 @@ export interface GetSectionModel {
      * @type {string}
      * @memberof GetSectionModel
      */
+    order: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
     status?: GetSectionModelStatusEnum;
 }
 
@@ -634,6 +606,12 @@ export interface GetSectionsModel {
      * @memberof GetSectionsModel
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    order: string;
     /**
      * 
      * @type {string}
@@ -887,7 +865,7 @@ export interface LessonModel {
      * @type {string}
      * @memberof LessonModel
      */
-    order: LessonModelOrderEnum;
+    order: string;
     /**
      * 
      * @type {number}
@@ -912,16 +890,6 @@ export const LessonModelStatusEnum = {
     Completed: 'COMPLETED'
 } as const;
 export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
-
-/**
- * @export
- */
-export const LessonModelOrderEnum = {
-    NotStarted: 'NOT_STARTED',
-    InProgress: 'IN_PROGRESS',
-    Completed: 'COMPLETED'
-} as const;
-export type LessonModelOrderEnum = typeof LessonModelOrderEnum[keyof typeof LessonModelOrderEnum];
 
 /**
  * 
@@ -1115,40 +1083,6 @@ export interface SectionIdResponse {
 /**
  * 
  * @export
-<<<<<<< HEAD
-=======
- * @interface SectionModel
- */
-export interface SectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    courseId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    order: string;
-}
-/**
- * 
- * @export
->>>>>>> development
  * @interface ShareCourseCode
  */
 export interface ShareCourseCode {
