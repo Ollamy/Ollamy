@@ -9,21 +9,12 @@ import {
   mockQuestionId2,
   mockQuestionData2,
   mockQuestionId3,
-  mockBody,
-  mockQuestionDb3,
-  correctAnswerId,
-  mockQuestionDb4,
-  mockBodyIncorrect,
   questionId,
-  mockUserLesson,
 } from 'tests/data/question.data';
-import { context } from 'tests/data/user.data';
 
 import { QuestionService } from 'question/question.service';
 import { PictureService } from 'picture/picture.service';
-import { mockLesson } from './data/lesson.data';
-import { mockSection1, mockUserToCourse } from './data/course.data';
-import { TasksService } from '../cron/cron.service';
+import { TasksService } from 'cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 
 describe('postQuestion', () => {

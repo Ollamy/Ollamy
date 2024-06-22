@@ -15,7 +15,7 @@ import {
 } from './answer.dto';
 import prisma from 'client';
 import { Prisma, Answer } from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
+import { PictureService } from 'picture/picture.service';
 import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
@@ -126,7 +126,7 @@ export class AnswerService {
           },
           select: {
             picture_id: true,
-          }
+          },
         });
 
         await PictureService.deletePicture(pictureId.picture_id);

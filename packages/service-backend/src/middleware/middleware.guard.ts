@@ -8,7 +8,7 @@ import {
 import prisma from 'client';
 import { Reflector } from '@nestjs/core';
 import { MIDDLEWARE_KEY } from './middleware.decorator';
-import SessionService from '../redis/session/session.service';
+import SessionService from 'redis/session/session.service';
 
 @Injectable()
 export class MiddlewareGuard implements CanActivate {

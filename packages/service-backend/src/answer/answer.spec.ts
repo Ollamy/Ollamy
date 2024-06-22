@@ -8,7 +8,7 @@ import {
   UpdateAnswerModel,
 } from './answer.dto';
 import { AnswerService } from './answer.service';
-import { PictureService } from '../picture/picture.service';
+import { PictureService } from 'picture/picture.service';
 
 describe('postAnswer', () => {
   let answerService: AnswerService;

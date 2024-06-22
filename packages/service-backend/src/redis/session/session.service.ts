@@ -1,4 +1,4 @@
-import RedisCacheService from '../redis.service';
+import RedisCacheService from 'redis/redis.service';
 
 const DAY = 24 * 60 * 60 * 1e3;
 
