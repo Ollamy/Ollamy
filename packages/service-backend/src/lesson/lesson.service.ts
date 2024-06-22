@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateLessonModel,
@@ -10,6 +11,7 @@ import {
   LessonModel,
   UpdateLessonModel,
   LessonIdResponse,
+  UpdateLessonOrderModel,
 } from './lesson.dto';
 import {
   LectureModel,
@@ -24,6 +26,7 @@ import {
   Lecture,
   UsertoLesson,
 } from '@prisma/client';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class LessonService {
@@ -32,11 +35,32 @@ export class LessonService {
     ctx: any,
   ): Promise<LessonIdResponse> {
     try {
+      const sectionLessons = await prisma.lesson.findMany({
+        where: {
+          section_id: lessonData.sectionId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       const lessonDb: Lesson = await prisma.lesson.create({
         data: {
           section_id: lessonData.sectionId,
           title: lessonData.title,
           description: lessonData.description,
+          order: generateKeyBetween(
+            !sectionLessons || !sectionLessons.length
+              ? undefined
+              : sectionLessons[sectionLessons.length - 1].order,
+            undefined,
+          ),
         },
       });
 
@@ -85,6 +109,11 @@ export class LessonService {
   async getLesson(lessonId: string, userId): Promise<LessonModel> {
     try {
       const lessonDb: Lesson = await prisma.lesson.findFirst({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           id: lessonId,
         },
@@ -123,6 +152,7 @@ export class LessonService {
         status: userLessonDb.status,
         numberOfQuestions: questionsCount,
         numberOfLectures: lecturesCount,
+        order: lessonDb.order,
       } as LessonModel;
     } catch (error) {
       Logger.error(error);
@@ -242,5 +272,27 @@ export class LessonService {
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');
     }
+  }
+
+  async updateLessonOrder(lessonData: UpdateLessonOrderModel): Promise<object> {
+    let order: string;
+    try {
+      order = generateKeyBetween(lessonData?.after, lessonData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
+    }
+    await prisma.lesson.update({
+      where: {
+        id: lessonData.origin,
+      },
+      data: {
+        order: order,
+      },
+    });
+
+    return {
+      order: order,
+    };
   }
 }

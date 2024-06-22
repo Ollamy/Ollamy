@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { UpdateOrderModel } from 'order/order.dto';
 
 export class CourseSectionModel {
   @ApiProperty()
@@ -13,6 +14,10 @@ export class CourseSectionModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
 }
 
 export class SectionModel {
@@ -27,6 +32,10 @@ export class SectionModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
 }
 
 export class CreateSectionModel {
@@ -71,3 +80,5 @@ export class SectionIdResponse {
   @IsUUID()
   id: string;
 }
+
+export class UpdateSectionOrderModel extends UpdateOrderModel {}

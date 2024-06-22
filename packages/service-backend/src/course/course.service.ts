@@ -183,6 +183,11 @@ export class CourseService {
   async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
     try {
       const courseSectionsDb: Section[] = await prisma.section.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           course_id: CourseId,
         },
@@ -193,10 +198,11 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => ({
-        id: lesson.id,
-        title: lesson.title,
-        description: lesson.description,
+      return courseSectionsDb.map((section: Section) => ({
+        id: section.id,
+        title: section.title,
+        description: section.description,
+        order: section.order,
       })) as CourseSectionModel[];
     } catch (error) {
       Logger.error(error);

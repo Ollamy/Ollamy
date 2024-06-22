@@ -28,6 +28,7 @@ export const mockCreatedLesson: Lesson = {
   section_id: mockLessonData.sectionId,
   title: mockLessonData.title,
   description: mockLessonData.description,
+  order: 'a0',
 };
 
 export const mockLessonData2: IdLessonModel = {
@@ -39,6 +40,7 @@ export const mockDeletedLesson: Lesson = {
   section_id: uuidv4(),
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };
 
 export const mockLesson: Lesson = {
@@ -46,6 +48,7 @@ export const mockLesson: Lesson = {
   section_id: uuidv4(),
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };
 
 export const mockLessonUpdatedData: UpdateLessonModel = {
@@ -57,6 +60,7 @@ export const mockUpdatedLesson: Lesson = {
   id: mockLessonId,
   section_id: uuidv4(),
   ...(mockLessonUpdatedData as { title: string; description: string }),
+  order: 'a0',
 };
 
 export const mockLessonData3: UpdateLessonModel = {
@@ -104,4 +108,5 @@ export const mockGetLesson: LessonModel = {
   status: mockUserLesson.status,
   numberOfLectures: 1,
   numberOfQuestions: 1,
+  order: 'a0',
 };

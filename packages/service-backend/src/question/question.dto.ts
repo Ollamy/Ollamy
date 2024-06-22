@@ -7,11 +7,8 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import {
-  AnswerType,
-  QuestionType,
-  QuestionDifficulty,
-} from '@prisma/client';
+import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
+import { UpdateOrderModel } from 'order/order.dto';
 
 abstract class BaseQuestion {
   @ApiProperty({ description: 'The unique identifier of the question' })
@@ -22,12 +19,18 @@ abstract class BaseQuestion {
   @IsString()
   title: string;
 
-  @ApiProperty({ description: 'The description of the question', required: false })
+  @ApiProperty({
+    description: 'The description of the question',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ description: 'The type of answer for the question', enum: AnswerType })
+  @ApiProperty({
+    description: 'The type of answer for the question',
+    enum: AnswerType,
+  })
   @IsEnum(AnswerType)
   typeAnswer: AnswerType;
 
@@ -62,7 +65,7 @@ abstract class BaseQuestion {
   points?: number;
 }
 
-export class QuestionModel extends BaseQuestion { }
+export class QuestionModel extends BaseQuestion {}
 
 export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @ApiProperty({ description: 'The lesson id of the question' })
@@ -73,12 +76,18 @@ export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
   @IsString()
   title: string;
 
-  @ApiProperty({ description: 'The description of the question', required: false })
+  @ApiProperty({
+    description: 'The description of the question',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   description: string;
 
-  @ApiProperty({ description: 'The type of answer for the question', enum: AnswerType })
+  @ApiProperty({
+    description: 'The type of answer for the question',
+    enum: AnswerType,
+  })
   @IsEnum(AnswerType)
   typeAnswer: AnswerType;
 
@@ -240,7 +249,7 @@ export class UpdateQuestionModel {
   @IsOptional()
   typeQuestion?: QuestionType;
 
-  @ApiProperty({ required: false, nullable: true, })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   picture?: string | null;
 
@@ -263,29 +272,7 @@ export class UpdateQuestionModel {
   trustAnswerId?: string;
 }
 
-export class UpdateQuestionOrderModel {
-  @ApiProperty({
-    description: 'The order after the current order',
-    required: false,
-    nullable: true,
-  })
-  @IsString()
-  @IsOptional()
-  after?: string | null;
-
-  @ApiProperty({
-    description: 'The order before the current order',
-    required: false,
-    nullable: true
-  })
-  @IsString()
-  @IsOptional()
-  before?: string | null;
-
-  @ApiProperty({ description: 'The origin of the question' })
-  @IsUUID()
-  origin: string;
-}
+export class UpdateQuestionOrderModel extends UpdateOrderModel {}
 
 export class QuestionIdResponse {
   @ApiProperty({ description: 'The unique identifier of the question' })
@@ -298,7 +285,10 @@ export class ValidateAnswerModel {
   @IsUUID()
   questionId: string;
 
-  @ApiProperty({ description: 'The unique identifier of the answer', required: false })
+  @ApiProperty({
+    description: 'The unique identifier of the answer',
+    required: false,
+  })
   @IsUUID()
   @IsOptional()
   answerId?: string;

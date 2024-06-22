@@ -25,6 +25,8 @@ describe('postSection', () => {
     sectionService = moduleRef.get<SectionService>(SectionService);
   });
   it('should create a section and return the success message', async () => {
+    jest.spyOn(prisma.section, 'findMany').mockResolvedValue(undefined);
+
     jest.spyOn(prisma.section, 'create').mockResolvedValue(mockSectionDb);
 
     // Invoke the function being tested
@@ -37,6 +39,7 @@ describe('postSection', () => {
         course_id: mockSectionData.courseId,
         title: mockSectionData.title,
         description: mockSectionData.description,
+        order: 'a0',
       },
     });
 
@@ -147,6 +150,7 @@ describe('getSection', () => {
       courseId: mockSectionDb.course_id,
       description: mockSectionDb.description,
       title: mockSectionDb.title,
+      order: mockSectionDb.order,
     });
   });
 
