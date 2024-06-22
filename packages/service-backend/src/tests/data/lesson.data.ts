@@ -57,6 +57,7 @@ export const mockLessonExtended = {
   section_id: uuidv4(),
   title: 'title',
   description: 'desc',
+  order: 'a0',
   UsertoLesson: [
     {
       status: mockUserLesson.status,
