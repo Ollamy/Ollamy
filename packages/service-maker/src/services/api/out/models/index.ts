@@ -408,18 +408,6 @@ export interface GetCourseRequest {
     picture: string;
     /**
      * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastLessonId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastSectionId?: string;
-    /**
-     * 
      * @type {number}
      * @memberof GetCourseRequest
      */
@@ -1463,18 +1451,6 @@ export interface UserCourses {
      * @memberof UserCourses
      */
     owner: boolean;
-    /**
-     * The unique identifier of the last lesson
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastLessonId?: string;
-    /**
-     * The unique identifier of the last section
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastSectionId?: string;
     /**
      * The number of users enrolled in the course
      * @type {number}
