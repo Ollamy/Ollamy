@@ -33,7 +33,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { MODE } from '../setup';
+import { MODE } from 'setup';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -191,16 +191,12 @@ export class UserController {
     @Response() res,
     @OllContext() ctx: any,
   ): Promise<SuccessBody> {
-    res.cookie(
-      'session',
-      await this.userService.logoutUser(ctx),
-      {
-        httpOnly: true,
-        maxAge: 0,
-        sameSite: MODE === 'prod' ? 'none' : undefined,
-        secure: MODE === 'prod',
-      },
-    );
+    res.cookie('session', await this.userService.logoutUser(ctx), {
+      httpOnly: true,
+      maxAge: 0,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
 
     return res.send({ success: true });
   }

@@ -18,9 +18,9 @@ import {
   mockCourseSlotsFullDb,
   mockCourseSlotsAvailableDb,
 } from 'tests/data/course.data';
-import { TasksService } from '../cron/cron.service';
+import { TasksService } from 'cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import RedisCacheService from '../redis/redis.service';
+import RedisCacheService from 'redis/redis.service';
 
 describe('postCourse', () => {
   let courseService: CourseService;

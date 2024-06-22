@@ -17,10 +17,10 @@ import {
 } from './question.dto';
 import prisma from 'client';
 import { Answer, AnswerType, Status, Prisma, Question } from '@prisma/client';
+import { SectionService } from 'section/section.service';
 import { PictureService } from 'picture/picture.service';
 import { QuestionAnswerModel } from 'answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
-import { SectionService } from 'section/section.service';
 import { TasksService } from 'cron/cron.service';
 
 @Injectable()

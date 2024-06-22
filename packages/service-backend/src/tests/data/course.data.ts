@@ -124,6 +124,7 @@ export const mockSection1: Section = {
   course_id: courseId,
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };
 
 export const mockSection2: Section = {
@@ -131,4 +132,5 @@ export const mockSection2: Section = {
   course_id: courseId,
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };

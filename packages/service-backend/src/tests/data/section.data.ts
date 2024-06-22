@@ -21,6 +21,7 @@ export const mockSectionDb: Section = {
   course_id: mockSectionData.courseId,
   title: mockSectionData.title,
   description: mockSectionData.description,
+  order: 'a0',
 };
 
 export const mockUserToSectionDb: UsertoSection = {
@@ -41,6 +42,8 @@ export const mockSectionDb2: Section = {
   course_id: courseId,
   title: 'Section Title',
   description: 'Section Description',
+  order: 'a0',
+
   // other properties
 };
 
@@ -61,6 +64,7 @@ export const mockSectionDb3: Section = {
   course_id: courseId,
   title: 'Section Title',
   description: 'Section Description',
+  order: 'a0',
 };
 
 export const mockLessonDb: Lesson[] = [
@@ -69,11 +73,13 @@ export const mockLessonDb: Lesson[] = [
     section_id: sectionId,
     title: 'Lesson 1',
     description: 'Lesson 1 Description',
+    order: 'a0',
   },
   {
     id: uuidv4(),
     section_id: sectionId,
     title: 'Lesson 2',
     description: 'Lesson 2 Description',
+    order: 'a1',
   },
 ];

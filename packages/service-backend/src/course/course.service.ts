@@ -190,6 +190,11 @@ export class CourseService {
   ): Promise<GetSectionsModel[]> {
     try {
       const courseSectionsDb = await prisma.section.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           course_id: CourseId,
         },
@@ -213,6 +218,7 @@ export class CourseService {
             id: section.id,
             description: section.description,
             title: section.title,
+            order: section.order,
             status: !ctx.__device.isMaker
               ? section?.UsertoSection[0]?.status ?? Status.NOT_STARTED
               : undefined,

@@ -146,6 +146,7 @@ model Section {
   description   String?
   Lesson        Lesson[]
   UsertoSection UsertoSection[]
+  order         String
 }
 
 model Lesson {
@@ -157,6 +158,7 @@ model Lesson {
   Questions    Question[]
   Lecture      Lecture[]
   UsertoLesson UsertoLesson[]
+  order        String
 }
 
 enum AnswerType {

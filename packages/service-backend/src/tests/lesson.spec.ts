@@ -29,6 +29,8 @@ describe('postLesson', () => {
     lessonService = moduleRef.get<LessonService>(LessonService);
   });
   it('should return a success message when the lesson is created', async () => {
+    jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue(undefined);
+
     jest.spyOn(prisma.lesson, 'create').mockResolvedValue(mockCreatedLesson);
     jest.spyOn(prisma.usertoLesson, 'create').mockResolvedValue(null);
 
@@ -44,6 +46,7 @@ describe('postLesson', () => {
       data: {
         ...otherData,
         section_id: sectionId,
+        order: 'a0',
       },
     });
 
@@ -142,6 +145,11 @@ describe('getLesson', () => {
     // Perform assertions
     expect(prisma.lesson.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.lesson.findFirst).toHaveBeenCalledWith({
+      orderBy: [
+        {
+          order: 'asc',
+        },
+      ],
       where: { id: mockLessonId },
       include: {
         UsertoLesson: {

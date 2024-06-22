@@ -149,7 +149,7 @@ export class QuestionController {
   })
   @ApiBody({
     type: UpdateQuestionOrderModel,
-    description: 'user data model',
+    description: 'update question order data model',
     examples: {
       template: {
         value: {
@@ -161,7 +161,7 @@ export class QuestionController {
     },
   })
   @LoggedMiddleware(true)
-  @Put()
+  @Put('/order')
   async updateQuestionOrder(
     @Body() body: UpdateQuestionOrderModel,
   ): Promise<object> {

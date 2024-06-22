@@ -7,6 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { UpdateOrderModel } from 'order/order.dto';
 
 export class LessonModel {
   @ApiProperty()
@@ -24,6 +25,10 @@ export class LessonModel {
   @ApiProperty({ enum: Status })
   @IsEnum(Status)
   status: Status;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
 
   @ApiProperty()
   @IsNumber()
@@ -82,3 +87,5 @@ export class LessonIdResponse {
   @IsUUID()
   id: string;
 }
+
+export class UpdateLessonOrderModel extends UpdateOrderModel {}

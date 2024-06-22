@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import {
   CreateSectionModel,
@@ -15,7 +16,8 @@ import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
 import { Status, Prisma, Section } from '@prisma/client';
 import { CourseService } from '../course/course.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { generateKeyBetween } from 'order/order.service';
+import { UpdateQuestionOrderModel } from '../question/question.dto';
 
 @Injectable()
 export class SectionService {
@@ -23,11 +25,32 @@ export class SectionService {
     sectionData: CreateSectionModel,
   ): Promise<SectionIdResponse> {
     try {
+      const courseSections = await prisma.section.findMany({
+        where: {
+          course_id: sectionData.courseId,
+        },
+        select: {
+          order: true,
+          id: true,
+        },
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
+      });
+
       const sectionDb: Section = await prisma.section.create({
         data: {
           course_id: sectionData.courseId,
           title: sectionData.title,
           description: sectionData.description,
+          order: generateKeyBetween(
+            !courseSections || !courseSections.length
+              ? undefined
+              : courseSections[courseSections.length - 1].order,
+            undefined,
+          ),
         },
       });
 
@@ -96,6 +119,7 @@ export class SectionService {
         courseId: sectionDb.course_id,
         title: sectionDb.title,
         description: sectionDb.description,
+        order: sectionDb.order,
         status: !ctx.__device.isMaker
           ? userToSection?.status ?? Status.NOT_STARTED
           : undefined,
@@ -137,6 +161,11 @@ export class SectionService {
   async getSectionLessons(sectionId: string, ctx: any): Promise<LessonModel[]> {
     try {
       const sectionLessonsDb = await prisma.lesson.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           section_id: sectionId,
         },
@@ -175,6 +204,7 @@ export class SectionService {
               : undefined,
             numberOfQuestions: lesson._count?.Questions ?? 0,
             numberOfLectures: lesson._count?.Lecture ?? 0,
+            order: lesson.order,
           };
         },
       );
@@ -244,5 +274,29 @@ export class SectionService {
         userId,
       );
     }
+  }
+
+  async updateSectionOrder(
+    sectionData: UpdateQuestionOrderModel,
+  ): Promise<object> {
+    let order: string;
+    try {
+      order = generateKeyBetween(sectionData?.after, sectionData?.before);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException(error.message, 409);
+    }
+    await prisma.section.update({
+      where: {
+        id: sectionData.origin,
+      },
+      data: {
+        order: order,
+      },
+    });
+
+    return {
+      order: order,
+    };
   }
 }
