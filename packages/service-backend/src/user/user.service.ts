@@ -201,49 +201,32 @@ export class UserService {
 
   async getUserCourses(ctx: any): Promise<UserCoursesResponse> {
     try {
-      const userDb = await prisma.user.findUnique({
+      const userCourses = await prisma.usertoCourse.findMany({
         where: {
-          id: ctx.__user.id,
+          user_id: ctx.__user.id,
         },
         include: {
-          UsertoCourse: true,
-        },
-      });
-
-      if (!userDb) {
-        Logger.error('User does not exists !');
-        throw new NotFoundException('User does not exists !');
-      }
-
-      const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
-
-      if (courses_id.length === 0) {
-        return { courses: [] };
-      }
-
-      const courses = await prisma.course.findMany({
-        where: {
-          id: {
-            in: courses_id,
+          course: {
+            select: {
+              owner_id: true,
+              title: true,
+              description: true,
+              picture_id: true,
+            },
           },
         },
       });
 
       return {
         courses: await Promise.all(
-          courses.map(async (course) => {
-            const isOwner = course.owner_id === ctx.__user.id;
-
-            delete course.owner_id;
-
-            let pictureId: string = undefined;
+          userCourses.map(async (userCourse) => {
+            const isOwner = userCourse.course.owner_id === ctx.__user.id;
             let users: number = undefined;
 
-            if (!ctx.__device.isMaker) {
-              pictureId = await PictureService.getPicture(course.picture_id);
+            if (ctx.__device.isMaker) {
               users = await prisma.usertoCourse.count({
                 where: {
-                  course_id: course.id,
+                  course_id: userCourse.course_id,
                   role_user: {
                     equals: Role.MEMBER,
                   },
@@ -251,29 +234,19 @@ export class UserService {
               });
             }
 
-            delete course.picture_id;
-
-            const {
-              last_lesson_id: lastLessonId,
-              last_section_id: lastSectionId,
-              status: status,
-            } = !ctx.__device.isMaker
-              ? userDb.UsertoCourse.find((c) => c.course_id === course.id)
-              : {
-                  last_lesson_id: undefined,
-                  last_section_id: undefined,
-                  status: undefined,
-                };
-
             return {
-              ...course,
-              pictureId,
-              lastLessonId,
-              lastSectionId,
+              id: userCourse.course_id,
+              title: userCourse.course.title,
+              description: userCourse.course.description,
+              pictureId: await PictureService.getPicture(
+                userCourse.course.picture_id,
+              ),
+              lastLessonId: undefined,
+              lastSectionId: undefined,
               owner: isOwner,
               numberOfUsers: users,
               status: !ctx.__device.isMaker
-                ? status ?? Status.NOT_STARTED
+                ? userCourse.status ?? Status.NOT_STARTED
                 : undefined,
             };
           }),
