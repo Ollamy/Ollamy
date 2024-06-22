@@ -70,11 +70,9 @@ model User {
 }
 
 model UsertoCourse {
-  id      String   @id @default(uuid()) @db.Uuid
-  course  Course   @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  lesson  Lesson?  @relation(references: [id], fields: [last_lesson_id])
-  section Section? @relation(references: [id], fields: [last_section_id])
+  id     String @id @default(uuid()) @db.Uuid
+  course Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user   User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   role_user          Role                @default(MEMBER)
   permission_user    PermissionUser[]    @default([])
@@ -86,9 +84,6 @@ model UsertoCourse {
   score              Int?                @default(0)
   hp                 Int?                @default(20)
   status             Status              @default(NOT_STARTED)
-
-  last_section_id String? @db.Uuid
-  last_lesson_id  String? @db.Uuid
 
   @@unique([course_id, user_id])
 }
@@ -150,7 +145,6 @@ model Section {
   title         String
   description   String?
   Lesson        Lesson[]
-  UsertoCourse  UsertoCourse[]
   UsertoSection UsertoSection[]
 }
 
@@ -163,7 +157,6 @@ model Lesson {
   Questions    Question[]
   Lecture      Lecture[]
   UsertoLesson UsertoLesson[]
-  UsertoCourse UsertoCourse[]
 }
 
 enum AnswerType {

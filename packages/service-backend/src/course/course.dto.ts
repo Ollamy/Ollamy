@@ -31,16 +31,6 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastLessonId?: string;
-
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastSectionId?: string;
-
   @ApiProperty()
   @IsNumber()
   numberOfUsers: number;

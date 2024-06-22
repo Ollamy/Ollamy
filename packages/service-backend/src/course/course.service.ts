@@ -124,8 +124,6 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        lastLessonId: userToCourse?.last_lesson_id,
-        lastSectionId: userToCourse?.last_section_id,
         numberOfUsers: users,
         status:
           ctx.__device.isPhone || ctx.__device.isTablet || ctx.__device.isMobile

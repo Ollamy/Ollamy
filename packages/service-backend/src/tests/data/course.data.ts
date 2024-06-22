@@ -98,14 +98,6 @@ export const mockCourseSlotsFullDb = {
   },
 };
 
-export const mockLastLessonDb = {
-  lesson_id: uuidv4(),
-} as UsertoLesson;
-
-export const mockLastSectionDb = {
-  section_id: uuidv4(),
-} as Lesson;
-
 export const mockUserToCourse: UsertoCourse = {
   id: uuidv4(),
   permission_course: [],
@@ -115,8 +107,6 @@ export const mockUserToCourse: UsertoCourse = {
   user_id: context.__user.id,
   role_user: 'MEMBER',
   permission_user: [],
-  last_lesson_id: mockLastLessonDb.lesson_id,
-  last_section_id: mockLastSectionDb.section_id,
   score: 0,
   hp: 1,
   status: Status.IN_PROGRESS,

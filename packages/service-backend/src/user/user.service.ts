@@ -241,8 +241,6 @@ export class UserService {
               pictureId: await PictureService.getPicture(
                 userCourse.course.picture_id,
               ),
-              lastLessonId: undefined,
-              lastSectionId: undefined,
               owner: isOwner,
               numberOfUsers: users,
               status: !ctx.__device.isMaker

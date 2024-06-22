@@ -170,20 +170,6 @@ export class UserCourses {
   owner: boolean;
 
   @ApiProperty({
-    description: 'The unique identifier of the last lesson',
-    required: false,
-  })
-  @IsUUID()
-  lastLessonId?: string;
-
-  @ApiProperty({
-    description: 'The unique identifier of the last section',
-    required: false,
-  })
-  @IsUUID()
-  lastSectionId?: string;
-
-  @ApiProperty({
     description: 'The number of users enrolled in the course',
     required: false,
   })
