@@ -28,7 +28,7 @@ function SectionDashboard() {
 
     const lastIdx = lessonsData.findIndex((e) => e.status !== Status.COMPLETED);
 
-    if (lastIdx !== -1) {
+    if (lastIdx !== -1 && lessonsData[lastIdx].status !== Status.IN_PROGRESS) {
       const tmp: LessonFormated = lessonsData.concat();
       tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS, last: true };
       return tmp;

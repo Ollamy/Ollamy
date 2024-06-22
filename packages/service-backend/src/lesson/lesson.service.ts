@@ -253,6 +253,7 @@ export class LessonService {
         data: {
           user_id: userId,
           lesson_id: lessonId,
+          status: Status.IN_PROGRESS,
         },
       });
 
