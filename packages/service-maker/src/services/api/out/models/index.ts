@@ -124,6 +124,12 @@ export interface CourseSectionModel {
      * @memberof CourseSectionModel
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseSectionModel
+     */
+    order: string;
 }
 /**
  * 
@@ -766,6 +772,12 @@ export interface LessonModel {
     status: LessonModelStatusEnum;
     /**
      * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    order: LessonModelOrderEnum;
+    /**
+     * 
      * @type {number}
      * @memberof LessonModel
      */
@@ -788,6 +800,16 @@ export const LessonModelStatusEnum = {
     Completed: 'COMPLETED'
 } as const;
 export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
+
+/**
+ * @export
+ */
+export const LessonModelOrderEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type LessonModelOrderEnum = typeof LessonModelOrderEnum[keyof typeof LessonModelOrderEnum];
 
 /**
  * 
@@ -985,6 +1007,12 @@ export interface SectionModel {
      * @memberof SectionModel
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SectionModel
+     */
+    order: string;
 }
 /**
  * 
@@ -1146,6 +1174,31 @@ export interface UpdateLessonModel {
 /**
  * 
  * @export
+ * @interface UpdateLessonOrderModel
+ */
+export interface UpdateLessonOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    origin: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateQuestionModel
  */
 export interface UpdateQuestionModel {
@@ -1258,7 +1311,7 @@ export interface UpdateQuestionOrderModel {
      */
     before?: string | null;
     /**
-     * The origin of the question
+     * Object's id
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
@@ -1288,6 +1341,31 @@ export interface UpdateSectionModel {
      * @memberof UpdateSectionModel
      */
     description?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateSectionOrderModel
+ */
+export interface UpdateSectionOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    origin: string;
 }
 /**
  * 
