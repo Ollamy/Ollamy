@@ -6,8 +6,11 @@ import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import { useGetCourseByIdQuery, useGetCourseSectionsQuery } from 'src/services/course/course';
 import { useJoinSectionMutation } from 'src/services/section/section';
+import type { SectionResponse } from 'src/services/section/section.dto';
 
 import { Status } from '../../types';
+
+type SectionFormated = (SectionResponse & { last?: boolean })[];
 
 function CourseDashboard(): JSX.Element {
   const navigate = useNavigate();
@@ -19,14 +22,14 @@ function CourseDashboard(): JSX.Element {
   const { data: sectionsData, isFetching: isSectionsDataFetching } = useGetCourseSectionsQuery(id!);
   const { data: courseData, isFetching: isCourseDataFetching } = useGetCourseByIdQuery(id!);
 
-  const sections = useMemo(() => {
+  const sections: SectionFormated = useMemo(() => {
     if (!sectionsData) return [];
 
     const lastIdx = sectionsData.findIndex((e) => e.status !== Status.COMPLETED);
 
-    if (lastIdx !== -1) {
-      const tmp = sectionsData.concat();
-      tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS };
+    if (lastIdx !== -1 && sectionsData[lastIdx].status !== Status.IN_PROGRESS) {
+      const tmp: SectionFormated = sectionsData.concat();
+      tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS, last: true };
       return tmp;
     }
 
@@ -36,9 +39,9 @@ function CourseDashboard(): JSX.Element {
   if (isSectionsDataFetching || isCourseDataFetching) return <Text>Loading...</Text>;
   if (!isCourseDataFetching && !courseData) return <Text>Course not found</Text>;
 
-  const handleJoinSection = async (sectionId: string) => {
+  const handleJoinSection = async (sectionId: string, isNotJoined?: boolean) => {
     try {
-      await joinSection(sectionId).unwrap();
+      if (isNotJoined) await joinSection(sectionId).unwrap();
       navigate(`/course/${id}/section/${sectionId}`);
     } catch (error) {
       showToast({
@@ -69,7 +72,7 @@ function CourseDashboard(): JSX.Element {
               itemName={'Section'}
               index={idx}
               lesson={section}
-              onPress={() => handleJoinSection(section.id)}
+              onPress={() => handleJoinSection(section.id, section.last)}
             />
           ))}
         </VStack>

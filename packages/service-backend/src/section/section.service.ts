@@ -7,22 +7,15 @@ import {
 import {
   CreateSectionModel,
   IdSectionModel,
-  SectionModel,
   UpdateSectionModel,
   SectionIdResponse,
   GetSectionModel,
 } from 'section/section.dto';
 import { LessonModel } from 'lesson/lesson.dto';
 import prisma from 'client';
-import {
-  Lesson,
-  Status,
-  Prisma,
-  Section,
-  UsertoLesson,
-  UsertoSection,
-} from '@prisma/client';
+import { Status, Prisma, Section } from '@prisma/client';
 import { CourseService } from '../course/course.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class SectionService {
@@ -103,10 +96,9 @@ export class SectionService {
         courseId: sectionDb.course_id,
         title: sectionDb.title,
         description: sectionDb.description,
-        status:
-          !ctx.__device.isMaker && userToSection
-            ? userToSection?.status
-            : undefined,
+        status: !ctx.__device.isMaker
+          ? userToSection?.status ?? Status.NOT_STARTED
+          : undefined,
       } as GetSectionModel;
     } catch (error) {
       Logger.error(error);
@@ -149,11 +141,21 @@ export class SectionService {
           section_id: sectionId,
         },
         include: {
-          UsertoLesson: {
-            where: {
-              user_id: ctx.__user.id,
-            },
-          },
+          _count: ctx.__device.isMaker
+            ? {
+                select: {
+                  Questions: true,
+                  Lecture: true,
+                },
+              }
+            : undefined,
+          UsertoLesson: !ctx.__device.isMaker
+            ? {
+                where: {
+                  user_id: ctx.__user.id,
+                },
+              }
+            : undefined,
         },
       });
 
@@ -164,30 +166,15 @@ export class SectionService {
 
       const lessonPromises: Promise<LessonModel>[] = sectionLessonsDb.map(
         async (lesson) => {
-          let questionsCount = undefined;
-          let lecturesCount = undefined;
-
-          if (!ctx.__device.isMaker) {
-            questionsCount = await prisma.question.count({
-              where: {
-                lesson_id: lesson.id,
-              },
-            });
-
-            lecturesCount = await prisma.lecture.count({
-              where: {
-                lesson_id: lesson.id,
-              },
-            });
-          }
-
           return {
             id: lesson.id,
             description: lesson.description,
             title: lesson.title,
-            status: lesson?.UsertoLesson[0]?.status ?? Status.NOT_STARTED,
-            numberOfQuestions: questionsCount ?? 0,
-            numberOfLectures: lecturesCount ?? 0,
+            status: !ctx.__device.isMaker
+              ? lesson?.UsertoLesson[0]?.status ?? Status.NOT_STARTED
+              : undefined,
+            numberOfQuestions: lesson._count?.Questions ?? 0,
+            numberOfLectures: lesson._count?.Lecture ?? 0,
           };
         },
       );
@@ -203,29 +190,26 @@ export class SectionService {
     sectionId: string,
     userId: string,
   ): Promise<SectionIdResponse> {
-    try {
-      const userToSection = await prisma.usertoSection.create({
-        data: {
-          user_id: userId,
-          section_id: sectionId,
-          status: Status.IN_PROGRESS,
-        },
-      });
+    const userToSection = await prisma.usertoSection.create({
+      data: {
+        user_id: userId,
+        section_id: sectionId,
+        status: Status.IN_PROGRESS,
+      },
+    });
 
-      if (!userToSection) {
-        Logger.error('Failed to create user section !');
-        throw new NotFoundException('Failed to create user section !');
-      }
-      return { id: userToSection.section_id } as SectionIdResponse;
-    } catch (error) {
+    if (!userToSection) {
+      Logger.error('Failed to create user section !');
+      throw new NotFoundException('Failed to create user section !');
     }
+    return { id: userToSection.section_id } as SectionIdResponse;
   }
 
   static async UpdateSectionCompletionFromLesson(
     lessonId: string,
     userId: string,
   ) {
-    const sectionId = await prisma.lesson.findUnique({
+    const section = await prisma.lesson.findUnique({
       where: { id: lessonId },
       select: {
         section_id: true,
@@ -235,7 +219,7 @@ export class SectionService {
     const remainingLessons = await prisma.$queryRaw`
       select count(*) as nb_left
       from "Lesson" as L
-      where section_id = ${sectionId.section_id}::uuid
+      where section_id = ${section.section_id}::uuid
       and not exists(
           select 1
           from  "UsertoLesson" utl
@@ -248,7 +232,7 @@ export class SectionService {
       await prisma.usertoSection.update({
         where: {
           section_id_user_id: {
-            section_id: sectionId.section_id,
+            section_id: section.section_id,
             user_id: userId,
           },
         },
@@ -256,7 +240,7 @@ export class SectionService {
       });
 
       CourseService.UpdateCourseCompletionFromLesson(
-        sectionId.section_id,
+        section.section_id,
         userId,
       );
     }

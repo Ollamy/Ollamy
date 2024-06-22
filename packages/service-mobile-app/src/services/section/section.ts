@@ -24,6 +24,7 @@ export const sectionApi = api.injectEndpoints({
         url: `/section/${id}/join`,
         method: 'POST',
       }),
+      invalidatesTags: ['Course'],
     }),
   }),
 });
