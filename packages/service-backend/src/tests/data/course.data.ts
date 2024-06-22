@@ -79,7 +79,7 @@ export const mockCourseSlotsAvailableDb = {
     ],
   },
   _count: {
-    userlist: 2,
+    userToCourse: 2,
   },
 };
 
