@@ -219,28 +219,13 @@ export class LessonService {
     userId: string,
   ): Promise<LessonIdResponse> {
     try {
-      let userToLesson = await prisma.usertoLesson.findUnique({
-        where: {
-          lesson_id_user_id: {
-            user_id: userId,
-            lesson_id: lessonId,
-          },
+      const userToLesson = await prisma.usertoLesson.create({
+        data: {
+          user_id: userId,
+          lesson_id: lessonId,
         },
       });
 
-      if (!userToLesson) {
-        userToLesson = await prisma.usertoLesson.create({
-          data: {
-            user_id: userId,
-            lesson_id: lessonId,
-          },
-        });
-      }
-
-      if (!userToLesson) {
-        Logger.error('Failed to create user lesson !');
-        throw new NotFoundException('Failed to create user lesson !');
-      }
       return { id: userToLesson.lesson_id } as LessonIdResponse;
     } catch (error) {
       Logger.error(error);
