@@ -31,6 +31,7 @@ export const mockUserToSectionDb: UsertoSection = {
   status: Status.IN_PROGRESS,
   updated_at: new Date(),
   created_at: new Date(),
+  score: 0,
 };
 
 export const mockSectionData2: IdSectionModel = {

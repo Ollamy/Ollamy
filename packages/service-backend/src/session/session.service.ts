@@ -41,6 +41,19 @@ export class SessionService {
       },
     })
 
+    await prisma.usertoLesson.update({
+      where: {
+        lesson_id_user_id: {
+          user_id: ctx.__user.id,
+          lesson_id: lessonId,
+        }
+      },
+      data: {
+        status: Status.IN_PROGRESS,
+        score: 0,
+      }
+    })
+
     if (!data) {
       throw new NotFoundException('Lesson not found');
     }
@@ -86,7 +99,7 @@ export class SessionService {
   }
 
 
-  private async processQuestionResult(sessionId: string, isCorrect: boolean, nextQuestion, session) {
+  private async processQuestionResult(sessionId: string, isCorrect: boolean, nextQuestion, session, percentage: number) {
     let hp: number;
 
     if (isCorrect) {
@@ -112,6 +125,7 @@ export class SessionService {
                     },
                     data: {
                       status: nextQuestion ? Status.IN_PROGRESS : Status.COMPLETED,
+                      score: percentage > 100 ? 100 : percentage,
                     }
                   }
                 ]
@@ -152,6 +166,9 @@ export class SessionService {
         user_id: true,
         course_id: true,
         lesson_id: true,
+        status: true,
+        correct_answers: true,
+        total_questions: true,
         preloaded_data: true,
       },
     });
@@ -159,12 +176,17 @@ export class SessionService {
     if (!session) {
       throw new NotFoundException('Session not found');
     }
-    const preloaded_data = JSON.parse(JSON.stringify(session.preloaded_data));
 
+    if (session.status === Status.COMPLETED) {
+      throw new BadRequestException('Session already completed');
+    }
+
+    const preloaded_data = JSON.parse(JSON.stringify(session.preloaded_data));
     const indexOfCurrentQuestion = preloaded_data.findIndex((question) => question.id === body.questionId);
     const nextQuestion = preloaded_data[indexOfCurrentQuestion + 1] ?? null;
     const isCorrect = preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id || preloaded_data[indexOfCurrentQuestion].Answer[0].data === body.answer.data;
-    const hp = await this.processQuestionResult(sessionId, isCorrect, nextQuestion, session);
+    const percentage = (((isCorrect) ? session.correct_answers + 1 : session.correct_answers) / session.total_questions) * 100;
+    const hp = await this.processQuestionResult(sessionId, isCorrect, nextQuestion, session, percentage);
 
     return {
       success: isCorrect,

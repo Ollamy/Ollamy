@@ -8,6 +8,9 @@
 ALTER TABLE "UsertoCourse" ADD COLUMN     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 ADD COLUMN     "updated_at" TIMESTAMP(3) NOT NULL;
 
+-- AlterTable
+ALTER TABLE "UsertoSection" ADD COLUMN     "score" INTEGER DEFAULT 0;
+
 -- CreateTable
 CREATE TABLE "UserSession" (
     "id" UUID NOT NULL,
@@ -26,9 +29,6 @@ CREATE TABLE "UserSession" (
 
     CONSTRAINT "UserSession_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserSession_user_id_course_id_key" ON "UserSession"("user_id", "course_id");
 
 -- AddForeignKey
 ALTER TABLE "UserSession" ADD CONSTRAINT "UserSession_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
