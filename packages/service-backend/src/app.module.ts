@@ -19,6 +19,7 @@ import { join } from 'path';
 import { BadgeModule } from './badge/badge.module';
 import { StripeModule } from './stripe/stripe.module';
 import { SessionModule } from './session/session.module';
+import { StatisticModule } from './statistic/statistic.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SessionModule } from './session/session.module';
       serveRoot: '/public',
     }),
     SessionModule,
+    StatisticModule,
   ],
   controllers: [AppController, AlertController],
   providers: [
