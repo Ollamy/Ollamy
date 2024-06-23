@@ -18,6 +18,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BadgeModule } from './badge/badge.module';
 import { StripeModule } from './stripe/stripe.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { StripeModule } from './stripe/stripe.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
+    SessionModule,
   ],
   controllers: [AppController, AlertController],
   providers: [

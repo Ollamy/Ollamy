@@ -181,14 +181,14 @@ INSERT INTO "Answer" (id, question_id, data, picture_id, "order") VALUES
     ('c02e5ef6-5399-4c46-87b5-6db1856b1741', 'fd353e6b-1e10-465c-a36b-4b226dc1f8f8', 'Avoid unnecessary comments and ensure comments stay updated with code changes.', NULL, 'a0');
 
 -- UsertoCourse
-INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, permission_course, status) VALUES
-    ('bb24df4f-2b48-4a50-88a8-12a7cb3011e0', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS'),
-    ('bc66af4b-e191-4e6f-afaf-cfe5bf3bf1d9', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'MEMBER', '{"READ", "WRITE"}', '{"READ"}', 'IN_PROGRESS'),
-    ('2ac2e8e0-3a23-4a2e-aa41-10bce6f3bc9e', '3a43db61-67b7-4ef4-9b58-3fbc87ea80f4', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS'),
+INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, permission_course, status, updated_at) VALUES
+    ('bb24df4f-2b48-4a50-88a8-12a7cb3011e0', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS', NOW()),
+    ('bc66af4b-e191-4e6f-afaf-cfe5bf3bf1d9', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'MEMBER', '{"READ", "WRITE"}', '{"READ"}', 'IN_PROGRESS', NOW()),
+    ('2ac2e8e0-3a23-4a2e-aa41-10bce6f3bc9e', '3a43db61-67b7-4ef4-9b58-3fbc87ea80f4', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS', NOW()),
 
-    ('af1d1bd4-84cf-4752-b991-74da2ff3715d', 'c87950af-2ee2-40c7-bd16-607d440cecb3', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 'MEMBER', '{"READ", "WRITE"}', '{"READ"}', 'IN_PROGRESS'),
-    ('f341c073-2b63-459c-ba85-6c83ed9c6d37', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS'),
-    ('0ddde9c0-915e-4f48-b5d4-28d0080d682c', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'MEMBER', '{"READ"}', '{"READ"}', 'IN_PROGRESS');
+    ('af1d1bd4-84cf-4752-b991-74da2ff3715d', 'c87950af-2ee2-40c7-bd16-607d440cecb3', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 'MEMBER', '{"READ", "WRITE"}', '{"READ"}', 'IN_PROGRESS', NOW()),
+    ('f341c073-2b63-459c-ba85-6c83ed9c6d37', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', 'a5e15301-9fb3-4d95-b08d-67fd781aafab', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS', NOW()),
+    ('0ddde9c0-915e-4f48-b5d4-28d0080d682c', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'MEMBER', '{"READ"}', '{"READ"}', 'IN_PROGRESS', NOW());
 
 -- UsertoSection
 INSERT INTO "UsertoSection" (id, section_id, user_id, status, updated_at) VALUES
@@ -251,7 +251,7 @@ INSERT INTO "Lecture" (id, lesson_id, data) VALUES
 
 
 -- Subscriptions plans
-INSERT INTO "Subscription" (id, plan, slots) VALUES
-    ('aaed0f14-ef84-4d14-81ce-b2169db6a013', 'BASIC', 5),
-    ('d369e00b-7e10-4b52-aca4-02be0eaeb804', 'ESSENTIAL', 100),
-    ('1bfd23ba-ea5b-4a45-b2f9-2e4d8627b32b', 'MASTER', 9999999);
+INSERT INTO "Subscription" (plan, slots) VALUES
+    ('BASIC', 5),
+    ('ESSENTIAL', 100),
+    ('MASTER', 9999999);

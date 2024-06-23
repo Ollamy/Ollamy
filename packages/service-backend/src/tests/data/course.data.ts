@@ -110,6 +110,8 @@ export const mockUserToCourse: UsertoCourse = {
   score: 0,
   hp: 1,
   status: Status.IN_PROGRESS,
+  created_at: new Date(),
+  updated_at: new Date(),
 };
 
 export const mockUpdateCourseData: UpdateCourseModel = {

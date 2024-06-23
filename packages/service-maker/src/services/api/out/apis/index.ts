@@ -9,5 +9,6 @@ export * from './LectureApi';
 export * from './LessonApi';
 export * from './QuestionApi';
 export * from './SectionApi';
+export * from './SessionApi';
 export * from './StripeApi';
 export * from './UserApi';

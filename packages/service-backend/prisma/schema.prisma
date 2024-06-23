@@ -67,6 +67,7 @@ model User {
   UserBadges       UserBadges[]
   UserSubscription UserSubscription[]
   UsertoSection    UsertoSection[]
+  UserSession      UserSession[]
 }
 
 model UsertoCourse {
@@ -84,6 +85,9 @@ model UsertoCourse {
   score              Int?                @default(0)
   hp                 Int?                @default(20)
   status             Status              @default(NOT_STARTED)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@unique([course_id, user_id])
 }
@@ -136,6 +140,7 @@ model Course {
   description  String?
   picture      Picture?       @relation(references: [id], fields: [picture_id])
   picture_id   String?        @db.Uuid
+  userSession  UserSession[]
 }
 
 model Section {
@@ -147,6 +152,7 @@ model Section {
   Lesson        Lesson[]
   UsertoSection UsertoSection[]
   order         String          @default("a0")
+  userSession   UserSession[]
 }
 
 model Lesson {
@@ -159,6 +165,7 @@ model Lesson {
   Lecture      Lecture[]
   UsertoLesson UsertoLesson[]
   order        String         @default("a0")
+  userSession  UserSession[]
 }
 
 enum AnswerType {
@@ -305,4 +312,27 @@ model UserSubscription {
   end_date   DateTime?
 
   @@unique([user_id, subscription_plan])
+}
+
+model UserSession {
+  id                  String    @id @default(uuid()) @db.Uuid
+  created_at          DateTime  @default(now())
+  end_date            DateTime?
+  last_update         DateTime  @updatedAt
+  course_id           String    @db.Uuid
+  section_id          String    @db.Uuid
+  lesson_id           String    @db.Uuid
+  user_id             String    @db.Uuid
+  current_question_id String    @db.Uuid
+  correct_answers     Int       @default(0)
+  total_questions     Int
+  status              Status    @default(IN_PROGRESS)
+  preloaded_data      Json?
+
+  course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, course_id])
 }

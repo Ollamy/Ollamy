@@ -24,25 +24,13 @@ export interface AnswerModel {
      * @type {string}
      * @memberof AnswerModel
      */
-    questionId: string;
+    id?: string;
     /**
      * 
      * @type {string}
      * @memberof AnswerModel
      */
     data?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AnswerModel
-     */
-    picture?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AnswerModel
-     */
-    order: string;
 }
 /**
  * 
@@ -1650,4 +1638,23 @@ export interface ValidateAnswerResponse {
      * @memberof ValidateAnswerResponse
      */
     hp?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateQuestionSessionModel
+ */
+export interface ValidateQuestionSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {AnswerModel}
+     * @memberof ValidateQuestionSessionModel
+     */
+    answer: AnswerModel;
 }
