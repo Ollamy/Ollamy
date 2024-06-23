@@ -98,6 +98,7 @@ export class SessionService {
           },
           current_question_id: nextQuestion?.id,
           status: nextQuestion ? Status.IN_PROGRESS : Status.COMPLETED,
+          end_date: nextQuestion ? null : new Date(),
           user: {
             update: {
               UsertoLesson: {
