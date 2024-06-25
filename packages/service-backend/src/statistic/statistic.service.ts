@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import prisma from 'client';
-import { StatisticOperation, StatisticType } from './statistic.dto';
+import {
+  CourseGradeStatisticModel,
+  GradeStatisticModel,
+  LessonGradeStatisticModel,
+  SectionGradeStatisticModel,
+  StatisticOperation,
+  StatisticType,
+  UserGradeStatisticModel,
+} from './statistic.dto';
 
 @Injectable()
 export class StatisticService {
@@ -9,7 +17,7 @@ export class StatisticService {
     operation: StatisticOperation,
     ctx: any,
     courseId?: string,
-  ) {
+  ): Promise<GradeStatisticModel[]> {
     if (!courseId) throw new Error('courseId is required');
 
     let result = undefined;
@@ -54,7 +62,7 @@ export class StatisticService {
     operation: StatisticOperation,
     userId: string,
     courseId: string,
-  ) {
+  ): Promise<CourseGradeStatisticModel[]> {
     const { _avg, _max, _min } = await prisma.usertoCourse.aggregate({
       _avg: {
         score: true,
@@ -75,10 +83,20 @@ export class StatisticService {
       },
     });
 
+    const { title } = await prisma.course.findUnique({
+      select: {
+        title: true,
+      },
+      where: {
+        id: courseId,
+        owner_id: userId,
+      },
+    });
     const data = {
       average: _avg.score,
       max: _max.score,
       min: _min.score,
+      title,
     };
 
     let result = undefined;
@@ -87,14 +105,14 @@ export class StatisticService {
         [operation.toLowerCase()]: data[operation.toLowerCase()],
       };
     }
-    return result ?? data;
+    return [result ?? data];
   }
 
   private async getGradeByTypeOfSection(
     operation: StatisticOperation,
     userId: string,
     courseId: string,
-  ) {
+  ): Promise<SectionGradeStatisticModel[]> {
     const data = await prisma.$queryRaw`
     SELECT AVG(uts.score)::INTEGER as average, MAX(uts.score) as max, MIN(uts.score) as min, sct.title
       FROM "UsertoSection" uts
@@ -126,7 +144,7 @@ export class StatisticService {
     operation: StatisticOperation,
     userId: string,
     courseId: string,
-  ) {
+  ): Promise<LessonGradeStatisticModel[]> {
     const data = await prisma.$queryRaw`
     SELECT AVG(utl.score)::INTEGER as average, MAX(utl.score) as max, MIN(utl.score) as min, ls.title
       FROM "UsertoLesson" utl
@@ -161,7 +179,7 @@ export class StatisticService {
     operation: StatisticOperation,
     userId: string,
     courseId: string,
-  ) {
+  ): Promise<UserGradeStatisticModel[]> {
     const data = await prisma.$queryRaw`
    SELECT AVG(utc.score)::INTEGER as average, MAX(utc.score) as max, MIN(utc.score) as min, us.firstname , us.lastname
       FROM "UsertoCourse" utc

@@ -10,5 +10,6 @@ export * from './LessonApi';
 export * from './QuestionApi';
 export * from './SectionApi';
 export * from './SessionApi';
+export * from './StatisticApi';
 export * from './StripeApi';
 export * from './UserApi';

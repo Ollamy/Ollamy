@@ -8,6 +8,7 @@ apis/LessonApi.ts
 apis/QuestionApi.ts
 apis/SectionApi.ts
 apis/SessionApi.ts
+apis/StatisticApi.ts
 apis/StripeApi.ts
 apis/UserApi.ts
 apis/index.ts
