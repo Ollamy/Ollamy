@@ -679,6 +679,49 @@ export interface GetUsersBadges {
 /**
  * 
  * @export
+ * @interface GradeStatisticModel
+ */
+export interface GradeStatisticModel {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    average?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    min?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    max?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    firstname?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    lastname?: string;
+}
+/**
+ * 
+ * @export
  * @interface IdAnswerModel
  */
 export interface IdAnswerModel {

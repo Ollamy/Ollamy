@@ -34,7 +34,7 @@ export class GradeStatisticModel {
   @ApiProperty({ required: false })
   @IsNumber()
   @IsOptional()
-  tilte?: string;
+  title?: string;
 
   @ApiProperty({ required: false })
   @IsNumber()

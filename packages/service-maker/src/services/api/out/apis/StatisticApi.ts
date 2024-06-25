@@ -2,6 +2,9 @@
 /* eslint-disable */
 
 import * as runtime from '../runtime';
+import type {
+  GradeStatisticModel,
+} from '../models/index';
 
 export interface GradeRequest {
     type: GradeTypeEnum;
@@ -15,7 +18,7 @@ export class StatisticApi extends runtime.BaseAPI {
 
     /**
      */
-    async gradeRaw(requestParameters: GradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async gradeRaw(requestParameters: GradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GradeStatisticModel> {
         if (requestParameters.type === null || requestParameters.type === undefined) {
             throw new runtime.RequiredError('type','Required parameter requestParameters.type was null or undefined when calling grade.');
         }
@@ -39,11 +42,12 @@ export class StatisticApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
+        return response.json();
     }
 
     /**
      */
-    static grade(requestParameters: GradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    static grade(requestParameters: GradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GradeStatisticModel> {
         return localStatisticApi.gradeRaw(requestParameters, initOverrides);
     }
 

@@ -92,7 +92,7 @@ export class StatisticService {
         owner_id: userId,
       },
     });
-    const data = {
+    const data: CourseGradeStatisticModel = {
       average: _avg.score,
       max: _max.score,
       min: _min.score,
@@ -113,7 +113,7 @@ export class StatisticService {
     userId: string,
     courseId: string,
   ): Promise<SectionGradeStatisticModel[]> {
-    const data = await prisma.$queryRaw`
+    const data: SectionGradeStatisticModel[] = await prisma.$queryRaw`
     SELECT AVG(uts.score)::INTEGER as average, MAX(uts.score) as max, MIN(uts.score) as min, sct.title
       FROM "UsertoSection" uts
       INNER JOIN "Section" sct on uts.section_id = sct.id
@@ -145,7 +145,7 @@ export class StatisticService {
     userId: string,
     courseId: string,
   ): Promise<LessonGradeStatisticModel[]> {
-    const data = await prisma.$queryRaw`
+    const data: LessonGradeStatisticModel[] = await prisma.$queryRaw`
     SELECT AVG(utl.score)::INTEGER as average, MAX(utl.score) as max, MIN(utl.score) as min, ls.title
       FROM "UsertoLesson" utl
       INNER JOIN "Lesson" ls on utl.lesson_id = ls.id
@@ -180,7 +180,7 @@ export class StatisticService {
     userId: string,
     courseId: string,
   ): Promise<UserGradeStatisticModel[]> {
-    const data = await prisma.$queryRaw`
+    const data: UserGradeStatisticModel[] = await prisma.$queryRaw`
    SELECT AVG(utc.score)::INTEGER as average, MAX(utc.score) as max, MIN(utc.score) as min, us.firstname , us.lastname
       FROM "UsertoCourse" utc
       INNER JOIN "User" us on utc.user_id = us.id

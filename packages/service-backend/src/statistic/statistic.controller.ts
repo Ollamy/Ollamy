@@ -4,11 +4,16 @@ import {
   ApiOkResponse,
   ApiParam,
   ApiQuery,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { OllContext } from '../context/context.decorator';
 import { LoggedMiddleware } from '../middleware/middleware.decorator';
-import { StatisticOperation, StatisticType } from './statistic.dto';
+import {
+  GradeStatisticModel,
+  StatisticOperation,
+  StatisticType,
+} from './statistic.dto';
 import { StatisticService } from './statistic.service';
 
 @ApiOkResponse({
@@ -20,6 +25,10 @@ import { StatisticService } from './statistic.service';
 export class StatisticController {
   constructor(private readonly statisticService: StatisticService) {}
 
+  @ApiOkResponse({
+    description: 'Course statistics',
+    type: GradeStatisticModel,
+  })
   @ApiParam({
     name: 'type',
     description: 'choose type of statistic',
@@ -42,7 +51,7 @@ export class StatisticController {
     @Param('operation') operation: StatisticOperation,
     @OllContext() ctx: any,
     @Query('courseId') courseId?: string,
-  ) {
+  ): Promise<GradeStatisticModel[]> {
     return this.statisticService.grade(type, operation, ctx, courseId);
   }
 }
