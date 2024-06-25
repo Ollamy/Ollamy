@@ -266,7 +266,7 @@ export class SectionService {
         where: {
           user_id: userId,
           lesson_id: lessonId,
-        }
+        },
       });
 
       await prisma.usertoSection.update({

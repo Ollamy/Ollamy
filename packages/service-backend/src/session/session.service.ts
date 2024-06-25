@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Status } from '@prisma/client';
 import prisma from 'client';
 import { TasksService } from '../cron/cron.service';
@@ -7,7 +11,7 @@ import { validateQuestionSessionModel } from './session.dto';
 
 @Injectable()
 export class SessionService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async createSession(lessonId: string, ctx: any) {
     const data = await prisma.lesson.findUnique({
@@ -39,27 +43,29 @@ export class SessionService {
           ],
         },
       },
-    })
+    });
 
     await prisma.usertoLesson.update({
       where: {
         lesson_id_user_id: {
           user_id: ctx.__user.id,
           lesson_id: lessonId,
-        }
+        },
       },
       data: {
         status: Status.IN_PROGRESS,
         score: 0,
-      }
-    })
+      },
+    });
 
     if (!data) {
       throw new NotFoundException('Lesson not found');
     }
 
     data.Questions.forEach((question) => {
-      question.Answer = question.Answer.filter((answer) => answer.id === question.trust_answer_id);
+      question.Answer = question.Answer.filter(
+        (answer) => answer.id === question.trust_answer_id,
+      );
     });
 
     const session = await prisma.userSession.create({
@@ -78,7 +84,10 @@ export class SessionService {
       throw new BadRequestException('Failed to create session');
     }
 
-    return { session_id: session.id, current_question_id: data.Questions[0].id };
+    return {
+      session_id: session.id,
+      current_question_id: data.Questions[0].id,
+    };
   }
 
   async getSession(sessionId: string) {
@@ -98,8 +107,13 @@ export class SessionService {
     return session;
   }
 
-
-  private async processQuestionResult(sessionId: string, isCorrect: boolean, nextQuestion, session, percentage: number) {
+  private async processQuestionResult(
+    sessionId: string,
+    isCorrect: boolean,
+    nextQuestion,
+    session,
+    percentage: number,
+  ) {
     let hp: number;
 
     if (isCorrect) {
@@ -121,45 +135,55 @@ export class SessionService {
                       lesson_id_user_id: {
                         user_id: session.user_id,
                         lesson_id: session.lesson_id,
-                      }
+                      },
                     },
                     data: {
-                      status: nextQuestion ? Status.IN_PROGRESS : Status.COMPLETED,
+                      status: nextQuestion
+                        ? Status.IN_PROGRESS
+                        : Status.COMPLETED,
                       score: percentage > 100 ? 100 : percentage,
-                    }
-                  }
-                ]
+                    },
+                  },
+                ],
               },
             },
           },
-        }
+        },
       });
 
-      await SectionService.UpdateSectionCompletionFromLesson(session.lesson_id, session.user_id);
+      await SectionService.UpdateSectionCompletionFromLesson(
+        session.lesson_id,
+        session.user_id,
+      );
     } else {
-      hp = (await prisma.usertoCourse.update({
-        where: {
-          course_id_user_id: {
-            user_id: session.user_id,
-            course_id: session.course_id,
+      hp = (
+        await prisma.usertoCourse.update({
+          where: {
+            course_id_user_id: {
+              user_id: session.user_id,
+              course_id: session.course_id,
+            },
           },
-        },
-        data: {
-          hp: {
-            decrement: 1,
-          }
-        },
-        select: {
-          hp: true,
-        }
-      })).hp
+          data: {
+            hp: {
+              decrement: 1,
+            },
+          },
+          select: {
+            hp: true,
+          },
+        })
+      ).hp;
 
       this.cronService.createHpCron(session.user_id, session.course_id);
     }
     return hp;
   }
 
-  async validateQuestion(sessionId: string, body: validateQuestionSessionModel) {
+  async validateQuestion(
+    sessionId: string,
+    body: validateQuestionSessionModel,
+  ) {
     const session = await prisma.userSession.findUnique({
       where: { id: sessionId },
       select: {
@@ -182,11 +206,25 @@ export class SessionService {
     }
 
     const preloaded_data = JSON.parse(JSON.stringify(session.preloaded_data));
-    const indexOfCurrentQuestion = preloaded_data.findIndex((question) => question.id === body.questionId);
+    const indexOfCurrentQuestion = preloaded_data.findIndex(
+      (question) => question.id === body.questionId,
+    );
     const nextQuestion = preloaded_data[indexOfCurrentQuestion + 1] ?? null;
-    const isCorrect = preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id || preloaded_data[indexOfCurrentQuestion].Answer[0].data === body.answer.data;
-    const percentage = (((isCorrect) ? session.correct_answers + 1 : session.correct_answers) / session.total_questions) * 100;
-    const hp = await this.processQuestionResult(sessionId, isCorrect, nextQuestion, session, percentage);
+    const isCorrect =
+      preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id ||
+      preloaded_data[indexOfCurrentQuestion].Answer[0].data ===
+        body.answer.data;
+    const percentage =
+      ((isCorrect ? session.correct_answers + 1 : session.correct_answers) /
+        session.total_questions) *
+      100;
+    const hp = await this.processQuestionResult(
+      sessionId,
+      isCorrect,
+      nextQuestion,
+      session,
+      percentage,
+    );
 
     return {
       success: isCorrect,
