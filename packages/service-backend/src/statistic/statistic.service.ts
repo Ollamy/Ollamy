@@ -24,28 +24,28 @@ export class StatisticService {
 
     switch (type) {
       case StatisticType.STUDENT:
-        result = await this.getGradeByTypeOfUser(
+        result = await StatisticService.getGradeByTypeOfUser(
           operation,
           ctx.__user.id,
           courseId,
         );
         break;
       case StatisticType.COURSE:
-        result = await this.getGradeByTypeOfCourses(
+        result = await StatisticService.getGradeByTypeOfCourse(
           operation,
           ctx.__user.id,
           courseId,
         );
         break;
       case StatisticType.SECTION:
-        result = await this.getGradeByTypeOfSection(
+        result = await StatisticService.getGradeByTypeOfSection(
           operation,
           ctx.__user.id,
           courseId,
         );
         break;
       case StatisticType.LESSON:
-        result = await this.getGradeByTypeOfLesson(
+        result = await StatisticService.getGradeByTypeOfLesson(
           operation,
           ctx.__user.id,
           courseId,
@@ -58,7 +58,7 @@ export class StatisticService {
     return result;
   }
 
-  private async getGradeByTypeOfCourses(
+  static async getGradeByTypeOfCourse(
     operation: StatisticOperation,
     userId: string,
     courseId: string,
@@ -108,7 +108,7 @@ export class StatisticService {
     return [result ?? data];
   }
 
-  private async getGradeByTypeOfSection(
+  static async getGradeByTypeOfSection(
     operation: StatisticOperation,
     userId: string,
     courseId: string,
@@ -140,7 +140,7 @@ export class StatisticService {
     return result ?? data;
   }
 
-  private async getGradeByTypeOfLesson(
+  static async getGradeByTypeOfLesson(
     operation: StatisticOperation,
     userId: string,
     courseId: string,
@@ -175,7 +175,7 @@ export class StatisticService {
     return result ?? data;
   }
 
-  private async getGradeByTypeOfUser(
+  static async getGradeByTypeOfUser(
     operation: StatisticOperation,
     userId: string,
     courseId: string,

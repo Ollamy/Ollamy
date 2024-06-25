@@ -3,7 +3,10 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateSessionModel,
+  GetSessionModel,
   ValidateQuestionSessionModel,
+  ValidateQuestionSessionResponseModel,
 } from '../models/index';
 
 export interface CreateRequest {
@@ -25,7 +28,7 @@ export class SessionApi extends runtime.BaseAPI {
 
     /**
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateSessionModel> {
         if (requestParameters.lessonId === null || requestParameters.lessonId === undefined) {
             throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling create.');
         }
@@ -41,17 +44,18 @@ export class SessionApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
+        return response.json();
     }
 
     /**
      */
-    static create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    static create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateSessionModel> {
         return localSessionApi.createRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async getSessionRaw(requestParameters: GetSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async getSessionRaw(requestParameters: GetSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSessionModel> {
         if (requestParameters.sessionId === null || requestParameters.sessionId === undefined) {
             throw new runtime.RequiredError('sessionId','Required parameter requestParameters.sessionId was null or undefined when calling getSession.');
         }
@@ -67,17 +71,18 @@ export class SessionApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
+        return response.json();
     }
 
     /**
      */
-    static getSession(requestParameters: GetSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    static getSession(requestParameters: GetSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSessionModel> {
         return localSessionApi.getSessionRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async validateQuestionRaw(requestParameters: ValidateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async validateQuestionRaw(requestParameters: ValidateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateQuestionSessionResponseModel> {
         if (requestParameters.sessionId === null || requestParameters.sessionId === undefined) {
             throw new runtime.RequiredError('sessionId','Required parameter requestParameters.sessionId was null or undefined when calling validateQuestion.');
         }
@@ -100,11 +105,12 @@ export class SessionApi extends runtime.BaseAPI {
             body: requestParameters.validateQuestionSessionModel,
         }, initOverrides);
 
+        return response.json();
     }
 
     /**
      */
-    static validateQuestion(requestParameters: ValidateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    static validateQuestion(requestParameters: ValidateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateQuestionSessionResponseModel> {
         return localSessionApi.validateQuestionRaw(requestParameters, initOverrides);
     }
 

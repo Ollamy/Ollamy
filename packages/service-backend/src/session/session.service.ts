@@ -5,15 +5,20 @@ import {
 } from '@nestjs/common';
 import { Status } from '@prisma/client';
 import prisma from 'client';
-import { TasksService } from '../cron/cron.service';
-import { SectionService } from '../section/section.service';
-import { validateQuestionSessionModel } from './session.dto';
+import { TasksService } from 'cron/cron.service';
+import { SectionService } from 'section/section.service';
+import {
+  CreateSessionModel,
+  GetSessionModel,
+  ValidateQuestionSessionModel,
+  ValidateQuestionSessionResponseModel,
+} from './session.dto';
 
 @Injectable()
 export class SessionService {
   constructor(private readonly cronService: TasksService) {}
 
-  async createSession(lessonId: string, ctx: any) {
+  async createSession(lessonId: string, ctx: any): Promise<CreateSessionModel> {
     const data = await prisma.lesson.findUnique({
       where: { id: lessonId },
       select: {
@@ -45,6 +50,10 @@ export class SessionService {
       },
     });
 
+    if (!data) {
+      throw new NotFoundException('Lesson not found');
+    }
+
     await prisma.usertoLesson.update({
       where: {
         lesson_id_user_id: {
@@ -58,11 +67,7 @@ export class SessionService {
       },
     });
 
-    if (!data) {
-      throw new NotFoundException('Lesson not found');
-    }
-
-    data.Questions.forEach((question) => {
+    data?.Questions?.forEach((question) => {
       question.Answer = question.Answer.filter(
         (answer) => answer.id === question.trust_answer_id,
       );
@@ -85,12 +90,12 @@ export class SessionService {
     }
 
     return {
-      session_id: session.id,
-      current_question_id: data.Questions[0].id,
+      sessionId: session.id,
+      currentQuestionId: data.Questions[0].id,
     };
   }
 
-  async getSession(sessionId: string) {
+  async getSession(sessionId: string): Promise<GetSessionModel> {
     const session = await prisma.userSession.findUnique({
       where: { id: sessionId },
       select: {
@@ -104,7 +109,11 @@ export class SessionService {
       throw new NotFoundException('Session not found');
     }
 
-    return session;
+    return {
+      currentQuestionId: session.current_question_id,
+      correctAnswers: session.correct_answers,
+      totalQuestions: session.total_questions,
+    };
   }
 
   private async processQuestionResult(
@@ -182,8 +191,8 @@ export class SessionService {
 
   async validateQuestion(
     sessionId: string,
-    body: validateQuestionSessionModel,
-  ) {
+    body: ValidateQuestionSessionModel,
+  ): Promise<ValidateQuestionSessionResponseModel> {
     const session = await prisma.userSession.findUnique({
       where: { id: sessionId },
       select: {
@@ -228,8 +237,8 @@ export class SessionService {
 
     return {
       success: isCorrect,
-      answer: preloaded_data[indexOfCurrentQuestion].Answer[0].id,
-      nextQuestion: nextQuestion?.id ?? null,
+      answerId: preloaded_data[indexOfCurrentQuestion].Answer[0].id,
+      nextQuestionId: nextQuestion?.id ?? null,
       hp,
     };
   }

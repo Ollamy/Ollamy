@@ -4,11 +4,10 @@ import {
   ApiOkResponse,
   ApiParam,
   ApiQuery,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { OllContext } from '../context/context.decorator';
-import { LoggedMiddleware } from '../middleware/middleware.decorator';
+import { OllContext } from 'context/context.decorator';
+import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
   GradeStatisticModel,
   StatisticOperation,
