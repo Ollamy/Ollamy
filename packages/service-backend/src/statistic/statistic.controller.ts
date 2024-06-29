@@ -15,9 +15,6 @@ import {
 } from './statistic.dto';
 import { StatisticService } from './statistic.service';
 
-@ApiOkResponse({
-  description: 'session create response',
-})
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Statistic')
 @Controller('statistic')
@@ -26,7 +23,7 @@ export class StatisticController {
 
   @ApiOkResponse({
     description: 'Course statistics',
-    type: GradeStatisticModel,
+    type: [GradeStatisticModel],
   })
   @ApiParam({
     name: 'type',
