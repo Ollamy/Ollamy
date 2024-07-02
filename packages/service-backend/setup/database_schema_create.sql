@@ -181,7 +181,7 @@ INSERT INTO "Answer" (id, question_id, data, picture_id, "order") VALUES
     ('c02e5ef6-5399-4c46-87b5-6db1856b1741', 'fd353e6b-1e10-465c-a36b-4b226dc1f8f8', 'Avoid unnecessary comments and ensure comments stay updated with code changes.', NULL, 'a0');
 
 -- UsertoCourse
-INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, permission_course, status, updated_at) VALUES
+INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, permission_course, "status", updated_at) VALUES
     ('bb24df4f-2b48-4a50-88a8-12a7cb3011e0', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS', NOW()),
     ('bc66af4b-e191-4e6f-afaf-cfe5bf3bf1d9', 'e5a1c556-193c-4a17-ba0c-5a9ddc5dd6f1', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'MEMBER', '{"READ", "WRITE"}', '{"READ"}', 'IN_PROGRESS', NOW()),
     ('2ac2e8e0-3a23-4a2e-aa41-10bce6f3bc9e', '3a43db61-67b7-4ef4-9b58-3fbc87ea80f4', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'OWNER', '{"READ", "WRITE", "DELETE", "ADMIN"}', '{"READ", "WRITE", "DELETE", "ADMIN"}', 'IN_PROGRESS', NOW()),
@@ -191,7 +191,7 @@ INSERT INTO "UsertoCourse" (id, course_id, user_id, role_user, permission_user, 
     ('0ddde9c0-915e-4f48-b5d4-28d0080d682c', 'db6cf3cc-7cb4-4a5d-84f4-75a6fcf223d3', '65d7c6f4-157b-4e7e-92e2-58b80e8e1d43', 'MEMBER', '{"READ"}', '{"READ"}', 'IN_PROGRESS', NOW());
 
 -- UsertoSection
-INSERT INTO "UsertoSection" (id, section_id, user_id, status, updated_at) VALUES
+INSERT INTO "UsertoSection" (id, section_id, user_id, "status", updated_at) VALUES
     ('db640804-a79b-456e-bd7b-640f97e2e37e', 'df0e43ff-1310-4d92-9a19-c62854ab7391', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', 'IN_PROGRESS', NOW()),
     ('870d7a48-2ff7-4f07-8825-900cc7d0c718', 'df0e43ff-1310-4d92-9a19-c62854ab7391', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'IN_PROGRESS' , NOW()),
     ('503d5913-80b9-44b6-85d3-ab2feb2b9ba1', 'd2e9fc8b-31c0-493a-9b45-004a73fe9bb9', '83f7337b-cf79-438e-86d4-3ba0db64b5db', 'IN_PROGRESS', NOW()),
@@ -202,7 +202,7 @@ INSERT INTO "UsertoSection" (id, section_id, user_id, status, updated_at) VALUES
 
 
 -- UsertoLesson
-INSERT INTO "UsertoLesson" (id, lesson_id, user_id, complete_lecture, complete_question, status, updated_at) VALUES
+INSERT INTO "UsertoLesson" (id, lesson_id, user_id, complete_lecture, complete_question, "status", updated_at) VALUES
     ('2c7e2e95-65e2-48fe-b5f4-d41b0f2e48e5', '8722bf34-6868-4a8b-988d-3b18fdbc384f', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', true, true, 'IN_PROGRESS', NOW()),
     ('3c8c23db-f42f-46ac-902d-98d124f0e39f', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', '56fb679c-973b-4b3e-8f87-3b7ddcadbfa4', true, false, 'IN_PROGRESS', NOW()),
     ('23f6f60b-c977-4b71-b953-554d61d7e9de', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', '83f7337b-cf79-438e-86d4-3ba0db64b5db', false, false, 'NOT_STARTED', NOW()),

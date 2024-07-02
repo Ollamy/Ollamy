@@ -27,6 +27,7 @@ import {
   UserCourseHp,
   Durationtype,
   ShareCourseCode,
+  EnrollmentResponseTotal,
 } from 'course/course.dto';
 import { CourseSectionModel, GetSectionsModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -38,6 +39,28 @@ import { OllContext } from 'context/context.decorator';
 @Controller('/course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
+
+  @ApiOkResponse({
+    description: 'User enrollments in courses',
+    type: EnrollmentResponseTotal,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'Id of the course (optional)',
+    required: false,
+  })
+  @LoggedMiddleware(true)
+  @Get('/enrollment')
+  async getUserEnrollments(
+    @Query('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<EnrollmentResponseTotal> {
+    if (id) {
+      return this.courseService.getEnrollmentsForCourse(id);
+    } else {
+      return this.courseService.getEnrollmentsForOwner(ctx.__user.id);
+    }
+  }
 
   @ApiOkResponse({
     description: 'course create response',

@@ -15,6 +15,9 @@ import {
   ShareCourseCode,
   ExpirationMap,
   Durationtype,
+  EnrollmentResponse,
+  EnrollmentTotal,
+  EnrollmentResponseTotal,
 } from './course.dto';
 import { GetSectionsModel } from 'section/section.dto';
 import { Course, Prisma, Role, Status } from '@prisma/client';
@@ -416,5 +419,54 @@ export class CourseService {
         },
       });
     }
+  }
+
+  private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
+    enrollments.sort((a, b) => a.epoch - b.epoch);
+    let total = 0;
+    return enrollments.map(enrollment => ({
+      epoch: enrollment.epoch,
+      total: ++total,
+    }));
+  }
+
+  async getEnrollmentsForCourse(courseId: string): Promise<EnrollmentResponseTotal> {
+    const enrollments = await prisma.usertoCourse.findMany({
+      where: { course_id: courseId },
+      select: {
+        user_id: true,
+        created_at: true,
+      },
+    });
+    const response: EnrollmentResponse[] = enrollments.map(enrollment => ({
+      userId: enrollment.user_id,
+      epoch: enrollment.created_at.getTime(),
+    }));
+    const cumulative = this.calculateCumulativeEnrollments(response);
+    return { total: response.length, enrollments: response, cumulative };
+  }
+
+  async getEnrollmentsForOwner(ownerId: string): Promise<EnrollmentResponseTotal> {
+    const courses = await prisma.course.findMany({
+      where: { owner_id: ownerId },
+      select: { id: true },
+    });
+
+    const courseIds = courses.map(course => course.id);
+
+    const enrollments = await prisma.usertoCourse.findMany({
+      where: { course_id: { in: courseIds } },
+      select: {
+        user_id: true,
+        created_at: true,
+      },
+    });
+
+    const response: EnrollmentResponse[] = enrollments.map(enrollment => ({
+      userId: enrollment.user_id,
+      epoch: enrollment.created_at.getTime(),
+    }));
+    const cumulative = this.calculateCumulativeEnrollments(response);
+    return { total: response.length, enrollments: response, cumulative };
   }
 }

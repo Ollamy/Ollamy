@@ -145,3 +145,35 @@ export class CourseCodeModel {
   @IsOptional()
   code?: string;
 }
+
+export class EnrollmentResponse {
+  @ApiProperty()
+  @IsUUID()
+  userId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  epoch: number;
+}
+
+export class EnrollmentTotal {
+  @ApiProperty()
+  @IsNumber()
+  epoch: number;
+
+  @ApiProperty()
+  @IsNumber()
+  total: number;
+}
+
+export class EnrollmentResponseTotal {
+  @ApiProperty()
+  @IsNumber()
+  total: number;
+
+  @ApiProperty({ type: [EnrollmentResponse] })
+  enrollments: EnrollmentResponse[];
+
+  @ApiProperty({ type: [EnrollmentTotal] })
+  cumulative: EnrollmentTotal[];
+}
