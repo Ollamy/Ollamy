@@ -249,9 +249,15 @@ INSERT INTO "Lecture" (id, lesson_id, data) VALUES
     ('f3a86e04-cd5e-4bf3-8bf3-3611397871e1', '9a75e507-4b5c-4b45-9379-c38a6f3f059e', 'In this lecture, we explore techniques for working with strings and numbers in programming.'),
     ('6c0d816d-13b2-491d-8ef8-5b1468b7d5f3', 'b8b7400d-52a1-4e10-96ce-995f5aa16739', 'Learn the fundamental concepts of object-oriented programming, including classes and objects.');
 
-
 -- Subscriptions plans
 INSERT INTO "Subscription" (plan, slots) VALUES
     ('BASIC', 5),
     ('ESSENTIAL', 100),
     ('MASTER', 9999999);
+
+INSERT INTO "Badge" (id, name, description, image_name, color, "order") VALUES
+    ('a030721b-ebb3-436a-a5b1-ed8837a58af4', 'First Lesson', 'You completed your first Lesson', 'first_lesson', '#DC8F69', 0),
+    ('a4b85e6b-3ef1-4160-84ff-dbf42c6734d2', 'Second Lesson', 'You completed your second Lesson', 'second_lesson', '#787DA3', 1),
+    ('6b33a659-4cb3-4247-bbcf-b8bd9f61f077', 'Third Lesson', 'You completed your third Lesson', 'third_lesson', '#E0AD03', 2),
+    ('682371e8-b486-4199-a5b4-6d2455f9926e', 'Fourth Lesson', 'You completed your fourth Lesson', 'fourth_lesson', '#8EBBFF', 3),
+    ('cb561c8a-7ab5-48e2-bd20-f5e8deebe982', 'Fifth Lesson', 'You completed your fifth Lesson', 'fifth_lesson', '#E0AD03', 4);

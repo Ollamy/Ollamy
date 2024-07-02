@@ -422,51 +422,103 @@ export class CourseService {
   }
 
   private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
-    enrollments.sort((a, b) => a.epoch - b.epoch);
     let total = 0;
-    return enrollments.map(enrollment => ({
-      epoch: enrollment.epoch,
-      total: ++total,
-    }));
+
+    enrollments.sort((a, b) => a.epoch - b.epoch);
+
+    return enrollments.map(enrollment => (
+      {
+        epoch: enrollment.epoch,
+        total: ++total,
+      }
+    ));
   }
 
   async getEnrollmentsForCourse(courseId: string): Promise<EnrollmentResponseTotal> {
-    const enrollments = await prisma.usertoCourse.findMany({
-      where: { course_id: courseId },
-      select: {
-        user_id: true,
-        created_at: true,
-      },
-    });
-    const response: EnrollmentResponse[] = enrollments.map(enrollment => ({
-      userId: enrollment.user_id,
-      epoch: enrollment.created_at.getTime(),
-    }));
-    const cumulative = this.calculateCumulativeEnrollments(response);
-    return { total: response.length, enrollments: response, cumulative };
+    try {
+      const enrollments = await prisma.usertoCourse.findMany({
+        where: {
+          course_id: courseId,
+        },
+        select: {
+          user_id: true,
+          created_at: true,
+        },
+      });
+
+      if (!enrollments.length) {
+        throw new NotFoundException(`No enrollments found for course with id: ${courseId}`);
+      }
+
+      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
+        {
+          userId: enrollment.user_id,
+          epoch: enrollment.created_at.getTime(),
+        }
+      ));
+
+      const cumulative = this.calculateCumulativeEnrollments(response);
+
+      return {
+        total: response.length,
+        enrollments: response,
+        cumulative,
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Failed to get enrollments for course.');
+    }
   }
 
   async getEnrollmentsForOwner(ownerId: string): Promise<EnrollmentResponseTotal> {
-    const courses = await prisma.course.findMany({
-      where: { owner_id: ownerId },
-      select: { id: true },
-    });
+    try {
+      const courses = await prisma.course.findMany({
+        where: {
+          owner_id: ownerId,
+        },
+        select: {
+          id: true,
+        },
+      });
 
-    const courseIds = courses.map(course => course.id);
+      if (!courses.length) {
+        throw new NotFoundException(`No courses found for owner with id: ${ownerId}`);
+      }
 
-    const enrollments = await prisma.usertoCourse.findMany({
-      where: { course_id: { in: courseIds } },
-      select: {
-        user_id: true,
-        created_at: true,
-      },
-    });
+      const courseIds = courses.map(course => course.id);
 
-    const response: EnrollmentResponse[] = enrollments.map(enrollment => ({
-      userId: enrollment.user_id,
-      epoch: enrollment.created_at.getTime(),
-    }));
-    const cumulative = this.calculateCumulativeEnrollments(response);
-    return { total: response.length, enrollments: response, cumulative };
+      const enrollments = await prisma.usertoCourse.findMany({
+        where: {
+          course_id: {
+            in: courseIds,
+          },
+        },
+        select: {
+          user_id: true,
+          created_at: true,
+        },
+      });
+
+      if (!enrollments.length) {
+        throw new NotFoundException(`No enrollments found for owner with id: ${ownerId}`);
+      }
+
+      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
+        {
+          userId: enrollment.user_id,
+          epoch: enrollment.created_at.getTime(),
+        }
+      ));
+      const cumulative = this.calculateCumulativeEnrollments(response);
+
+      return {
+        total: response.length,
+        enrollments: response,
+        cumulative,
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Failed to get enrollments for owner.');
+    }
   }
 }
