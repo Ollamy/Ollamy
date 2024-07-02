@@ -398,6 +398,69 @@ export type CreateUserModelPlatformEnum = typeof CreateUserModelPlatformEnum[key
 /**
  * 
  * @export
+ * @interface EnrollmentResponse
+ */
+export interface EnrollmentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof EnrollmentResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponse
+     */
+    epoch: number;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentResponseTotal
+ */
+export interface EnrollmentResponseTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponseTotal
+     */
+    total: number;
+    /**
+     * 
+     * @type {Array<EnrollmentResponse>}
+     * @memberof EnrollmentResponseTotal
+     */
+    enrollments: Array<EnrollmentResponse>;
+    /**
+     * 
+     * @type {Array<EnrollmentTotal>}
+     * @memberof EnrollmentResponseTotal
+     */
+    cumulative: Array<EnrollmentTotal>;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentTotal
+ */
+export interface EnrollmentTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    epoch: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    total: number;
+}
+/**
+ * 
+ * @export
  * @interface GetCourseRequest
  */
 export interface GetCourseRequest {
