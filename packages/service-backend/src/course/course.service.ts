@@ -434,8 +434,22 @@ export class CourseService {
     ));
   }
 
-  async getEnrollmentsForCourse(courseId: string): Promise<EnrollmentResponseTotal> {
+  async getEnrollmentsForCourse(courseId: string, ownerId: string): Promise<EnrollmentResponseTotal> {
     try {
+      const course = await prisma.course.findFirst({
+        where: {
+          id: courseId,
+          owner_id: ownerId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!course) {
+        throw new NotFoundException(`No course found for owner with id: ${ownerId}`);
+      }
+
       const enrollments = await prisma.usertoCourse.findMany({
         where: {
           course_id: courseId,

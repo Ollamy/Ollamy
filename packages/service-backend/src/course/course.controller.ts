@@ -41,28 +41,6 @@ export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @ApiOkResponse({
-    description: 'User enrollments in courses',
-    type: EnrollmentResponseTotal,
-  })
-  @ApiQuery({
-    name: 'id',
-    description: 'Id of the course (optional)',
-    required: false,
-  })
-  @LoggedMiddleware(true)
-  @Get('/enrollment')
-  async getUserEnrollments(
-    @Query('id') id: string,
-    @OllContext() ctx: any,
-  ): Promise<EnrollmentResponseTotal> {
-    if (id) {
-      return this.courseService.getEnrollmentsForCourse(id);
-    } else {
-      return this.courseService.getEnrollmentsForOwner(ctx.__user.id);
-    }
-  }
-
-  @ApiOkResponse({
     description: 'course create response',
     type: CourseIdResponse,
   })
@@ -107,6 +85,28 @@ export class CourseController {
   @Delete()
   async deleteCourse(@Body() body: IdCourseModel): Promise<CourseIdResponse> {
     return this.courseService.deleteCourse(body);
+  }
+
+  @ApiOkResponse({
+    description: 'User enrollments in courses',
+    type: EnrollmentResponseTotal,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'Id of the course (optional)',
+    required: false,
+  })
+  @LoggedMiddleware(true)
+  @Get('/enrollment')
+  async getUserEnrollments(
+    @Query('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<EnrollmentResponseTotal> {
+    if (id) {
+      return this.courseService.getEnrollmentsForCourse(id, ctx.__user.id);
+    } else {
+      return this.courseService.getEnrollmentsForOwner(ctx.__user.id);
+    }
   }
 
   @ApiOkResponse({
