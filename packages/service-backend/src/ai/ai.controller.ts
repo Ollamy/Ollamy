@@ -60,13 +60,12 @@ export class AiController {
     return await this.aiService.generateText(AiFile);
   }
 
-  // @ApiBody({
-  //   type: Any,
-  //   description: 'object containing a list of questions with their answers to create'
-  // })
+  @ApiBody({
+    type: CreateQuestionResponse,
+    description: 'Object containing a list of questions with their answers to create'
+  })
   @ApiResponse({
     status: 200,
-    description: '',
     type: Boolean,
   })
   @LoggedMiddleware(true)

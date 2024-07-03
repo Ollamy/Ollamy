@@ -87,10 +87,11 @@ export class AiService {
         select: {
           id: true
         }
-      }
-      )
+      })
+
       const trustedAnswer = await prisma.answer.createManyAndReturn({
-        data: question.answers.sort((a, b) => Number(b.correct) - Number(a.correct)).map(answer => { return { data: answer.answer, question_id: id } }
+        data: question.answers.sort(
+          (a, b) => Number(b.correct) - Number(a.correct)).map(answer => { return { data: answer.answer, question_id: id } }
         ) as unknown as Prisma.AnswerCreateManyInput[],
         select: {
           id: true
