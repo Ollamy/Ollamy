@@ -102,11 +102,7 @@ export class CourseController {
     @Query('id') id: string,
     @OllContext() ctx: any,
   ): Promise<EnrollmentResponseTotal> {
-    if (id) {
-      return this.courseService.getEnrollmentsForCourse(id, ctx.__user.id);
-    } else {
-      return this.courseService.getEnrollmentsForOwner(ctx.__user.id);
-    }
+    return this.courseService.getEnrollmentsForOwnerCourse(ctx.__user.id, id);
   }
 
   @ApiOkResponse({

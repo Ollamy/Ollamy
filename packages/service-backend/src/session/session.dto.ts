@@ -63,7 +63,7 @@ export class ValidateQuestionSessionResponseModel {
   @ApiProperty({ required: true, nullable: true })
   @IsUUID()
   @IsOptional()
-  nextQuestionId?: string;
+  nextQuestionId?: string | null;
 
   @ApiProperty({ required: true })
   @IsUUID()

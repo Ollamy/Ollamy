@@ -434,13 +434,17 @@ export class CourseService {
     ));
   }
 
-  async getEnrollmentsForCourse(courseId: string, ownerId: string): Promise<EnrollmentResponseTotal> {
+  async getEnrollmentsForOwnerCourse(ownerId: string, courseId?: string | undefined): Promise<EnrollmentResponseTotal> {
     try {
       const enrollments = await prisma.usertoCourse.findMany({
-        where: {
+        where: courseId ? {
           course_id: courseId,
           course: {
             id: courseId,
+            owner_id: ownerId
+          }
+        } : {
+          course: {
             owner_id: ownerId
           }
         },
@@ -471,43 +475,6 @@ export class CourseService {
     } catch (error) {
       Logger.error(error);
       throw new ConflictException('Failed to get enrollments for course.');
-    }
-  }
-
-  async getEnrollmentsForOwner(ownerId: string): Promise<EnrollmentResponseTotal> {
-    try {
-      const enrollments = await prisma.usertoCourse.findMany({
-        where: {
-          course: {
-            owner_id: ownerId
-          }
-        },
-        select: {
-          user_id: true,
-          created_at: true,
-        },
-      });
-
-      if (!enrollments.length) {
-        throw new NotFoundException(`No enrollments found for owner with id: ${ownerId}`);
-      }
-
-      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
-        {
-          userId: enrollment.user_id,
-          epoch: enrollment.created_at.getTime(),
-        }
-      ));
-      const cumulative = this.calculateCumulativeEnrollments(response);
-
-      return {
-        total: response.length,
-        enrollments: response,
-        cumulative,
-      };
-    } catch (error) {
-      Logger.error(error);
-      throw new ConflictException('Failed to get enrollments for owner.');
     }
   }
 }
