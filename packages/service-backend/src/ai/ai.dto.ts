@@ -43,7 +43,7 @@ export class QuestionResponse {
 }
 
 export class CreateQuestionResponse {
-  @ApiProperty({type: [Question]})
+  @ApiProperty({type: [Question], required: true})
   @Type(() => Question)
   @ValidateNested({ each: true })
   @IsArray()
