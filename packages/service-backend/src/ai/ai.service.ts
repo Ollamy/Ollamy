@@ -9,7 +9,7 @@ import {
   VertexAI
 } from '@google-cloud/vertexai'
 import { CreateQuestionResponse, FileAi, QuestionResponse } from './ai.dto';
-import prisma from '../client';
+import prisma from 'client';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 
 @Injectable()

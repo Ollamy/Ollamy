@@ -3,6 +3,25 @@
 /**
  * 
  * @export
+ * @interface Answer
+ */
+export interface Answer {
+    /**
+     * 
+     * @type {string}
+     * @memberof Answer
+     */
+    answer: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Answer
+     */
+    correct: boolean;
+}
+/**
+ * 
+ * @export
  * @interface AnswerIdResponse
  */
 export interface AnswerIdResponse {
@@ -303,6 +322,25 @@ export const CreateQuestionModelDifficultyEnum = {
 } as const;
 export type CreateQuestionModelDifficultyEnum = typeof CreateQuestionModelDifficultyEnum[keyof typeof CreateQuestionModelDifficultyEnum];
 
+/**
+ * 
+ * @export
+ * @interface CreateQuestionResponse
+ */
+export interface CreateQuestionResponse {
+    /**
+     * 
+     * @type {Array<Question>}
+     * @memberof CreateQuestionResponse
+     */
+    questionReponse: Array<Question>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateQuestionResponse
+     */
+    lessonId: string;
+}
 /**
  * 
  * @export
@@ -930,6 +968,25 @@ export type LoginUserModelPlatformEnum = typeof LoginUserModelPlatformEnum[keyof
 /**
  * 
  * @export
+ * @interface Question
+ */
+export interface Question {
+    /**
+     * 
+     * @type {string}
+     * @memberof Question
+     */
+    question: string;
+    /**
+     * 
+     * @type {Array<Answer>}
+     * @memberof Question
+     */
+    answers: Array<Answer>;
+}
+/**
+ * 
+ * @export
  * @interface QuestionAnswerModel
  */
 export interface QuestionAnswerModel {
@@ -1067,6 +1124,19 @@ export const QuestionModelDifficultyEnum = {
 } as const;
 export type QuestionModelDifficultyEnum = typeof QuestionModelDifficultyEnum[keyof typeof QuestionModelDifficultyEnum];
 
+/**
+ * 
+ * @export
+ * @interface QuestionResponse
+ */
+export interface QuestionResponse {
+    /**
+     * 
+     * @type {Array<Question>}
+     * @memberof QuestionResponse
+     */
+    root: Array<Question>;
+}
 /**
  * 
  * @export
