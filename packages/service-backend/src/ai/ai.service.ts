@@ -8,7 +8,9 @@ import {
   HarmCategory,
   VertexAI
 } from '@google-cloud/vertexai'
-import { FileAi, QuestionResponse } from './ai.dto';
+import { CreateQuestionResponse, FileAi, QuestionResponse } from './ai.dto';
+import prisma from '../client';
+import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 
 @Injectable()
 export class AiService {
@@ -25,7 +27,8 @@ export class AiService {
         maxOutputTokens: 8192,
         temperature: 1,
         topP: 0.95,
-      },
+        responseMimeType: 'application/json'
+      } as any,
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
@@ -69,10 +72,40 @@ export class AiService {
     };
     const response = await AiService.generativeModel.generateContent(req);
     const data = response.response.candidates[0].content.parts[0].text;
-    const json = data.match(/```json(.*?)```/s);
-    if (!json) {
-      throw new Error('Failed to generate text');
-    }
-    return JSON.parse(json[1]);
+    return JSON.parse(data);
+  }
+
+  async createQuizz(questions: CreateQuestionResponse): Promise<Boolean> {
+    questions.questionReponse.forEach(async (question) => {
+      const { id } = await prisma.question.create({
+        data: {
+          title: question.question,
+          type_question: QuestionType.TEXT,
+          type_answer: AnswerType.MULTIPLE_CHOICE,
+          lesson_id: questions.lessonId
+        },
+        select: {
+          id: true
+        }
+      }
+      )
+      const trustedAnswer = await prisma.answer.createManyAndReturn({
+        data: question.answers.sort((a, b) => Number(b.correct) - Number(a.correct)).map(answer => { return { data: answer.answer, question_id: id } }
+        ) as unknown as Prisma.AnswerCreateManyInput[],
+        select: {
+          id: true
+        }
+      })[0];
+
+      await prisma.question.update({
+        where: {
+          id: id
+        },
+        data: {
+          trust_answer_id: trustedAnswer.id
+        }
+      });
+    })
+    return true
   }
 }

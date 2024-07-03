@@ -13,14 +13,11 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiOkResponse,
-  ApiHeader,
-  ApiParam,
   ApiTags,
   ApiConsumes,
   ApiResponse,
 } from '@nestjs/swagger';
-import { FileAi, QuestionResponse } from 'ai/ai.dto';
+import { CreateQuestionResponse, FileAi, QuestionResponse } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
@@ -61,5 +58,22 @@ export class AiController {
     };
 
     return await this.aiService.generateText(AiFile);
+  }
+
+  // @ApiBody({
+  //   type: Any,
+  //   description: 'object containing a list of questions with their answers to create'
+  // })
+  @ApiResponse({
+    status: 200,
+    description: '',
+    type: Boolean,
+  })
+  @LoggedMiddleware(true)
+  @Post('/create-generated-question')
+  async createQuestion(
+    @Body() questions: CreateQuestionResponse,
+  ): Promise<Boolean> {
+    return await this.aiService.createQuizz(questions);
   }
 }

@@ -13,17 +13,21 @@ export class FileAi {
 }
 
 export class Answer {
+  @ApiProperty()
   @IsString()
   answer: string;
 
+  @ApiProperty()
   @IsBoolean()
   correct: boolean;
 }
 
 export class Question {
+  @ApiProperty()
   @IsString()
   question: string;
 
+  @ApiProperty({type: [Answer]})
   @Type(() => Answer)
   @ValidateNested({ each: true })
   @IsArray()
@@ -31,8 +35,22 @@ export class Question {
 }
 
 export class QuestionResponse {
+  @ApiProperty({type: [Question]})
   @Type(() => Question)
   @ValidateNested({ each: true })
   @IsArray()
   root: Question[];
+}
+
+export class CreateQuestionResponse {
+  @ApiProperty({type: [Question]})
+  @Type(() => Question)
+  @ValidateNested({ each: true })
+  @IsArray()
+  questionReponse: Question[];
+
+  @ApiProperty({type: String, required: true})
+  @Type(() => String)
+  @IsString()
+  lessonId: string;
 }
