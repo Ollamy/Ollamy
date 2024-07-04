@@ -1,5 +1,6 @@
 import {
-  Injectable,
+  ConflictException,
+  Injectable, Logger,
 } from '@nestjs/common';
 import {
   GenerateContentRequest,
@@ -13,6 +14,7 @@ import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import prisma from '../client';
 import { generateKeyBetween } from 'order/order.service';
+import { CourseTrueResponse } from '../course/course.dto';
 
 @Injectable()
 export class AiService {
@@ -83,7 +85,7 @@ export class AiService {
       orderBy: { order: 'desc' },
       select: { order: true },
     });
-    return result?.order ?? "a0";
+    return result?.order ?? null;
   }
 
   async createQuizz(questions: CreateQuestionResponse, lessonId: string) {
@@ -95,8 +97,8 @@ export class AiService {
     for (const questionData of questions.questionReponse) {
       const questionId = uuidv4();
 
-      const questionOrder = lastQuestionOrder;
       lastQuestionOrder = generateKeyBetween(lastQuestionOrder, null);
+      const questionOrder = lastQuestionOrder;
 
       const answersForThisQuestion: Prisma.AnswerCreateManyInput[] = [];
       let trustAnswerId: string | undefined;
@@ -133,11 +135,16 @@ export class AiService {
       answersToCreate.push(...answersForThisQuestion);
     }
 
-    await prisma.$transaction([
-      prisma.question.createMany({ data: questionsToCreate }),
-      prisma.answer.createMany({ data: answersToCreate }),
-    ]);
+    try {
+      await prisma.$transaction([
+        prisma.question.createMany({ data: questionsToCreate }),
+        prisma.answer.createMany({ data: answersToCreate }),
+      ]);
+    } catch (e) {
+      Logger.error('Failed to create questions !');
+      throw new ConflictException('Failed to create questions');
+    }
 
-    return true;
+    return { success: true } as CourseTrueResponse;
   }
 }

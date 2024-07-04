@@ -2,11 +2,7 @@ import {
   Controller,
   Post,
   Body,
-  Delete,
-  Get,
-  Put,
   Param,
-  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -21,8 +17,8 @@ import {
 import { CreateQuestionResponse, FileAi, QuestionResponse } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { OllContext } from 'context/context.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CourseTrueResponse } from '../course/course.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Ai')
@@ -72,7 +68,7 @@ export class AiController {
   })
   @ApiResponse({
     status: 200,
-    type: Boolean,
+    type: CourseTrueResponse,
   })
   @LoggedMiddleware(true)
   @Post('/create-generated-question/:lessonId')

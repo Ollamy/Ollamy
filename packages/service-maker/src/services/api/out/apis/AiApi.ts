@@ -3,6 +3,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CourseTrueResponse,
   CreateQuestionResponse,
   QuestionResponse,
 } from '../models/index';
@@ -22,7 +23,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    async createQuestionRaw(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<boolean> {
+    async createQuestionRaw(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         if (requestParameters.lessonId === null || requestParameters.lessonId === undefined) {
             throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling createQuestion.');
         }
@@ -45,16 +46,12 @@ export class AiApi extends runtime.BaseAPI {
             body: requestParameters.createQuestionResponse,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return response.json();
-        } else {
-            return response.text();
-        }
+        return response.json();
     }
 
     /**
      */
-    static createQuestion(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<boolean> {
+    static createQuestion(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
         return localAiApi.createQuestionRaw(requestParameters, initOverrides);
     }
 
