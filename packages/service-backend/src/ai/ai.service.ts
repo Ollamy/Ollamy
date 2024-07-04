@@ -9,7 +9,7 @@ import {
   HarmCategory,
   VertexAI
 } from '@google-cloud/vertexai'
-import { CreateQuestionResponse, FileAi, QuestionResponse } from './ai.dto';
+import { FileAi, Question } from './ai.dto';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import prisma from '../client';
@@ -55,7 +55,7 @@ export class AiService {
   }
 
 
-  async generateText(file: FileAi): Promise<QuestionResponse> {
+  async generateText(file: FileAi): Promise<Question[]> {
     const req: GenerateContentRequest = {
       contents: [
         {
@@ -74,9 +74,10 @@ export class AiService {
         parts: [{ text: 'You are an AI assistant designed to create multiple-choice questions from PDF files. You will receive a PDF file as input. Your task is to extract important information from the PDF and formulate relevant questions with answer choices. Make sure the questions are clear, concise, and cover the key points of the document. Provide four answer choices for each question, only one of which is correct. If the PDF is unreadable or does not contain enough information to generate questions, report an error to the user. Return your answer as a JSON string in the following format:  ```json { "question": "...", "answers": [ { "answer": "...", "correct": true }, { "answer": "...", "correct": false }, { "answer": "...", "correct": false }, { "answer": "...", "correct": false } ] }, ...} ```' }],
       }
     };
+
     const response = await AiService.generativeModel.generateContent(req);
     const data = response.response.candidates[0].content.parts[0].text;
-    return JSON.parse(data);
+    return JSON.parse(data) as Question[];
   }
 
   private async getLastOrderQuestion(lessonId: string) {
@@ -88,13 +89,13 @@ export class AiService {
     return result?.order ?? null;
   }
 
-  async createQuizz(questions: CreateQuestionResponse, lessonId: string) {
+  async createQuizz(questions: Question[], lessonId: string) {
     let lastQuestionOrder = await this.getLastOrderQuestion(lessonId);
 
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
     const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
 
-    for (const questionData of questions.questionReponse) {
+    for (const questionData of questions) {
       const questionId = uuidv4();
 
       lastQuestionOrder = generateKeyBetween(lastQuestionOrder, null);

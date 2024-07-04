@@ -34,18 +34,3 @@ export class Question {
   answers: Answer[];
 }
 
-export class QuestionResponse {
-  @ApiProperty({type: [Question]})
-  @Type(() => Question)
-  @ValidateNested({ each: true })
-  @IsArray()
-  root: Question[];
-}
-
-export class CreateQuestionResponse {
-  @ApiProperty({type: [Question], required: true})
-  @Type(() => Question)
-  @ValidateNested({ each: true })
-  @IsArray()
-  questionReponse: Question[];
-}

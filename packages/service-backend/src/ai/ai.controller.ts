@@ -14,7 +14,7 @@ import {
   ApiResponse,
   ApiParam,
 } from '@nestjs/swagger';
-import { CreateQuestionResponse, FileAi, QuestionResponse } from 'ai/ai.dto';
+import { FileAi, Question, } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -40,7 +40,7 @@ export class AiController {
   @ApiResponse({
     status: 200,
     description: 'The questions generated from the pdf file',
-    type: QuestionResponse,
+    type: [Question],
   })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
@@ -48,7 +48,7 @@ export class AiController {
   @Post('/generate-question')
   async generateText(
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<QuestionResponse> {
+  ): Promise<Question[]> {
     const AiFile: FileAi = {
       data: file.buffer.toString('base64'),
       mimeType: file.mimetype,
@@ -58,7 +58,7 @@ export class AiController {
   }
 
   @ApiBody({
-    type: CreateQuestionResponse,
+    type: [Question],
     description: 'Object containing a list of questions with their answers to create'
   })
   @ApiParam({
@@ -73,7 +73,7 @@ export class AiController {
   @LoggedMiddleware(true)
   @Post('/create-generated-question/:lessonId')
   async createQuestion(
-    @Body() questions: CreateQuestionResponse,
+    @Body() questions: Question[],
     @Param('lessonId') lessonId: string,
   ) {
     return await this.aiService.createQuizz(questions, lessonId);

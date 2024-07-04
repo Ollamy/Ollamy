@@ -4,13 +4,12 @@
 import * as runtime from '../runtime';
 import type {
   CourseTrueResponse,
-  CreateQuestionResponse,
-  QuestionResponse,
+  Question,
 } from '../models/index';
 
 export interface CreateQuestionRequest {
     lessonId: string;
-    createQuestionResponse: CreateQuestionResponse;
+    question: Array<Question>;
 }
 
 export interface GenerateTextRequest {
@@ -28,8 +27,8 @@ export class AiApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling createQuestion.');
         }
 
-        if (requestParameters.createQuestionResponse === null || requestParameters.createQuestionResponse === undefined) {
-            throw new runtime.RequiredError('createQuestionResponse','Required parameter requestParameters.createQuestionResponse was null or undefined when calling createQuestion.');
+        if (requestParameters.question === null || requestParameters.question === undefined) {
+            throw new runtime.RequiredError('question','Required parameter requestParameters.question was null or undefined when calling createQuestion.');
         }
 
         const queryParameters: any = {};
@@ -43,7 +42,7 @@ export class AiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.createQuestionResponse,
+            body: requestParameters.question,
         }, initOverrides);
 
         return response.json();
@@ -57,7 +56,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    async generateTextRaw(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionResponse> {
+    async generateTextRaw(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -95,7 +94,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    static generateText(requestParameters: GenerateTextRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionResponse> {
+    static generateText(requestParameters: GenerateTextRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
         return localAiApi.generateTextRaw(requestParameters, initOverrides);
     }
 

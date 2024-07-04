@@ -325,19 +325,6 @@ export type CreateQuestionModelDifficultyEnum = typeof CreateQuestionModelDiffic
 /**
  * 
  * @export
- * @interface CreateQuestionResponse
- */
-export interface CreateQuestionResponse {
-    /**
-     * 
-     * @type {Array<Question>}
-     * @memberof CreateQuestionResponse
-     */
-    questionReponse: Array<Question>;
-}
-/**
- * 
- * @export
  * @interface CreateSectionModel
  */
 export interface CreateSectionModel {
@@ -1118,19 +1105,6 @@ export const QuestionModelDifficultyEnum = {
 } as const;
 export type QuestionModelDifficultyEnum = typeof QuestionModelDifficultyEnum[keyof typeof QuestionModelDifficultyEnum];
 
-/**
- * 
- * @export
- * @interface QuestionResponse
- */
-export interface QuestionResponse {
-    /**
-     * 
-     * @type {Array<Question>}
-     * @memberof QuestionResponse
-     */
-    root: Array<Question>;
-}
 /**
  * 
  * @export
