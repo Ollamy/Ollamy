@@ -259,6 +259,16 @@ export class SectionService {
       )`;
 
     if (remainingLessons[0].nb_left === BigInt(0)) {
+      const avg_percentage = await prisma.usertoLesson.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          user_id: userId,
+          lesson_id: lessonId,
+        },
+      });
+
       await prisma.usertoSection.update({
         where: {
           section_id_user_id: {
@@ -266,7 +276,10 @@ export class SectionService {
             user_id: userId,
           },
         },
-        data: { status: Status.COMPLETED },
+        data: {
+          status: Status.COMPLETED,
+          score: avg_percentage._avg.score,
+        },
       });
 
       CourseService.UpdateCourseCompletionFromLesson(

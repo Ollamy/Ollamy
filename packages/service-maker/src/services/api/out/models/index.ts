@@ -350,6 +350,25 @@ export interface CreateSectionModel {
 /**
  * 
  * @export
+ * @interface CreateSessionModel
+ */
+export interface CreateSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSessionModel
+     */
+    currentQuestionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSessionModel
+     */
+    sessionId: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateUserModel
  */
 export interface CreateUserModel {
@@ -395,6 +414,69 @@ export const CreateUserModelPlatformEnum = {
 } as const;
 export type CreateUserModelPlatformEnum = typeof CreateUserModelPlatformEnum[keyof typeof CreateUserModelPlatformEnum];
 
+/**
+ * 
+ * @export
+ * @interface EnrollmentResponse
+ */
+export interface EnrollmentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof EnrollmentResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponse
+     */
+    epoch: number;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentResponseTotal
+ */
+export interface EnrollmentResponseTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponseTotal
+     */
+    total: number;
+    /**
+     * 
+     * @type {Array<EnrollmentResponse>}
+     * @memberof EnrollmentResponseTotal
+     */
+    enrollments: Array<EnrollmentResponse>;
+    /**
+     * 
+     * @type {Array<EnrollmentTotal>}
+     * @memberof EnrollmentResponseTotal
+     */
+    cumulative: Array<EnrollmentTotal>;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentTotal
+ */
+export interface EnrollmentTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    epoch: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    total: number;
+}
 /**
  * 
  * @export
@@ -653,6 +735,31 @@ export type GetSectionsModelStatusEnum = typeof GetSectionsModelStatusEnum[keyof
 /**
  * 
  * @export
+ * @interface GetSessionModel
+ */
+export interface GetSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSessionModel
+     */
+    currentQuestionId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetSessionModel
+     */
+    correctAnswers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetSessionModel
+     */
+    totalQuestions: number;
+}
+/**
+ * 
+ * @export
  * @interface GetUserModel
  */
 export interface GetUserModel {
@@ -706,6 +813,49 @@ export interface GetUsersBadges {
      * @memberof GetUsersBadges
      */
     badges: Array<BadgeModel>;
+}
+/**
+ * 
+ * @export
+ * @interface GradeStatisticModel
+ */
+export interface GradeStatisticModel {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    average?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    min?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    max?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    firstname?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    lastname?: string;
 }
 /**
  * 
@@ -1688,4 +1838,54 @@ export interface ValidateAnswerResponse {
      * @memberof ValidateAnswerResponse
      */
     hp?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateQuestionSessionModel
+ */
+export interface ValidateQuestionSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {AnswerModel}
+     * @memberof ValidateQuestionSessionModel
+     */
+    answer: AnswerModel;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateQuestionSessionResponseModel
+ */
+export interface ValidateQuestionSessionResponseModel {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    success: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    nextQuestionId: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    answerId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    hp: number;
 }

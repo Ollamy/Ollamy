@@ -27,6 +27,7 @@ import {
   UserCourseHp,
   Durationtype,
   ShareCourseCode,
+  EnrollmentResponseTotal,
 } from 'course/course.dto';
 import { CourseSectionModel, GetSectionsModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
@@ -84,6 +85,24 @@ export class CourseController {
   @Delete()
   async deleteCourse(@Body() body: IdCourseModel): Promise<CourseIdResponse> {
     return this.courseService.deleteCourse(body);
+  }
+
+  @ApiOkResponse({
+    description: 'User enrollments in courses',
+    type: EnrollmentResponseTotal,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'Id of the course (optional)',
+    required: false,
+  })
+  @LoggedMiddleware(true)
+  @Get('/enrollment')
+  async getUserEnrollments(
+    @Query('id') id: string,
+    @OllContext() ctx: any,
+  ): Promise<EnrollmentResponseTotal> {
+    return this.courseService.getEnrollmentsForOwnerCourse(ctx.__user.id, id);
   }
 
   @ApiOkResponse({

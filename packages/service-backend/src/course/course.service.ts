@@ -15,6 +15,9 @@ import {
   ShareCourseCode,
   ExpirationMap,
   Durationtype,
+  EnrollmentResponse,
+  EnrollmentTotal,
+  EnrollmentResponseTotal,
 } from './course.dto';
 import { GetSectionsModel } from 'section/section.dto';
 import { Course, Prisma, Role, Status } from '@prisma/client';
@@ -393,6 +396,16 @@ export class CourseService {
     )`;
 
     if (remainingSection[0].nb_left === BigInt(0)) {
+      const avg_percentage = await prisma.usertoSection.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          user_id: userId,
+          section_id: sectionId,
+        }
+      });
+
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {
@@ -400,8 +413,68 @@ export class CourseService {
             user_id: userId,
           },
         },
-        data: { status: Status.COMPLETED },
+        data: {
+          status: Status.COMPLETED,
+          score: avg_percentage._avg.score,
+        },
       });
+    }
+  }
+
+  private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
+    let total = 0;
+
+    enrollments.sort((a, b) => a.epoch - b.epoch);
+
+    return enrollments.map(enrollment => (
+      {
+        epoch: enrollment.epoch,
+        total: ++total,
+      }
+    ));
+  }
+
+  async getEnrollmentsForOwnerCourse(ownerId: string, courseId?: string | undefined): Promise<EnrollmentResponseTotal> {
+    try {
+      const enrollments = await prisma.usertoCourse.findMany({
+        where: courseId ? {
+          course_id: courseId,
+          course: {
+            id: courseId,
+            owner_id: ownerId
+          }
+        } : {
+          course: {
+            owner_id: ownerId
+          }
+        },
+        select: {
+          user_id: true,
+          created_at: true,
+        },
+      });
+
+      if (!enrollments.length) {
+        throw new NotFoundException(`No enrollments found for course with id: ${courseId}`);
+      }
+
+      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
+        {
+          userId: enrollment.user_id,
+          epoch: enrollment.created_at.getTime(),
+        }
+      ));
+
+      const cumulative = this.calculateCumulativeEnrollments(response);
+
+      return {
+        total: response.length,
+        enrollments: response,
+        cumulative,
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Failed to get enrollments for course.');
     }
   }
 }
