@@ -117,19 +117,18 @@ export class AiService {
     let response;
     try {
       response = await AiService.generativeModel.generateContent(req);
-      console.log(JSON.stringify(response, null, 2));
     } catch (e) {
       Logger.error(e)
       throw new ConflictException('Failed to generate questions');
     }
 
-    const data = response.response.candidates[0].content.parts[0].text;
+    const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
 
-    if (data.includes('error')) {
-      throw new ConflictException(JSON.parse(data));
+    if (data.error) {
+      throw new ConflictException(data);
     }
 
-    return JSON.parse(data) as Question[];
+    return data as Question[];
   }
 
   private async getLastOrderQuestion(lessonId: string) {
