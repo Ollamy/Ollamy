@@ -8,6 +8,7 @@ import type {
 } from '../models/index';
 
 export interface CreateQuestionRequest {
+    lessonId: string;
     createQuestionResponse: CreateQuestionResponse;
 }
 
@@ -22,6 +23,10 @@ export class AiApi extends runtime.BaseAPI {
     /**
      */
     async createQuestionRaw(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<boolean> {
+        if (requestParameters.lessonId === null || requestParameters.lessonId === undefined) {
+            throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling createQuestion.');
+        }
+
         if (requestParameters.createQuestionResponse === null || requestParameters.createQuestionResponse === undefined) {
             throw new runtime.RequiredError('createQuestionResponse','Required parameter requestParameters.createQuestionResponse was null or undefined when calling createQuestion.');
         }
@@ -33,7 +38,7 @@ export class AiApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/ai/create-generated-question`,
+            path: `/ai/create-generated-question/{lessonId}`.replace(`{${"lessonId"}}`, encodeURIComponent(String(requestParameters.lessonId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

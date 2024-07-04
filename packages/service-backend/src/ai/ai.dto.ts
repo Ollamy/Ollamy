@@ -48,9 +48,4 @@ export class CreateQuestionResponse {
   @ValidateNested({ each: true })
   @IsArray()
   questionReponse: Question[];
-
-  @ApiProperty({type: String, required: true})
-  @Type(() => String)
-  @IsString()
-  lessonId: string;
 }

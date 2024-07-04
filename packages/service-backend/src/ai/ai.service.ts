@@ -9,8 +9,10 @@ import {
   VertexAI
 } from '@google-cloud/vertexai'
 import { CreateQuestionResponse, FileAi, QuestionResponse } from './ai.dto';
-import prisma from 'client';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
+import prisma from '../client';
+import { generateKeyBetween } from 'order/order.service';
 
 @Injectable()
 export class AiService {
@@ -75,38 +77,67 @@ export class AiService {
     return JSON.parse(data);
   }
 
-  async createQuizz(questions: CreateQuestionResponse): Promise<Boolean> {
-    questions.questionReponse.forEach(async (question) => {
-      const { id } = await prisma.question.create({
-        data: {
-          title: question.question,
-          type_question: QuestionType.TEXT,
-          type_answer: AnswerType.MULTIPLE_CHOICE,
-          lesson_id: questions.lessonId
-        },
-        select: {
-          id: true
-        }
-      })
+  private async getLastOrderQuestion(lessonId: string) {
+    const result = await prisma.question.findFirst({
+      where: { lesson_id: lessonId },
+      orderBy: { order: 'desc' },
+      select: { order: true },
+    });
+    return result?.order ?? "a0";
+  }
 
-      const trustedAnswer = await prisma.answer.createManyAndReturn({
-        data: question.answers.sort(
-          (a, b) => Number(b.correct) - Number(a.correct)).map(answer => { return { data: answer.answer, question_id: id } }
-        ) as unknown as Prisma.AnswerCreateManyInput[],
-        select: {
-          id: true
-        }
-      })[0];
+  async createQuizz(questions: CreateQuestionResponse, lessonId: string) {
+    let lastQuestionOrder = await this.getLastOrderQuestion(lessonId);
 
-      await prisma.question.update({
-        where: {
-          id: id
-        },
-        data: {
-          trust_answer_id: trustedAnswer.id
+    const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    for (const questionData of questions.questionReponse) {
+      const questionId = uuidv4();
+
+      const questionOrder = lastQuestionOrder;
+      lastQuestionOrder = generateKeyBetween(lastQuestionOrder, null);
+
+      const answersForThisQuestion: Prisma.AnswerCreateManyInput[] = [];
+      let trustAnswerId: string | undefined;
+
+      let currentAnswerOrder = 'a0';
+
+      for (const answerData of questionData.answers) {
+        const answerId = uuidv4();
+
+        answersForThisQuestion.push({
+          id: answerId,
+          question_id: questionId,
+          data: answerData.answer,
+          order: currentAnswerOrder,
+        });
+
+        if (answerData.correct) {
+          trustAnswerId = answerId;
         }
+
+        currentAnswerOrder = generateKeyBetween(currentAnswerOrder, null);
+      }
+
+      questionsToCreate.push({
+        id: questionId,
+        lesson_id: lessonId,
+        title: questionData.question,
+        type_question: QuestionType.TEXT,
+        type_answer: AnswerType.MULTIPLE_CHOICE,
+        order: questionOrder,
+        trust_answer_id: trustAnswerId,
       });
-    })
-    return true
+
+      answersToCreate.push(...answersForThisQuestion);
+    }
+
+    await prisma.$transaction([
+      prisma.question.createMany({ data: questionsToCreate }),
+      prisma.answer.createMany({ data: answersToCreate }),
+    ]);
+
+    return true;
   }
 }

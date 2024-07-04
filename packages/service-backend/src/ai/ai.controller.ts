@@ -16,6 +16,7 @@ import {
   ApiTags,
   ApiConsumes,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { CreateQuestionResponse, FileAi, QuestionResponse } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
@@ -64,15 +65,21 @@ export class AiController {
     type: CreateQuestionResponse,
     description: 'Object containing a list of questions with their answers to create'
   })
+  @ApiParam({
+    name: 'lessonId',
+    type: 'string',
+    description: 'The lesson id to create the questions for',
+  })
   @ApiResponse({
     status: 200,
     type: Boolean,
   })
   @LoggedMiddleware(true)
-  @Post('/create-generated-question')
+  @Post('/create-generated-question/:lessonId')
   async createQuestion(
     @Body() questions: CreateQuestionResponse,
-  ): Promise<Boolean> {
-    return await this.aiService.createQuizz(questions);
+    @Param('lessonId') lessonId: string,
+  ) {
+    return await this.aiService.createQuizz(questions, lessonId);
   }
 }

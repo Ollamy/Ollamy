@@ -334,12 +334,6 @@ export interface CreateQuestionResponse {
      * @memberof CreateQuestionResponse
      */
     questionReponse: Array<Question>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionResponse
-     */
-    lessonId: string;
 }
 /**
  * 
