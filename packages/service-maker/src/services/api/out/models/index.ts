@@ -3,6 +3,25 @@
 /**
  * 
  * @export
+ * @interface Answer
+ */
+export interface Answer {
+    /**
+     * 
+     * @type {string}
+     * @memberof Answer
+     */
+    answer: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Answer
+     */
+    correct: boolean;
+}
+/**
+ * 
+ * @export
  * @interface AnswerIdResponse
  */
 export interface AnswerIdResponse {
@@ -1077,6 +1096,25 @@ export const LoginUserModelPlatformEnum = {
 } as const;
 export type LoginUserModelPlatformEnum = typeof LoginUserModelPlatformEnum[keyof typeof LoginUserModelPlatformEnum];
 
+/**
+ * 
+ * @export
+ * @interface Question
+ */
+export interface Question {
+    /**
+     * 
+     * @type {string}
+     * @memberof Question
+     */
+    question: string;
+    /**
+     * 
+     * @type {Array<Answer>}
+     * @memberof Question
+     */
+    answers: Array<Answer>;
+}
 /**
  * 
  * @export
