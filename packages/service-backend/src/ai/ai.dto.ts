@@ -34,3 +34,19 @@ export class Question {
   answers: Answer[];
 }
 
+export enum AllowedMimeType {
+  PDF = 'application/pdf',
+  MP3 = 'audio/mpeg',
+  WAV = 'audio/wav',
+  PNG = 'image/png',
+  JPEG = 'image/jpeg',
+  TXT = 'text/plain',
+  MOV = 'video/mov',
+  MPEG = 'video/mpeg',
+  MP4 = 'video/mp4',
+  MPG = 'video/mpg',
+  AVI = 'video/avi',
+  WMV = 'video/wmv',
+  MPEGPS = 'video/mpegps',
+  FLV = 'video/flv',
+}

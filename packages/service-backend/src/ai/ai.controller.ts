@@ -5,6 +5,8 @@ import {
   Param,
   UploadedFile,
   UseInterceptors,
+  ConflictException,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -13,8 +15,9 @@ import {
   ApiConsumes,
   ApiResponse,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
-import { FileAi, Question, } from 'ai/ai.dto';
+import { AllowedMimeType, FileAi, Question, } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -42,19 +45,39 @@ export class AiController {
     description: 'The questions generated from the pdf file',
     type: [Question],
   })
+  @ApiQuery({
+    name: 'numberofquestions',
+    type: 'number',
+    schema: {
+      minimum: 1,
+    },
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
   @Post('/generate-question')
   async generateText(
     @UploadedFile() file: Express.Multer.File,
+    @Query('numberofquestions') numberOfQuestions: number = 10,
   ): Promise<Question[]> {
+    if (!file) {
+      throw new ConflictException('File is empty');
+    }
+
+    if (numberOfQuestions < 1) {
+      throw new ConflictException('Number of questions must be at least 1');
+    }
+
+    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+      throw new ConflictException(`File type ${file.mimetype} is not allowed`);
+    }
+
     const AiFile: FileAi = {
       data: file.buffer.toString('base64'),
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateText(AiFile);
+    return await this.aiService.generateText(AiFile, numberOfQuestions);
   }
 
   @ApiBody({

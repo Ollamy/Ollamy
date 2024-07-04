@@ -13,6 +13,7 @@ export interface CreateQuestionRequest {
 }
 
 export interface GenerateTextRequest {
+    numberofquestions: any;
     file?: Blob;
 }
 
@@ -57,7 +58,15 @@ export class AiApi extends runtime.BaseAPI {
     /**
      */
     async generateTextRaw(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
+        if (requestParameters.numberofquestions === null || requestParameters.numberofquestions === undefined) {
+            throw new runtime.RequiredError('numberofquestions','Required parameter requestParameters.numberofquestions was null or undefined when calling generateText.');
+        }
+
         const queryParameters: any = {};
+
+        if (requestParameters.numberofquestions !== undefined) {
+            queryParameters['numberofquestions'] = requestParameters.numberofquestions;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -94,7 +103,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    static generateText(requestParameters: GenerateTextRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
+    static generateText(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
         return localAiApi.generateTextRaw(requestParameters, initOverrides);
     }
 
