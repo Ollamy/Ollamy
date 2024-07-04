@@ -63,50 +63,27 @@ export class StatisticService {
     userId: string,
     courseId: string,
   ): Promise<CourseGradeStatisticModel[]> {
-    const { _avg, _max, _min } = await prisma.usertoCourse.aggregate({
-      _avg: {
-        score: true,
-      },
-      _max: {
-        score: true,
-      },
-      _min: {
-        score: true,
-      },
-      where: {
-        course_id: courseId,
-        AND: {
-          course: {
-            owner_id: userId,
-          },
-        },
-      },
-    });
+    const data: UserGradeStatisticModel[] = await prisma.$queryRaw`
+  SELECT AVG(utc.score)::INTEGER as average, MAX(utc.score) as max, MIN(utc.score) as min, cs.title
+     FROM "UsertoCourse" utc
+     INNER JOIN "User" us on utc.user_id = us.id
+     INNER JOIN "Course" cs on cs.id = ${courseId}::uuid
+     AND cs.owner_id = ${userId}::uuid
+   GROUP BY cs.title`;
 
-    const { title } = await prisma.course.findUnique({
-      select: {
-        title: true,
-      },
-      where: {
-        id: courseId,
-        owner_id: userId,
-      },
-    });
-    const data: CourseGradeStatisticModel = {
-      average: _avg.score,
-      max: _max.score,
-      min: _min.score,
-      title,
-    };
+   if (!data) throw new Error('Unable to retrieve data');
+   let result;
 
-    let result = undefined;
-    if (operation !== StatisticOperation.ALL) {
-      result = {
-        [operation.toLowerCase()]: data[operation.toLowerCase()],
-      };
-    }
-    return [result ?? data];
-  }
+   if (operation !== StatisticOperation.ALL) {
+     result = (data as Array<object>).map((course) => {
+       return {
+         [operation.toLowerCase()]: course[operation.toLowerCase()],
+         title: course['title'],
+       };
+     });
+   }
+   return result ?? data;
+ }
 
   static async getGradeByTypeOfSection(
     operation: StatisticOperation,
