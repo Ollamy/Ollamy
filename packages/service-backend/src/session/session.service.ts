@@ -125,12 +125,12 @@ export class SessionService {
   ) {
     let hp: number;
 
-    if (isCorrect) {
+    if (isCorrect || nextQuestion === null) {
       await prisma.userSession.update({
         where: { id: sessionId },
         data: {
           correct_answers: {
-            increment: 1,
+            increment: isCorrect ? 1 : 0,
           },
           current_question_id: nextQuestion?.id,
           status: nextQuestion ? Status.IN_PROGRESS : Status.COMPLETED,

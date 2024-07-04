@@ -38,7 +38,6 @@ export class StatisticController {
   @ApiQuery({
     name: 'courseId',
     description: 'course id',
-    required: false,
   })
   @LoggedMiddleware(true)
   @Get(':type/:operation')
