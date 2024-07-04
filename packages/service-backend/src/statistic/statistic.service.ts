@@ -63,7 +63,7 @@ export class StatisticService {
     userId: string,
     courseId: string,
   ): Promise<CourseGradeStatisticModel[]> {
-    const data: UserGradeStatisticModel[] = await prisma.$queryRaw`
+    const data: CourseGradeStatisticModel[] = await prisma.$queryRaw`
   SELECT AVG(utc.score)::INTEGER as average, MAX(utc.score) as max, MIN(utc.score) as min, cs.title
      FROM "UsertoCourse" utc
      INNER JOIN "User" us on utc.user_id = us.id
