@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) {}
+  constructor(private readonly cronService: TasksService) { }
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -286,17 +286,50 @@ export class CourseService {
       throw new ConflictException('Course is full for subscription plan !');
     }
 
-    const userToCourseDb = await prisma.usertoCourse.create({
-      data: {
-        user_id: userId,
-        course_id: joinCourseId,
-      },
-    });
+    await prisma.$transaction(async (prisma) => {
+      const userToCourse = await prisma.usertoCourse.create({
+        data: {
+          user_id: userId,
+          course_id: joinCourseId,
+        },
+      });
 
-    if (!userToCourseDb) {
-      Logger.error('Failed to add user to course !');
-      throw new ConflictException('Failed to add user to course !');
-    }
+      if (!userToCourse) {
+        throw new ConflictException('Failed to add user to course');
+      }
+  
+      const userToSectionDb = await prisma.section.findMany({
+        where: {
+          course_id: joinCourseId,
+        },
+      });
+
+      await prisma.usertoSection.createMany({
+        data: userToSectionDb.map((section) => {
+          return {
+            user_id: userId,
+            section_id: section.id,
+          };
+        }),
+      });
+
+      const userToLessonDb = await prisma.lesson.findMany({
+        where: {
+          section: {
+            course_id: joinCourseId,
+          },
+        },
+      });
+
+      await prisma.usertoLesson.createMany({
+        data: userToLessonDb.map((lesson) => {
+          return {
+            user_id: userId,
+            lesson_id: lesson.id,
+          };
+        }),
+      });
+    });
 
     await RedisCacheService.run('DEL', `sharecode:${code}`);
     return { success: true } as CourseTrueResponse;
@@ -366,7 +399,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };

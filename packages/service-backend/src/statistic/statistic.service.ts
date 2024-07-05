@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { Role, Status } from '@prisma/client';
 import prisma from 'client';
 import {
   CourseGradeStatisticModel,
@@ -18,17 +19,34 @@ export class StatisticService {
     ctx: any,
     courseId?: string,
   ): Promise<GradeStatisticModel[]> {
-    if (!courseId) throw new Error('courseId is required');
+    const { role_user } = await prisma.usertoCourse.findFirst({
+      where: {
+        course_id: courseId,
+        user_id: ctx.__user.id,
+      },
+      select: {
+        role_user: true,
+      },
+    }) ?? { role_user: null };
+
+    if (!role_user) throw new ConflictException('Course not found');
 
     let result = undefined;
 
     switch (type) {
       case StatisticType.STUDENT:
-        result = await StatisticService.getGradeByTypeOfUser(
-          operation,
-          ctx.__user.id,
-          courseId,
-        );
+        if (role_user === Role.OWNER) {
+          result = await StatisticService.getGradeByTypeOfUser(
+            operation,
+            ctx.__user.id,
+            courseId,
+          );
+        } else if (role_user === Role.MEMBER) {
+          result = await StatisticService.getGradeForStudent(
+            ctx.__user.id,
+            courseId,
+          );
+        }
         break;
       case StatisticType.COURSE:
         result = await StatisticService.getGradeByTypeOfCourse(
@@ -58,6 +76,64 @@ export class StatisticService {
     return result;
   }
 
+  static async getGradeForStudent(id: any, courseId: string) {
+    const data = await prisma.userSession.findMany({
+      where: {
+        user_id: id,
+        course_id: courseId,
+        status: Status.COMPLETED,
+      },
+      select: {
+        lesson_id: true,
+        correct_answers: true,
+        total_questions: true,
+        created_at: true,
+        end_date: true,
+        lesson: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    if (!data) throw new ConflictException('No session found');
+
+    const lessonResults = data.reduce((acc, session) => {
+      const lessonId = session.lesson_id;
+      const existingLesson = acc.get(lessonId);
+      if (!existingLesson) {
+        acc.set(lessonId, {
+          lessonId,
+          title: session.lesson.title,
+          average: 0,
+          max: 0,
+          min: 0,
+          sessions: [],
+        });
+      }
+
+      acc.get(lessonId).sessions.push({
+        correctAnswers: session.correct_answers,
+        totalQuestions: session.total_questions,
+        timeTakenInSeconds: Math.round((session.end_date.getTime() - session.created_at.getTime()) / 1000),
+      });
+
+      const lessonData = acc.get(lessonId);
+      lessonData.average = Math.round(
+        (lessonData.average * (acc.get(lessonId).sessions.length - 1) + session.correct_answers) /
+        acc.get(lessonId).sessions.length
+      );
+      lessonData.max = Math.max(lessonData.max, session.correct_answers);
+      lessonData.min = Math.min(lessonData.min, session.correct_answers);
+
+      return acc;
+    }, new Map());
+
+    return Array.from(lessonResults.values());
+  }
+
+
   static async getGradeByTypeOfCourse(
     operation: StatisticOperation,
     userId: string,
@@ -71,19 +147,19 @@ export class StatisticService {
      AND cs.owner_id = ${userId}::uuid
    GROUP BY cs.title`;
 
-   if (!data) throw new Error('Unable to retrieve data');
-   let result;
+    if (!data) throw new Error('Unable to retrieve data');
+    let result;
 
-   if (operation !== StatisticOperation.ALL) {
-     result = (data as Array<object>).map((course) => {
-       return {
-         [operation.toLowerCase()]: course[operation.toLowerCase()],
-         title: course['title'],
-       };
-     });
-   }
-   return result ?? data;
- }
+    if (operation !== StatisticOperation.ALL) {
+      result = (data as Array<object>).map((course) => {
+        return {
+          [operation.toLowerCase()]: course[operation.toLowerCase()],
+          title: course['title'],
+        };
+      });
+    }
+    return result ?? data;
+  }
 
   static async getGradeByTypeOfSection(
     operation: StatisticOperation,

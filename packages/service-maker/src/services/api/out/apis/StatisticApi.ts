@@ -9,7 +9,7 @@ import type {
 export interface GradeRequest {
     type: GradeTypeEnum;
     operation: GradeOperationEnum;
-    courseId?: string;
+    courseId: string;
 }
 
 /**
@@ -25,6 +25,10 @@ export class StatisticApi extends runtime.BaseAPI {
 
         if (requestParameters.operation === null || requestParameters.operation === undefined) {
             throw new runtime.RequiredError('operation','Required parameter requestParameters.operation was null or undefined when calling grade.');
+        }
+
+        if (requestParameters.courseId === null || requestParameters.courseId === undefined) {
+            throw new runtime.RequiredError('courseId','Required parameter requestParameters.courseId was null or undefined when calling grade.');
         }
 
         const queryParameters: any = {};
