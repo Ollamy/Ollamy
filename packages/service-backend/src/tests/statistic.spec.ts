@@ -8,7 +8,9 @@ import {
 } from './data/statistic.data';
 import { StatisticService } from 'statistic/statistic.service';
 import { StatisticOperation, StatisticType } from 'statistic/statistic.dto';
-import { courseId } from './data/course.data';
+import { courseId, mockUserToCourse } from './data/course.data';
+import { Role } from '@prisma/client';
+import prisma from 'client';
 
 describe('createSession', () => {
   let statisticService: StatisticService;
@@ -22,6 +24,8 @@ describe('createSession', () => {
   });
 
   it('should return a list of course statistics', async () => {
+    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfCourse')
       .mockResolvedValue([mockCourseStatisticData]);
@@ -38,6 +42,8 @@ describe('createSession', () => {
   });
 
   it('should return a list of section statistics', async () => {
+    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfSection')
       .mockResolvedValue(mockSectionStatisticData);
@@ -54,6 +60,8 @@ describe('createSession', () => {
   });
 
   it('should return a list of lesson statistics', async () => {
+    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfLesson')
       .mockResolvedValue(mockLessonStatisticData);
@@ -70,6 +78,8 @@ describe('createSession', () => {
   });
 
   it('should return a list of user statistics', async () => {
+    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue({...mockUserToCourse, role_user: Role.OWNER});
+
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfUser')
       .mockResolvedValue([mockUserStatisticData]);
