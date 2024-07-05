@@ -287,13 +287,17 @@ export class CourseService {
     }
 
     await prisma.$transaction(async (prisma) => {
-      await prisma.usertoCourse.create({
+      const userToCourse = await prisma.usertoCourse.create({
         data: {
           user_id: userId,
           course_id: joinCourseId,
         },
       });
 
+      if (!userToCourse) {
+        throw new ConflictException('Failed to add user to course');
+      }
+  
       const userToSectionDb = await prisma.section.findMany({
         where: {
           course_id: joinCourseId,
