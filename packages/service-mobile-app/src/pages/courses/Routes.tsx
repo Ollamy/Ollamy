@@ -1,10 +1,9 @@
 import { Route, Routes } from 'react-router-native';
-import CourseDashboard from 'src/pages/courses/dashboard/CourseDashboard/CourseDashboard';
-import SectionDashboard from 'src/pages/courses/dashboard/SectionDashboard/SectionDashboard';
+import Lesson from 'src/pages/courses/dashboard/lesson';
+import LessonsList from 'src/pages/courses/dashboard/LessonsList/LessonsList';
+import SectionsList from 'src/pages/courses/dashboard/SectionsList/SectionsList';
 import FindCourse from 'src/pages/courses/FindCourse/FindCourse';
 import JoinCourse from 'src/pages/courses/JoinCourse/JoinCourse';
-
-import Lesson from './dashboard/lesson';
 
 function CourseRouter() {
   return (
@@ -12,8 +11,8 @@ function CourseRouter() {
       <Route path={':id/join'} element={<JoinCourse />} />
       <Route path={'find'} element={<FindCourse />} />
 
-      <Route path={':id'} element={<CourseDashboard />} />
-      <Route path={':id/section/:sectionId'} element={<SectionDashboard />} />
+      <Route path={':id'} element={<SectionsList />} />
+      <Route path={':id/section/:sectionId'} element={<LessonsList />} />
       <Route path={':id/section/:sectionId/lesson/:lessonId'} element={<Lesson />} />
     </Routes>
   );

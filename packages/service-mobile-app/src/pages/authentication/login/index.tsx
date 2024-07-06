@@ -4,23 +4,11 @@ import BACKGROUND from 'assets/background-big.png';
 // @ts-ignore
 import Ollamy from 'assets/Ollamy.png';
 import type { AxiosError, AxiosResponse } from 'axios';
-import {
-  Box,
-  Button,
-  FormControl,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  Input,
-  Pressable,
-  ScrollView,
-  Text,
-  VStack,
-} from 'native-base';
+import { Box, Button, FormControl, Heading, HStack, Icon, Image, Input, Pressable, Text, VStack } from 'native-base';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SafeAreaView } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate } from 'react-router-dom';
@@ -90,26 +78,20 @@ function Login(): JSX.Element {
   };
 
   return (
-    <SafeAreaView>
-      <Image source={BACKGROUND} position={'absolute'} alt={'background'} />
-      <VStack w={'100%'} h={'100%'} paddingY={16} justifyContent={'flex-end'}>
-        <Box w={'full'} h={'full'} bg={'white'} opacity={0.97} borderRadius={8} p={'24px'}>
-          <VStack w={'full'}>
-            <HStack alignItems={'center'} space={'md'} w={'full'}>
-              <Image source={Ollamy} w={'72px'} h={'38px'} resizeMode={'contain'} alt={'ollamy'} />
-              <Heading color={'#758EE9'} fontWeight={'bold'} fontSize={24}>
-                Ollamy
-              </Heading>
-            </HStack>
-            <ScrollView
-              contentContainerStyle={{
-                justifyContent: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-              }}
-            >
-              <VStack flex={'1'} justifyContent={'center'} space={6} alignItems={'center'} px={5}>
+    <KeyboardAwareScrollView extraScrollHeight={35}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <VStack h={'full'} w={'full'}>
+          <Image source={BACKGROUND} alt={'background'} w={'full'} h={'200px'} resizeMode={'cover'} />
+          <Box w={'full'} h={'full'} bg={'white'} opacity={0.97} borderRadius={8} p={'24px'}>
+            <VStack w={'full'} space={'16px'}>
+              <HStack alignItems={'center'} space={'md'} w={'full'}>
+                <Image source={Ollamy} w={'72px'} h={'38px'} resizeMode={'contain'} alt={'ollamy'} />
+                <Heading color={'#876BF6'} fontWeight={'bold'} fontSize={24}>
+                  Ollamy
+                </Heading>
+              </HStack>
+
+              <VStack w={'full'} justifyContent={'center'} space={6} alignItems={'center'} px={5}>
                 <Controller
                   control={control}
                   name={'email'}
@@ -163,6 +145,7 @@ function Login(): JSX.Element {
                     </FormControl>
                   )}
                 />
+
                 <DotStepper currentStep={3} stepsNumber={3} goToStep={() => {}} />
                 <Button variant={'yellow'} isLoading={isLoading} onPress={handleSubmit(onSubmit)} w={'full'}>
                   LOG IN
@@ -176,13 +159,12 @@ function Login(): JSX.Element {
                     Register
                   </Text>
                 </HStack>
-                <Toast />
               </VStack>
-            </ScrollView>
-          </VStack>
-        </Box>
-      </VStack>
-    </SafeAreaView>
+            </VStack>
+          </Box>
+        </VStack>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }
 

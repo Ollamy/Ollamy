@@ -17,12 +17,12 @@ interface LectureProps {
   setLectureState: (v: boolean) => void;
 }
 
-function Lecture(props: LectureProps) {
+function LessonLecture(props: LectureProps) {
   const navigate = useNavigate();
   const { setLectureState, lessonId } = props;
 
   const { id: courseId } = useParams();
-  const { data: course, isFetching: isLessonLectureFetching } = useGetLessonLectureQuery({ id: lessonId });
+  const { data: lecture, isFetching: isLessonLectureFetching } = useGetLessonLectureQuery({ id: lessonId });
   const {
     data: userHp,
     isFetching: isCourseHpFetching,
@@ -71,7 +71,7 @@ function Lecture(props: LectureProps) {
   }, [onClose, userHp]);
 
   if (isCourseHpFetching || isLessonLectureFetching || isLessonDataFetching) return <Text>Loading...</Text>;
-  if (!course || !userHp || !lessonData) return <ErrorPage />;
+  if (!lecture || lecture.length === 0 || !userHp || !lessonData) return <ErrorPage />;
 
   return (
     <>
@@ -96,7 +96,7 @@ function Lecture(props: LectureProps) {
           </Text>
           <SafeAreaView style={{ width: '100%' }}>
             <ScrollView contentInsetAdjustmentBehavior={'automatic'}>
-              <Markdown>{course[0].data}</Markdown>
+              <Markdown>{lecture[0].data}</Markdown>
             </ScrollView>
           </SafeAreaView>
         </VStack>
@@ -115,4 +115,4 @@ function Lecture(props: LectureProps) {
   );
 }
 
-export default Lecture;
+export default LessonLecture;

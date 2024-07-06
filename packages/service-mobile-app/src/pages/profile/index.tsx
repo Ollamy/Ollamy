@@ -1,9 +1,12 @@
 // @ts-ignore
+import { FontAwesome6 } from '@expo/vector-icons';
+// @ts-ignore
 import PROFILE from 'assets/icons/user-pp.png';
-import { Box, Button, Text } from 'native-base';
+import { Box, Button, Icon, Text } from 'native-base';
 import { Image, StyleSheet, View } from 'react-native';
 import RCTNetworking from 'react-native/Libraries/Network/RCTNetworking';
 import { useNavigate } from 'react-router-native';
+import { StatCard } from 'src/pages/profile/ProfileStats';
 import { useGetUserQuery } from 'src/services/user/user';
 
 const styles = StyleSheet.create({
@@ -49,6 +52,11 @@ function Profile() {
         </Text>
         <Text>{user.email}</Text>
       </Box>
+      <StatCard
+        title={'Day streak'}
+        value={'12'}
+        icon={<Icon as={<FontAwesome6 name={'fire'} />} size={8} mr={2} color={'muted.400'} />}
+      />
       <Button
         variant={'red'}
         onPress={() =>
@@ -57,7 +65,7 @@ function Profile() {
           })
         }
       >
-        log out
+        Log out
       </Button>
     </View>
   );

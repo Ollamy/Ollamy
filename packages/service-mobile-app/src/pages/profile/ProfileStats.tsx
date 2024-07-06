@@ -6,11 +6,11 @@ import type { InterfaceBoxProps } from 'native-base/lib/typescript/components/pr
 interface StatCardProps extends InterfaceBoxProps {
   title: string;
   value: string;
+  icon: JSX.Element;
   bg?: InterfaceBoxProps['bg'];
-  icon?: JSX.Element;
 }
 
-function StatCard({ title, value, icon, bg = 'white', ...props }: StatCardProps) {
+export function StatCard({ title, value, icon, bg = 'white', ...props }: StatCardProps) {
   return (
     <Box w={'full'} shadow={2} borderColor={'coolGray.200'} borderWidth={1} borderRadius={12} bg={bg} p={4} {...props}>
       <HStack w={'full'} alignItems={'center'} space={3}>
@@ -26,7 +26,7 @@ function StatCard({ title, value, icon, bg = 'white', ...props }: StatCardProps)
   );
 }
 
-function ProfileStats() {
+export function ProfileStats() {
   return (
     <VStack w={'full'} space={3}>
       <Heading size={'md'} mb={2}>
@@ -41,5 +41,3 @@ function ProfileStats() {
     </VStack>
   );
 }
-
-export default ProfileStats;

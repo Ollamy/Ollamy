@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-native';
 import ErrorPage from 'src/components/ErrorPage/ErrorPage';
 
-import Lecture from './lecture';
+import Lecture from './lecture/LessonLecture';
 import Quiz from './quiz';
 
 function Lesson() {
