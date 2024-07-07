@@ -6,10 +6,12 @@ import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
-import type { Lesson } from 'src/pages/courses/types';
-import { LessonStatus } from 'src/pages/courses/types';
+import { Status } from 'src/pages/courses/types';
 import { useJoinLessonMutation } from 'src/services/lesson/lesson';
+import type { LessonResponse } from 'src/services/lesson/lesson.dto';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
+
+type LessonFormated = (LessonResponse & { last?: boolean })[];
 
 function LessonsList() {
   const { id: courseId, sectionId } = useParams();
@@ -29,23 +31,25 @@ function LessonsList() {
 
   const navigate = useNavigate();
 
-  const lessons = useMemo<Lesson[]>(() => {
+  const lessons = useMemo<LessonFormated>(() => {
     if (!lessonsData) return [];
 
-    const lastCompletedLesson = lessonsData.findLastIndex((e) => e.status === LessonStatus.COMPLETED);
+    const lastIdx = lessonsData.findIndex((e) => e.status !== Status.COMPLETED);
 
-    return lessonsData.map((s, i) => {
-      if (i === lastCompletedLesson + 1) return { ...s, status: LessonStatus.IN_PROGRESS };
-      if (i > lastCompletedLesson) return { ...s, status: LessonStatus.NOT_STARTED };
-      return { ...s, status: LessonStatus.COMPLETED };
-    });
+    if (lastIdx !== -1 && lessonsData[lastIdx].status !== Status.IN_PROGRESS) {
+      const tmp: LessonFormated = lessonsData.concat();
+      tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS, last: true };
+      return tmp;
+    }
+
+    return lessonsData;
   }, [lessonsData]);
 
   const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-  const handleJoinLesson = async (id: string) => {
+  const handleJoinLesson = async (id: string, isNotJoined: boolean | undefined) => {
     try {
-      await joinLesson(id).unwrap();
+      if (isNotJoined) await joinLesson(id).unwrap();
       navigate(`lesson/${id}`);
     } catch (error) {
       showToast({
@@ -91,7 +95,7 @@ function LessonsList() {
                   lesson={lesson}
                   index={index}
                   key={lesson.id}
-                  onPress={() => handleJoinLesson(lesson.id)}
+                  onPress={() => handleJoinLesson(lesson.id, lesson.last)}
                 />
               ))}
             </VStack>

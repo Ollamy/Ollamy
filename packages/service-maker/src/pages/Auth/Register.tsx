@@ -17,7 +17,9 @@ export function Register() {
 
   const onSubmit = useCallback(
     (values: CreateUserModel) => {
-      registerMutation({ createUserModel: values }).then(() => {
+      registerMutation({
+        createUserModel: { ...values, platform: 'MAKER' },
+      }).then(() => {
         navigate('/home');
       });
     },

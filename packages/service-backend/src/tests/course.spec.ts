@@ -9,8 +9,6 @@ import {
   createCourseData,
   deleteCourseId,
   mockCourseDb,
-  mockLastLessonDb,
-  mockLastSectionDb,
   mockPictureDb,
   mockSubscriptionDb,
   mockUserSubscriptionDb,
@@ -20,9 +18,11 @@ import {
   mockCourseSlotsFullDb,
   mockCourseSlotsAvailableDb,
 } from 'tests/data/course.data';
-import { TasksService } from '../cron/cron.service';
+import { TasksService } from 'cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import RedisCacheService from '../redis/redis.service';
+import RedisCacheService from 'redis/redis.service';
+import { mockLessonDb, mockSectionDb, sectionId } from './data/section.data';
+import { mockLessonId } from './data/lesson.data';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -198,8 +198,6 @@ describe('getCourse', () => {
         picture: mockPictureDb.filename,
         title: mockCourseDb.title,
         description: mockCourseDb.description,
-        lastLessonId: mockLastLessonDb.lesson_id,
-        lastSectionId: mockLastSectionDb.section_id,
         numberOfUsers: 0,
       };
       expect(result.picture).toContain('http');
@@ -321,9 +319,9 @@ describe('getCourseSections', () => {
 
     {
       // Invoke the function being tested and perform asserstions
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 
@@ -335,9 +333,9 @@ describe('getCourseSections', () => {
     }
 
     {
-      await expect(courseService.getCourseSections(courseId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        courseService.getCourseSections(courseId, context),
+      ).rejects.toThrow(NotFoundException);
     }
   });
 });
@@ -392,13 +390,16 @@ describe('addUserToCourse', () => {
   it('should add user to course successfully', async () => {
     const userId = mockUserSubscriptionDb.user_id;
 
-    jest.spyOn(RedisCacheService, 'run').mockResolvedValue(sharecode);
-
-    jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
-    jest
-      .spyOn(prisma.usertoCourse, 'create')
-      .mockResolvedValue(mockUserToCourse);
+    jest.spyOn(RedisCacheService, 'run').mockResolvedValue(courseId);
     jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);
+    jest.spyOn(prisma, '$transaction').mockImplementation(async (callback) => {
+      await callback(prisma);
+    });
+    jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue(mockUserToCourse);
+    jest.spyOn(prisma.section, 'findMany').mockResolvedValue([{...mockSectionDb,  id: sectionId }]);
+    jest.spyOn(prisma.usertoSection, 'createMany').mockResolvedValue(undefined);
+    jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue([{...mockLessonDb[0], id: mockLessonId }]);
+    jest.spyOn(prisma.usertoLesson, 'createMany').mockResolvedValue(undefined);
 
     const result = await courseService.addUserToCourse(
       courseId,
@@ -407,12 +408,31 @@ describe('addUserToCourse', () => {
     );
 
     expect(result).toEqual({ success: true });
-    expect(prisma.course.findUnique).toHaveBeenCalledTimes(2);
+    expect(RedisCacheService.run).toHaveBeenCalledWith('GET', `sharecode:${sharecode}`);
+    expect(courseService.checkCourseSlots).toHaveBeenCalledWith(courseId);
     expect(prisma.usertoCourse.create).toHaveBeenCalledWith({
       data: {
         user_id: userId,
         course_id: courseId,
       },
+    });
+    expect(prisma.section.findMany).toHaveBeenCalledWith({
+      where: {
+        course_id: courseId,
+      },
+    });
+    expect(prisma.usertoSection.createMany).toHaveBeenCalledWith({
+      data: [{ user_id: userId, section_id: sectionId }],
+    });
+    expect(prisma.lesson.findMany).toHaveBeenCalledWith({
+      where: {
+        section: {
+          course_id: courseId,
+        },
+      },
+    });
+    expect(prisma.usertoLesson.createMany).toHaveBeenCalledWith({
+      data: [{ user_id: userId, lesson_id: mockLessonId }],
     });
   });
 
@@ -432,6 +452,7 @@ describe('addUserToCourse', () => {
   it('should throw ConflictException if user to course creation fails', async () => {
     const userId = mockUserSubscriptionDb.user_id;
 
+    jest.spyOn(RedisCacheService, 'run').mockResolvedValue(sharecode);
     jest.spyOn(prisma.course, 'findUnique').mockResolvedValue(mockCourseDb);
     jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue(null);
     jest.spyOn(courseService, 'checkCourseSlots').mockResolvedValue(true);

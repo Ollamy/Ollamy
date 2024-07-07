@@ -1,17 +1,17 @@
 import { Box } from 'native-base';
 import { Path, Svg } from 'react-native-svg';
 import { BadgeStatus } from 'src/pages/badge/types';
-import { LessonStatus } from 'src/pages/courses/types';
+import { Status } from 'src/pages/courses/types';
 
 interface VerticalProgressBarProps {
-  status: LessonStatus | BadgeStatus;
+  status: Status | BadgeStatus;
   index: number;
 }
 
-export const STATUS_COLORS: Record<LessonStatus | BadgeStatus, string> = {
-  [LessonStatus.NOT_STARTED]: '#BDBDBD',
-  [LessonStatus.IN_PROGRESS]: '#F5B75D',
-  [LessonStatus.COMPLETED]: '#876BF6',
+export const STATUS_COLORS: Record<Status | BadgeStatus, string> = {
+  [Status.NOT_STARTED]: '#BDBDBD',
+  [Status.IN_PROGRESS]: '#F5B75D',
+  [Status.COMPLETED]: '#876BF6',
   [BadgeStatus.UNLOCKED]: '#79CE87',
   [BadgeStatus.LOCKED]: '#BDBDBD',
 };

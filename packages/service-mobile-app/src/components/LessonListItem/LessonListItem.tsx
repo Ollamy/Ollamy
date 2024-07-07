@@ -8,7 +8,7 @@ import { Box, HStack, Image, Pressable, Text, VStack } from 'native-base';
 import type { ImageSourcePropType } from 'react-native';
 import VerticalProgressBar, { STATUS_COLORS } from 'src/components/VerticalProgressBar/VerticalProgressBar';
 import type { Lesson } from 'src/pages/courses/types';
-import { LessonStatus } from 'src/pages/courses/types';
+import { Status } from 'src/pages/courses/types';
 
 interface LessonItemProps {
   lesson: Lesson;
@@ -17,17 +17,17 @@ interface LessonItemProps {
   itemName?: string;
 }
 
-const STATUS_TO_ICON: Record<LessonStatus, ImageSourcePropType> = {
-  [LessonStatus.NOT_STARTED]: NotStartedIcon,
-  [LessonStatus.IN_PROGRESS]: InProgressIcon,
-  [LessonStatus.COMPLETED]: CompletedIcon,
+const STATUS_TO_ICON: Record<Status, ImageSourcePropType> = {
+  [Status.NOT_STARTED]: NotStartedIcon,
+  [Status.IN_PROGRESS]: InProgressIcon,
+  [Status.COMPLETED]: CompletedIcon,
 };
 
 function LessonListItem({ lesson, index, onPress, itemName }: LessonItemProps) {
   return (
     <HStack w={'full'} justifyContent={'start'} mt={'-2px'}>
       <VerticalProgressBar status={lesson.status} index={index} />
-      <Pressable flex={'1'} py={4} pl={4} h={'full'} onPress={onPress}>
+      <Pressable flex={'1'} py={4} pl={4} h={'full'} disabled={lesson.status === Status.NOT_STARTED} onPress={onPress}>
         <Box borderWidth={2} borderRadius={8} borderColor={STATUS_COLORS[lesson.status]} h={'68px'}>
           <HStack flex={'1'} alignItems={'center'} justifyContent={'space-between'} px={4}>
             <HStack space={4}>

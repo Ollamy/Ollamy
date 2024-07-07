@@ -44,6 +44,7 @@ function Login(): JSX.Element {
       await login({
         email: data.email,
         password: data.password,
+        platform: 'MOBILE',
       }).unwrap();
       showToast({
         type: 'success',

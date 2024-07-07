@@ -15,20 +15,22 @@ import {
   ShareCourseCode,
   ExpirationMap,
   Durationtype,
+  EnrollmentResponse,
+  EnrollmentTotal,
+  EnrollmentResponseTotal,
 } from './course.dto';
-import { CourseSectionModel } from 'section/section.dto';
+import { GetSectionsModel } from 'section/section.dto';
+import { Course, Prisma, Role, Status } from '@prisma/client';
 import prisma from 'client';
-import { Course, Prisma, Role, Section } from '@prisma/client';
 import { PictureService } from 'picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from 'redis/redis.service';
-import { SubscriptionPlan } from '@prisma/client';
 
 const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) {}
+  constructor(private readonly cronService: TasksService) { }
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -104,14 +106,18 @@ export class CourseService {
         },
       });
 
-      const users = await prisma.usertoCourse.count({
-        where: {
-          course_id: courseId,
-          role_user: {
-            equals: Role.MEMBER,
+      let userCount: number = undefined;
+
+      if (ctx.__device.isMaker) {
+        userCount = await prisma.usertoCourse.count({
+          where: {
+            course_id: courseId,
+            role_user: {
+              equals: Role.MEMBER,
+            },
           },
-        },
-      });
+        });
+      }
 
       if (!courseDb) {
         Logger.error('Course does not exists !');
@@ -125,9 +131,10 @@ export class CourseService {
         picture: courseDb.picture_id
           ? await PictureService.getPicture(courseDb.picture_id)
           : undefined,
-        lastLessonId: userToCourse?.last_lesson_id,
-        lastSectionId: userToCourse?.last_section_id,
-        numberOfUsers: users,
+        numberOfUsers: userCount,
+        status: !ctx.__device.isMaker
+          ? userToCourse?.status ?? Status.NOT_STARTED
+          : undefined,
       } as GetCourseRequest;
     } catch (error) {
       Logger.error(error);
@@ -180,11 +187,26 @@ export class CourseService {
     }
   }
 
-  async getCourseSections(CourseId: string): Promise<CourseSectionModel[]> {
+  async getCourseSections(
+    CourseId: string,
+    ctx: any,
+  ): Promise<GetSectionsModel[]> {
     try {
-      const courseSectionsDb: Section[] = await prisma.section.findMany({
+      const courseSectionsDb = await prisma.section.findMany({
+        orderBy: [
+          {
+            order: 'asc',
+          },
+        ],
         where: {
           course_id: CourseId,
+        },
+        include: {
+          UsertoSection: {
+            where: {
+              user_id: ctx.__user.id,
+            },
+          },
         },
       });
 
@@ -193,11 +215,21 @@ export class CourseService {
         throw new NotFoundException('No sections for this course !');
       }
 
-      return courseSectionsDb.map((lesson: Section) => ({
-        id: lesson.id,
-        title: lesson.title,
-        description: lesson.description,
-      })) as CourseSectionModel[];
+      const sectionPromises: GetSectionsModel[] = courseSectionsDb.map(
+        (section) => {
+          return {
+            id: section.id,
+            description: section.description,
+            title: section.title,
+            order: section.order,
+            status: !ctx.__device.isMaker
+              ? section?.UsertoSection[0]?.status ?? Status.NOT_STARTED
+              : undefined,
+          };
+        },
+      );
+
+      return sectionPromises;
     } catch (error) {
       Logger.error(error);
       throw new NotFoundException('Sections not found !');
@@ -220,7 +252,7 @@ export class CourseService {
           },
         },
         _count: {
-          select: { userlist: { where: { role_user: Role.MEMBER } } },
+          select: { userToCourse: { where: { role_user: Role.MEMBER } } },
         },
       },
     });
@@ -228,7 +260,7 @@ export class CourseService {
     const subscriptionSlots =
       result.user?.UserSubscription?.[0]?.Subscription?.slots ?? 0;
 
-    return result._count.userlist <= subscriptionSlots;
+    return result._count.userToCourse <= subscriptionSlots;
   }
 
   async addUserToCourse(
@@ -254,17 +286,50 @@ export class CourseService {
       throw new ConflictException('Course is full for subscription plan !');
     }
 
-    const userToCourseDb = await prisma.usertoCourse.create({
-      data: {
-        user_id: userId,
-        course_id: joinCourseId,
-      },
-    });
+    await prisma.$transaction(async (prisma) => {
+      const userToCourse = await prisma.usertoCourse.create({
+        data: {
+          user_id: userId,
+          course_id: joinCourseId,
+        },
+      });
 
-    if (!userToCourseDb) {
-      Logger.error('Failed to add user to course !');
-      throw new ConflictException('Failed to add user to course !');
-    }
+      if (!userToCourse) {
+        throw new ConflictException('Failed to add user to course');
+      }
+  
+      const userToSectionDb = await prisma.section.findMany({
+        where: {
+          course_id: joinCourseId,
+        },
+      });
+
+      await prisma.usertoSection.createMany({
+        data: userToSectionDb.map((section) => {
+          return {
+            user_id: userId,
+            section_id: section.id,
+          };
+        }),
+      });
+
+      const userToLessonDb = await prisma.lesson.findMany({
+        where: {
+          section: {
+            course_id: joinCourseId,
+          },
+        },
+      });
+
+      await prisma.usertoLesson.createMany({
+        data: userToLessonDb.map((lesson) => {
+          return {
+            user_id: userId,
+            lesson_id: lesson.id,
+          };
+        }),
+      });
+    });
 
     await RedisCacheService.run('DEL', `sharecode:${code}`);
     return { success: true } as CourseTrueResponse;
@@ -334,9 +399,115 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };
+  }
+
+  static async UpdateCourseCompletionFromLesson(
+    sectionId: string,
+    userId: string,
+  ) {
+    const course = await prisma.section.findUnique({
+      where: { id: sectionId },
+      select: {
+        course_id: true,
+      },
+    });
+
+    const remainingSection = await prisma.$queryRaw`
+      select count(*) as nb_left
+      from "Section" as s
+      where s.course_id = ${course.course_id}::uuid
+      and not exists(
+          select 1
+          from "UsertoSection" uts
+          where uts.section_id = s.id
+              and uts.status = 'COMPLETED'
+              and uts.user_id = ${userId}::uuid
+    )`;
+
+    if (remainingSection[0].nb_left === BigInt(0)) {
+      const avg_percentage = await prisma.usertoSection.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          user_id: userId,
+          section_id: sectionId,
+        }
+      });
+
+      await prisma.usertoCourse.update({
+        where: {
+          course_id_user_id: {
+            course_id: course.course_id,
+            user_id: userId,
+          },
+        },
+        data: {
+          status: Status.COMPLETED,
+          score: avg_percentage._avg.score,
+        },
+      });
+    }
+  }
+
+  private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
+    let total = 0;
+
+    enrollments.sort((a, b) => a.epoch - b.epoch);
+
+    return enrollments.map(enrollment => (
+      {
+        epoch: enrollment.epoch,
+        total: ++total,
+      }
+    ));
+  }
+
+  async getEnrollmentsForOwnerCourse(ownerId: string, courseId?: string | undefined): Promise<EnrollmentResponseTotal> {
+    try {
+      const enrollments = await prisma.usertoCourse.findMany({
+        where: courseId ? {
+          course_id: courseId,
+          course: {
+            id: courseId,
+            owner_id: ownerId
+          }
+        } : {
+          course: {
+            owner_id: ownerId
+          }
+        },
+        select: {
+          user_id: true,
+          created_at: true,
+        },
+      });
+
+      if (!enrollments.length) {
+        throw new NotFoundException(`No enrollments found for course with id: ${courseId}`);
+      }
+
+      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
+        {
+          userId: enrollment.user_id,
+          epoch: enrollment.created_at.getTime(),
+        }
+      ));
+
+      const cumulative = this.calculateCumulativeEnrollments(response);
+
+      return {
+        total: response.length,
+        enrollments: response,
+        cumulative,
+      };
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('Failed to get enrollments for course.');
+    }
   }
 }

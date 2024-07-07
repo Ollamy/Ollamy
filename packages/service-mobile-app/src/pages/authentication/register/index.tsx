@@ -60,6 +60,7 @@ function Register(): JSX.Element {
         lastname: data.lastname,
         email: data.email,
         password: data.password,
+        platform: 'MOBILE',
       }).unwrap();
       showToast({
         type: 'success',

@@ -42,6 +42,13 @@ export const lessonActions = {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
     }),
+  useUpdateLesson: () =>
+    useMutation(LessonApi.updateLesson, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_LESSON_KEY);
+        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+      },
+    }),
   useRemoveLesson: () =>
     useMutation(LessonApi.deleteLesson, {
       onSuccess: () => {

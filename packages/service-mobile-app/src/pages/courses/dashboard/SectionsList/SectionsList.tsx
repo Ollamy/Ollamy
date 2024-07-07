@@ -1,18 +1,16 @@
 import { ArrowBackIcon, Button, Heading, ScrollView, Skeleton, Text, VStack } from 'native-base';
 import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl } from 'react-native';
+import type { ToastShowParams } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
-import { type CourseSection, LessonStatus } from 'src/pages/courses/types';
+import { Status } from 'src/pages/courses/types';
 import { useGetCourseByIdQuery, useGetCourseSectionsQuery } from 'src/services/course/course';
+import { useJoinSectionMutation } from 'src/services/section/section';
 import type { SectionResponse } from 'src/services/section/section.dto';
 
-function getLastSectionIndex(sectionsData: SectionResponse[], lastSectionId: string | undefined) {
-  if (!lastSectionId) return 0;
-  const lastSectionIndex = sectionsData.findIndex((s) => s.id === lastSectionId);
-
-  return lastSectionIndex !== -1 ? lastSectionIndex : 0;
-}
+type SectionFormated = (SectionResponse & { last?: boolean })[];
 
 function SectionsList() {
   const navigate = useNavigate();
@@ -26,17 +24,35 @@ function SectionsList() {
   const { data: courseData, isFetching: isCourseDataFetching, refetch: refetchCourseData } = useGetCourseByIdQuery(id!);
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const showToast = (body: ToastShowParams): void => Toast.show(body);
+  const [joinSection] = useJoinSectionMutation();
 
-  const sections = useMemo<CourseSection[]>(() => {
+  const sections = useMemo<SectionFormated>(() => {
     if (!sectionsData) return [];
-    const lastSectionIndex = getLastSectionIndex(sectionsData, courseData?.lastSectionId);
 
-    return sectionsData.map((s, i) => {
-      if (i > lastSectionIndex) return { ...s, status: LessonStatus.NOT_STARTED };
-      if (i === lastSectionIndex) return { ...s, status: LessonStatus.IN_PROGRESS };
-      return { ...s, status: LessonStatus.NOT_STARTED };
-    });
-  }, [courseData, sectionsData]);
+    const lastIdx = sectionsData.findIndex((e) => e.status !== Status.COMPLETED);
+
+    if (lastIdx !== -1 && sectionsData[lastIdx].status !== Status.IN_PROGRESS) {
+      const tmp: SectionFormated = sectionsData.concat();
+      tmp[lastIdx] = { ...tmp[lastIdx], status: Status.IN_PROGRESS, last: true };
+      return tmp;
+    }
+
+    return sectionsData;
+  }, [sectionsData]);
+
+  const handleJoinSection = async (sectionId: string, isNotJoined?: boolean) => {
+    try {
+      if (isNotJoined) await joinSection(sectionId).unwrap();
+      navigate(`/course/${id}/section/${sectionId}`);
+    } catch (error) {
+      showToast({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occured. Please try again',
+      });
+    }
+  };
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -75,7 +91,7 @@ function SectionsList() {
                   itemName={'Section'}
                   index={idx}
                   lesson={section}
-                  onPress={() => navigate(`/course/${id}/section/${section.id}`)}
+                  onPress={() => handleJoinSection(section.id, section.last)}
                 />
               ))}
             </VStack>
