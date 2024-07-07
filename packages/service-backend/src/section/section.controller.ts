@@ -180,7 +180,7 @@ export class SectionController {
   })
   @LoggedMiddleware(true)
   @Post('/:id/join')
-  async joinLesson(
+  async joinSection(
     @Param('id') id: string,
     @OllContext() ctx: any,
   ): Promise<SectionIdResponse> {
