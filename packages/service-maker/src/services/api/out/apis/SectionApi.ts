@@ -24,7 +24,7 @@ export interface GetSectionLessonsRequest {
     id: string;
 }
 
-export interface JoinLessonRequest {
+export interface JoinSectionRequest {
     id: string;
 }
 
@@ -131,9 +131,9 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async joinLessonRaw(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+    async joinSectionRaw(requestParameters: JoinSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinLesson.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinSection.');
         }
 
         const queryParameters: any = {};
@@ -152,8 +152,8 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    static joinLesson(requestParameters: JoinLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
-        return localSectionApi.joinLessonRaw(requestParameters, initOverrides);
+    static joinSection(requestParameters: JoinSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        return localSectionApi.joinSectionRaw(requestParameters, initOverrides);
     }
 
     /**
