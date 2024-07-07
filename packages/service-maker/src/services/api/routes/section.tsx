@@ -5,7 +5,7 @@ import type {
   GetSectionLessonsRequest,
   GetSectionRequest,
   LessonModel,
-  SectionModel,
+  GetSectionModel,
 } from 'services/api/out';
 import { SectionApi } from 'services/api/out';
 import { GET_COURSE_SECTIONS_KEY } from 'services/api/routes/course';
@@ -16,7 +16,7 @@ export const GET_SECTION_LESSONS_KEY = 'getSectionLessonKey';
 export const sectionActions = {
   useSection: (
     requestParameters: GetSectionRequest,
-    config?: UseQueryOptions<SectionModel>,
+    config?: UseQueryOptions<GetSectionModel>,
   ) =>
     useQuery({
       queryKey: [GET_SECTION_KEY, requestParameters.id],
