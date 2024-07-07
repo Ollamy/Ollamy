@@ -29,7 +29,7 @@ import {
   ShareCourseCode,
   EnrollmentResponseTotal,
 } from 'course/course.dto';
-import { CourseSectionModel, GetSectionsModel } from 'section/section.dto';
+import { GetSectionsModel } from 'section/section.dto';
 import { CourseService } from 'course/course.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from 'context/context.decorator';
