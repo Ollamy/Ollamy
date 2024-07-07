@@ -1,24 +1,19 @@
 import { Spinner, View } from 'native-base';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-native';
-import IconButton from 'src/components/Buttons/IconButton/IconButton';
+import { useState } from 'react';
+import { useParams } from 'react-router-native';
+import { useGetSessionQuery } from 'src/services/session/section';
 import ErrorPage from 'src/components/ErrorPage/ErrorPage';
-import HealthPoints from 'src/components/HealthPoints';
-import ProgressBar from 'src/components/ProgressBar/ProgressBar';
-import TopBarContainer from 'src/components/topBarContainer';
-import { useGetCourseUserHpQuery } from 'src/services/course/course';
-import { useGetLessonQuestionsQuery } from 'src/services/lesson/lesson';
 
 import Question from './question';
 import ResultPage from './result';
-
+import TopProgressBar from './topProgressBar'
 interface QuizProps {
-  lessonId: string;
+  sessionId: string;
+  sessionQuestionId: string;
 }
 
-function Quiz({ lessonId }: QuizProps) {
-  const navigate = useNavigate();
-  const [currentQuestionId, setCurrentQuestionId] = useState<string | undefined>(undefined);
+function Quiz({ sessionId, sessionQuestionId }: QuizProps) {
+  const [currentQuestionId, setCurrentQuestionId] = useState<string>(sessionQuestionId);
   const [currentQuestionOrder, setCurrentQuestionOrder] = useState<number>(0);
   const [currentErrorNumber, setCurrentErrorNumber] = useState<number>(0);
   const [nextQuestionId, setNextQuestionId] = useState<string | undefined>(undefined);
@@ -26,27 +21,22 @@ function Quiz({ lessonId }: QuizProps) {
   const [isFinish, setIsFinish] = useState<boolean>(false);
 
   const { id: courseId } = useParams();
-  const { data: questions, isFetching: isQuestionsFetching } = useGetLessonQuestionsQuery({ id: lessonId });
-  const { data: userHp, isFetching: isUserHpFetching } = useGetCourseUserHpQuery(courseId!);
+  const { data: session, isFetching: isSessionFetching } = useGetSessionQuery(sessionId);
 
-  useEffect(() => {
-    if (questions && questions.length > 0) setCurrentQuestionId(questions[0].id);
-  }, [questions]);
-  const numberQuestion = questions === undefined ? 0 : questions.length;
+  if (!courseId) return <ErrorPage />;
+  if (isSessionFetching || !session) return <Spinner />;
 
-  if (isFinish) return <ResultPage totalQuestionNb={numberQuestion} errorNb={currentErrorNumber} />;
-
-  if (isQuestionsFetching || questions === undefined || currentQuestionId === undefined) return <Spinner />;
-
-  if (!userHp && !isUserHpFetching) return <ErrorPage customMessage={'Unexpected error loading user health points'} />;
+  if (isFinish) return <ResultPage totalQuestionNb={session.totalQuestions} errorNb={currentErrorNumber} />;
 
   const handleNext = async () => {
     try {
       if (isEnd) {
         setIsFinish(true);
-      } else {
+      } else if (nextQuestionId) {
         setCurrentQuestionId(nextQuestionId);
         setCurrentQuestionOrder(currentQuestionOrder + 1);
+      } else {
+        throw new Error();
       }
     } catch (error) {
       console.error('rejected', error);
@@ -55,16 +45,14 @@ function Quiz({ lessonId }: QuizProps) {
 
   return (
     <View>
-      <TopBarContainer>
-        <IconButton onPress={() => navigate('/home')} iconName={'close'} style={{}} />
-        <ProgressBar
-          progress={currentQuestionOrder / numberQuestion}
-          nextProgress={(currentQuestionOrder + 1) / numberQuestion}
-        />
-        <HealthPoints health={userHp?.hp} />
-      </TopBarContainer>
+      <TopProgressBar
+        courseId={courseId}
+        totalQuestions={session.totalQuestions}
+        currentQuestionOrder={currentQuestionOrder}
+      />
       <Question
         questionId={currentQuestionId}
+        sessionId={sessionId}
         nextQuestion={handleNext}
         setNextQuestionId={setNextQuestionId}
         setIsEnd={setIsEnd}
