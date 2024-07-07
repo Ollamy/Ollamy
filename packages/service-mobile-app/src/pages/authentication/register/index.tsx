@@ -72,25 +72,7 @@ function Register(): JSX.Element {
       console.log('error :', error);
       showToast({
         type: 'error',
-        text1:
-          (
-            (error as AxiosError)?.response as AxiosResponse<{
-              message: string;
-              error: string;
-              statusCode: number;
-            }>
-          )?.data.error ?? 'Something went wrong',
-        text2: [
-          (
-            (error as AxiosError)?.response as AxiosResponse<{
-              message: string;
-              error: string;
-              statusCode: number;
-            }>
-          )?.data.message ?? '',
-        ]
-          .flat()
-          .join('\n'),
+        text1: 'Something went wrong',
       });
     }
   };
@@ -312,6 +294,7 @@ function Register(): JSX.Element {
           </Box>
         </VStack>
       </TouchableWithoutFeedback>
+      <Toast />
     </KeyboardAwareScrollView>
   );
 }

@@ -1,24 +1,32 @@
-import { ArrowBackIcon, Button, ScrollView, Text, VStack } from 'native-base';
-import { useMemo } from 'react';
+import { ArrowBackIcon, Button, ScrollView, Skeleton, Text, VStack } from 'native-base';
+import { useCallback, useMemo, useState } from 'react';
+import { RefreshControl } from 'react-native';
 import type { ToastShowParams } from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
 import { useNavigate, useParams } from 'react-router-native';
 import LessonListItem from 'src/components/LessonListItem/LessonListItem';
 import SectionHeader from 'src/components/SectionHeader/SectionHeader';
 import { Status } from 'src/pages/courses/types';
-import { useGetCourseByIdQuery } from 'src/services/course/course';
 import { useJoinLessonMutation } from 'src/services/lesson/lesson';
 import type { LessonResponse } from 'src/services/lesson/lesson.dto';
 import { useGetSectionByIdQuery, useGetSectionLessonsQuery } from 'src/services/section/section';
 
 type LessonFormated = (LessonResponse & { last?: boolean })[];
 
-function SectionDashboard() {
+function LessonsList() {
   const { id: courseId, sectionId } = useParams();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const { data: lessonsData, isFetching: isLessonsDataFetching } = useGetSectionLessonsQuery(sectionId!);
-  const { data: sectionData, isFetching: isSectionDataFetching } = useGetSectionByIdQuery(sectionId!);
-  const { data: courseData, isFetching: isCourseDataFetching } = useGetCourseByIdQuery(courseId!);
+  const {
+    data: lessonsData,
+    isFetching: isLessonsDataFetching,
+    refetch: refetchLessonsData,
+  } = useGetSectionLessonsQuery(sectionId!);
+  const {
+    data: sectionData,
+    isFetching: isSectionDataFetching,
+    refetch: refetchSectionData,
+  } = useGetSectionByIdQuery(sectionId!);
   const [joinLesson] = useJoinLessonMutation();
 
   const navigate = useNavigate();
@@ -39,12 +47,7 @@ function SectionDashboard() {
 
   const showToast = (body: ToastShowParams): void => Toast.show(body);
 
-  if (isLessonsDataFetching || isCourseDataFetching || isSectionDataFetching) return <Text>Loading...</Text>;
-  if (!lessons) return <Text>No lessons found.</Text>;
-  if (!courseData) return <Text>No course found.</Text>;
-  if (!sectionData) return <Text>Section not found.</Text>;
-
-  const handleJoinLesson = async (id: string, isNotJoined?: boolean) => {
+  const handleJoinLesson = async (id: string, isNotJoined: boolean | undefined) => {
     try {
       if (isNotJoined) await joinLesson(id).unwrap();
       navigate(`lesson/${id}`);
@@ -57,8 +60,15 @@ function SectionDashboard() {
     }
   };
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refetchLessonsData();
+    await refetchSectionData();
+    setRefreshing(false);
+  }, [refetchLessonsData, refetchSectionData]);
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <VStack w={'full'} space={'md'}>
         <Button
           onPress={() => navigate(`/course/${courseId}`)}
@@ -69,21 +79,36 @@ function SectionDashboard() {
         >
           <Text bold>Go back</Text>
         </Button>
-        <SectionHeader title={sectionData.title} description={sectionData.description} />
 
-        <VStack w={'full'}>
-          {lessons.map((lesson, index) => (
-            <LessonListItem
-              lesson={lesson}
-              index={index}
-              key={lesson.id}
-              onPress={() => handleJoinLesson(lesson.id, lesson.last)}
-            />
-          ))}
-        </VStack>
+        {isSectionDataFetching || isLessonsDataFetching ? (
+          <>
+            <Skeleton mt={'12'} h={'48'} borderRadius={12} />
+            <Skeleton h={'16'} borderRadius={5} />
+            <Skeleton h={'16'} borderRadius={5} />
+          </>
+        ) : sectionData && lessons ? (
+          <>
+            <SectionHeader title={sectionData.title} description={sectionData.description} />
+            <VStack w={'full'}>
+              {lessons.map((lesson, index) => (
+                <LessonListItem
+                  lesson={lesson}
+                  index={index}
+                  key={lesson.id}
+                  onPress={() => handleJoinLesson(lesson.id, lesson.last)}
+                />
+              ))}
+            </VStack>
+          </>
+        ) : (
+          <Text fontSize={'md'} color={'coolGray.700'}>
+            No lessons found
+          </Text>
+        )}
       </VStack>
+      <Toast />
     </ScrollView>
   );
 }
 
-export default SectionDashboard;
+export default LessonsList;
