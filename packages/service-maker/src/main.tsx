@@ -19,6 +19,7 @@ import { createGlobalStyle } from 'styled-components';
 import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
+import UserProfilePage from 'pages/UserProfile/UserProfilePage';
 
 const router = createBrowserRouter([
   {
@@ -65,10 +66,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  // {
-  //   path: '/profile',
-  //   element: <ProfilePage />,
-  // },
+  {
+    path: '/user',
+    element: (
+      <ProtectedRoute>
+        <UserProfilePage />
+      </ProtectedRoute>
+    ),
+  },
   // {
   //   path: '/setting',
   //   element: <SettingPage />,

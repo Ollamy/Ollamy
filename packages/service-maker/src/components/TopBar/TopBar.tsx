@@ -1,30 +1,47 @@
+import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useCallback, useMemo } from 'react';
-import { Button } from '@radix-ui/themes';
-import { ArrowLeftIcon } from '@radix-ui/react-icons';
 
-function TopBar() {
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { Button } from '@radix-ui/themes';
+import { userActions } from 'services/api/routes/user';
+
+interface TopBarProps {
+  isProfileDisplayed?: boolean;
+}
+
+function TopBar({ isProfileDisplayed = true }: TopBarProps) {
   const [params] = useSearchParams();
   const navigate = useNavigate();
 
+  const { data } = userActions.useGetUser();
+
   const { lessonId } = useParams();
 
-  const urlParams = useMemo(() => {
-    return {
+  const urlParams = useMemo(
+    () => ({
       courseId: params.get('courseId') ?? undefined,
-    };
-  }, [params]);
+    }),
+    [params],
+  );
 
   const handleClick = useCallback(() => {
     if (lessonId) navigate(`/course/${urlParams.courseId}`);
     else navigate('/home');
-  }, []);
+  }, [lessonId, navigate, urlParams.courseId]);
+
+  const handleClickProfile = useCallback(() => {
+    navigate('/user');
+  }, [navigate]);
 
   return (
     <Container>
-      <ProfilContainer>N</ProfilContainer>
-      <Button variant="outline" onClick={handleClick}>
+      {isProfileDisplayed && (
+        <ProfilContainer onClick={handleClickProfile}>
+          {data?.firstname[0].toUpperCase() || 'N'}
+        </ProfilContainer>
+      )}
+      <Button variant={'outline'} onClick={handleClick}>
         <ArrowLeftIcon />
         Back to {lessonId ? 'course' : 'home'}
       </Button>
@@ -60,6 +77,7 @@ const ProfilContainer = styled.div`
   box-sizing: border-box;
 
   font-size: 14px;
+  cursor: pointer;
 `;
 
 export default TopBar;

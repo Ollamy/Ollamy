@@ -22,6 +22,9 @@ interface CustomDialogTitleDescriptionProps<T> {
   moreOptions?: T;
   defaultTitle?: string;
   defaultDescription?: string;
+  defaultTitleLabel?: string;
+  defaultDescriptionLabel?: string;
+  secondFieldType?: 'textArea' | 'input' | 'none';
 }
 
 function CustomDialogTitleDescription<T>({
@@ -33,6 +36,9 @@ function CustomDialogTitleDescription<T>({
   moreOptions,
   defaultTitle = '',
   defaultDescription = '',
+  defaultTitleLabel = 'Title',
+  defaultDescriptionLabel = 'Description',
+  secondFieldType = 'textArea',
 }: CustomDialogTitleDescriptionProps<T>) {
   const defaultValues = useMemo(
     () => ({
@@ -73,7 +79,7 @@ function CustomDialogTitleDescription<T>({
             <CustomForm onSubmit={handleSubmit(onSubmit)}>
               <CustomFieldset className={'DialogFieldset'}>
                 <CustomLabel className={'DialogLabel'} htmlFor={'title'}>
-                  Title
+                  {defaultTitleLabel}
                 </CustomLabel>
                 <CustomInput
                   {...register('title', { required: true })}
@@ -83,18 +89,32 @@ function CustomDialogTitleDescription<T>({
                 />
                 {errors.title && <span>This field is required</span>}
               </CustomFieldset>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'description'}>
-                  Description
-                </CustomLabel>
-                <TextArea
-                  {...register('description', { required: true })}
-                  id={'description'}
-                  className={'DialogTextarea'}
-                  placeholder={'Section description…'}
-                />
-                {errors.description && <span>This field is required</span>}
-              </CustomFieldset>
+              {secondFieldType !== 'none' && (
+                <CustomFieldset className={'DialogFieldset'}>
+                  <CustomLabel
+                    className={'DialogLabel'}
+                    htmlFor={'description'}
+                  >
+                    {defaultDescriptionLabel}
+                  </CustomLabel>
+                  {secondFieldType === 'textArea' ? (
+                    <TextArea
+                      {...register('description', { required: true })}
+                      id={'description'}
+                      className={'DialogTextarea'}
+                      placeholder={'Section description…'}
+                    />
+                  ) : (
+                    <CustomInput
+                      {...register('description', { required: true })}
+                      id={'description'}
+                      className={'DialogInput'}
+                      placeholder={'Section title'}
+                    />
+                  )}
+                  {errors.description && <span>This field is required</span>}
+                </CustomFieldset>
+              )}
               <ButtonContainer>
                 <CustomButton type={'submit'} className={'DialogButton green'}>
                   {actionButtonValue}
