@@ -32,7 +32,6 @@ function FindCourse() {
         onHide: () => navigate('/home'),
       });
     }
-    console.log(code);
   }, [code, joinCourse, navigate]);
 
   return (

@@ -106,6 +106,7 @@ function LessonsList() {
           </Text>
         )}
       </VStack>
+      <Toast />
     </ScrollView>
   );
 }

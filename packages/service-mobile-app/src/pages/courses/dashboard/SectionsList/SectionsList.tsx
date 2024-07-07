@@ -102,6 +102,7 @@ function SectionsList() {
           </Text>
         )}
       </VStack>
+      <Toast />
     </ScrollView>
   );
 }

@@ -165,6 +165,7 @@ function Login(): JSX.Element {
           </Box>
         </VStack>
       </TouchableWithoutFeedback>
+      <Toast />
     </KeyboardAwareScrollView>
   );
 }
