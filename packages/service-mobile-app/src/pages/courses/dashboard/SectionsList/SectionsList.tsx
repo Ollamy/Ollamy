@@ -1,4 +1,4 @@
-import { ArrowBackIcon, Button, Heading, ScrollView, Skeleton, Text, VStack } from 'native-base';
+import { ArrowBackIcon, Button, Heading, HStack, ScrollView, Skeleton, Text, VStack } from 'native-base';
 import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl } from 'react-native';
 import type { ToastShowParams } from 'react-native-toast-message';
@@ -64,15 +64,25 @@ function SectionsList() {
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <VStack flex={'1'} w={'100%'} space={'8'}>
-        <Button
-          onPress={() => navigate('/home')}
-          bg={'coolGray.100'}
-          leftIcon={<ArrowBackIcon />}
-          alignSelf={'flex-start'}
-          variant={'unstyled'}
-        >
-          <Text bold>Go back</Text>
-        </Button>
+        <HStack width={'100%'} justifyContent={'space-between'}>
+          <Button
+            onPress={() => navigate('/home')}
+            bg={'coolGray.100'}
+            leftIcon={<ArrowBackIcon />}
+            alignSelf={'flex-start'}
+            variant={'unstyled'}
+            >
+            <Text bold>Go back</Text>
+          </Button>
+          <Button
+            onPress={() => navigate(`/course/${id}/statistic`)}
+            bg={'coolGray.100'}
+            alignSelf={'flex-start'}
+            variant={'unstyled'}
+            >
+            <Text bold>STATS</Text>
+          </Button>
+        </HStack>
 
         {isCourseDataFetching || isSectionsDataFetching ? (
           <>

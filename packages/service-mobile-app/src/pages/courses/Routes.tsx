@@ -4,6 +4,7 @@ import LessonsList from 'src/pages/courses/dashboard/LessonsList/LessonsList';
 import SectionsList from 'src/pages/courses/dashboard/SectionsList/SectionsList';
 import FindCourse from 'src/pages/courses/FindCourse/FindCourse';
 import JoinCourse from 'src/pages/courses/JoinCourse/JoinCourse';
+import CourseStatistic from 'src/pages/courses/courseStatistic';
 
 function CourseRouter() {
   return (
@@ -12,6 +13,7 @@ function CourseRouter() {
       <Route path={'find'} element={<FindCourse />} />
 
       <Route path={':id'} element={<SectionsList />} />
+      <Route path={':id/statistic'} element={<CourseStatistic />} />
       <Route path={':id/section/:sectionId'} element={<LessonsList />} />
       <Route path={':id/section/:sectionId/lesson/:lessonId'} element={<Lesson />} />
     </Routes>
