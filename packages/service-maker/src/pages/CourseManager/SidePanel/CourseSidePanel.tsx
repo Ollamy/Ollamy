@@ -3,7 +3,7 @@ import CourseManager from 'pages/CourseManager/SidePanel/CourseManager/CourseMan
 import SectionCreator from 'pages/CourseManager/SidePanel/Creator/SectionCreator';
 import SectionList from 'pages/CourseManager/SidePanel/List/SectionList';
 import SectionSearchBar from 'pages/CourseManager/SidePanel/SearchBar/SectionSearchBar';
-import type { CourseSectionModel } from 'services/api/out';
+import type { GetSectionsModel } from 'services/api/out';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ interface CourseSidePanelProps {
   courseId: string;
 }
 
-export interface CustomCourseSectionModel extends CourseSectionModel {
+export interface CustomCourseSectionModel extends GetSectionsModel {
   realIndex?: number;
 }
 

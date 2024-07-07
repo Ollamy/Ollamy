@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { CourseSectionModel } from 'services/api/out';
+import type { GetSectionsModel } from 'services/api/out';
 import styled from 'styled-components';
 import checkDataActive from 'utils/activeData';
 
@@ -10,8 +10,8 @@ interface SectionRowProps {
   id: string;
   index: number;
   isActive: boolean;
-  title: CourseSectionModel['title'];
-  description: CourseSectionModel['description'];
+  title: GetSectionsModel['title'];
+  description: GetSectionsModel['description'];
 }
 
 function SectionRow({

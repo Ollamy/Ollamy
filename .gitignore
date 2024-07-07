@@ -2,7 +2,6 @@ node_modules/
 .envrc
 .idea
 **/.yarn/
-.yarnrc.yml
 .vscode
 .DS_Store
 **/.history
