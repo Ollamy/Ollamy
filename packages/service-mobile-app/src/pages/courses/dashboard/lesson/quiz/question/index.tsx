@@ -2,11 +2,10 @@ import { ScrollView, Spinner, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
+import QuestionDifficulty from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
+import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 import { AnswerType } from 'src/services/question/question.dto';
-
-import QuestionDifficulty from './questionDifficulty';
-import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
@@ -17,7 +16,7 @@ interface QuestionProps {
 }
 
 function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
-  const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
   const [validate] = useValidateAnswerMutation();
@@ -27,7 +26,7 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
 
   useEffect(() => {
     setTrueAnswer(undefined);
-    setSelectAnswer(undefined);
+    setSelectedAnswer(undefined);
   }, [questionId]);
 
   if (question === undefined || answers === undefined) return <Spinner />;
@@ -62,18 +61,19 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
         >
           {createElement(quizFactory[question.typeAnswer], {
             answers,
-            setAnswer: (answer) => setSelectAnswer(answer),
+            setAnswer: (answer) => setSelectedAnswer(answer),
             correctAnswer: trueAnswer,
+            currentAnswer: selectedAnswer,
           })}
         </ScrollView>
       </View>
       <View style={{ alignItems: 'center', width: '100%' }}>
         <TextButton
-          disabled={selectAnswer === undefined}
+          disabled={selectedAnswer === undefined}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>
-            selectAnswer &&
-            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer, question.typeAnswer))
+            selectedAnswer &&
+            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
           }
           rightIconName={'arrow-forward'}
         />

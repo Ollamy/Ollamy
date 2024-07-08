@@ -8,6 +8,7 @@ import { AnswerType } from 'src/services/question/question.dto';
 export interface FactoryComponentInterface {
   setAnswer: (answer: string) => void;
   correctAnswer?: string;
+  currentAnswer?: string;
   answers: GetAnswerRequest[];
 }
 

@@ -43,7 +43,8 @@ function SectionsList() {
 
   const handleJoinSection = async (sectionId: string, isNotJoined?: boolean) => {
     try {
-      if (isNotJoined) await joinSection(sectionId).unwrap();
+      // TODO FIX
+      // if (isNotJoined) await joinSection(sectionId).unwrap();
       navigate(`/course/${id}/section/${sectionId}`);
     } catch (error) {
       showToast({
