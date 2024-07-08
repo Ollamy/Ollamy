@@ -1,11 +1,11 @@
-import { ScrollView, Spinner, View, VStack } from 'native-base';
+import { ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 import QuestionDifficulty from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
 import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
-import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
+import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/question';
 import { AnswerType } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
 
@@ -66,6 +66,7 @@ function Question({
     <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
       {question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />}
       <QuestionTitle title={question.title} />
+      <Text fontSize={'md'}>{question.description}</Text>
       <View maxHeight={'35%'}>
         <ScrollView
           contentContainerStyle={{
