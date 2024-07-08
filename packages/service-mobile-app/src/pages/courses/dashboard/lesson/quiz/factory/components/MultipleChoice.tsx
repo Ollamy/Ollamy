@@ -4,7 +4,7 @@ import type { FactoryComponentInterface } from 'src/pages/courses/dashboard/less
 
 function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryComponentInterface) {
   return (
-    <VStack space={4}>
+    <VStack space={4} w={'full'}>
       {answers.map((a) => (
         <Pressable
           onPress={() => setAnswer(a.id)}
