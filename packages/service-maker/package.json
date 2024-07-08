@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "preview": "vite preview",
-    "client:generate": "/bin/bash -c 'source .env && ./../../script/openapi/backend-client-generator.sh http://localhost:$BACKEND_PORT src/services/api/out ./../../script/openapi/ollamy-openapi-generator-cli.jar'"
+    "client:generate": "/bin/bash -c 'source .env && ./../../script/openapi/backend-client-generator.sh http://localhost:$BACKEND_PORT src/services/api/out ./../../script/openapi/ollamy-openapi-generator-cli.jar'",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@ollamy/design-system": "*",
