@@ -11,16 +11,17 @@ function CourseStatistic() {
   const navigate = useNavigate();
   const { id: courseId } = useParams();
   const [selectedlessonId, setSelectedlessonId] = useState<string | undefined>();
-  if (!courseId) return <ErrorPage />;
 
-  const { data: statistic, isLoading } = useGetUserCourseStatisticQuery(courseId);
+  const { data: statistic, isLoading } = useGetUserCourseStatisticQuery(courseId!);
 
   const selectedLessonStats = useMemo(() => {
     if (selectedlessonId && statistic) {
       return statistic.find((lesson) => lesson.lessonId === selectedlessonId);
     }
     return undefined;
-  }, [selectedlessonId]);
+  }, [selectedlessonId, statistic]);
+
+  if (!courseId) return <ErrorPage />;
 
   if (!statistic || isLoading) return <Spinner />;
 
