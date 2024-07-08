@@ -9,7 +9,7 @@ export const statisticApi = api.injectEndpoints({
         method: 'GET',
         params: { courseId: id }
       }),
-      providesTags: (resp, err, id) => [{ type: 'Statistic', id: id }],
+      providesTags: (resp, err, id) => [{ type: 'Statistic' }],
     }),
   }),
 });

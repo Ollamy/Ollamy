@@ -27,7 +27,7 @@ function CourseStatistic() {
 
   if (!selectedLessonStats) {
     return (
-      <View>
+      <View h={'90%'}>
         <Button
           onPress={() => navigate(`/course/${courseId}`)}
           bg={'coolGray.100'}
@@ -49,7 +49,7 @@ function CourseStatistic() {
     );
   }
   return (
-    <View>
+    <View h={'90%'}>
       <Button
         onPress={() => setSelectedlessonId(undefined)}
         bg={'coolGray.100'}

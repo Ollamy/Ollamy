@@ -23,7 +23,7 @@ export const sessionApi = api.injectEndpoints({
         body: arg.body,
         method: 'POST',
       }),
-      invalidatesTags: (resp, err, arg) => [{ type: 'HP' }],
+      invalidatesTags: (resp, err, arg) => [{ type: 'HP' }, { type: 'Statistic' }],
     }),
   }),
 });

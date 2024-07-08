@@ -5,6 +5,7 @@ import type { SessionGradeStatistic } from 'src/services/statistic/statistic.dto
 
 function SessionStatsRaw({ SessionStats, idx }: { SessionStats: SessionGradeStatistic, idx: number }) {
   const navigate = useNavigate();
+  const isSuccess = SessionStats.correctAnswers === 0 ? false : (SessionStats.correctAnswers / SessionStats.totalQuestions)  > 0.70
 
   return (
     <Pressable key={idx} w={'100%'} onPress={() => navigate(``)}>
@@ -17,7 +18,12 @@ function SessionStatsRaw({ SessionStats, idx }: { SessionStats: SessionGradeStat
       borderColor={'gray.200'}
       borderWidth={1}
       >
-      <Text style={{ fontWeight: 'bold', fontSize: 16, textTransform: 'capitalize' }}>Session Date: 12-07-2024</Text>
+      {
+        isSuccess ? <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'green' }}>Success</Text>
+          : <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'red' }}>Failure</Text>
+      }
+      {/* Waiting for the backend data */}
+      <Text style={{ fontWeight: 'bold', fontSize: 16, textTransform: 'capitalize' }}>Session Date: 12-08-2024</Text>
       <VStack
         alignItems={'center'}
         w={'full'}
