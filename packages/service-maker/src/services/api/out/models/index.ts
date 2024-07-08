@@ -135,6 +135,49 @@ export interface CourseTrueResponse {
 /**
  * 
  * @export
+ * @interface CourseUserStatistic
+ */
+export interface CourseUserStatistic {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseUserStatistic
+     */
+    lessonId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseUserStatistic
+     */
+    title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseUserStatistic
+     */
+    average: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseUserStatistic
+     */
+    max: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseUserStatistic
+     */
+    min: number;
+    /**
+     * 
+     * @type {Array<Session>}
+     * @memberof CourseUserStatistic
+     */
+    sessions: Array<Session>;
+}
+/**
+ * 
+ * @export
  * @interface CreateAnswerModel
  */
 export interface CreateAnswerModel {
@@ -1267,6 +1310,31 @@ export interface SectionIdResponse {
      * @memberof SectionIdResponse
      */
     id: string;
+}
+/**
+ * 
+ * @export
+ * @interface Session
+ */
+export interface Session {
+    /**
+     * 
+     * @type {number}
+     * @memberof Session
+     */
+    correctAnswers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Session
+     */
+    totalQuestions: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Session
+     */
+    timeTakenInSeconds: number;
 }
 /**
  * 
