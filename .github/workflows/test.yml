@@ -55,6 +55,9 @@ jobs:
       - name: Update yarn
         run: yarn set version 3.6.0
 
+      - name: install yarn global packages
+        run: yarn install
+
       - name: Install backend dependencies
         working-directory: ./packages/service-backend
         run: yarn install
