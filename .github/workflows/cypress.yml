@@ -22,14 +22,7 @@ jobs:
         run: corepack prepare yarn@3.6.0 --activate
 
       - name: Install dependencies
-        run: |
-          if [ ! -f yarn.lock ]; then
-            echo "yarn.lock file is missing, creating it..."
-            yarn install
-          else
-            echo "yarn.lock file exists, using --immutable flag..."
-            yarn install --immutable
-          fi
+        run: yarn install --check-files || yarn install --force
 
       - name: Run Cypress tests
         run: yarn run cypress:run
