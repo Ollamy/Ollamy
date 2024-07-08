@@ -31,7 +31,7 @@ jobs:
       #   run: yarn install --immutable
 
       - name: Run Cypress tests
-        run: yarn install && yarn run cypress:run
+        run: yarn install --immutable && yarn run cypress:run
 
       - name: Upload Cypress artifacts
         if: failure()
