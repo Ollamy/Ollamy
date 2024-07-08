@@ -1,7 +1,8 @@
 node_modules/
 .envrc
 .idea
-**/.yarn/
+!.yarn/releases/yarn-3.6.0.cjs
+**/.yarn/*
 .vscode
 .DS_Store
 **/.history
