@@ -21,17 +21,8 @@ jobs:
       - name: Set Yarn version
         run: corepack prepare yarn@3.6.0 --activate
 
-      # - name: Ensure yarn.lock exists
-      #   run: |
-      #     if [ ! -f yarn.lock ]; then
-      #       yarn install --immutable || yarn install;
-      #     fi
-
-      # - name: Install dependencies
-      #   run: yarn install --immutable
-
       - name: Run Cypress tests
-        run: yarn install --immutable && yarn run cypress:run
+        run: yarn run cypress:run
 
       - name: Upload Cypress artifacts
         if: failure()
