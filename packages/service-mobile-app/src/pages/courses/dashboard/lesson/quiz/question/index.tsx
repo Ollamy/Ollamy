@@ -1,25 +1,35 @@
 import { ScrollView, Spinner, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
+import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 import QuestionDifficulty from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
 import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 import { AnswerType } from 'src/services/question/question.dto';
+import { useValidateQuestionMutation } from 'src/services/session/section';
 
 interface QuestionProps {
   questionId: string;
+  sessionId: string;
   nextQuestion: () => void;
   setNextQuestionId: (id: string | undefined) => void;
   setIsEnd: (isEnd: boolean) => void;
   setCurrentErrorNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
+function Question({
+  questionId,
+  sessionId,
+  nextQuestion,
+  setNextQuestionId,
+  setIsEnd,
+  setCurrentErrorNumber,
+}: QuestionProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
-  const [validate] = useValidateAnswerMutation();
+  const [validate] = useValidateQuestionMutation();
 
   const { data: question } = useGetQuestionQuery({ id: questionId });
   const { data: answers } = useGetAnswerQuery({ id: questionId });
@@ -34,13 +44,19 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
   const validateAnswer = async (answer: string, answerType: AnswerType) => {
     try {
       const data = await validate({
-        answerId: answerType === AnswerType.FREE_ANSWER ? undefined : answer,
-        questionId,
-        data: answerType === AnswerType.FREE_ANSWER ? answer : undefined,
+        sessionId,
+        body: {
+          questionId,
+          answer: {
+            id: answerType === AnswerType.FREE_ANSWER ? undefined : answer,
+            data: answerType === AnswerType.FREE_ANSWER ? answer : undefined,
+          },
+        },
       }).unwrap();
-      setNextQuestionId(data.nextQuestionId);
-      setTrueAnswer(data.answer);
-      setIsEnd(data.end);
+      setNextQuestionId(data.nextQuestionId ?? undefined);
+      setTrueAnswer(data.answerId);
+      setIsEnd(!data.nextQuestionId);
+      Keyboard.dismiss();
       if (!data.success) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
@@ -60,10 +76,10 @@ function Question({ questionId, nextQuestion, setNextQuestionId, setIsEnd, setCu
           }}
         >
           {createElement(quizFactory[question.typeAnswer], {
+            answer: selectedAnswer,
             answers,
             setAnswer: (answer) => setSelectedAnswer(answer),
             correctAnswer: trueAnswer,
-            currentAnswer: selectedAnswer,
           })}
         </ScrollView>
       </View>

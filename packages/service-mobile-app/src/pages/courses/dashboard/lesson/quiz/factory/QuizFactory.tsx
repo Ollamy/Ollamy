@@ -6,9 +6,9 @@ import type { GetAnswerRequest } from 'src/services/question/question.dto';
 import { AnswerType } from 'src/services/question/question.dto';
 
 export interface FactoryComponentInterface {
+  answer?: string;
   setAnswer: (answer: string) => void;
   correctAnswer?: string;
-  currentAnswer?: string;
   answers: GetAnswerRequest[];
 }
 

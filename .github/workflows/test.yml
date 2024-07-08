@@ -20,6 +20,7 @@ jobs:
     environment: Docker
     env:
       BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+      BACKEND_URL: ${{ secrets.BACKEND_URL }}
       MODE: ${{ secrets.MODE }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
@@ -66,7 +67,7 @@ jobs:
       - name: Upload test results
         id: upload-test-results
         uses: dorny/test-reporter@v1
-        if: success() || failure()
+        if: success()
         with:
           working-directory: ./packages/service-backend
           name: Backend Test Results
@@ -75,7 +76,7 @@ jobs:
 
       - name: Summary to PR
         id: summary-to-pr
-        if: success() || failure()
+        if: success()
         uses: mshick/add-pr-comment@v2
         with:
           message: |
