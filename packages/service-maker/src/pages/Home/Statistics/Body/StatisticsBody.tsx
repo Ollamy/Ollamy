@@ -1,13 +1,11 @@
-import styled from 'styled-components';
-import { PersonIcon, RocketIcon } from '@radix-ui/react-icons';
-import { Badge, Button } from '@radix-ui/themes';
-import api from 'services/api';
 import { useMemo } from 'react';
+import api from 'services/api';
+import styled from 'styled-components';
 
-// eslint-disable-next-line
-interface StatisticsBodyProps {}
+import { PersonIcon, RocketIcon } from '@radix-ui/react-icons';
+import { Button } from '@radix-ui/themes';
 
-const StatisticsBody = ({}: StatisticsBodyProps) => {
+function StatisticsBody() {
   const { data } = api.user.useGetUserCourses();
 
   const totalOfStudent = useMemo(() => {
@@ -34,23 +32,21 @@ const StatisticsBody = ({}: StatisticsBodyProps) => {
         </CardContainer>
       </CardSection>
       <CourseSection>
-        {data?.courses?.map(({ title, id, pictureId }) => {
-          return (
-            <CourseItem key={id}>
-              <CourseInfosContainer>
-                <CourseImage src={pictureId} />
-                <CourseTitle>{title}</CourseTitle>
-              </CourseInfosContainer>
-              <Button size={'1'} variant={'surface'}>
-                View
-              </Button>
-            </CourseItem>
-          );
-        })}
+        {data?.courses?.map(({ title, id, pictureId }) => (
+          <CourseItem key={id}>
+            <CourseInfosContainer>
+              <CourseImage src={pictureId} />
+              <CourseTitle>{title}</CourseTitle>
+            </CourseInfosContainer>
+            <Button size={'1'} variant={'surface'}>
+              View
+            </Button>
+          </CourseItem>
+        ))}
       </CourseSection>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
