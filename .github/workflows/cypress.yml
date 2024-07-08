@@ -27,8 +27,8 @@ jobs:
       #       yarn install --immutable || yarn install;
       #     fi
 
-      - name: Install dependencies
-        run: yarn install --immutable
+      # - name: Install dependencies
+      #   run: yarn install --immutable
 
       - name: Run Cypress tests
         run: yarn run cypress:run
