@@ -15,8 +15,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install Yarn
-        run: npm install --global yarn
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Set Yarn version
+        run: corepack prepare yarn@3.6.0 --activate
 
       - name: Install dependencies
         run: yarn install
