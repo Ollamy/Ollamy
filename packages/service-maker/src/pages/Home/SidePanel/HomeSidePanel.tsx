@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { HomeIcon, PersonIcon } from '@radix-ui/react-icons';
+import { HomeIcon, IdCardIcon, PersonIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button } from '@radix-ui/themes';
 import { capitalizeFirstLetterOfEachWord } from 'pages/UserProfile/UserGeneralSettings/UserGeneralSettings';
@@ -56,15 +56,15 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
               </LinkNav>
             </NavigationMenu.Item>
 
-            {/* <NavigationMenu.Item onClick={() => handleClick('settings')}> */}
-            {/*   <LinkNav */}
-            {/*     active={currentPage === 'settings'} */}
-            {/*     className={'NavigationMenuLink'} */}
-            {/*   > */}
-            {/*     <GearIcon /> */}
-            {/*     Settings */}
-            {/*   </LinkNav> */}
-            {/* </NavigationMenu.Item> */}
+            <NavigationMenu.Item onClick={() => handleClick('statistics')}>
+              <LinkNav
+                active={currentPage === 'statistics'}
+                className={'NavigationMenuLink'}
+              >
+                <IdCardIcon />
+                Statistics
+              </LinkNav>
+            </NavigationMenu.Item>
 
             <NavigationMenu.Indicator className={'NavigationMenuIndicator'}>
               <div className={'Arrow'} />
