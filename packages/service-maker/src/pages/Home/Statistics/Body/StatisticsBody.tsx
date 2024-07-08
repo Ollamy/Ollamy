@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { PersonIcon, RocketIcon } from '@radix-ui/react-icons';
 import { Badge, Button } from '@radix-ui/themes';
 import api from 'services/api';
+import { useMemo } from 'react';
 
 // eslint-disable-next-line
 interface StatisticsBodyProps {}
@@ -9,13 +10,22 @@ interface StatisticsBodyProps {}
 const StatisticsBody = ({}: StatisticsBodyProps) => {
   const { data } = api.user.useGetUserCourses();
 
+  const totalOfStudent = useMemo(() => {
+    if (!data) return null;
+
+    return data.courses.reduce(
+      (acc, curr) => acc + (curr?.numberOfUsers || 0),
+      0,
+    );
+  }, [data]);
+
   return (
     <Container>
       <CardSection>
         <CardContainer>
           <PersonIcon />
           Students Enrolled
-          <Number>2</Number>
+          <Number>{totalOfStudent}</Number>
         </CardContainer>
         <CardContainer>
           <RocketIcon />
