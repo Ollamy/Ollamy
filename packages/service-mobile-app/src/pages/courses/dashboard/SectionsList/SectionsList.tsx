@@ -71,7 +71,7 @@ function SectionsList() {
             leftIcon={<ArrowBackIcon />}
             alignSelf={'flex-start'}
             variant={'unstyled'}
-            >
+          >
             <Text bold>Go back</Text>
           </Button>
           <Button
@@ -79,7 +79,7 @@ function SectionsList() {
             bg={'coolGray.100'}
             alignSelf={'flex-start'}
             variant={'unstyled'}
-            >
+          >
             <Text bold>STATS</Text>
           </Button>
         </HStack>

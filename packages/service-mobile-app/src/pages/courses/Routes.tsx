@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-native';
+import CourseStatistic from 'src/pages/courses/courseStatistic';
 import Lesson from 'src/pages/courses/dashboard/lesson';
 import LessonsList from 'src/pages/courses/dashboard/LessonsList/LessonsList';
 import SectionsList from 'src/pages/courses/dashboard/SectionsList/SectionsList';
 import FindCourse from 'src/pages/courses/FindCourse/FindCourse';
 import JoinCourse from 'src/pages/courses/JoinCourse/JoinCourse';
-import CourseStatistic from 'src/pages/courses/courseStatistic';
 
 function CourseRouter() {
   return (

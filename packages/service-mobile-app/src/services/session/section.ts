@@ -1,5 +1,11 @@
 import { api } from 'src/services/api';
-import { CreateSessionResponse, GetSessionResponse, ValidateQuestionSessionRequest, ValidateQuestionSessionResponse } from './session.dto';
+
+import type {
+  CreateSessionResponse,
+  GetSessionResponse,
+  ValidateQuestionSessionRequest,
+  ValidateQuestionSessionResponse,
+} from './session.dto';
 
 export const sessionApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -8,7 +14,7 @@ export const sessionApi = api.injectEndpoints({
         url: `/session/${id}`,
         method: 'GET',
       }),
-      providesTags: (resp, err, id) => [{ type: 'Session', id: id }],
+      providesTags: (resp, err, id) => [{ type: 'Session', id }],
     }),
     createSession: build.mutation<CreateSessionResponse, string>({
       query: (id) => ({

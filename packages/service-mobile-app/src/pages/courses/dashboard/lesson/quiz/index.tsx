@@ -1,12 +1,13 @@
 import { Spinner, View } from 'native-base';
 import { useState } from 'react';
 import { useParams } from 'react-router-native';
-import { useGetSessionQuery } from 'src/services/session/section';
 import ErrorPage from 'src/components/ErrorPage/ErrorPage';
+import { useGetSessionQuery } from 'src/services/session/section';
 
 import Question from './question';
 import ResultPage from './result';
-import TopProgressBar from './topProgressBar'
+import TopProgressBar from './topProgressBar';
+
 interface QuizProps {
   sessionId: string;
   sessionQuestionId: string;

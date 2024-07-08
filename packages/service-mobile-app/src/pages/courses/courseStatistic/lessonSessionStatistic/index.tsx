@@ -1,7 +1,7 @@
-import { View, ScrollView, VStack } from 'native-base';
+import { ScrollView, View, VStack } from 'native-base';
 import React from 'react';
-
 import type { GradeStatisticModel } from 'src/services/statistic/statistic.dto';
+
 import SessionStatsRaw from './sessionStatsRaw';
 
 function LessonStatistic({ lessonStats }: { lessonStats: GradeStatisticModel }) {
@@ -9,9 +9,9 @@ function LessonStatistic({ lessonStats }: { lessonStats: GradeStatisticModel }) 
     <View>
       <ScrollView>
         <VStack w={'100%'} flex={'1'} space={'4'}>
-          {lessonStats.sessions.map(
-            (lessonStats, idx) => <SessionStatsRaw SessionStats={lessonStats} idx={idx}/>
-          )}
+          {lessonStats.sessions.map((SessionStats, idx) => (
+            <SessionStatsRaw SessionStats={SessionStats} idx={idx} />
+          ))}
         </VStack>
       </ScrollView>
     </View>

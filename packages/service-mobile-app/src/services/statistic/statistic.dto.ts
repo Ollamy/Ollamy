@@ -13,9 +13,9 @@ export enum StatisticOperation {
 }
 
 export interface SessionGradeStatistic {
-  correctAnswers: number,
-  totalQuestions: number,
-  timeTakenInSeconds: number,
+  correctAnswers: number;
+  totalQuestions: number;
+  timeTakenInSeconds: number;
 }
 
 export interface GradeStatisticModel {
@@ -24,7 +24,7 @@ export interface GradeStatisticModel {
   average: number;
   min: number;
   max: number;
-  sessions: SessionGradeStatistic[]
+  sessions: SessionGradeStatistic[];
 }
 
-export type GetUserCourseStatisticResponse = GradeStatisticModel[]
+export type GetUserCourseStatisticResponse = GradeStatisticModel[];

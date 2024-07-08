@@ -1,11 +1,11 @@
 import { ScrollView, Spinner, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
+import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
 import { AnswerType } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
-import { Keyboard } from 'react-native';
 
 import QuestionDifficulty from './questionDifficulty';
 import QuestionTitle from './questionTitle';
@@ -19,7 +19,14 @@ interface QuestionProps {
   setCurrentErrorNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Question({ questionId, sessionId, nextQuestion, setNextQuestionId, setIsEnd, setCurrentErrorNumber }: QuestionProps) {
+function Question({
+  questionId,
+  sessionId,
+  nextQuestion,
+  setNextQuestionId,
+  setIsEnd,
+  setCurrentErrorNumber,
+}: QuestionProps) {
   const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
@@ -44,13 +51,13 @@ function Question({ questionId, sessionId, nextQuestion, setNextQuestionId, setI
           answer: {
             id: answerType === AnswerType.FREE_ANSWER ? undefined : answer,
             data: answerType === AnswerType.FREE_ANSWER ? answer : undefined,
-          }
-        }
+          },
+        },
       }).unwrap();
       setNextQuestionId(data.nextQuestionId ?? undefined);
       setTrueAnswer(data.answerId);
       setIsEnd(!data.nextQuestionId);
-      Keyboard.dismiss()
+      Keyboard.dismiss();
       if (!data.success) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);

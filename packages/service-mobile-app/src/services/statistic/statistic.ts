@@ -1,5 +1,6 @@
 import { api } from 'src/services/api';
-import { GetUserCourseStatisticResponse } from './statistic.dto';
+
+import type { GetUserCourseStatisticResponse } from './statistic.dto';
 
 export const statisticApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -7,7 +8,7 @@ export const statisticApi = api.injectEndpoints({
       query: (id) => ({
         url: `/statistic/STUDENT/ALL`,
         method: 'GET',
-        params: { courseId: id }
+        params: { courseId: id },
       }),
       providesTags: (resp, err, id) => [{ type: 'Statistic' }],
     }),

@@ -6,7 +6,6 @@ import ProgressBar from 'src/components/ProgressBar/ProgressBar';
 import TopBarContainer from 'src/components/topBarContainer';
 import { useGetCourseUserHpQuery } from 'src/services/course/course';
 
-
 interface QuizProps {
   courseId: string;
   totalQuestions: number;
