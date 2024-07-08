@@ -15,11 +15,14 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Install Yarn
+        run: npm install --global yarn
+
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run Cypress tests
-        run: npm run cypress:run
+        run: yarn run cypress:run
 
       - name: Upload Cypress artifacts
         if: failure()
