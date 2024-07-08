@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import CourseCard from 'pages/Home/Body/CourseCard/CourseCard';
-import HomeSearchBar from 'pages/Home/Body/SearchBar/HomeSearchBar';
+import CourseCard from 'pages/Home/Home/Body/CourseCard/CourseCard';
+import HomeSearchBar from 'pages/Home/Home/Body/SearchBar/HomeSearchBar';
 import api from 'services/api';
 import styled from 'styled-components';
 
