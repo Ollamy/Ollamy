@@ -1,8 +1,8 @@
 import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
+import { queryClient } from 'main';
 import type { GetUserModel, UserCoursesResponse } from 'services/api/out';
 import { UserApi } from 'services/api/out';
-import { queryClient } from 'main';
 
 export const GET_USER_COURSES_KEY = 'getUserCoursesKey';
 const GET_USER_KEY = 'getUserKey';
@@ -10,6 +10,12 @@ const GET_USER_KEY = 'getUserKey';
 export const userActions = {
   useLogout: () =>
     useMutation(UserApi.logoutUser, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_USER_KEY);
+      },
+    }),
+  useUpdateUser: () =>
+    useMutation(UserApi.updateUser, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_USER_KEY);
       },
