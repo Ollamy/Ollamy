@@ -24,7 +24,7 @@ jobs:
       - name: Ensure yarn.lock exists
         run: |
           if [ ! -f yarn.lock ]; then
-            yarn install --frozen-lockfile || yarn install;
+            yarn install --immutable || yarn install;
           fi
 
       - name: Install dependencies
