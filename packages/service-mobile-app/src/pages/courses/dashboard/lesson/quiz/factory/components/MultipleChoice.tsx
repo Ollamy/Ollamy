@@ -2,30 +2,30 @@ import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { Circle, HStack, Icon, Pressable, Text, VStack } from 'native-base';
 import type { FactoryComponentInterface } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
 
-function MultipleChoice({ answers, correctAnswer, currentAnswer, setAnswer }: FactoryComponentInterface) {
+function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryComponentInterface) {
   return (
     <VStack space={4}>
-      {answers.map((answer) => (
+      {answers.map((a) => (
         <Pressable
-          onPress={() => setAnswer(answer.id)}
-          key={answer.id}
-          id={answer.id}
+          onPress={() => setAnswer(a.id)}
+          key={a.id}
+          id={a.id}
           p={4}
           borderRadius={8}
           borderWidth={1}
           borderColor={
-            currentAnswer === answer.id && !correctAnswer
+            answer === a.id && !correctAnswer
               ? '#2C8DE7'
-              : correctAnswer === answer.id
+              : correctAnswer === a.id
               ? '#3BB765'
-              : correctAnswer && currentAnswer !== correctAnswer && currentAnswer === answer.id
+              : correctAnswer && answer !== correctAnswer && answer === a.id
               ? '#EB6161'
               : '#303030'
           }
           background={
-            correctAnswer === answer.id
+            correctAnswer === a.id
               ? '#3BB765'
-              : correctAnswer && currentAnswer !== correctAnswer && currentAnswer === answer.id
+              : correctAnswer && answer !== correctAnswer && answer === a.id
               ? '#EB6161'
               : 'white'
           }
@@ -38,29 +38,29 @@ function MultipleChoice({ answers, correctAnswer, currentAnswer, setAnswer }: Fa
           >
             <Circle
               borderWidth={1}
-              borderColor={currentAnswer === answer.id ? '#2C8DE7' : '#303030'}
+              borderColor={answer === a.id ? '#2C8DE7' : '#303030'}
               padding={1}
               boxSize={6}
               opacity={correctAnswer ? 0 : 1}
             >
-              {currentAnswer === answer.id && <Circle size={4} bg={'#2C8DE7'} />}
+              {answer === a.id && <Circle size={4} bg={'#2C8DE7'} />}
             </Circle>
             <Text
               color={
-                correctAnswer && currentAnswer !== correctAnswer && currentAnswer === answer.id
+                correctAnswer && answer !== correctAnswer && answer === a.id
                   ? 'white'
-                  : currentAnswer === answer.id && !correctAnswer
+                  : answer === a.id && !correctAnswer
                   ? '#2C8DE7'
-                  : correctAnswer === answer.id
+                  : correctAnswer === a.id
                   ? 'white'
                   : '#303030'
               }
               fontWeight={'bold'}
             >
-              {answer.data}
+              {a.data}
             </Text>
 
-            {correctAnswer === answer.id ? (
+            {correctAnswer === a.id ? (
               <Icon as={FontAwesome5} name={'check'} color={'white'} />
             ) : (
               <Icon as={Entypo} name={'cross'} color={'white'} />
