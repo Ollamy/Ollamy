@@ -30,12 +30,7 @@ function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryCo
               : 'white'
           }
         >
-          <HStack
-            w={'full'}
-            alignItems={'center'}
-            justifyContent={correctAnswer ? 'space-between' : undefined}
-            space={24}
-          >
+          <HStack w={'full'} alignItems={'center'} justifyContent={'space-between'} space={24}>
             <Circle
               borderWidth={1}
               borderColor={answer === a.id ? '#2C8DE7' : '#303030'}
