@@ -21,11 +21,11 @@ jobs:
       - name: Set Yarn version
         run: corepack prepare yarn@3.6.0 --activate
 
-      - name: Ensure yarn.lock exists
-        run: |
-          if [ ! -f yarn.lock ]; then
-            yarn install --immutable || yarn install;
-          fi
+      # - name: Ensure yarn.lock exists
+      #   run: |
+      #     if [ ! -f yarn.lock ]; then
+      #       yarn install --immutable || yarn install;
+      #     fi
 
       - name: Install dependencies
         run: yarn install --immutable
