@@ -16,9 +16,9 @@ function ProgressBar({
   nextProgressColor = '#bce8be64',
 }: ProgressBarProps) {
   return (
-    <Box h="6px" flex="1" backgroundColor={backgroundColor} borderRadius="full" overflow="hidden">
-      <Box h="full" w={`${nextProgress * 100}%`} backgroundColor={nextProgressColor}>
-        <Box h="full" w={`${progress * 100}%`} backgroundColor={progressColor} />
+    <Box h={'6px'} flex={'1'} backgroundColor={backgroundColor} borderRadius={'full'} overflow={'hidden'}>
+      <Box h={'full'} w={`${nextProgress * 100}%`} backgroundColor={nextProgressColor}>
+        <Box h={'full'} w={`${progress * 100}%`} backgroundColor={progressColor} />
       </Box>
     </Box>
   );

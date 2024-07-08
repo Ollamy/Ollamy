@@ -2,7 +2,7 @@ import type { UseQueryOptions } from 'react-query';
 import { useMutation, useQuery } from 'react-query';
 import { queryClient } from 'main';
 import type {
-  CourseSectionModel,
+  GetSectionsModel,
   GetCourseOperationRequest,
   GetCourseRequest,
   GetCourseSectionsRequest,
@@ -25,7 +25,7 @@ export const courseActions = {
     }),
   useGetCourseSections: (
     requestParameters: GetCourseSectionsRequest,
-    config?: UseQueryOptions<Array<CourseSectionModel>>,
+    config?: UseQueryOptions<Array<GetSectionsModel>>,
   ) =>
     useQuery({
       queryKey: [GET_COURSE_SECTIONS_KEY, requestParameters.id],
@@ -36,6 +36,13 @@ export const courseActions = {
     useMutation(CourseApi.postCourse, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_USER_COURSES_KEY);
+      },
+    }),
+  useUpdateCourse: () =>
+    useMutation(CourseApi.updateCourse, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_USER_COURSES_KEY);
+        queryClient.invalidateQueries(GET_COURSE_KEY);
       },
     }),
   useRemoveCourse: () =>

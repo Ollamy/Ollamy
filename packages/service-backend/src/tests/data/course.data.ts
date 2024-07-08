@@ -3,6 +3,10 @@ import {
   Lesson,
   Picture,
   Section,
+  Status,
+  Subscription,
+  SubscriptionPlan,
+  UserSubscription,
   UsertoCourse,
   UsertoLesson,
 } from '@prisma/client';
@@ -18,6 +22,8 @@ import { v4 as uuidv4 } from 'uuid';
 // Data
 
 export const courseId = uuidv4();
+
+export const sharecode = 'sharecode-123';
 
 export const createCourseData: CreateCourseModel = {
   title: 'title',
@@ -40,6 +46,20 @@ export const mockPictureDb: Picture = {
   filename: 'data',
 };
 
+export const mockSubscriptionDb: Subscription = {
+  plan: SubscriptionPlan.BASIC,
+  slots: 5,
+  price: 0,
+};
+
+export const mockUserSubscriptionDb: UserSubscription = {
+  id: uuidv4(),
+  user_id: context.__user.id,
+  subscription_plan: SubscriptionPlan.BASIC,
+  start_date: undefined,
+  end_date: undefined,
+};
+
 export const mockCourseDb: Course = {
   id: courseId,
   owner_id: context.__user.id,
@@ -48,13 +68,35 @@ export const mockCourseDb: Course = {
   picture_id: mockPictureDb.id,
 };
 
-export const mockLastLessonDb = {
-  lesson_id: uuidv4(),
-} as UsertoLesson;
+export const mockCourseSlotsAvailableDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userToCourse: 2,
+  },
+};
 
-export const mockLastSectionDb = {
-  section_id: uuidv4(),
-} as Lesson;
+export const mockCourseSlotsFullDb = {
+  user: {
+    UserSubscription: [
+      {
+        Subscription: {
+          slots: 5,
+        },
+      },
+    ],
+  },
+  _count: {
+    userlist: 6,
+  },
+};
 
 export const mockUserToCourse: UsertoCourse = {
   id: uuidv4(),
@@ -65,10 +107,11 @@ export const mockUserToCourse: UsertoCourse = {
   user_id: context.__user.id,
   role_user: 'MEMBER',
   permission_user: [],
-  last_lesson_id: mockLastLessonDb.lesson_id,
-  last_section_id: mockLastSectionDb.section_id,
   score: 0,
   hp: 1,
+  status: Status.IN_PROGRESS,
+  created_at: new Date(),
+  updated_at: new Date(),
 };
 
 export const mockUpdateCourseData: UpdateCourseModel = {
@@ -83,6 +126,7 @@ export const mockSection1: Section = {
   course_id: courseId,
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };
 
 export const mockSection2: Section = {
@@ -90,4 +134,5 @@ export const mockSection2: Section = {
   course_id: courseId,
   title: 'title',
   description: 'desc',
+  order: 'a0',
 };

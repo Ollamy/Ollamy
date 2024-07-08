@@ -22,6 +22,7 @@ import {
   LessonModel,
   LessonIdResponse,
   UpdateLessonModel,
+  UpdateLessonOrderModel,
 } from 'lesson/lesson.dto';
 import { LessonService } from 'lesson/lesson.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
@@ -100,7 +101,32 @@ export class LessonController {
     @Param('id') id: string,
     @OllContext() ctx: any,
   ): Promise<LessonModel> {
-    return this.lessonService.getLesson(id, ctx.__user.id);
+    return this.lessonService.getLesson(id, ctx);
+  }
+
+  @ApiOkResponse({
+    description: 'Lesson order changed',
+    type: LessonIdResponse,
+  })
+  @ApiBody({
+    type: UpdateLessonOrderModel,
+    description: 'update lesson order data model',
+    examples: {
+      template: {
+        value: {
+          before: 'order id',
+          after: 'order id',
+          origin: 'lesson id',
+        } as UpdateLessonOrderModel,
+      },
+    },
+  })
+  @LoggedMiddleware(true)
+  @Put('/order')
+  async updateLessonOrder(
+    @Body() body: UpdateLessonOrderModel,
+  ): Promise<object> {
+    return this.lessonService.updateLessonOrder(body);
   }
 
   @ApiOkResponse({
@@ -113,7 +139,7 @@ export class LessonController {
     required: true,
   })
   @ApiBody({
-    type: LessonModel,
+    type: UpdateLessonModel,
     description: 'user data model',
     examples: {
       template: {

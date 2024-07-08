@@ -17,6 +17,9 @@ import { AiModule } from './ai/ai.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BadgeModule } from './badge/badge.module';
+import { StripeModule } from './stripe/stripe.module';
+import { SessionModule } from './session/session.module';
+import { StatisticModule } from './statistic/statistic.module';
 
 @Module({
   imports: [
@@ -30,10 +33,13 @@ import { BadgeModule } from './badge/badge.module';
     LectureModule,
     BadgeModule,
     AiModule,
+    StripeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
+    SessionModule,
+    StatisticModule,
   ],
   controllers: [AppController, AlertController],
   providers: [

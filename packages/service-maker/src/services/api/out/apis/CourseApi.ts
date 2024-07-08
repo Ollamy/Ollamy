@@ -4,10 +4,11 @@
 import * as runtime from '../runtime';
 import type {
   CourseIdResponse,
-  CourseSectionModel,
   CourseTrueResponse,
   CreateCourseModel,
+  EnrollmentResponseTotal,
   GetCourseRequest,
+  GetSectionsModel,
   IdCourseModel,
   ShareCourseCode,
   UpdateCourseModel,
@@ -34,6 +35,10 @@ export interface GetCourseOperationRequest {
 
 export interface GetCourseSectionsRequest {
     id: string;
+}
+
+export interface GetUserEnrollmentsRequest {
+    id?: string;
 }
 
 export interface GetUserToCourseHpRequest {
@@ -174,7 +179,7 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
+    async getCourseSectionsRaw(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GetSectionsModel>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getCourseSections.');
         }
@@ -195,8 +200,35 @@ export class CourseApi extends runtime.BaseAPI {
 
     /**
      */
-    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CourseSectionModel>> {
+    static getCourseSections(requestParameters: GetCourseSectionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GetSectionsModel>> {
         return localCourseApi.getCourseSectionsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async getUserEnrollmentsRaw(requestParameters: GetUserEnrollmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnrollmentResponseTotal> {
+        const queryParameters: any = {};
+
+        if (requestParameters.id !== undefined) {
+            queryParameters['id'] = requestParameters.id;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/course/enrollment`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static getUserEnrollments(requestParameters: GetUserEnrollmentsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EnrollmentResponseTotal> {
+        return localCourseApi.getUserEnrollmentsRaw(requestParameters, initOverrides);
     }
 
     /**

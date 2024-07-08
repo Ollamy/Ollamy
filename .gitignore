@@ -2,7 +2,6 @@ node_modules/
 .envrc
 .idea
 **/.yarn/
-.yarnrc.yml
 .vscode
 .DS_Store
 **/.history
@@ -32,6 +31,7 @@ yarn-error.log*
 *.launch
 .settings/
 *.sublime-workspace
+*.code-workspace
 .vscode/*
 .expo
 /dist

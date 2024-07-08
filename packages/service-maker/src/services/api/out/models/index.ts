@@ -3,6 +3,25 @@
 /**
  * 
  * @export
+ * @interface Answer
+ */
+export interface Answer {
+    /**
+     * 
+     * @type {string}
+     * @memberof Answer
+     */
+    answer: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Answer
+     */
+    correct: boolean;
+}
+/**
+ * 
+ * @export
  * @interface AnswerIdResponse
  */
 export interface AnswerIdResponse {
@@ -99,31 +118,6 @@ export interface CourseIdResponse {
      * @memberof CourseIdResponse
      */
     id: string;
-}
-/**
- * 
- * @export
- * @interface CourseSectionModel
- */
-export interface CourseSectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseSectionModel
-     */
-    description: string;
 }
 /**
  * 
@@ -356,6 +350,25 @@ export interface CreateSectionModel {
 /**
  * 
  * @export
+ * @interface CreateSessionModel
+ */
+export interface CreateSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSessionModel
+     */
+    currentQuestionId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSessionModel
+     */
+    sessionId: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateUserModel
  */
 export interface CreateUserModel {
@@ -383,6 +396,86 @@ export interface CreateUserModel {
      * @memberof CreateUserModel
      */
     password: string;
+    /**
+     * Platform user tries to access
+     * @type {string}
+     * @memberof CreateUserModel
+     */
+    platform: CreateUserModelPlatformEnum;
+}
+
+
+/**
+ * @export
+ */
+export const CreateUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type CreateUserModelPlatformEnum = typeof CreateUserModelPlatformEnum[keyof typeof CreateUserModelPlatformEnum];
+
+/**
+ * 
+ * @export
+ * @interface EnrollmentResponse
+ */
+export interface EnrollmentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof EnrollmentResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponse
+     */
+    epoch: number;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentResponseTotal
+ */
+export interface EnrollmentResponseTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentResponseTotal
+     */
+    total: number;
+    /**
+     * 
+     * @type {Array<EnrollmentResponse>}
+     * @memberof EnrollmentResponseTotal
+     */
+    enrollments: Array<EnrollmentResponse>;
+    /**
+     * 
+     * @type {Array<EnrollmentTotal>}
+     * @memberof EnrollmentResponseTotal
+     */
+    cumulative: Array<EnrollmentTotal>;
+}
+/**
+ * 
+ * @export
+ * @interface EnrollmentTotal
+ */
+export interface EnrollmentTotal {
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    epoch: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EnrollmentTotal
+     */
+    total: number;
 }
 /**
  * 
@@ -416,23 +509,29 @@ export interface GetCourseRequest {
     picture: string;
     /**
      * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastLessonId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetCourseRequest
-     */
-    lastSectionId?: string;
-    /**
-     * 
      * @type {number}
      * @memberof GetCourseRequest
      */
     numberOfUsers: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetCourseRequest
+     */
+    status?: GetCourseRequestStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const GetCourseRequestStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof typeof GetCourseRequestStatusEnum];
+
 /**
  * 
  * @export
@@ -538,6 +637,129 @@ export type GetQuestionModelDifficultyEnum = typeof GetQuestionModelDifficultyEn
 /**
  * 
  * @export
+ * @interface GetSectionModel
+ */
+export interface GetSectionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    courseId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    order: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionModel
+     */
+    status?: GetSectionModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionModelStatusEnum = typeof GetSectionModelStatusEnum[keyof typeof GetSectionModelStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSectionsModel
+ */
+export interface GetSectionsModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    order: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSectionsModel
+     */
+    status?: GetSectionsModelStatusEnum;
+}
+
+
+/**
+ * @export
+ */
+export const GetSectionsModelStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type GetSectionsModelStatusEnum = typeof GetSectionsModelStatusEnum[keyof typeof GetSectionsModelStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetSessionModel
+ */
+export interface GetSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSessionModel
+     */
+    currentQuestionId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetSessionModel
+     */
+    correctAnswers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetSessionModel
+     */
+    totalQuestions: number;
+}
+/**
+ * 
+ * @export
  * @interface GetUserModel
  */
 export interface GetUserModel {
@@ -591,6 +813,49 @@ export interface GetUsersBadges {
      * @memberof GetUsersBadges
      */
     badges: Array<BadgeModel>;
+}
+/**
+ * 
+ * @export
+ * @interface GradeStatisticModel
+ */
+export interface GradeStatisticModel {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    average?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    min?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeStatisticModel
+     */
+    max?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    firstname?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeStatisticModel
+     */
+    lastname?: string;
 }
 /**
  * 
@@ -766,6 +1031,12 @@ export interface LessonModel {
     status: LessonModelStatusEnum;
     /**
      * 
+     * @type {string}
+     * @memberof LessonModel
+     */
+    order: string;
+    /**
+     * 
      * @type {number}
      * @memberof LessonModel
      */
@@ -807,6 +1078,42 @@ export interface LoginUserModel {
      * @memberof LoginUserModel
      */
     password: string;
+    /**
+     * Platform user tries to login
+     * @type {string}
+     * @memberof LoginUserModel
+     */
+    platform: LoginUserModelPlatformEnum;
+}
+
+
+/**
+ * @export
+ */
+export const LoginUserModelPlatformEnum = {
+    Mobile: 'MOBILE',
+    Maker: 'MAKER'
+} as const;
+export type LoginUserModelPlatformEnum = typeof LoginUserModelPlatformEnum[keyof typeof LoginUserModelPlatformEnum];
+
+/**
+ * 
+ * @export
+ * @interface Question
+ */
+export interface Question {
+    /**
+     * 
+     * @type {string}
+     * @memberof Question
+     */
+    question: string;
+    /**
+     * 
+     * @type {Array<Answer>}
+     * @memberof Question
+     */
+    answers: Array<Answer>;
 }
 /**
  * 
@@ -964,31 +1271,6 @@ export interface SectionIdResponse {
 /**
  * 
  * @export
- * @interface SectionModel
- */
-export interface SectionModel {
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    courseId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SectionModel
-     */
-    description: string;
-}
-/**
- * 
- * @export
  * @interface ShareCourseCode
  */
 export interface ShareCourseCode {
@@ -1121,6 +1403,56 @@ export interface UpdateLectureModel {
 /**
  * 
  * @export
+ * @interface UpdateLessonModel
+ */
+export interface UpdateLessonModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    sectionId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateLessonModel
+     */
+    description?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateLessonOrderModel
+ */
+export interface UpdateLessonOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateLessonOrderModel
+     */
+    origin: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateQuestionModel
  */
 export interface UpdateQuestionModel {
@@ -1233,7 +1565,7 @@ export interface UpdateQuestionOrderModel {
      */
     before?: string | null;
     /**
-     * The origin of the question
+     * Object's id
      * @type {string}
      * @memberof UpdateQuestionOrderModel
      */
@@ -1263,6 +1595,31 @@ export interface UpdateSectionModel {
      * @memberof UpdateSectionModel
      */
     description?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateSectionOrderModel
+ */
+export interface UpdateSectionOrderModel {
+    /**
+     * The order after the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    after?: string | null;
+    /**
+     * The order before the current order
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    before?: string | null;
+    /**
+     * Object's id
+     * @type {string}
+     * @memberof UpdateSectionOrderModel
+     */
+    origin: string;
 }
 /**
  * 
@@ -1351,24 +1708,30 @@ export interface UserCourses {
      */
     owner: boolean;
     /**
-     * The unique identifier of the last lesson
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastLessonId: string;
-    /**
-     * The unique identifier of the last section
-     * @type {string}
-     * @memberof UserCourses
-     */
-    lastSectionId: string;
-    /**
      * The number of users enrolled in the course
      * @type {number}
      * @memberof UserCourses
      */
-    numberOfUsers: number;
+    numberOfUsers?: number;
+    /**
+     * course completion status
+     * @type {string}
+     * @memberof UserCourses
+     */
+    status?: UserCoursesStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const UserCoursesStatusEnum = {
+    NotStarted: 'NOT_STARTED',
+    InProgress: 'IN_PROGRESS',
+    Completed: 'COMPLETED'
+} as const;
+export type UserCoursesStatusEnum = typeof UserCoursesStatusEnum[keyof typeof UserCoursesStatusEnum];
+
 /**
  * 
  * @export
@@ -1475,4 +1838,54 @@ export interface ValidateAnswerResponse {
      * @memberof ValidateAnswerResponse
      */
     hp?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateQuestionSessionModel
+ */
+export interface ValidateQuestionSessionModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionModel
+     */
+    questionId: string;
+    /**
+     * 
+     * @type {AnswerModel}
+     * @memberof ValidateQuestionSessionModel
+     */
+    answer: AnswerModel;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateQuestionSessionResponseModel
+ */
+export interface ValidateQuestionSessionResponseModel {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    success: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    nextQuestionId: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    answerId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ValidateQuestionSessionResponseModel
+     */
+    hp: number;
 }

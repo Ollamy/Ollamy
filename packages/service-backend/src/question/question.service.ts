@@ -8,7 +8,6 @@ import {
 import {
   CreateQuestionModel,
   IdQuestionModel,
-  QuestionModel,
   UpdateQuestionModel,
   QuestionIdResponse,
   UpdateQuestionOrderModel,
@@ -17,17 +16,12 @@ import {
   GetQuestionModel,
 } from './question.dto';
 import prisma from 'client';
-import {
-  Answer,
-  AnswerType,
-  LessonStatus,
-  Prisma,
-  Question,
-} from '@prisma/client';
-import { PictureService } from '../picture/picture.service';
-import { AnswerModel, QuestionAnswerModel } from '../answer/answer.dto';
+import { Answer, AnswerType, Status, Prisma, Question } from '@prisma/client';
+import { SectionService } from 'section/section.service';
+import { PictureService } from 'picture/picture.service';
+import { QuestionAnswerModel } from 'answer/answer.dto';
 import { generateKeyBetween } from 'order/order.service';
-import { TasksService } from '../cron/cron.service';
+import { TasksService } from 'cron/cron.service';
 
 @Injectable()
 export class QuestionService {
@@ -335,7 +329,7 @@ export class QuestionService {
       },
     });
 
-    if (userLesson.status === LessonStatus.NOT_STARTED) {
+    if (userLesson.status === Status.NOT_STARTED) {
       await prisma.usertoLesson.update({
         where: {
           lesson_id_user_id: {
@@ -344,12 +338,12 @@ export class QuestionService {
           },
         },
         data: {
-          status: LessonStatus.IN_PROGRESS,
+          status: Status.IN_PROGRESS,
         },
       });
     }
 
-    if (isValidated === true && userLesson.status !== LessonStatus.COMPLETED) {
+    if (isValidated === true && userLesson.status !== Status.COMPLETED) {
       await prisma.usertoScore.upsert({
         where: { user_id: ctx.__user.id },
         create: {
@@ -416,9 +410,14 @@ export class QuestionService {
           },
         },
         data: {
-          status: LessonStatus.COMPLETED,
+          status: Status.COMPLETED,
         },
       });
+
+      await SectionService.UpdateSectionCompletionFromLesson(
+        userLesson.lesson_id,
+        userLesson.user_id,
+      );
     }
 
     return {
@@ -427,7 +426,7 @@ export class QuestionService {
       end: !(nextQuestion !== null),
       nextQuestionId: nextQuestion !== null ? nextQuestion.id : undefined,
       points:
-        isValidated && userLesson.status !== LessonStatus.COMPLETED
+        isValidated && userLesson.status !== Status.COMPLETED
           ? questionPoints
           : 0,
       hp: hp - 1,

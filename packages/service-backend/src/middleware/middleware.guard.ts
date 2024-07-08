@@ -8,7 +8,8 @@ import {
 import prisma from 'client';
 import { Reflector } from '@nestjs/core';
 import { MIDDLEWARE_KEY } from './middleware.decorator';
-import SessionService from '../redis/session/session.service';
+import SessionService from 'redis/session/session.service';
+import { PlatformEnum } from 'user/user.dto';
 
 @Injectable()
 export class MiddlewareGuard implements CanActivate {
@@ -52,6 +53,11 @@ export class MiddlewareGuard implements CanActivate {
 
     req.__user = user;
 
+    req.__device = {
+      isMaker: data.platform === PlatformEnum.MAKER,
+      platform: data.platform,
+    };
+
     const userToCourse = await prisma.usertoCourse.findMany({
       where: {
         user_id: req.__user.id,
@@ -63,6 +69,7 @@ export class MiddlewareGuard implements CanActivate {
       throw new NotAcceptableException('Invalid Token');
     }
     req.__userToCourse = userToCourse;
+
     return true;
   }
 }

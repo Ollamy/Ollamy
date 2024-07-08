@@ -1,4 +1,6 @@
-import { type FormEvent, useCallback, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import 'styles/dialog.css';
@@ -6,13 +8,23 @@ import 'styles/dialog.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
+interface FormInputs {
+  title: string;
+  description: string;
+}
+
 interface CustomDialogTitleDescriptionProps<T> {
   dialogTitle: string;
   dialogDescription: string;
   actionButtonValue: string;
-  TriggerButton: React.ReactNode;
+  TriggerButton: ReactNode;
   createFunction: (title: string, description: string, moreOptions?: T) => void;
   moreOptions?: T;
+  defaultTitle?: string;
+  defaultDescription?: string;
+  defaultTitleLabel?: string;
+  defaultDescriptionLabel?: string;
+  secondFieldType?: 'textArea' | 'input' | 'none';
 }
 
 function CustomDialogTitleDescription<T>({
@@ -22,22 +34,36 @@ function CustomDialogTitleDescription<T>({
   actionButtonValue,
   dialogDescription,
   moreOptions,
+  defaultTitle = '',
+  defaultDescription = '',
+  defaultTitleLabel = 'Title',
+  defaultDescriptionLabel = 'Description',
+  secondFieldType = 'textArea',
 }: CustomDialogTitleDescriptionProps<T>) {
+  const defaultValues = useMemo(
+    () => ({
+      title: defaultTitle,
+      description: defaultDescription,
+    }),
+    [defaultTitle, defaultDescription],
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormInputs>({ defaultValues });
   const [open, setOpen] = useState(false);
 
-  const handleSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
-      const formData = new FormData(event.currentTarget as HTMLFormElement);
-      const title = formData.get('title') as string;
-      const description = formData.get('description') as string;
-
-      createFunction(title, description, moreOptions);
-      setOpen(false);
-    },
-    [createFunction, moreOptions],
-  );
+  const onSubmit = (data: FormInputs) => {
+    createFunction(data.title, data.description, moreOptions);
+    setOpen(false);
+  };
 
   return (
     <Container>
@@ -50,31 +76,45 @@ function CustomDialogTitleDescription<T>({
             <Dialog.Description className={'DialogDescription'}>
               {dialogDescription}
             </Dialog.Description>
-            <CustomForm onSubmit={handleSubmit}>
+            <CustomForm onSubmit={handleSubmit(onSubmit)}>
               <CustomFieldset className={'DialogFieldset'}>
                 <CustomLabel className={'DialogLabel'} htmlFor={'title'}>
-                  Title
+                  {defaultTitleLabel}
                 </CustomLabel>
                 <CustomInput
-                  required
+                  {...register('title', { required: true })}
                   id={'title'}
-                  name={'title'}
                   className={'DialogInput'}
                   placeholder={'Section title'}
                 />
+                {errors.title && <span>This field is required</span>}
               </CustomFieldset>
-              <CustomFieldset className={'DialogFieldset'}>
-                <CustomLabel className={'DialogLabel'} htmlFor={'description'}>
-                  Description
-                </CustomLabel>
-                <TextArea
-                  required
-                  id={'description'}
-                  name={'description'}
-                  className={'DialogTextarea'}
-                  placeholder={'Section description…'}
-                />
-              </CustomFieldset>
+              {secondFieldType !== 'none' && (
+                <CustomFieldset className={'DialogFieldset'}>
+                  <CustomLabel
+                    className={'DialogLabel'}
+                    htmlFor={'description'}
+                  >
+                    {defaultDescriptionLabel}
+                  </CustomLabel>
+                  {secondFieldType === 'textArea' ? (
+                    <TextArea
+                      {...register('description', { required: true })}
+                      id={'description'}
+                      className={'DialogTextarea'}
+                      placeholder={'Section description…'}
+                    />
+                  ) : (
+                    <CustomInput
+                      {...register('description', { required: true })}
+                      id={'description'}
+                      className={'DialogInput'}
+                      placeholder={'Section title'}
+                    />
+                  )}
+                  {errors.description && <span>This field is required</span>}
+                </CustomFieldset>
+              )}
               <ButtonContainer>
                 <CustomButton type={'submit'} className={'DialogButton green'}>
                   {actionButtonValue}

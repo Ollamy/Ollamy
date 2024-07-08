@@ -45,28 +45,35 @@ enum PermissionLesson {
   PING
 }
 
+enum SubscriptionPlan {
+  BASIC
+  ESSENTIAL
+  MASTER
+}
+
 model User {
-  id              String            @id @default(uuid()) @db.Uuid
-  firstname       String
-  lastname        String
-  email           String            @unique
-  password        String
-  communities_id  String[]          @db.Uuid
-  UsertoCourse    UsertoCourse[]
-  Course          Course[]
-  Message         Message[]
-  UserDiscussions UserDiscussions[]
-  UsertoLesson    UsertoLesson[]
-  UsertoScore     UsertoScore[]
-  UserBadges      UserBadges[]
+  id               String             @id @default(uuid()) @db.Uuid
+  firstname        String
+  lastname         String
+  email            String             @unique
+  password         String
+  communities_id   String[]           @db.Uuid
+  UsertoCourse     UsertoCourse[]
+  Course           Course[]
+  Message          Message[]
+  UserDiscussions  UserDiscussions[]
+  UsertoLesson     UsertoLesson[]
+  UsertoScore      UsertoScore[]
+  UserBadges       UserBadges[]
+  UserSubscription UserSubscription[]
+  UsertoSection    UsertoSection[]
+  UserSession      UserSession[]
 }
 
 model UsertoCourse {
-  id      String   @id @default(uuid()) @db.Uuid
-  course  Course   @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  lesson  Lesson?  @relation(references: [id], fields: [last_lesson_id])
-  section Section? @relation(references: [id], fields: [last_section_id])
+  id     String @id @default(uuid()) @db.Uuid
+  course Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user   User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   role_user          Role                @default(MEMBER)
   permission_user    PermissionUser[]    @default([])
@@ -77,55 +84,76 @@ model UsertoCourse {
   user_id            String              @db.Uuid
   score              Int?                @default(0)
   hp                 Int?                @default(20)
+  status             Status              @default(NOT_STARTED)
 
-  last_section_id String? @db.Uuid
-  last_lesson_id  String? @db.Uuid
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@unique([course_id, user_id])
 }
 
-enum LessonStatus {
+model UsertoSection {
+  id      String  @id @default(uuid()) @db.Uuid
+  section Section @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  user    User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  section_id String @db.Uuid
+  user_id    String @db.Uuid
+
+  score  Int?   @default(0)
+  status Status @default(NOT_STARTED)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([section_id, user_id])
+}
+
+enum Status {
   NOT_STARTED
   IN_PROGRESS
   COMPLETED
 }
 
 model UsertoLesson {
-  id                String       @id @default(uuid()) @db.Uuid
-  lesson            Lesson       @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
-  user              User         @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  lesson_id         String       @db.Uuid
-  user_id           String       @db.Uuid
-  score             Int?         @default(0)
-  complete_lecture  Boolean      @default(false)
-  complete_question Boolean      @default(false)
-  status            LessonStatus @default(NOT_STARTED)
-  created_at        DateTime     @default(now())
-  updated_at        DateTime     @updatedAt
+  id                String   @id @default(uuid()) @db.Uuid
+  lesson            Lesson   @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  user              User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  lesson_id         String   @db.Uuid
+  user_id           String   @db.Uuid
+  score             Int?     @default(0)
+  complete_lecture  Boolean  @default(false)
+  complete_question Boolean  @default(false)
+  status            Status   @default(NOT_STARTED)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
 
   @@unique([lesson_id, user_id])
 }
 
 model Course {
-  id          String         @id @default(uuid()) @db.Uuid
-  section     Section[]
-  userlist    UsertoCourse[]
-  user        User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
-  owner_id    String         @db.Uuid
-  title       String
-  description String?
-  picture     Picture?       @relation(references: [id], fields: [picture_id])
-  picture_id  String?        @db.Uuid
+  id           String         @id @default(uuid()) @db.Uuid
+  section      Section[]
+  userToCourse UsertoCourse[]
+  user         User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id     String         @db.Uuid
+  title        String
+  description  String?
+  picture      Picture?       @relation(references: [id], fields: [picture_id])
+  picture_id   String?        @db.Uuid
+  userSession  UserSession[]
 }
 
 model Section {
-  id           String         @id @default(uuid()) @db.Uuid
-  course       Course         @relation(references: [id], fields: [course_id], onDelete: Cascade)
-  course_id    String         @db.Uuid
-  title        String
-  description  String?
-  Lesson       Lesson[]
-  UsertoCourse UsertoCourse[]
+  id            String          @id @default(uuid()) @db.Uuid
+  course        Course          @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id     String          @db.Uuid
+  title         String
+  description   String?
+  Lesson        Lesson[]
+  UsertoSection UsertoSection[]
+  order         String          @default("a0")
+  userSession   UserSession[]
 }
 
 model Lesson {
@@ -137,7 +165,8 @@ model Lesson {
   Questions    Question[]
   Lecture      Lecture[]
   UsertoLesson UsertoLesson[]
-  UsertoCourse UsertoCourse[]
+  order        String         @default("a0")
+  userSession  UserSession[]
 }
 
 enum AnswerType {
@@ -191,7 +220,7 @@ model Question {
   picture_id      String?             @db.Uuid
   points          Int?                @default(0)
   difficulty      QuestionDifficulty?
-  order           String
+  order           String              @default("a0")
 }
 
 model Answer {
@@ -201,7 +230,7 @@ model Answer {
   data        String?
   picture     Picture? @relation(references: [id], fields: [picture_id])
   picture_id  String?  @db.Uuid
-  order       String
+  order       String   @default("a0")
 }
 
 model Discussion {
@@ -261,4 +290,48 @@ model UserBadges {
   created_at DateTime @default(now())
 
   @@id([user_id, badge_id])
+}
+
+model Subscription {
+  plan  SubscriptionPlan @id @unique @default(BASIC)
+  slots Int              @default(5)
+  price Int              @default(0)
+
+  UserSubscription UserSubscription[]
+}
+
+model UserSubscription {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  User    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String? @unique @db.Uuid
+
+  Subscription      Subscription     @relation(fields: [subscription_plan], references: [plan], onDelete: Cascade)
+  subscription_plan SubscriptionPlan
+
+  start_date DateTime  @default(now())
+  end_date   DateTime?
+
+  @@unique([user_id, subscription_plan])
+}
+
+model UserSession {
+  id                  String    @id @default(uuid()) @db.Uuid
+  created_at          DateTime  @default(now())
+  end_date            DateTime?
+  last_update         DateTime  @updatedAt
+  course_id           String    @db.Uuid
+  section_id          String    @db.Uuid
+  lesson_id           String    @db.Uuid
+  user_id             String    @db.Uuid
+  current_question_id String    @db.Uuid
+  correct_answers     Int       @default(0)
+  total_questions     Int
+  status              Status    @default(IN_PROGRESS)
+  preloaded_data      Json?
+
+  course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

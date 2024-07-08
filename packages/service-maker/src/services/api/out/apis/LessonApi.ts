@@ -9,6 +9,8 @@ import type {
   LessonLectureModel,
   LessonModel,
   QuestionModel,
+  UpdateLessonModel,
+  UpdateLessonOrderModel,
 } from '../models/index';
 
 export interface DeleteLessonRequest {
@@ -37,7 +39,11 @@ export interface RegisterLessonRequest {
 
 export interface UpdateLessonRequest {
     id: string;
-    lessonModel: LessonModel;
+    updateLessonModel: UpdateLessonModel;
+}
+
+export interface UpdateLessonOrderRequest {
+    updateLessonOrderModel: UpdateLessonOrderModel;
 }
 
 /**
@@ -219,8 +225,8 @@ export class LessonApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateLesson.');
         }
 
-        if (requestParameters.lessonModel === null || requestParameters.lessonModel === undefined) {
-            throw new runtime.RequiredError('lessonModel','Required parameter requestParameters.lessonModel was null or undefined when calling updateLesson.');
+        if (requestParameters.updateLessonModel === null || requestParameters.updateLessonModel === undefined) {
+            throw new runtime.RequiredError('updateLessonModel','Required parameter requestParameters.updateLessonModel was null or undefined when calling updateLesson.');
         }
 
         const queryParameters: any = {};
@@ -234,7 +240,7 @@ export class LessonApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.lessonModel,
+            body: requestParameters.updateLessonModel,
         }, initOverrides);
 
         return response.json();
@@ -244,6 +250,36 @@ export class LessonApi extends runtime.BaseAPI {
      */
     static updateLesson(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
         return localLessonApi.updateLessonRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async updateLessonOrderRaw(requestParameters: UpdateLessonOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+        if (requestParameters.updateLessonOrderModel === null || requestParameters.updateLessonOrderModel === undefined) {
+            throw new runtime.RequiredError('updateLessonOrderModel','Required parameter requestParameters.updateLessonOrderModel was null or undefined when calling updateLessonOrder.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/lesson/order`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.updateLessonOrderModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static updateLessonOrder(requestParameters: UpdateLessonOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
+        return localLessonApi.updateLessonOrderRaw(requestParameters, initOverrides);
     }
 
 }

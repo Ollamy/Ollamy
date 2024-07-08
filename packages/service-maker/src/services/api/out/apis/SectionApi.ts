@@ -4,11 +4,12 @@
 import * as runtime from '../runtime';
 import type {
   CreateSectionModel,
+  GetSectionModel,
   IdSectionModel,
   LessonModel,
   SectionIdResponse,
-  SectionModel,
   UpdateSectionModel,
+  UpdateSectionOrderModel,
 } from '../models/index';
 
 export interface DeleteSectionRequest {
@@ -23,6 +24,10 @@ export interface GetSectionLessonsRequest {
     id: string;
 }
 
+export interface JoinSectionRequest {
+    id: string;
+}
+
 export interface RegisterSectionRequest {
     createSectionModel: CreateSectionModel;
 }
@@ -30,6 +35,10 @@ export interface RegisterSectionRequest {
 export interface UpdateSectionRequest {
     id: string;
     updateSectionModel: UpdateSectionModel;
+}
+
+export interface UpdateSectionOrderRequest {
+    updateSectionOrderModel: UpdateSectionOrderModel;
 }
 
 /**
@@ -68,7 +77,7 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    async getSectionRaw(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionModel> {
+    async getSectionRaw(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSectionModel> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSection.');
         }
@@ -89,7 +98,7 @@ export class SectionApi extends runtime.BaseAPI {
 
     /**
      */
-    static getSection(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionModel> {
+    static getSection(requestParameters: GetSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetSectionModel> {
         return localSectionApi.getSectionRaw(requestParameters, initOverrides);
     }
 
@@ -118,6 +127,33 @@ export class SectionApi extends runtime.BaseAPI {
      */
     static getSectionLessons(requestParameters: GetSectionLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonModel>> {
         return localSectionApi.getSectionLessonsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async joinSectionRaw(requestParameters: JoinSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling joinSection.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/section/{id}/join`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static joinSection(requestParameters: JoinSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        return localSectionApi.joinSectionRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -182,6 +218,36 @@ export class SectionApi extends runtime.BaseAPI {
      */
     static updateSection(requestParameters: UpdateSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
         return localSectionApi.updateSectionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async updateSectionOrderRaw(requestParameters: UpdateSectionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        if (requestParameters.updateSectionOrderModel === null || requestParameters.updateSectionOrderModel === undefined) {
+            throw new runtime.RequiredError('updateSectionOrderModel','Required parameter requestParameters.updateSectionOrderModel was null or undefined when calling updateSectionOrder.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/section/order`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.updateSectionOrderModel,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static updateSectionOrder(requestParameters: UpdateSectionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
+        return localSectionApi.updateSectionOrderRaw(requestParameters, initOverrides);
     }
 
 }

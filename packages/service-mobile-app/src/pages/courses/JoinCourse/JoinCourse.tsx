@@ -9,7 +9,7 @@ function JoinCourse(): JSX.Element {
 
   if (!data && !isLoading) {
     return (
-      <VStack justifyContent="center" alignItems="center" w="100%" h="100%">
+      <VStack justifyContent={'center'} alignItems={'center'} w={'100%'} h={'100%'}>
         <Text>Course not found</Text>
       </VStack>
     );
@@ -17,7 +17,7 @@ function JoinCourse(): JSX.Element {
 
   if (isLoading || !data) {
     return (
-      <VStack justifyContent="center" alignItems="center" w="100%" h="100%">
+      <VStack justifyContent={'center'} alignItems={'center'} w={'100%'} h={'100%'}>
         <Text>Loading...</Text>
       </VStack>
     );

@@ -9,7 +9,7 @@ interface Props {
 function CustomIconButton({ onPress, children }: Props) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Box backgroundColor="transparent" p={5}>
+      <Box backgroundColor={'transparent'} p={5}>
         {children}
       </Box>
     </TouchableOpacity>

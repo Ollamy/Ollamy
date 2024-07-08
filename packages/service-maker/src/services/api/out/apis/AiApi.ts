@@ -2,8 +2,18 @@
 /* eslint-disable */
 
 import * as runtime from '../runtime';
+import type {
+  CourseTrueResponse,
+  Question,
+} from '../models/index';
+
+export interface CreateQuestionRequest {
+    lessonId: string;
+    question: Array<Question>;
+}
 
 export interface GenerateTextRequest {
+    numberofquestions: any;
     file?: Blob;
 }
 
@@ -13,8 +23,50 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    async generateTextRaw(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+    async createQuestionRaw(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
+        if (requestParameters.lessonId === null || requestParameters.lessonId === undefined) {
+            throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling createQuestion.');
+        }
+
+        if (requestParameters.question === null || requestParameters.question === undefined) {
+            throw new runtime.RequiredError('question','Required parameter requestParameters.question was null or undefined when calling createQuestion.');
+        }
+
         const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/ai/create-generated-question/{lessonId}`.replace(`{${"lessonId"}}`, encodeURIComponent(String(requestParameters.lessonId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters.question,
+        }, initOverrides);
+
+        return response.json();
+    }
+
+    /**
+     */
+    static createQuestion(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
+        return localAiApi.createQuestionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async generateTextRaw(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
+        if (requestParameters.numberofquestions === null || requestParameters.numberofquestions === undefined) {
+            throw new runtime.RequiredError('numberofquestions','Required parameter requestParameters.numberofquestions was null or undefined when calling generateText.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.numberofquestions !== undefined) {
+            queryParameters['numberofquestions'] = requestParameters.numberofquestions;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -51,7 +103,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    static generateText(requestParameters: GenerateTextRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+    static generateText(requestParameters: GenerateTextRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
         return localAiApi.generateTextRaw(requestParameters, initOverrides);
     }
 
