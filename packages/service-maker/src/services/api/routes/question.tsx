@@ -16,7 +16,7 @@ export const GET_QUESTION_ANSWERS_KEY = 'getQuestionAnswersKey';
 export const questionActions = {
   useQuestion: (
     requestParameters: GetQuestionRequest,
-    config?: UseQueryOptions<GetQuestionModel>,
+    config?: UseQueryOptions<GetQuestionModel>
   ) =>
     useQuery({
       queryKey: [GET_QUESTION_KEY, requestParameters.id],
@@ -29,6 +29,12 @@ export const questionActions = {
         queryClient.invalidateQueries(GET_LESSON_QUESTIONS_KEY);
       },
     }),
+  useSortQuestion: () =>
+    useMutation(QuestionApi.updateQuestionOrder, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_QUESTION_KEY);
+      },
+    }),
   useUpdateQuestion: () =>
     useMutation(QuestionApi.updateQuestion, {
       onSuccess: () => {
@@ -38,7 +44,7 @@ export const questionActions = {
     }),
   useGetQuestionAnswers: (
     requestParameters: GetQuestionAnswersRequest,
-    config?: UseQueryOptions<QuestionAnswerModel[]>,
+    config?: UseQueryOptions<QuestionAnswerModel[]>
   ) =>
     useQuery({
       queryKey: [GET_QUESTION_ANSWERS_KEY, requestParameters.id],

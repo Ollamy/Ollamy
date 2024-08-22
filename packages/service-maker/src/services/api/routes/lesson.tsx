@@ -20,7 +20,7 @@ export const GET_LESSON_LECTURES_KEY = 'getLessonLectureKey';
 export const lessonActions = {
   useLesson: (
     requestParameters: GetLessonRequest,
-    config?: UseQueryOptions<LessonModel>,
+    config?: UseQueryOptions<LessonModel>
   ) =>
     useQuery({
       queryKey: [GET_LESSON_KEY, requestParameters.id],
@@ -29,7 +29,7 @@ export const lessonActions = {
     }),
   useGetLessonQuestions: (
     requestParameters: GetLessonQuestionsRequest,
-    config?: UseQueryOptions<Array<QuestionModel>>,
+    config?: UseQueryOptions<Array<QuestionModel>>
   ) =>
     useQuery({
       queryKey: [GET_LESSON_QUESTIONS_KEY, requestParameters.id],
@@ -38,6 +38,12 @@ export const lessonActions = {
     }),
   useCreateLesson: () =>
     useMutation(LessonApi.registerLesson, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
+      },
+    }),
+  useSortLesson: () =>
+    useMutation(LessonApi.updateLessonOrder, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
@@ -57,7 +63,7 @@ export const lessonActions = {
     }),
   useGetLessonLectures: (
     requestParameters: GetLessonLectureRequest,
-    config?: UseQueryOptions<Array<LessonLectureModel>>,
+    config?: UseQueryOptions<Array<LessonLectureModel>>
   ) =>
     useQuery({
       queryKey: [GET_LESSON_LECTURES_KEY, requestParameters.id],
