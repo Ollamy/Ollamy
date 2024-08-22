@@ -1,6 +1,8 @@
+import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { CustomCourseSectionModel } from 'pages/CourseManager/SidePanel/CourseSidePanel';
 import SectionRow from 'pages/CourseManager/SidePanel/List/Row/SectionRow';
+import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
 
 import { Spinner, Text } from '@radix-ui/themes';
@@ -13,6 +15,26 @@ function SectionList({ data }: SectionListProps) {
   const [searchParams] = useSearchParams();
   const sectionId = searchParams.get('sectionId');
 
+  const { mutate: useSortSection } = sectionActions.useSortSection();
+
+  const moveSection = (dragIndex: number, hoverIndex: number) => {
+    if (!data) return;
+
+    const dragSection = data[dragIndex - 1];
+    const newOrder = [...data] as unknown as any;
+    newOrder.splice(dragIndex - 1, 1);
+    newOrder.splice(hoverIndex - 1, 0, dragSection);
+
+    const after = newOrder[dragIndex - 1].order || null;
+    const before = newOrder[hoverIndex]?.order || null;
+
+    useSortSection({
+      origin: dragSection.id,
+      after,
+      before,
+    });
+  };
+
   return data && data.length ? (
     <Container>
       {data.map(({ id, title, description, realIndex }, index) => (
@@ -23,6 +45,7 @@ function SectionList({ data }: SectionListProps) {
           index={(realIndex || index) + 1}
           description={description}
           isActive={sectionId === id}
+          moveSection={moveSection}
         />
       ))}
     </Container>

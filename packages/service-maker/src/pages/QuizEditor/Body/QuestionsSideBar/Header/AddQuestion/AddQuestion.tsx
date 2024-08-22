@@ -32,7 +32,7 @@ function AddQuestion({ lessonId }: AddQuestionProps) {
     async (
       title: string,
       description: string,
-      moreOptions?: MoreOptionsType,
+      moreOptions?: MoreOptionsType
     ) => {
       if (!moreOptions?.typeAnswer) {
         // eslint-disable-next-line no-console
@@ -55,7 +55,7 @@ function AddQuestion({ lessonId }: AddQuestionProps) {
         // setOpen(false);
       });
     },
-    [createNewQuestion, lessonId],
+    [createNewQuestion, lessonId]
   );
 
   return (
@@ -120,7 +120,7 @@ interface CustomCardProps {
   open: boolean;
 }
 
-const CustomCard = styled(Card)<CustomCardProps>`
+const CustomCard = styled(Card) <CustomCardProps>`
   display: flex;
   flex-direction: column;
 

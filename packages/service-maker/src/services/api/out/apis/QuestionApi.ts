@@ -198,9 +198,9 @@ export class QuestionApi extends runtime.BaseAPI {
     /**
      */
     async updateQuestionOrderRaw(requestParameters: UpdateQuestionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QuestionIdResponse> {
-        if (requestParameters.updateQuestionOrderModel === null || requestParameters.updateQuestionOrderModel === undefined) {
-            throw new runtime.RequiredError('updateQuestionOrderModel','Required parameter requestParameters.updateQuestionOrderModel was null or undefined when calling updateQuestionOrder.');
-        }
+        // if (requestParameters.updateQuestionOrderModel === null || requestParameters.updateQuestionOrderModel === undefined) {
+        //     throw new runtime.RequiredError('updateQuestionOrderModel','Required parameter requestParameters.updateQuestionOrderModel was null or undefined when calling updateQuestionOrder.');
+        // }
 
         const queryParameters: any = {};
 
@@ -213,7 +213,7 @@ export class QuestionApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.updateQuestionOrderModel,
+            body: requestParameters,
         }, initOverrides);
 
         return response.json();

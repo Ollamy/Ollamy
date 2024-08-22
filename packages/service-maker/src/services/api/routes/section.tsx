@@ -42,6 +42,7 @@ export const sectionActions = {
     useMutation(SectionApi.updateSectionOrder, {
       onSuccess: () => {
         queryClient.invalidateQueries(GET_COURSE_SECTIONS_KEY);
+        queryClient.invalidateQueries(GET_SECTION_LESSONS_KEY);
       },
     }),
   useUpdateSection: () =>

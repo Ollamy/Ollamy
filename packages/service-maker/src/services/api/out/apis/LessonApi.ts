@@ -255,9 +255,10 @@ export class LessonApi extends runtime.BaseAPI {
     /**
      */
     async updateLessonOrderRaw(requestParameters: UpdateLessonOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonIdResponse> {
-        if (requestParameters.updateLessonOrderModel === null || requestParameters.updateLessonOrderModel === undefined) {
-            throw new runtime.RequiredError('updateLessonOrderModel','Required parameter requestParameters.updateLessonOrderModel was null or undefined when calling updateLessonOrder.');
-        }
+        // if (requestParameters.updateLessonOrderModel === null || requestParameters.updateLessonOrderModel === undefined) {
+        //     throw new runtime.RequiredError('updateLessonOrderModel','Required parameter requestParameters.updateLessonOrderModel was null or undefined when calling updateLessonOrder.');
+        // }
+        console.log({requestParameters});
 
         const queryParameters: any = {};
 
@@ -265,12 +266,13 @@ export class LessonApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
         const response = await this.request({
             path: `/lesson/order`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.updateLessonOrderModel,
+            body: requestParameters,
         }, initOverrides);
 
         return response.json();

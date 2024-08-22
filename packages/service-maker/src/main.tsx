@@ -1,4 +1,6 @@
 import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import ReactDOM from 'react-dom/client';
 import {
   MutationCache,
@@ -121,8 +123,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Theme>
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <DndProvider backend={HTML5Backend}>
+          <RouterProvider router={router} />
+        </DndProvider>
       </QueryClientProvider>
     </Theme>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

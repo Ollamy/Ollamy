@@ -1,8 +1,9 @@
+import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useCallback, useMemo } from 'react';
-import { Button } from '@radix-ui/themes';
+
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { Button } from '@radix-ui/themes';
 
 function TopBar() {
   const [params] = useSearchParams();
@@ -10,11 +11,12 @@ function TopBar() {
 
   const { lessonId } = useParams();
 
-  const urlParams = useMemo(() => {
-    return {
+  const urlParams = useMemo(
+    () => ({
       courseId: params.get('courseId') ?? undefined,
-    };
-  }, [params]);
+    }),
+    [params]
+  );
 
   const handleClick = useCallback(() => {
     if (lessonId) navigate(`/course/${urlParams.courseId}`);
@@ -24,7 +26,7 @@ function TopBar() {
   return (
     <Container>
       <ProfilContainer>N</ProfilContainer>
-      <Button variant="outline" onClick={handleClick}>
+      <Button variant={'outline'} onClick={handleClick}>
         <ArrowLeftIcon />
         Back to {lessonId ? 'course' : 'home'}
       </Button>

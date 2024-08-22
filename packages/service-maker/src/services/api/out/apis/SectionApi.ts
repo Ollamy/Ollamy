@@ -223,9 +223,10 @@ export class SectionApi extends runtime.BaseAPI {
     /**
      */
     async updateSectionOrderRaw(requestParameters: UpdateSectionOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SectionIdResponse> {
-        if (requestParameters.updateSectionOrderModel === null || requestParameters.updateSectionOrderModel === undefined) {
-            throw new runtime.RequiredError('updateSectionOrderModel','Required parameter requestParameters.updateSectionOrderModel was null or undefined when calling updateSectionOrder.');
-        }
+        console.log({requestParameters});
+        // if (requestParameters.updateSectionOrderModel === null || requestParameters.updateSectionOrderModel === undefined) {
+        //     throw new runtime.RequiredError('updateSectionOrderModel','Required parameter requestParameters.updateSectionOrderModel was null or undefined when calling updateSectionOrder.');
+        // }
 
         const queryParameters: any = {};
 
@@ -238,7 +239,7 @@ export class SectionApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.updateSectionOrderModel,
+            body: requestParameters,
         }, initOverrides);
 
         return response.json();
