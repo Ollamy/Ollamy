@@ -233,17 +233,59 @@ export interface CreateLessonModel {
  */
 export interface CreateQuestionModel {
     /**
-     * The unique identifier of the lesson
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    lessonId: string;
-    /**
      * The title of the question
      * @type {string}
      * @memberof CreateQuestionModel
      */
     title: string;
+    /**
+     * The type of answer for the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    typeAnswer: CreateQuestionModelTypeAnswerEnum;
+    /**
+     * The type of question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    typeQuestion: CreateQuestionModelTypeQuestionEnum;
+    /**
+     * The unique identifier of the picture
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    pictureId?: string;
+    /**
+     * The difficulty level of the question
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    difficulty?: CreateQuestionModelDifficultyEnum;
+    /**
+     * The points for the question
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    points?: number;
+    /**
+     * The time allowed for the response to the question
+     * @type {number}
+     * @memberof CreateQuestionModel
+     */
+    time?: number;
+    /**
+     * Define a bonus question
+     * @type {boolean}
+     * @memberof CreateQuestionModel
+     */
+    bonus?: boolean;
+    /**
+     * The unique identifier of the lesson
+     * @type {string}
+     * @memberof CreateQuestionModel
+     */
+    lessonId: string;
     /**
      * The description of the question
      * @type {string}
@@ -255,31 +297,7 @@ export interface CreateQuestionModel {
      * @type {string}
      * @memberof CreateQuestionModel
      */
-    typeAnswer: CreateQuestionModelTypeAnswerEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    typeQuestion: CreateQuestionModelTypeQuestionEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
     picture?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateQuestionModel
-     */
-    difficulty?: CreateQuestionModelDifficultyEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreateQuestionModel
-     */
-    points?: number;
     /**
      * The unique identifier of the trusted answer
      * @type {string}
@@ -539,12 +557,6 @@ export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof
  */
 export interface GetQuestionModel {
     /**
-     * The lesson id of the question
-     * @type {string}
-     * @memberof GetQuestionModel
-     */
-    lessonId: string;
-    /**
      * The title of the question
      * @type {string}
      * @memberof GetQuestionModel
@@ -585,12 +597,6 @@ export interface GetQuestionModel {
      * @type {string}
      * @memberof GetQuestionModel
      */
-    trust_answer_id?: string;
-    /**
-     * The order of the question
-     * @type {string}
-     * @memberof GetQuestionModel
-     */
     order: string;
     /**
      * The points for the question
@@ -598,6 +604,18 @@ export interface GetQuestionModel {
      * @memberof GetQuestionModel
      */
     points?: number;
+    /**
+     * The time allowed for the response to the question
+     * @type {number}
+     * @memberof GetQuestionModel
+     */
+    time?: number;
+    /**
+     * Define a bonus question
+     * @type {boolean}
+     * @memberof GetQuestionModel
+     */
+    bonus?: boolean;
 }
 
 
@@ -1219,6 +1237,18 @@ export interface QuestionModel {
      * @memberof QuestionModel
      */
     points?: number;
+    /**
+     * The time allowed for the response to the question
+     * @type {number}
+     * @memberof QuestionModel
+     */
+    time?: number;
+    /**
+     * Define a bonus question
+     * @type {boolean}
+     * @memberof QuestionModel
+     */
+    bonus?: boolean;
 }
 
 
@@ -1457,11 +1487,11 @@ export interface UpdateLessonOrderModel {
  */
 export interface UpdateQuestionModel {
     /**
-     * The unique identifier of the lesson
+     * The unique identifier of the question
      * @type {string}
      * @memberof UpdateQuestionModel
      */
-    lessonId?: string;
+    id?: string;
     /**
      * The title of the question
      * @type {string}
@@ -1475,35 +1505,65 @@ export interface UpdateQuestionModel {
      */
     description?: string;
     /**
-     * 
+     * The type of answer for the question
      * @type {string}
      * @memberof UpdateQuestionModel
      */
     typeAnswer?: UpdateQuestionModelTypeAnswerEnum;
     /**
-     * 
+     * The type of question
      * @type {string}
      * @memberof UpdateQuestionModel
      */
     typeQuestion?: UpdateQuestionModelTypeQuestionEnum;
+    /**
+     * The unique identifier of the picture
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    pictureId?: string;
+    /**
+     * The difficulty level of the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    difficulty?: UpdateQuestionModelDifficultyEnum;
+    /**
+     * The order of the question
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    order?: string;
+    /**
+     * The points for the question
+     * @type {number}
+     * @memberof UpdateQuestionModel
+     */
+    points?: number;
+    /**
+     * The time allowed for the response to the question
+     * @type {number}
+     * @memberof UpdateQuestionModel
+     */
+    time?: number;
+    /**
+     * Define a bonus question
+     * @type {boolean}
+     * @memberof UpdateQuestionModel
+     */
+    bonus?: boolean;
+    /**
+     * The unique identifier of the lesson
+     * @type {string}
+     * @memberof UpdateQuestionModel
+     */
+    lessonId?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateQuestionModel
      */
     picture?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateQuestionModel
-     */
-    difficulty?: UpdateQuestionModelDifficultyEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateQuestionModel
-     */
-    points?: number;
     /**
      * The unique identifier of the trusted answer
      * @type {string}
