@@ -221,6 +221,7 @@ model Question {
   points          Int?                @default(0)
   difficulty      QuestionDifficulty?
   order           String              @default("a0")
+  time            Int?
 }
 
 model Answer {

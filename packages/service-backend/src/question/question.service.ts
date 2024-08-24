@@ -51,6 +51,7 @@ export class QuestionService {
           lesson_id: questionData.lessonId,
           title: questionData.title,
           description: questionData.description,
+          time: questionData.time,
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
@@ -129,6 +130,7 @@ export class QuestionService {
           : undefined,
         difficulty: questionDb.difficulty,
         trust_answer_id: questionDb.trust_answer_id,
+        time: questionDb?.time,
         order: questionDb.order,
         points: questionDb.points,
       } as GetQuestionModel;
@@ -168,6 +170,7 @@ export class QuestionService {
           type_answer: questionData?.typeAnswer,
           type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
+          time: questionData.time,
           picture_id: questionData?.picture
             ? await PictureService.postPicture(questionData.picture)
             : undefined,

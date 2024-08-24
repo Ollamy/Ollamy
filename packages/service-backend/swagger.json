@@ -1433,20 +1433,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateQuestionModel"
-              },
-              "examples": {
-                "template": {
-                  "value": {
-                    "lessonId": "Lesson Id",
-                    "title": "Question Title",
-                    "description": "Question decsription",
-                    "typeAnswer": "MULTIPLE_CHOICE",
-                    "typeQuestion": "TEXT",
-                    "trustAnswerId": "TrustAnswer Id",
-                    "pictureId": "Question picture",
-                    "difficulty": "BEGINNER"
-                  }
-                }
               }
             }
           }
@@ -3029,19 +3015,23 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The unique identifier of the question"
+            "description": "The unique identifier of the question",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "title": {
             "type": "string",
-            "description": "The title of the question"
+            "description": "The title of the question",
+            "example": "My title"
           },
           "description": {
             "type": "string",
-            "description": "The description of the question"
+            "description": "The description of the question",
+            "example": "My perfect description"
           },
           "typeAnswer": {
             "type": "string",
             "description": "The type of answer for the question",
+            "example": "FREE_ANSWER",
             "enum": [
               "FREE_ANSWER",
               "MULTIPLE_CHOICE",
@@ -3057,15 +3047,18 @@
               "IMAGE",
               "AUDIO",
               "OTHER"
-            ]
+            ],
+            "example": "AUDIO"
           },
           "pictureId": {
             "type": "string",
-            "description": "The unique identifier of the picture"
+            "description": "The unique identifier of the picture",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "difficulty": {
             "type": "string",
             "description": "The difficulty level of the question",
+            "example": "ADVANCED",
             "enum": [
               "BEGINNER",
               "INTERMEDIATE",
@@ -3075,11 +3068,18 @@
           },
           "order": {
             "type": "string",
-            "description": "The order of the question"
+            "description": "The order of the question",
+            "example": "a0"
           },
           "points": {
             "type": "number",
-            "description": "The points for the question"
+            "description": "The points for the question",
+            "example": 2
+          },
+          "time": {
+            "type": "number",
+            "description": "The time allowed for the response to the question",
+            "example": 1
           }
         },
         "required": [
@@ -3110,20 +3110,15 @@
       "CreateQuestionModel": {
         "type": "object",
         "properties": {
-          "lessonId": {
-            "type": "string",
-            "description": "The unique identifier of the lesson"
-          },
           "title": {
             "type": "string",
-            "description": "The title of the question"
-          },
-          "description": {
-            "type": "string",
-            "description": "The description of the question"
+            "description": "The title of the question",
+            "example": "My title"
           },
           "typeAnswer": {
             "type": "string",
+            "description": "The type of answer for the question",
+            "example": "FREE_ANSWER",
             "enum": [
               "FREE_ANSWER",
               "MULTIPLE_CHOICE",
@@ -3132,19 +3127,25 @@
           },
           "typeQuestion": {
             "type": "string",
+            "description": "The type of question",
             "enum": [
               "TEXT",
               "VIDEO",
               "IMAGE",
               "AUDIO",
               "OTHER"
-            ]
+            ],
+            "example": "AUDIO"
           },
-          "picture": {
-            "type": "string"
+          "pictureId": {
+            "type": "string",
+            "description": "The unique identifier of the picture",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "difficulty": {
             "type": "string",
+            "description": "The difficulty level of the question",
+            "example": "ADVANCED",
             "enum": [
               "BEGINNER",
               "INTERMEDIATE",
@@ -3153,19 +3154,41 @@
             ]
           },
           "points": {
-            "type": "number"
+            "type": "number",
+            "description": "The points for the question",
+            "example": 2
+          },
+          "time": {
+            "type": "number",
+            "description": "The time allowed for the response to the question",
+            "example": 1
+          },
+          "lessonId": {
+            "type": "string",
+            "description": "The unique identifier of the lesson",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the question",
+            "example": "My perfect example"
+          },
+          "picture": {
+            "type": "string",
+            "example": "https://google.com/images"
           },
           "trustAnswerId": {
             "type": "string",
-            "description": "The unique identifier of the trusted answer"
+            "description": "The unique identifier of the trusted answer",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
-          "lessonId",
           "title",
-          "description",
           "typeAnswer",
-          "typeQuestion"
+          "typeQuestion",
+          "lessonId",
+          "description"
         ]
       },
       "QuestionIdResponse": {
@@ -3185,7 +3208,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The unique identifier of the question"
+            "description": "The unique identifier of the question",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
@@ -3195,21 +3219,20 @@
       "GetQuestionModel": {
         "type": "object",
         "properties": {
-          "lessonId": {
-            "type": "string",
-            "description": "The lesson id of the question"
-          },
           "title": {
             "type": "string",
-            "description": "The title of the question"
+            "description": "The title of the question",
+            "example": "My title"
           },
           "description": {
             "type": "string",
-            "description": "The description of the question"
+            "description": "The description of the question",
+            "example": "My perfect description"
           },
           "typeAnswer": {
             "type": "string",
             "description": "The type of answer for the question",
+            "example": "FREE_ANSWER",
             "enum": [
               "FREE_ANSWER",
               "MULTIPLE_CHOICE",
@@ -3225,15 +3248,18 @@
               "IMAGE",
               "AUDIO",
               "OTHER"
-            ]
+            ],
+            "example": "AUDIO"
           },
           "pictureId": {
             "type": "string",
-            "description": "The unique identifier of the picture"
+            "description": "The unique identifier of the picture",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "difficulty": {
             "type": "string",
             "description": "The difficulty level of the question",
+            "example": "ADVANCED",
             "enum": [
               "BEGINNER",
               "INTERMEDIATE",
@@ -3241,21 +3267,23 @@
               "MASTER"
             ]
           },
-          "trust_answer_id": {
-            "type": "string",
-            "description": "The order of the question"
-          },
           "order": {
             "type": "string",
-            "description": "The order of the question"
+            "description": "The order of the question",
+            "example": "a0"
           },
           "points": {
             "type": "number",
-            "description": "The points for the question"
+            "description": "The points for the question",
+            "example": 2
+          },
+          "time": {
+            "type": "number",
+            "description": "The time allowed for the response to the question",
+            "example": 1
           }
         },
         "required": [
-          "lessonId",
           "title",
           "typeAnswer",
           "typeQuestion",
@@ -3265,20 +3293,25 @@
       "UpdateQuestionModel": {
         "type": "object",
         "properties": {
-          "lessonId": {
+          "id": {
             "type": "string",
-            "description": "The unique identifier of the lesson"
+            "description": "The unique identifier of the question",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "title": {
             "type": "string",
-            "description": "The title of the question"
+            "description": "The title of the question",
+            "example": "My title"
           },
           "description": {
             "type": "string",
-            "description": "The description of the question"
+            "description": "The description of the question",
+            "example": "My perfect description"
           },
           "typeAnswer": {
             "type": "string",
+            "description": "The type of answer for the question",
+            "example": "FREE_ANSWER",
             "enum": [
               "FREE_ANSWER",
               "MULTIPLE_CHOICE",
@@ -3287,20 +3320,25 @@
           },
           "typeQuestion": {
             "type": "string",
+            "description": "The type of question",
             "enum": [
               "TEXT",
               "VIDEO",
               "IMAGE",
               "AUDIO",
               "OTHER"
-            ]
+            ],
+            "example": "AUDIO"
           },
-          "picture": {
+          "pictureId": {
             "type": "string",
-            "nullable": true
+            "description": "The unique identifier of the picture",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           },
           "difficulty": {
             "type": "string",
+            "description": "The difficulty level of the question",
+            "example": "ADVANCED",
             "enum": [
               "BEGINNER",
               "INTERMEDIATE",
@@ -3308,12 +3346,35 @@
               "MASTER"
             ]
           },
+          "order": {
+            "type": "string",
+            "description": "The order of the question",
+            "example": "a0"
+          },
           "points": {
-            "type": "number"
+            "type": "number",
+            "description": "The points for the question",
+            "example": 2
+          },
+          "time": {
+            "type": "number",
+            "description": "The time allowed for the response to the question",
+            "example": 1
+          },
+          "lessonId": {
+            "type": "string",
+            "description": "The unique identifier of the lesson",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
+          },
+          "picture": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://google.com/images"
           },
           "trustAnswerId": {
             "type": "string",
-            "description": "The unique identifier of the trusted answer"
+            "description": "The unique identifier of the trusted answer",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         }
       },

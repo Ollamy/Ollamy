@@ -140,6 +140,7 @@ describe('getQuestion', () => {
       order: mockQuestionDb2.order,
       points: mockQuestionDb2.points,
       trust_answer_id: mockQuestionDb2.trust_answer_id,
+      time: mockQuestionDb2.time,
     });
   });
 

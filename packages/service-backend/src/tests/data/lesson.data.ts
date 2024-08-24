@@ -96,6 +96,7 @@ export const mockLessonQuestions: Question[] = [
     picture_id: uuidv4(),
     points: 1,
     order: 'a0',
+    time: undefined,
     // other question properties
   },
   {
@@ -110,6 +111,7 @@ export const mockLessonQuestions: Question[] = [
     picture_id: uuidv4(),
     points: 2,
     order: 'a1',
+    time: 20,
     // other question properties
   },
   // other questions

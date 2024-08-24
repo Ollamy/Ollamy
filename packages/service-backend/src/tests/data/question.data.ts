@@ -39,6 +39,7 @@ export const mockQuestionDb: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
 };
 
 export const mockQuestionDb2: Question = {
@@ -53,6 +54,7 @@ export const mockQuestionDb2: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
 };
 
 export const mockQuestionId3 = uuidv4();
@@ -82,6 +84,7 @@ export const mockQuestionDb3: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
 };
 
 export const mockBodyIncorrect: ValidateAnswerModel = {
@@ -101,6 +104,7 @@ export const mockQuestionDb4: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
 };
 
 export const mockUserLesson: UsertoLesson = {
