@@ -3080,6 +3080,11 @@
             "type": "number",
             "description": "The time allowed for the response to the question",
             "example": 1
+          },
+          "bonus": {
+            "type": "boolean",
+            "description": "Define a bonus question",
+            "example": true
           }
         },
         "required": [
@@ -3162,6 +3167,11 @@
             "type": "number",
             "description": "The time allowed for the response to the question",
             "example": 1
+          },
+          "bonus": {
+            "type": "boolean",
+            "description": "Define a bonus question",
+            "example": true
           },
           "lessonId": {
             "type": "string",
@@ -3281,6 +3291,11 @@
             "type": "number",
             "description": "The time allowed for the response to the question",
             "example": 1
+          },
+          "bonus": {
+            "type": "boolean",
+            "description": "Define a bonus question",
+            "example": true
           }
         },
         "required": [
@@ -3360,6 +3375,11 @@
             "type": "number",
             "description": "The time allowed for the response to the question",
             "example": 1
+          },
+          "bonus": {
+            "type": "boolean",
+            "description": "Define a bonus question",
+            "example": true
           },
           "lessonId": {
             "type": "string",

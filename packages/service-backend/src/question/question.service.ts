@@ -62,6 +62,7 @@ export class QuestionService {
             undefined,
           ),
           points: questionData?.points,
+          bonus: questionData?.bonus,
         },
       });
 
@@ -131,6 +132,7 @@ export class QuestionService {
         difficulty: questionDb.difficulty,
         trust_answer_id: questionDb.trust_answer_id,
         time: questionDb?.time,
+        bonus: questionDb?.bonus,
         order: questionDb.order,
         points: questionDb.points,
       } as GetQuestionModel;
@@ -176,6 +178,7 @@ export class QuestionService {
             : undefined,
           difficulty: questionData?.difficulty,
           points: questionData?.points,
+          bonus: questionData?.bonus,
         },
       });
 
@@ -377,7 +380,7 @@ export class QuestionService {
           },
         },
       });
-    } else if (isValidated === false && hp > 0) {
+    } else if (isValidated === false && hp > 0 && questionDb.bonus !== true) {
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {

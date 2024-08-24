@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -297,7 +297,7 @@ export class CourseService {
       if (!userToCourse) {
         throw new ConflictException('Failed to add user to course');
       }
-  
+
       const userToSectionDb = await prisma.section.findMany({
         where: {
           course_id: joinCourseId,
@@ -399,7 +399,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };
@@ -436,7 +436,7 @@ export class CourseService {
         where: {
           user_id: userId,
           section_id: sectionId,
-        }
+        },
       });
 
       await prisma.usertoCourse.update({
@@ -454,33 +454,38 @@ export class CourseService {
     }
   }
 
-  private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
+  private calculateCumulativeEnrollments(
+    enrollments: EnrollmentResponse[],
+  ): EnrollmentTotal[] {
     let total = 0;
 
     enrollments.sort((a, b) => a.epoch - b.epoch);
 
-    return enrollments.map(enrollment => (
-      {
-        epoch: enrollment.epoch,
-        total: ++total,
-      }
-    ));
+    return enrollments.map((enrollment) => ({
+      epoch: enrollment.epoch,
+      total: ++total,
+    }));
   }
 
-  async getEnrollmentsForOwnerCourse(ownerId: string, courseId?: string | undefined): Promise<EnrollmentResponseTotal> {
+  async getEnrollmentsForOwnerCourse(
+    ownerId: string,
+    courseId?: string | undefined,
+  ): Promise<EnrollmentResponseTotal> {
     try {
       const enrollments = await prisma.usertoCourse.findMany({
-        where: courseId ? {
-          course_id: courseId,
-          course: {
-            id: courseId,
-            owner_id: ownerId
-          }
-        } : {
-          course: {
-            owner_id: ownerId
-          }
-        },
+        where: courseId
+          ? {
+              course_id: courseId,
+              course: {
+                id: courseId,
+                owner_id: ownerId,
+              },
+            }
+          : {
+              course: {
+                owner_id: ownerId,
+              },
+            },
         select: {
           user_id: true,
           created_at: true,
@@ -488,15 +493,15 @@ export class CourseService {
       });
 
       if (!enrollments.length) {
-        throw new NotFoundException(`No enrollments found for course with id: ${courseId}`);
+        throw new NotFoundException(
+          `No enrollments found for course with id: ${courseId}`,
+        );
       }
 
-      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
-        {
-          userId: enrollment.user_id,
-          epoch: enrollment.created_at.getTime(),
-        }
-      ));
+      const response: EnrollmentResponse[] = enrollments.map((enrollment) => ({
+        userId: enrollment.user_id,
+        epoch: enrollment.created_at.getTime(),
+      }));
 
       const cumulative = this.calculateCumulativeEnrollments(response);
 

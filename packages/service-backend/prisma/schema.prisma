@@ -222,6 +222,7 @@ model Question {
   difficulty      QuestionDifficulty?
   order           String              @default("a0")
   time            Int?
+  bonus           Boolean             @default(false)
 }
 
 model Answer {

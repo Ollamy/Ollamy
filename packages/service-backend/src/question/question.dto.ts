@@ -90,6 +90,15 @@ class BaseQuestion {
   @IsNumber()
   @IsOptional()
   time?: number;
+
+  @ApiProperty({
+    description: 'Define a bonus question',
+    required: false,
+    example: true,
+  })
+  @IsBoolean()
+  @IsOptional()
+  bonus?: boolean;
 }
 
 export class QuestionModel extends BaseQuestion {}

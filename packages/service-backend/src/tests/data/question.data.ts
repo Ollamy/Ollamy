@@ -40,6 +40,7 @@ export const mockQuestionDb: Question = {
   difficulty: 'BEGINNER',
   order: 'a0',
   time: 0,
+  bonus: false,
 };
 
 export const mockQuestionDb2: Question = {
@@ -55,6 +56,7 @@ export const mockQuestionDb2: Question = {
   difficulty: 'BEGINNER',
   order: 'a0',
   time: 0,
+  bonus: false,
 };
 
 export const mockQuestionId3 = uuidv4();
@@ -85,6 +87,7 @@ export const mockQuestionDb3: Question = {
   difficulty: 'BEGINNER',
   order: 'a0',
   time: 0,
+  bonus: false,
 };
 
 export const mockBodyIncorrect: ValidateAnswerModel = {
@@ -105,6 +108,7 @@ export const mockQuestionDb4: Question = {
   difficulty: 'BEGINNER',
   order: 'a0',
   time: 0,
+  bonus: false,
 };
 
 export const mockUserLesson: UsertoLesson = {

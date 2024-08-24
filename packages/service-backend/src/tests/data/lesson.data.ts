@@ -97,6 +97,7 @@ export const mockLessonQuestions: Question[] = [
     points: 1,
     order: 'a0',
     time: undefined,
+    bonus: false,
     // other question properties
   },
   {
@@ -112,6 +113,7 @@ export const mockLessonQuestions: Question[] = [
     points: 2,
     order: 'a1',
     time: 20,
+    bonus: false,
     // other question properties
   },
   // other questions
