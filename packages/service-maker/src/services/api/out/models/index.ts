@@ -313,7 +313,8 @@ export interface CreateQuestionModel {
 export const CreateQuestionModelTypeAnswerEnum = {
     FreeAnswer: 'FREE_ANSWER',
     MultipleChoice: 'MULTIPLE_CHOICE',
-    SquareChoice: 'SQUARE_CHOICE'
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
 } as const;
 export type CreateQuestionModelTypeAnswerEnum = typeof CreateQuestionModelTypeAnswerEnum[keyof typeof CreateQuestionModelTypeAnswerEnum];
 
@@ -325,6 +326,7 @@ export const CreateQuestionModelTypeQuestionEnum = {
     Video: 'VIDEO',
     Image: 'IMAGE',
     Audio: 'AUDIO',
+    Order: 'ORDER',
     Other: 'OTHER'
 } as const;
 export type CreateQuestionModelTypeQuestionEnum = typeof CreateQuestionModelTypeQuestionEnum[keyof typeof CreateQuestionModelTypeQuestionEnum];
@@ -625,7 +627,8 @@ export interface GetQuestionModel {
 export const GetQuestionModelTypeAnswerEnum = {
     FreeAnswer: 'FREE_ANSWER',
     MultipleChoice: 'MULTIPLE_CHOICE',
-    SquareChoice: 'SQUARE_CHOICE'
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
 } as const;
 export type GetQuestionModelTypeAnswerEnum = typeof GetQuestionModelTypeAnswerEnum[keyof typeof GetQuestionModelTypeAnswerEnum];
 
@@ -637,6 +640,7 @@ export const GetQuestionModelTypeQuestionEnum = {
     Video: 'VIDEO',
     Image: 'IMAGE',
     Audio: 'AUDIO',
+    Order: 'ORDER',
     Other: 'OTHER'
 } as const;
 export type GetQuestionModelTypeQuestionEnum = typeof GetQuestionModelTypeQuestionEnum[keyof typeof GetQuestionModelTypeQuestionEnum];
@@ -1258,7 +1262,8 @@ export interface QuestionModel {
 export const QuestionModelTypeAnswerEnum = {
     FreeAnswer: 'FREE_ANSWER',
     MultipleChoice: 'MULTIPLE_CHOICE',
-    SquareChoice: 'SQUARE_CHOICE'
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
 } as const;
 export type QuestionModelTypeAnswerEnum = typeof QuestionModelTypeAnswerEnum[keyof typeof QuestionModelTypeAnswerEnum];
 
@@ -1270,6 +1275,7 @@ export const QuestionModelTypeQuestionEnum = {
     Video: 'VIDEO',
     Image: 'IMAGE',
     Audio: 'AUDIO',
+    Order: 'ORDER',
     Other: 'OTHER'
 } as const;
 export type QuestionModelTypeQuestionEnum = typeof QuestionModelTypeQuestionEnum[keyof typeof QuestionModelTypeQuestionEnum];
@@ -1579,7 +1585,8 @@ export interface UpdateQuestionModel {
 export const UpdateQuestionModelTypeAnswerEnum = {
     FreeAnswer: 'FREE_ANSWER',
     MultipleChoice: 'MULTIPLE_CHOICE',
-    SquareChoice: 'SQUARE_CHOICE'
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
 } as const;
 export type UpdateQuestionModelTypeAnswerEnum = typeof UpdateQuestionModelTypeAnswerEnum[keyof typeof UpdateQuestionModelTypeAnswerEnum];
 
@@ -1591,6 +1598,7 @@ export const UpdateQuestionModelTypeQuestionEnum = {
     Video: 'VIDEO',
     Image: 'IMAGE',
     Audio: 'AUDIO',
+    Order: 'ORDER',
     Other: 'OTHER'
 } as const;
 export type UpdateQuestionModelTypeQuestionEnum = typeof UpdateQuestionModelTypeQuestionEnum[keyof typeof UpdateQuestionModelTypeQuestionEnum];
