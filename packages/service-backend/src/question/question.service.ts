@@ -397,7 +397,10 @@ export class QuestionService {
       this.cronService.createHpCron(ctx.__user.id, courseId);
     }
 
-    if (questionDb.type_answer === AnswerType.FREE_ANSWER) {
+    if (
+      questionDb.type_answer === AnswerType.FREE_ANSWER ||
+      questionDb.type_answer === AnswerType.ORDER_CHOICE
+    ) {
       const answerDb = await prisma.answer.findFirst({
         where: {
           id: questionDb.trust_answer_id,

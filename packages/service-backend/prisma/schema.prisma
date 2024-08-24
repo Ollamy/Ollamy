@@ -173,6 +173,7 @@ enum AnswerType {
   FREE_ANSWER
   MULTIPLE_CHOICE
   SQUARE_CHOICE
+  ORDER_CHOICE
 }
 
 enum QuestionType {
@@ -180,6 +181,7 @@ enum QuestionType {
   VIDEO
   IMAGE
   AUDIO
+  ORDER
   OTHER
 }
 
