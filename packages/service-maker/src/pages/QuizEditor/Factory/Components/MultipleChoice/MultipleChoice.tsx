@@ -6,7 +6,7 @@ import useManageTextAnswer from 'pages/QuizEditor/Factory/hooks/useManageTextAns
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button, RadioGroup, Text } from '@radix-ui/themes';
+import { Button, RadioGroup, Skeleton, Text } from '@radix-ui/themes';
 
 function MultipleChoice({ questionId }: FactoryComponentInterface) {
   const { data: questionData } = questionActions.useQuestion({
@@ -59,24 +59,33 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
         </CustomButton>
       </ButtonContainer>
       <RadioGroup.Root color={'green'} value={correctAnswer}>
-        {answerData?.map(({ id, data }, index) => (
-          <AnswerRow key={id}>
-            <RadioGroup.Item
-              value={id}
-              onClick={() => handleChangeCorrectAnswer(id)}
-            />
-            <QuizAnswerInput
-              key={id}
-              name={id}
-              answerId={id}
-              defaultValue={data}
-              takesPictures={false}
-              questionId={questionId}
-              onChange={handleChangeAnswerValue}
-              placeholder={`Answer ${index + 1}`}
-            />
-          </AnswerRow>
-        ))}
+        {answerData?.length ? (
+          answerData.map(({ id, data }, index) => (
+            <AnswerRow key={id}>
+              <RadioGroup.Item
+                value={id}
+                onClick={() => handleChangeCorrectAnswer(id)}
+              />
+              <QuizAnswerInput
+                key={id}
+                name={id}
+                answerId={id}
+                defaultValue={data}
+                takesPictures={false}
+                questionId={questionId}
+                onChange={handleChangeAnswerValue}
+                placeholder={`Answer ${index + 1}`}
+              />
+            </AnswerRow>
+          ))
+        ) : (
+          <>
+            <Skeleton width="100%" height="30px" />
+            <Skeleton width="100%" height="30px" />
+            <Skeleton width="100%" height="30px" />
+            <Skeleton width="100%" height="30px" />
+          </>
+        )}
       </RadioGroup.Root>
     </Container>
   );

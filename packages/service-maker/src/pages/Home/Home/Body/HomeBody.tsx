@@ -4,7 +4,7 @@ import HomeSearchBar from 'pages/Home/Home/Body/SearchBar/HomeSearchBar';
 import api from 'services/api';
 import styled from 'styled-components';
 
-import { Spinner, Text } from '@radix-ui/themes';
+import { Skeleton, Text } from '@radix-ui/themes';
 
 function HomeBody() {
   const { data } = api.user.useGetUserCourses();
@@ -45,10 +45,10 @@ function HomeBody() {
       ) : currentData && !currentData.length ? (
         <TextPlaceholder>{"You haven't created a course yet!"}</TextPlaceholder>
       ) : (
-        <TextPlaceholder>
-          <Spinner />
-          Loading…
-        </TextPlaceholder>
+        <Grid>
+          <Skeleton width="350px" height="300px" />
+          <Skeleton width="350px" height="300px" />
+        </Grid>
       )}
     </Container>
   );
