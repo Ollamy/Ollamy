@@ -33,7 +33,7 @@ import {
   Heading,
   ScrollArea,
   Separator,
-  Text,
+  Skeleton,
 } from '@radix-ui/themes';
 
 interface LectureEditorProps {
@@ -102,33 +102,33 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
           <Heading align={'center'}>Lecture editor</Heading>
           <Separator size={'4'} />
           <Badge style={{ width: '40px' }}>Data</Badge>
-          <ScrollArea style={{height: 460, width: '100%'}}>
-          <MDXEditor
-            ref={mdxEditorRef}
-            markdown={'# Hello world'}
-            plugins={[
-              headingsPlugin(),
-              linkPlugin(),
-              imagePlugin({}),
-              listsPlugin(),
-              quotePlugin(),
-              headingsPlugin(),
-              linkDialogPlugin(),
-              frontmatterPlugin(),
-              thematicBreakPlugin(),
-              tablePlugin(),
-              markdownShortcutPlugin(),
-              diffSourcePlugin(),
-              codeMirrorPlugin(),
-              directivesPlugin({
-                directiveDescriptors: [AdmonitionDirectiveDescriptor],
-              }),
-              toolbarPlugin({
-                toolbarContents: () => <KitchenSinkToolbar />,
-              }),
-            ]}
+          <ScrollArea style={{ height: 460, width: '100%' }}>
+            <MDXEditor
+              ref={mdxEditorRef}
+              markdown={'# Hello world'}
+              plugins={[
+                headingsPlugin(),
+                linkPlugin(),
+                imagePlugin({}),
+                listsPlugin(),
+                quotePlugin(),
+                headingsPlugin(),
+                linkDialogPlugin(),
+                frontmatterPlugin(),
+                thematicBreakPlugin(),
+                tablePlugin(),
+                markdownShortcutPlugin(),
+                diffSourcePlugin(),
+                codeMirrorPlugin(),
+                directivesPlugin({
+                  directiveDescriptors: [AdmonitionDirectiveDescriptor],
+                }),
+                toolbarPlugin({
+                  toolbarContents: () => <KitchenSinkToolbar />,
+                }),
+              ]}
             />
-            </ScrollArea>
+          </ScrollArea>
           <Button color={'green'} onClick={handleUpdateLectureValue}>
             Update Lecture
           </Button>
@@ -152,7 +152,7 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
       ) : data && !data.length ? (
         <Button onClick={handleCreateLecture}>Create lecture</Button>
       ) : (
-        <Text>Loading...</Text>
+        <Skeleton width="100%" height="100%" />
       )}
     </Container>
   );

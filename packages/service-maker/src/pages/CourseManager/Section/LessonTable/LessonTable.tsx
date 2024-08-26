@@ -3,7 +3,7 @@ import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
 
 import { GearIcon, InfoCircledIcon } from '@radix-ui/react-icons';
-import { IconButton, Table, Text, Tooltip } from '@radix-ui/themes';
+import { IconButton, Skeleton, Table, Text, Tooltip } from '@radix-ui/themes';
 import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
 import { useCallback } from 'react';
 import { lessonActions } from 'services/api/routes/lesson';
@@ -98,6 +98,11 @@ function LessonTable({ sectionId }: LessonTableProps) {
         </Table.Body>
       </Table.Root>
     </Container>
+  ) : !data ? (
+    <SkeletonsContainer>
+      <Skeleton width="100%" height="40px" />
+      <Skeleton width="100%" height="40px" />
+    </SkeletonsContainer>
   ) : (
     <Text>No lessons yet</Text>
   );
@@ -115,5 +120,11 @@ const LessonNameContainer = styled.div`
 const ActionsContainer = styled(LessonNameContainer)`
   justify-content: center;
 `;
+
+const SkeletonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
 
 export default LessonTable;
