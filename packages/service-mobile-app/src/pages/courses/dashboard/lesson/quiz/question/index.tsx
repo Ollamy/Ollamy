@@ -1,14 +1,13 @@
-import { ScrollView, Spinner, View, VStack } from 'native-base';
+import { ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
-import { useGetAnswerQuery, useGetQuestionQuery, useValidateAnswerMutation } from 'src/services/question/question';
+import QuestionDifficulty from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
+import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
+import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/question';
 import { AnswerType } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
-
-import QuestionDifficulty from './questionDifficulty';
-import QuestionTitle from './questionTitle';
 
 interface QuestionProps {
   questionId: string;
@@ -27,7 +26,7 @@ function Question({
   setIsEnd,
   setCurrentErrorNumber,
 }: QuestionProps) {
-  const [selectAnswer, setSelectAnswer] = useState<string | undefined>(undefined);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
 
   const [validate] = useValidateQuestionMutation();
@@ -37,7 +36,7 @@ function Question({
 
   useEffect(() => {
     setTrueAnswer(undefined);
-    setSelectAnswer(undefined);
+    setSelectedAnswer(undefined);
   }, [questionId]);
 
   if (question === undefined || answers === undefined) return <Spinner />;
@@ -67,6 +66,7 @@ function Question({
     <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
       {question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />}
       <QuestionTitle title={question.title} />
+      <Text fontSize={'md'}>{question.description}</Text>
       <View maxHeight={'35%'}>
         <ScrollView
           contentContainerStyle={{
@@ -77,20 +77,20 @@ function Question({
           }}
         >
           {createElement(quizFactory[question.typeAnswer], {
-            answer: selectAnswer,
+            answer: selectedAnswer,
             answers,
-            setAnswer: (answer) => setSelectAnswer(answer),
+            setAnswer: (answer) => setSelectedAnswer(answer),
             correctAnswer: trueAnswer,
           })}
         </ScrollView>
       </View>
       <View style={{ alignItems: 'center', width: '100%' }}>
         <TextButton
-          disabled={selectAnswer === undefined}
+          disabled={selectedAnswer === undefined}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>
-            selectAnswer &&
-            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectAnswer, question.typeAnswer))
+            selectedAnswer &&
+            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
           }
           rightIconName={'arrow-forward'}
         />
