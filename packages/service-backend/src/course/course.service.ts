@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) {}
+  constructor(private readonly cronService: TasksService) { }
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -399,7 +399,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };
@@ -473,30 +473,18 @@ export class CourseService {
   ): Promise<EnrollmentResponseTotal> {
     try {
       const enrollments = await prisma.usertoCourse.findMany({
-        where: courseId
-          ? {
-              course_id: courseId,
-              course: {
-                id: courseId,
-                owner_id: ownerId,
-              },
-            }
-          : {
-              course: {
-                owner_id: ownerId,
-              },
-            },
+        where: {
+          course_id: courseId,
+          course: {
+            id: courseId,
+            owner_id: ownerId,
+          },
+        },
         select: {
           user_id: true,
           created_at: true,
         },
       });
-
-      if (!enrollments.length) {
-        throw new NotFoundException(
-          `No enrollments found for course with id: ${courseId}`,
-        );
-      }
 
       const response: EnrollmentResponse[] = enrollments.map((enrollment) => ({
         userId: enrollment.user_id,
@@ -512,7 +500,7 @@ export class CourseService {
       };
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Failed to get enrollments for course.');
+      throw new ConflictException(error.message);
     }
   }
 }
