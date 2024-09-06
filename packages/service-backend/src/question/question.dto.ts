@@ -92,7 +92,8 @@ class BaseQuestion {
   time?: number;
 
   @ApiProperty({
-    description: 'Define a bonus question',
+    description:
+      'Define a bonus question that will not count in the user evaluation',
     required: false,
     example: true,
   })
