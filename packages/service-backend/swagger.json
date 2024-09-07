@@ -1303,19 +1303,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateQuestionModel"
-              },
-              "examples": {
-                "template": {
-                  "value": {
-                    "lessonId": "Lesson Id",
-                    "title": "Question Title",
-                    "description": "Question decsription",
-                    "typeAnswer": "FREE_ANSWER",
-                    "typeQuestion": "TEXT",
-                    "difficulty": "BEGINNER",
-                    "points": 0
-                  }
-                }
               }
             }
           }
@@ -3085,7 +3072,7 @@
           },
           "bonus": {
             "type": "boolean",
-            "description": "Define a bonus question",
+            "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
           }
         },
@@ -3174,7 +3161,7 @@
           },
           "bonus": {
             "type": "boolean",
-            "description": "Define a bonus question",
+            "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
           },
           "lessonId": {
@@ -3300,7 +3287,7 @@
           },
           "bonus": {
             "type": "boolean",
-            "description": "Define a bonus question",
+            "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
           }
         },
@@ -3386,7 +3373,7 @@
           },
           "bonus": {
             "type": "boolean",
-            "description": "Define a bonus question",
+            "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
           },
           "lessonId": {
