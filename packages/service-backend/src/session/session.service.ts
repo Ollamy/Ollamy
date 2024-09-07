@@ -221,12 +221,7 @@ export class SessionService {
       (question) => question.id === body.questionId,
     );
     const nextQuestion = preloaded_data[indexOfCurrentQuestion + 1] ?? null;
-    const { bonus } = await prisma.question.findUnique({
-      where: { id: session.current_question_id },
-      select: {
-        bonus: true,
-      },
-    });
+    const bonus = preloaded_data[indexOfCurrentQuestion].bonus;
     const isCorrect =
       preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id ||
       preloaded_data[indexOfCurrentQuestion].Answer[0].data ===
