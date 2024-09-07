@@ -51,6 +51,7 @@ export class QuestionService {
           lesson_id: questionData.lessonId,
           title: questionData.title,
           description: questionData.description,
+          time: questionData.time,
           type_answer: questionData.typeAnswer,
           type_question: questionData.typeQuestion,
           difficulty: questionData?.difficulty,
@@ -61,6 +62,7 @@ export class QuestionService {
             undefined,
           ),
           points: questionData?.points,
+          bonus: questionData?.bonus,
         },
       });
 
@@ -129,6 +131,8 @@ export class QuestionService {
           : undefined,
         difficulty: questionDb.difficulty,
         trust_answer_id: questionDb.trust_answer_id,
+        time: questionDb?.time,
+        bonus: questionDb?.bonus,
         order: questionDb.order,
         points: questionDb.points,
       } as GetQuestionModel;
@@ -168,11 +172,13 @@ export class QuestionService {
           type_answer: questionData?.typeAnswer,
           type_question: questionData?.typeQuestion,
           trust_answer_id: questionData?.trustAnswerId,
+          time: questionData.time,
           picture_id: questionData?.picture
             ? await PictureService.postPicture(questionData.picture)
             : undefined,
           difficulty: questionData?.difficulty,
           points: questionData?.points,
+          bonus: questionData?.bonus,
         },
       });
 
@@ -374,7 +380,7 @@ export class QuestionService {
           },
         },
       });
-    } else if (isValidated === false && hp > 0) {
+    } else if (isValidated === false && hp > 0 && questionDb.bonus !== true) {
       await prisma.usertoCourse.update({
         where: {
           course_id_user_id: {
@@ -391,7 +397,10 @@ export class QuestionService {
       this.cronService.createHpCron(ctx.__user.id, courseId);
     }
 
-    if (questionDb.type_answer === AnswerType.FREE_ANSWER) {
+    if (
+      questionDb.type_answer === AnswerType.FREE_ANSWER ||
+      questionDb.type_answer === AnswerType.ORDER_CHOICE
+    ) {
       const answerDb = await prisma.answer.findFirst({
         where: {
           id: questionDb.trust_answer_id,

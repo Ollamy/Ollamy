@@ -173,6 +173,7 @@ enum AnswerType {
   FREE_ANSWER
   MULTIPLE_CHOICE
   SQUARE_CHOICE
+  ORDER_CHOICE
 }
 
 enum QuestionType {
@@ -180,6 +181,7 @@ enum QuestionType {
   VIDEO
   IMAGE
   AUDIO
+  ORDER
   OTHER
 }
 
@@ -221,6 +223,8 @@ model Question {
   points          Int?                @default(0)
   difficulty      QuestionDifficulty?
   order           String              @default("a0")
+  time            Int?
+  bonus           Boolean             @default(false)
 }
 
 model Answer {
