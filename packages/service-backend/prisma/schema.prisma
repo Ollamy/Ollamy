@@ -68,6 +68,7 @@ model User {
   UserSubscription UserSubscription[]
   UsertoSection    UsertoSection[]
   UserSession      UserSession[]
+  Product          Product[]
 }
 
 model UsertoCourse {
@@ -338,4 +339,14 @@ model UserSession {
   section Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
   lesson  Lesson  @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id         String   @id
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  price_id   String
+  user_id    String   @db.Uuid
+  renewals   Boolean  @default(false)
+  active     Boolean  @default(true)
+  created_at DateTime @default(now())
 }
