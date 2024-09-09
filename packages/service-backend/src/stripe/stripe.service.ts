@@ -139,7 +139,7 @@ export class StripeService {
       },
     });
 
-    if (dbProducts.length !== productIds.length) {
+    if (!Array.isArray(productIds) || dbProducts.length !== productIds.length) {
       throw new Error('Some products not found');
     }
 
