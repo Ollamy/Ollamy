@@ -78,7 +78,10 @@ export class StripeController {
   })
   @ApiBody({
     type: [String], examples: {
-      example1: { value: ['prod_1', 'prod_2'], summary: 'Example of products to delete' },
+      example1: {
+        value: ['prod_1', 'prod_2'],
+        summary: 'Example of products to delete'
+      },
     }
   })
   @LoggedMiddleware(true)
