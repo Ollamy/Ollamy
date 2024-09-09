@@ -86,8 +86,8 @@ export class StripeController {
   })
   @LoggedMiddleware(true)
   @Delete('delete-products')
-  async deleteProducts(@Body() body: string[], @OllContext() ctx: any) {
-    return await this.stripeService.deleteProducts(body, ctx);
+  async deleteProducts(@Body() data: string[], @OllContext() ctx: any) {
+    return await this.stripeService.deleteProducts(data, ctx);
   }
 
   @ApiOkResponse({
