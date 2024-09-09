@@ -90,8 +90,6 @@ export class StripeController {
     return await this.stripeService.deleteProducts(body, ctx);
   }
 
-
-  // get payment link from a product
   @ApiOkResponse({
     description: 'Payment link created successfully',
   })
