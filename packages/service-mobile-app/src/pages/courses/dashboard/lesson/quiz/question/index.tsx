@@ -9,6 +9,8 @@ import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/qu
 import { AnswerType } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
 
+import QuestionBonusIndicator from './questionBonus';
+
 interface QuestionProps {
   questionId: string;
   sessionId: string;
@@ -63,10 +65,22 @@ function Question({
     }
   };
   return (
-    <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
-      {question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />}
-      <QuestionTitle title={question.title} />
-      <Text fontSize={'md'}>{question.description}</Text>
+    <VStack
+      height={'100%'}
+      space={'24px'}
+      paddingTop={23}
+      paddingX={'20px'}
+      backgroundColor={question.bonus ? '#876BF6' : undefined}
+    >
+      {question.bonus ? (
+        <QuestionBonusIndicator />
+      ) : (
+        question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />
+      )}
+      <QuestionTitle title={question.title} color={question.bonus ? 'white' : undefined} />
+      <Text fontSize={'md'} color={question.bonus ? 'white' : undefined}>
+        {question.description}
+      </Text>
       <View maxHeight={'35%'}>
         <ScrollView
           contentContainerStyle={{
@@ -86,6 +100,7 @@ function Question({
       </View>
       <View style={{ alignItems: 'center', width: '100%' }}>
         <TextButton
+          style={question.bonus ? { backgroundColor: '#F7AC16' } : undefined}
           disabled={selectedAnswer === undefined}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>

@@ -16,7 +16,7 @@ const DIFFICULTY_TO_NUMBER: Record<QuestionDifficulty, number> = {
 
 function QuestionDifficultyStars({ difficulty }: QuestionDifficultyStarsProps) {
   return (
-    <HStack w={'full'} justifyContent={'center'}>
+    <HStack w={'full'} justifyContent={'left'}>
       <HStack
         width={`${DIFFICULTY_TO_NUMBER[difficulty] * 33}px`}
         borderRadius={8}
