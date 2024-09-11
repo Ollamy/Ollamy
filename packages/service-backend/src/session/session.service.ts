@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { Status } from '@prisma/client';
+import { AnswerType, QuestionType, Status } from '@prisma/client';
 import prisma from 'client';
 import { TasksService } from 'cron/cron.service';
 import { SectionService } from 'section/section.service';
@@ -122,6 +122,7 @@ export class SessionService {
     nextQuestion,
     session,
     percentage: number,
+    isBonus: Boolean,
   ) {
     let hp: number;
 
@@ -164,7 +165,7 @@ export class SessionService {
         session.lesson_id,
         session.user_id,
       );
-    } else {
+    } else if (isBonus === false) {
       hp = (
         await prisma.usertoCourse.update({
           where: {
@@ -203,6 +204,7 @@ export class SessionService {
         correct_answers: true,
         total_questions: true,
         preloaded_data: true,
+        current_question_id: true,
       },
     });
 
@@ -219,10 +221,13 @@ export class SessionService {
       (question) => question.id === body.questionId,
     );
     const nextQuestion = preloaded_data[indexOfCurrentQuestion + 1] ?? null;
+    const bonus = preloaded_data[indexOfCurrentQuestion].bonus;
     const isCorrect =
       preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id ||
       preloaded_data[indexOfCurrentQuestion].Answer[0].data ===
-        body.answer.data;
+        body.answer.data ||
+      bonus;
+
     const percentage =
       ((isCorrect ? session.correct_answers + 1 : session.correct_answers) /
         session.total_questions) *
@@ -233,6 +238,7 @@ export class SessionService {
       nextQuestion,
       session,
       percentage,
+      bonus,
     );
 
     return {
