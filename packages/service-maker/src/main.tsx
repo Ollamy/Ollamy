@@ -11,7 +11,6 @@ import { Login } from 'pages/Auth/Login';
 import ProtectedRoute from 'pages/Auth/ProtectedRoute';
 import { Register } from 'pages/Auth/Register';
 import CourseManagerPage from 'pages/CourseManager/CourseManagerPage';
-import HomePage from 'pages/Home/HomePage';
 import LectureEditorPage from 'pages/LectureEditor/LectureEditorPage';
 import QuizEditorPage from 'pages/QuizEditor/QuizEditorPage';
 import { createGlobalStyle } from 'styled-components';
@@ -20,6 +19,7 @@ import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
 import UserProfilePage from 'pages/UserProfile/UserProfilePage';
+import Dashboard from 'pages/Dashboard/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -33,14 +33,6 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
-  },
-  {
-    path: '/home',
-    element: (
-      <ProtectedRoute>
-        <HomePage />
-      </ProtectedRoute>
-    ),
   },
   {
     path: '/course/:courseId',
@@ -74,14 +66,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  // {
-  //   path: '/setting',
-  //   element: <SettingPage />,
-  // },
-  // {
-  //   path: '/formation',
-  //   element: <FormationSetting />,
-  // },
+  {
+    path: '*',
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 // React Query setup (use to query the backend)
