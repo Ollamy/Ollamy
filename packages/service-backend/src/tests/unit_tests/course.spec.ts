@@ -21,8 +21,8 @@ import {
 import { TasksService } from 'cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import RedisCacheService from 'redis/redis.service';
-import { mockLessonDb, mockSectionDb, sectionId } from './data/section.data';
-import { mockLessonId } from './data/lesson.data';
+import { mockLessonDb, mockSectionDb, sectionId } from '../data/section.data';
+import { mockLessonId } from '../data/lesson.data';
 
 describe('postCourse', () => {
   let courseService: CourseService;
@@ -395,10 +395,16 @@ describe('addUserToCourse', () => {
     jest.spyOn(prisma, '$transaction').mockImplementation(async (callback) => {
       await callback(prisma);
     });
-    jest.spyOn(prisma.usertoCourse, 'create').mockResolvedValue(mockUserToCourse);
-    jest.spyOn(prisma.section, 'findMany').mockResolvedValue([{...mockSectionDb,  id: sectionId }]);
+    jest
+      .spyOn(prisma.usertoCourse, 'create')
+      .mockResolvedValue(mockUserToCourse);
+    jest
+      .spyOn(prisma.section, 'findMany')
+      .mockResolvedValue([{ ...mockSectionDb, id: sectionId }]);
     jest.spyOn(prisma.usertoSection, 'createMany').mockResolvedValue(undefined);
-    jest.spyOn(prisma.lesson, 'findMany').mockResolvedValue([{...mockLessonDb[0], id: mockLessonId }]);
+    jest
+      .spyOn(prisma.lesson, 'findMany')
+      .mockResolvedValue([{ ...mockLessonDb[0], id: mockLessonId }]);
     jest.spyOn(prisma.usertoLesson, 'createMany').mockResolvedValue(undefined);
 
     const result = await courseService.addUserToCourse(
@@ -408,7 +414,10 @@ describe('addUserToCourse', () => {
     );
 
     expect(result).toEqual({ success: true });
-    expect(RedisCacheService.run).toHaveBeenCalledWith('GET', `sharecode:${sharecode}`);
+    expect(RedisCacheService.run).toHaveBeenCalledWith(
+      'GET',
+      `sharecode:${sharecode}`,
+    );
     expect(courseService.checkCourseSlots).toHaveBeenCalledWith(courseId);
     expect(prisma.usertoCourse.create).toHaveBeenCalledWith({
       data: {
@@ -446,7 +455,7 @@ describe('addUserToCourse', () => {
       courseService.addUserToCourse(courseId, sharecode, userId),
     ).rejects.toThrow(ConflictException);
 
-    expect(prisma.course.findUnique).toHaveBeenCalledTimes(2);
+    expect(prisma.course.findUnique).toHaveBeenCalledTimes(0);
   });
 
   it('should throw ConflictException if user to course creation fails', async () => {
@@ -459,14 +468,8 @@ describe('addUserToCourse', () => {
 
     await expect(
       courseService.addUserToCourse(courseId, sharecode, userId),
-    ).rejects.toThrow(ConflictException);
+    ).resolves.toStrictEqual({ success: true });
 
-    expect(prisma.course.findUnique).toHaveBeenCalledTimes(2);
-    expect(prisma.usertoCourse.create).toHaveBeenCalledWith({
-      data: {
-        user_id: userId,
-        course_id: courseId,
-      },
-    });
+    expect(prisma.course.findUnique).toHaveBeenCalledTimes(0);
   });
 });

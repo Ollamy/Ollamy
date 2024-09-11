@@ -1,14 +1,14 @@
 import { Test } from '@nestjs/testing';
-import { context } from './data/user.data';
+import { context } from '../data/user.data';
 import {
   mockCourseStatisticData,
   mockLessonStatisticData,
   mockSectionStatisticData,
   mockUserStatisticData,
-} from './data/statistic.data';
+} from '../data/statistic.data';
 import { StatisticService } from 'statistic/statistic.service';
 import { StatisticOperation, StatisticType } from 'statistic/statistic.dto';
-import { courseId, mockUserToCourse } from './data/course.data';
+import { courseId, mockUserToCourse } from '../data/course.data';
 import { Role } from '@prisma/client';
 import prisma from 'client';
 
@@ -24,7 +24,9 @@ describe('createSession', () => {
   });
 
   it('should return a list of course statistics', async () => {
-    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+    jest
+      .spyOn(prisma.usertoCourse, 'findFirst')
+      .mockResolvedValue(mockUserToCourse);
 
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfCourse')
@@ -42,7 +44,9 @@ describe('createSession', () => {
   });
 
   it('should return a list of section statistics', async () => {
-    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+    jest
+      .spyOn(prisma.usertoCourse, 'findFirst')
+      .mockResolvedValue(mockUserToCourse);
 
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfSection')
@@ -60,7 +64,9 @@ describe('createSession', () => {
   });
 
   it('should return a list of lesson statistics', async () => {
-    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue(mockUserToCourse);
+    jest
+      .spyOn(prisma.usertoCourse, 'findFirst')
+      .mockResolvedValue(mockUserToCourse);
 
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfLesson')
@@ -78,7 +84,9 @@ describe('createSession', () => {
   });
 
   it('should return a list of user statistics', async () => {
-    jest.spyOn(prisma.usertoCourse, 'findFirst').mockResolvedValue({...mockUserToCourse, role_user: Role.OWNER});
+    jest
+      .spyOn(prisma.usertoCourse, 'findFirst')
+      .mockResolvedValue({ ...mockUserToCourse, role_user: Role.OWNER });
 
     jest
       .spyOn(StatisticService, 'getGradeByTypeOfUser')
