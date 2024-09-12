@@ -2219,6 +2219,29 @@
         ]
       }
     },
+    "/stripe/check-session-status": {
+      "get": {
+        "operationId": "StripeController_checkSessionStatus",
+        "parameters": [
+          {
+            "name": "session_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session status checked successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
     "/session/create/{lessonId}": {
       "post": {
         "operationId": "SessionController_create",

@@ -102,4 +102,16 @@ export class StripeController {
   ) {
     return await this.stripeService.createPaymentLink(product_id, ctx);
   }
+
+  @ApiOkResponse({
+    description: 'Session status checked successfully',
+  })
+  @ApiQuery({ name: 'session_id', required: true })
+  @LoggedMiddleware(true)
+  @Get('check-session-status')
+  async checkSessionStatus(
+    @Query('session_id') session_id: string,
+  ) {
+    return await this.stripeService.checkSessionStatus(session_id);
+  }
 }

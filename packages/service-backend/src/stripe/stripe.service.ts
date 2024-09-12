@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { STRIPE_PRIVATE_KEY, STRIPE_WEBHOOK_SECRET } from 'setup';
+import { STRIPE_PRIVATE_KEY, STRIPE_WEBHOOK_SECRET, FRONTEND_URL } from 'setup';
 import { CreateProductDto, CurrencyType } from './stripe.dto';
 import prisma from 'client';
 
@@ -188,10 +188,14 @@ export class StripeService {
         },
       ],
       mode: product.renewals ? 'subscription' : 'payment',
-      success_url: 'https://app.ollamy.com/success',
-      cancel_url: 'https://app.ollamy.com/cancel',
+      success_url: `${FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${FRONTEND_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     return session;
+  }
+
+  async checkSessionStatus(session_id: string) {
+    return await this.stripe.checkout.sessions.retrieve(session_id);
   }
 }

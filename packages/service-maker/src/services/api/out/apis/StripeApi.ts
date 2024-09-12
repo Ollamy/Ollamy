@@ -6,6 +6,10 @@ import type {
   CreateProductDto,
 } from '../models/index';
 
+export interface CheckSessionStatusRequest {
+    sessionId: string;
+}
+
 export interface CreatePaymentIntentRequest {
     amount: number;
     currency: CreatePaymentIntentCurrencyEnum;
@@ -30,6 +34,36 @@ export interface HandleWebhookRequest {
 /**
  */
 export class StripeApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async checkSessionStatusRaw(requestParameters: CheckSessionStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        if (requestParameters.sessionId === null || requestParameters.sessionId === undefined) {
+            throw new runtime.RequiredError('sessionId','Required parameter requestParameters.sessionId was null or undefined when calling checkSessionStatus.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.sessionId !== undefined) {
+            queryParameters['session_id'] = requestParameters.sessionId;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/stripe/check-session-status`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+    }
+
+    /**
+     */
+    static checkSessionStatus(requestParameters: CheckSessionStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        return localStripeApi.checkSessionStatusRaw(requestParameters, initOverrides);
+    }
 
     /**
      */
