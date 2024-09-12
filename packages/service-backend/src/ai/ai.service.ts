@@ -200,7 +200,7 @@ export class AiService {
     return { success: true } as CourseTrueResponse;
   }
 
-  async generateFakeAnswer(questionId: string, numWrongAnswers = 3) {
+  async generateFakeAnswer(questionId: string, numberWrongAnswers = 3) {
     const question = await prisma.question.findUnique({
       where: { id: questionId },
       select: {
@@ -225,7 +225,8 @@ export class AiService {
 
     const existingAnswers = await prisma.answer.findMany({
       where: { question_id: questionId },
-      select: { data: true, id: true }
+      select: { data: true, id: true, order: true },
+      orderBy: { order: 'asc' }
     });
 
     const correctAnswer = existingAnswers.find(a => a.id === question.trust_answer_id)?.data;
@@ -240,7 +241,7 @@ export class AiService {
   `;
 
     const prompt = `
-    Generate ${numWrongAnswers} plausible but incorrect answer choices for the multiple-choice question above.
+    Generate ${numberWrongAnswers} plausible but incorrect answer choices for the multiple-choice question above.
     These should be distinct from the correct answer and existing incorrect answers.
     Make sure the fake answers are relevant to the context of the question and lesson.
   `;
@@ -290,6 +291,33 @@ export class AiService {
 
     const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
 
-    return data as string[];
+    if (data.error) {
+      throw new ConflictException(data);
+    }
+
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    let lastAnswerOrder = existingAnswers[existingAnswers.length - 1]?.order || null;
+    console.log(lastAnswerOrder);
+
+    for (const answer of data) {
+      lastAnswerOrder = generateKeyBetween(lastAnswerOrder, null);
+
+      answersToCreate.push({
+        id: uuidv4(),
+        question_id: questionId,
+        data: answer,
+        order: lastAnswerOrder
+      });
+    }
+
+    try {
+      await prisma.answer.createMany({ data: answersToCreate });
+    } catch (e) {
+      Logger.error('Failed to create fake answers !');
+      throw new ConflictException('Failed to create fake answers');
+    }
+
+    return { success: true };
   }
 }
