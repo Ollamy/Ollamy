@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import DifficultyPicker from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/DifficultyPicker/DifficultyPicker';
@@ -24,7 +24,6 @@ function QuestionsPropertiesSideBar({
   const { data } = questionActions.useQuestion({ id: questionId });
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
   const { mutateAsync: removeQuestion } = questionActions.useRemoveQuestion();
-  const [isTime, setIsTime] = useState(!!data?.time);
 
   const handleDifficultyClick = useCallback(
     async (difficulty: Difficulty) => {
@@ -76,7 +75,6 @@ function QuestionsPropertiesSideBar({
             checked={!!data?.time}
             onChange={async (event) => {
               const newValue = event.target.checked;
-              setIsTime(newValue);
               await updateQuestion({
                 id: questionId,
                 updateQuestionModel: {
@@ -86,7 +84,7 @@ function QuestionsPropertiesSideBar({
             }}
           />
         </SettingsContainer>
-        {isTime && (
+        {!!data?.time && (
           <SettingsContainer>
             {timeChoices.map((time) => (
               <Button
