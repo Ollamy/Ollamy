@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import HomeBody from 'pages/Home/Home/Body/HomeBody';
-import HomeHeader from 'pages/Home/Home/Header/HomeHeader';
-import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
-import { DefaultApi } from 'services/api/out';
-import styled from 'styled-components';
-import StatisticsBody from 'pages/Home/Statistics/Body/StatisticsBody';
-import StatisticsHeader from 'pages/Home/Statistics/Header/StatisticsHeader';
 import { Route, Routes } from 'react-router-dom';
 import CourseStatistics from 'pages/CourseManager/Statistics/CourseStatistics';
+import HomeBody from 'pages/Home/Home/Body/HomeBody';
+import HomeHeader from 'pages/Home/Home/Header/HomeHeader';
+import type { PageType } from 'pages/Home/HomePage';
+import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
+import StatisticsBody from 'pages/Home/Statistics/Body/StatisticsBody';
+import StatisticsHeader from 'pages/Home/Statistics/Header/StatisticsHeader';
+import { DefaultApi } from 'services/api/out';
+import styled from 'styled-components';
 
-export type PageType = 'home' | 'statistics';
-
-const Dashboard = () => {
+function Dashboard() {
   const [currentPage, setCurrentPage] = useState<PageType>('home');
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const Dashboard = () => {
 
       <Routes>
         <Route
-          path="home"
+          path={'home'}
           element={
             <SubContainer>
               <HomeHeader />
@@ -37,7 +36,7 @@ const Dashboard = () => {
         />
 
         <Route
-          path="statistics"
+          path={'statistics'}
           element={
             <SubContainer>
               <StatisticsHeader />
@@ -47,7 +46,7 @@ const Dashboard = () => {
         />
 
         <Route
-          path="course/:courseId/statistics"
+          path={'course/:courseId/statistics'}
           element={
             <SubContainer>
               <StatisticsHeader />
@@ -58,7 +57,7 @@ const Dashboard = () => {
       </Routes>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;
