@@ -9,6 +9,7 @@ import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/qu
 import { AnswerType } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
 
+import ImageModal from './image';
 import QuestionBonusIndicator from './questionBonus';
 
 interface QuestionProps {
@@ -80,9 +81,13 @@ function Question({
         question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />
       )}
       <QuestionTitle title={question.title} color={question.bonus ? 'white' : undefined} />
-      <Text fontSize={'md'} color={question.bonus ? 'white' : undefined}>
-        {question.description}
-      </Text>
+      {question.pictureId ? (
+        <ImageModal uri={question.pictureId} />
+      ) : (
+        <Text fontSize={'md'} color={question.bonus ? 'white' : undefined}>
+          {question.description}
+        </Text>
+      )}
       <View maxHeight={'35%'}>
         <ScrollView
           scrollEnabled={scrollEnable}
