@@ -9,12 +9,14 @@ interface UseManageTextAnswerProps {
 
 const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(
-    undefined,
+    undefined
   );
 
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
   const { mutateAsync: addNewAnswer } = answerActions.useCreateAnswer();
   const { mutateAsync: updateAnswer } = answerActions.useUpdateAnswer();
+  const { mutateAsync: generateFakeAnswer } =
+    answerActions.useCreateFalseAnswers();
 
   const handleChangeCorrectAnswer = async (id: string) => {
     await updateQuestion({
@@ -39,7 +41,7 @@ const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
           },
         });
       },
-      [questionId, updateAnswer],
+      [questionId, updateAnswer]
     );
 
   const handleCreateNewAnswer = useCallback(async () => {
@@ -48,12 +50,23 @@ const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
     });
   }, [addNewAnswer, questionId]);
 
+  const handleCreateFalseAnswers = useCallback(
+    async (numberWrongAnswers: number) => {
+      await generateFakeAnswer({
+        questionId,
+        numberWrongAnswers,
+      });
+    },
+    [generateFakeAnswer, questionId]
+  );
+
   return {
     correctAnswer,
     setCorrectAnswer,
     handleCreateNewAnswer,
     handleChangeAnswerValue,
     handleChangeCorrectAnswer,
+    handleCreateFalseAnswers,
   };
 };
 

@@ -298,7 +298,6 @@ export class AiService {
     const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
 
     let lastAnswerOrder = existingAnswers[existingAnswers.length - 1]?.order || null;
-    console.log(lastAnswerOrder);
 
     for (const answer of data) {
       lastAnswerOrder = generateKeyBetween(lastAnswerOrder, null);
