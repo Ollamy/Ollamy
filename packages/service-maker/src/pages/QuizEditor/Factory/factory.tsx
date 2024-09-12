@@ -23,6 +23,10 @@ const quizFactory: Record<GetQuestionModelTypeAnswerEnum, Factory> = {
     Component: SquareChoice,
     label: 'Square question',
   },
+  [GetQuestionModelTypeAnswerEnum.OrderChoice]: {
+    Component: FreeAnswer,
+    label: 'Order choice question',
+  },
 } as const;
 
 export default quizFactory;
