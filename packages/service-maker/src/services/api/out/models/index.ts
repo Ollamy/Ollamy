@@ -333,7 +333,7 @@ export interface CreateQuestionModel {
      * @type {number}
      * @memberof CreateQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -671,7 +671,7 @@ export interface GetQuestionModel {
      * @type {number}
      * @memberof GetQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -1312,7 +1312,7 @@ export interface QuestionModel {
      * @type {number}
      * @memberof QuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -1617,7 +1617,7 @@ export interface UpdateQuestionModel {
      * @type {number}
      * @memberof UpdateQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
