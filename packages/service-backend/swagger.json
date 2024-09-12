@@ -2122,6 +2122,126 @@
         ]
       }
     },
+    "/stripe/create-product": {
+      "post": {
+        "operationId": "StripeController_createProduct",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/retrieve-products": {
+      "get": {
+        "operationId": "StripeController_retrieveProducts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Product created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/delete-products": {
+      "delete": {
+        "operationId": "StripeController_deleteProducts",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "examples": {
+                "example1": {
+                  "value": [
+                    "prod_1",
+                    "prod_2"
+                  ],
+                  "summary": "Example of products to delete"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Products deleted successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/create-payment-link": {
+      "get": {
+        "operationId": "StripeController_createPaymentLink",
+        "parameters": [
+          {
+            "name": "product_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment link created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/check-session-status": {
+      "get": {
+        "operationId": "StripeController_checkSessionStatus",
+        "parameters": [
+          {
+            "name": "session_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session status checked successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
     "/session/create/{lessonId}": {
       "post": {
         "operationId": "SessionController_create",
@@ -3734,6 +3854,53 @@
         "required": [
           "question",
           "answers"
+        ]
+      },
+      "CreateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the product",
+            "example": "My product"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the product",
+            "example": "My perfect description"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the product in cents",
+            "example": 1000
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the product",
+            "example": "usd",
+            "enum": [
+              "usd",
+              "eur",
+              "gbp"
+            ]
+          },
+          "renewal": {
+            "type": "string",
+            "description": "The renewal of the product",
+            "example": "month",
+            "enum": [
+              "day",
+              "month",
+              "week",
+              "year"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "currency",
+          "renewal"
         ]
       },
       "CreateSessionModel": {

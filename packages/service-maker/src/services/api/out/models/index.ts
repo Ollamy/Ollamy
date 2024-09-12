@@ -229,6 +229,66 @@ export interface CreateLessonModel {
 /**
  * 
  * @export
+ * @interface CreateProductDto
+ */
+export interface CreateProductDto {
+    /**
+     * The name of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    name: string;
+    /**
+     * The description of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    description?: string;
+    /**
+     * The price of the product in cents
+     * @type {number}
+     * @memberof CreateProductDto
+     */
+    price: number;
+    /**
+     * The currency of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    currency: CreateProductDtoCurrencyEnum;
+    /**
+     * The renewal of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    renewal: CreateProductDtoRenewalEnum;
+}
+
+
+/**
+ * @export
+ */
+export const CreateProductDtoCurrencyEnum = {
+    Usd: 'usd',
+    Eur: 'eur',
+    Gbp: 'gbp'
+} as const;
+export type CreateProductDtoCurrencyEnum = typeof CreateProductDtoCurrencyEnum[keyof typeof CreateProductDtoCurrencyEnum];
+
+/**
+ * @export
+ */
+export const CreateProductDtoRenewalEnum = {
+    Day: 'day',
+    Month: 'month',
+    Week: 'week',
+    Year: 'year'
+} as const;
+export type CreateProductDtoRenewalEnum = typeof CreateProductDtoRenewalEnum[keyof typeof CreateProductDtoRenewalEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateQuestionModel
  */
 export interface CreateQuestionModel {
