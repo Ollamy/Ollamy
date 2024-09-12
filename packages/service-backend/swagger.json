@@ -2063,6 +2063,104 @@
         ]
       }
     },
+    "/ai/create-and-generate-question/{lessonId}": {
+      "post": {
+        "operationId": "AiController_createAndGenerateText",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "description": "The lesson id to create the questions for",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numberofquestions",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The questions generated from the pdf file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Ai"
+        ]
+      }
+    },
+    "/ai/generate-fake-answer/{questionId}": {
+      "post": {
+        "operationId": "AiController_generateFakeAnswer",
+        "parameters": [
+          {
+            "name": "questionId",
+            "required": true,
+            "in": "path",
+            "description": "The question id to generate the fake answer for",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numWrongAnswers",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 10,
+              "default": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The fake answer generated from the question"
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Ai"
+        ]
+      }
+    },
     "/stripe/create-payment-intent": {
       "get": {
         "operationId": "StripeController_createPaymentIntent",
