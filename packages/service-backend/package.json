@@ -16,11 +16,11 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "ci:lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix --max-warnings=0",
     "test": "jest --testPathPattern=src/tests/unit_tests",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --testPathPattern=src/tests/unit_tests",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --forceExit",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --testPathPattern=src/tests/e2e",
+    "test:e2e": "jest --forceExit --testPathPattern=src/tests/e2e",
     "build:openapi-generator-cli": "openapi-generator-cli generate -g typescript-nestjs --additional-properties=useSingleRequestParameter=true,withoutRuntimeChecks=true,typescriptThreePlus=true,modelPropertyNaming=original --skip-validate-spec -g typescript-fetch --enable-post-process-file --remove-operation-id-prefix  -o out -i ./swagger.json",
     "prisma:generate": "yarn prisma generate",
     "prisma:migrate": "yarn prisma migrate dev"
