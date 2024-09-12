@@ -86,10 +86,11 @@ class BaseQuestion {
     description: 'The time allowed for the response to the question',
     required: false,
     example: 1,
+    nullable: true,
   })
   @IsNumber()
   @IsOptional()
-  time?: number;
+  time?: number | null;
 
   @ApiProperty({
     description:
