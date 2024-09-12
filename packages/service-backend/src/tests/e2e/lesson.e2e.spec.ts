@@ -6,7 +6,7 @@ import { prismaMock } from './singleton';
 import { LessonModule } from 'lesson/lesson.module';
 import { UserService } from 'user/user.service';
 import * as cookieParser from 'cookie-parser';
-import * as Data from './data';
+import * as Data from './data/data';
 import { v4 as uuidv4 } from 'uuid';
 
 const PORT = 3336;
@@ -95,5 +95,59 @@ describe('AppController (e2e)', () => {
       })
       .withQueryParams({ id: Data.courseData.id })
       .expectStatus(200);
+  });
+
+  it(`should get lessons question`, async () => {
+    const token = await new UserService().createToken(
+      Data.userId,
+      Data.userData.platform,
+    );
+
+    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
+    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
+    prismaMock.question.findMany.mockResolvedValue(Data.questionArray);
+
+    await pactum
+      .spec()
+      .get('/lesson/questions/:id')
+      .withCookies('session', token)
+      .withQueryParams({ id: Data.sectionsData.id })
+      .expectStatus(200);
+  });
+
+  it(`should get lessons lectures`, async () => {
+    const token = await new UserService().createToken(
+      Data.userId,
+      Data.userData.platform,
+    );
+
+    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
+    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
+    prismaMock.lecture.findMany.mockResolvedValue(Data.lectureArray);
+
+    await pactum
+      .spec()
+      .get('/lesson/lecture/:id')
+      .withCookies('session', token)
+      .withQueryParams({ id: Data.sectionsData.id })
+      .expectStatus(200);
+  });
+
+  it(`should join lesson`, async () => {
+    const token = await new UserService().createToken(
+      Data.userId,
+      Data.userData.platform,
+    );
+
+    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
+    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
+    prismaMock.usertoLesson.create.mockResolvedValue(Data.returnUserToLesson);
+
+    await pactum
+      .spec()
+      .post('/lesson/:id/join')
+      .withCookies('session', token)
+      .withQueryParams({ id: Data.sectionsData.id })
+      .expectStatus(201);
   });
 });

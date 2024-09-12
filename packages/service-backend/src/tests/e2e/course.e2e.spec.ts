@@ -6,7 +6,7 @@ import { prismaMock } from './singleton';
 import { CourseModule } from 'course/course.module';
 import { UserService } from 'user/user.service';
 import * as cookieParser from 'cookie-parser';
-import * as Data from './data';
+import * as Data from './data/data';
 import { v4 as uuidv4 } from 'uuid';
 import { Durationtype } from 'course/course.dto';
 

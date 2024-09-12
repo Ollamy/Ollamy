@@ -2,10 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserService } from 'user/user.service';
 import { PlatformEnum } from 'user/user.dto';
 import {
+  AnswerType,
   PermissionCourse,
   PermissionLesson,
   PermissionSection,
   PermissionUser,
+  QuestionDifficulty,
+  QuestionType,
   Role,
   Status,
 } from '@prisma/client';
@@ -16,6 +19,7 @@ const hashed_password = new UserService().hashPassword(password);
 const courseUpdatedTitle = 'new tile';
 const sectionUpdatedTitle = 'new tile';
 const lessonUpdatedTitle = 'new tile';
+const lectureUpdatedTitle = 'new tile';
 
 const userData = {
   firstname: 'name',
@@ -132,6 +136,64 @@ const returnUserToSection = {
   score: 100,
 };
 
+const createLectureData = {
+  id: uuidv4(),
+  data: 'lecture title',
+  lessonId: lessonData.id,
+};
+
+const lectureData = {
+  id: uuidv4(),
+  data: 'lecture title',
+  lesson_id: lessonData.id,
+};
+
+const lectureArray = [lectureData];
+
+const returnLectureData = {
+  ...createLectureData,
+  id: createLectureData.id,
+};
+
+const updateLectureData = {
+  data: lectureUpdatedTitle,
+};
+
+const returnUpdateLectureData = {
+  ...updateLectureData,
+  id: createLectureData.id,
+};
+
+const questionData = {
+  id: uuidv4(),
+  title: 'question title',
+  description: 'question description',
+  type_answer: AnswerType.MULTIPLE_CHOICE,
+  type_question: QuestionType.TEXT,
+  order: 'a0',
+  points: 2,
+  time: 1,
+  bonus: true,
+  difficulty: QuestionDifficulty.ADVANCED,
+  picture_id: undefined,
+  lesson_id: lessonData.id,
+  trust_answer_id: undefined,
+};
+
+const questionArray = [questionData];
+
+const returnUserToLesson = {
+  id: uuidv4(),
+  user_id: userId,
+  lesson_id: lessonData.id,
+  status: Status.COMPLETED,
+  created_at: new Date(),
+  updated_at: new Date(),
+  score: 100,
+  complete_lecture: true,
+  complete_question: true,
+};
+
 export {
   password,
   hashed_password,
@@ -155,4 +217,14 @@ export {
   createLessonData,
   orderUpdate,
   returnUserToSection,
+  createLectureData,
+  lectureData,
+  returnLectureData,
+  updateLectureData,
+  returnUpdateLectureData,
+  lectureUpdatedTitle,
+  questionArray,
+  questionData,
+  lectureArray,
+  returnUserToLesson,
 };
