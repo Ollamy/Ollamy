@@ -56,11 +56,12 @@ function Question({
           },
         },
       }).unwrap();
+
       setNextQuestionId(data.nextQuestionId ?? undefined);
       setTrueAnswer(data.answerId);
       setIsEnd(!data.nextQuestionId);
       Keyboard.dismiss();
-      if (!data.success) setCurrentErrorNumber((old) => old + 1);
+      if (data.success === false) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
     }
