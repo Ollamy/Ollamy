@@ -177,7 +177,7 @@ export class SectionService {
                   Lecture: true,
                 },
               }
-            : undefined,
+            : {},
           UsertoLesson: !ctx.__device.isMaker
             ? {
                 where: {
