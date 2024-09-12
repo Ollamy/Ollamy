@@ -2,15 +2,20 @@ import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { PageType } from 'pages/Home/HomePage';
+import { capitalizeFirstLetterOfEachWord } from 'pages/UserProfile/UserGeneralSettings/UserGeneralSettings';
 import { userActions } from 'services/api/routes/user';
 import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { HomeIcon, IdCardIcon, PersonIcon } from '@radix-ui/react-icons';
+import {
+  HomeIcon,
+  IdCardIcon,
+  LightningBoltIcon,
+  PersonIcon,
+} from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button } from '@radix-ui/themes';
-import { capitalizeFirstLetterOfEachWord } from 'pages/UserProfile/UserGeneralSettings/UserGeneralSettings';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
@@ -64,6 +69,16 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
               >
                 <IdCardIcon />
                 Statistics
+              </LinkNav>
+            </NavigationMenu.Item>
+
+            <NavigationMenu.Item onClick={() => handleClick('subscription')}>
+              <LinkNav
+                active={currentPage === 'subscription'}
+                className={'NavigationMenuLink'}
+              >
+                <LightningBoltIcon />
+                Subscription
               </LinkNav>
             </NavigationMenu.Item>
 
