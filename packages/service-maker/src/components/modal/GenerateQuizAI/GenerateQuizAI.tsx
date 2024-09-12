@@ -37,16 +37,19 @@ export const GenerateQuizAIModal = ({
         setFileTarget((event.target.files as FileList)[0]);
       }
     },
-    [],
+    [setFileTarget],
   );
 
   const handleChangeTargetNumber: ChangeEventHandler<HTMLInputElement> =
-    useCallback((event) => {
-      const newValue = +event.currentTarget.value;
-      if (newValue > 0) {
-        setNumberOfQuestionTarget(newValue);
-      }
-    }, []);
+    useCallback(
+      (event) => {
+        const newValue = +event.currentTarget.value;
+        if (newValue > 0) {
+          setNumberOfQuestionTarget(newValue);
+        }
+      },
+      [setNumberOfQuestionTarget],
+    );
 
   const handleChangeTargetContext = useCallback(() => {}, []);
 

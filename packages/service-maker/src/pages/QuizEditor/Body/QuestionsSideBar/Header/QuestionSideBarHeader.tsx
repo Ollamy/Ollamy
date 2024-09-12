@@ -6,7 +6,7 @@ import { AIAction } from 'services/api/routes/AI';
 import styled from 'styled-components';
 
 import { SymbolIcon } from '@radix-ui/react-icons';
-import { Button } from '@radix-ui/themes';
+import { Button, Spinner } from '@radix-ui/themes';
 
 interface QuestionSideBarHeaderProps {
   lessonId: string;
@@ -19,6 +19,7 @@ function QuestionSideBarHeader({
   const [numberOfQuestionTarget, setNumberOfQuestionTarget] = useState(10);
   const [fileTarget, setFileTarget] = useState<File | undefined>(undefined);
   // const [contextTarget, setContextTarget] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerateQuiz = useCallback(async () => {
     if (numberOfQuestionTarget < 0 || !fileTarget) {
@@ -26,12 +27,15 @@ function QuestionSideBarHeader({
       return;
     }
 
+    setIsLoading(true);
     await generateQuiz({
       lessonId,
       file: fileTarget,
       numberOfQuestions: numberOfQuestionTarget,
+    }).then(() => {
+      setIsLoading(false);
     });
-  }, [numberOfQuestionTarget, fileTarget, lessonId]);
+  }, [numberOfQuestionTarget, fileTarget, generateQuiz, lessonId]);
 
   return (
     <Container>
@@ -44,8 +48,14 @@ function QuestionSideBarHeader({
         setNumberOfQuestionTarget={setNumberOfQuestionTarget}
         triggerButton={
           <Button variant={'soft'} color={'orange'}>
-            <SymbolIcon />
-            Generate Quiz
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <SymbolIcon />
+                Generate Quiz
+              </>
+            )}
           </Button>
         }
       />
