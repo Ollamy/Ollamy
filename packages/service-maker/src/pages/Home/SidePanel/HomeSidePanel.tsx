@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { PageType } from 'pages/Home/HomePage';
 import { capitalizeFirstLetterOfEachWord } from 'pages/UserProfile/UserGeneralSettings/UserGeneralSettings';
@@ -32,7 +32,7 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
       setCurrentPage(target);
       navigate(`/${target}`);
     },
-    [setCurrentPage],
+    [setCurrentPage]
   );
 
   const handleLogout = useCallback(() => {
