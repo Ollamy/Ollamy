@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import FreeAnswer from 'pages/QuizEditor/Factory/Components/FreeAnswer/FreeAnswer';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
 import MultipleChoice from 'pages/QuizEditor/Factory/Components/MultipleChoice/MultipleChoice';
+import { OrderAnswer } from 'pages/QuizEditor/Factory/Components/OrderAnswer/OrderAnswer';
 import SquareChoice from 'pages/QuizEditor/Factory/Components/SquareChoice/SquareChoice';
 import { GetQuestionModelTypeAnswerEnum } from 'services/api/out';
 
@@ -24,7 +25,7 @@ const quizFactory: Record<GetQuestionModelTypeAnswerEnum, Factory> = {
     label: 'Square question',
   },
   [GetQuestionModelTypeAnswerEnum.OrderChoice]: {
-    Component: FreeAnswer,
+    Component: OrderAnswer,
     label: 'Order choice question',
   },
 } as const;
