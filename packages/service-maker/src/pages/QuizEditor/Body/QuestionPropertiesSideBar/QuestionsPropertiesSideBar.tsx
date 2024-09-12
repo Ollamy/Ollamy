@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
 import DifficultyPicker from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/DifficultyPicker/DifficultyPicker';
@@ -7,11 +7,15 @@ import type { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button } from '@radix-ui/themes';
+import { TitlePart } from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/style';
+
+import { Button, Separator } from '@radix-ui/themes';
 
 interface QuestionsPropertiesSideBarProps {
   questionId: string;
 }
+
+const timeChoices = [15, 30, 60, 120] as const;
 
 function QuestionsPropertiesSideBar({
   questionId,
@@ -20,6 +24,7 @@ function QuestionsPropertiesSideBar({
   const { data } = questionActions.useQuestion({ id: questionId });
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
   const { mutateAsync: removeQuestion } = questionActions.useRemoveQuestion();
+  const [isTime, setIsTime] = useState(!!data?.time);
 
   const handleDifficultyClick = useCallback(
     async (difficulty: Difficulty) => {
@@ -41,11 +46,68 @@ function QuestionsPropertiesSideBar({
 
   return (
     <Container>
-      <DifficultyPicker
-        questionId={questionId}
-        onClick={handleDifficultyClick}
-        difficulty={data?.difficulty as Difficulty}
-      />
+      <SubContainer>
+        <DifficultyPicker
+          questionId={questionId}
+          onClick={handleDifficultyClick}
+          difficulty={data?.difficulty as Difficulty}
+        />
+        <Separator size={'4'} />
+        <TitlePart>Settings</TitlePart>
+        <SettingsContainer>
+          <SettingsTitle>Bonus</SettingsTitle>
+          <input
+            type={'checkbox'}
+            checked={data?.bonus ?? false}
+            onChange={async () => {
+              await updateQuestion({
+                id: questionId,
+                updateQuestionModel: {
+                  bonus: !(data?.bonus ?? false),
+                },
+              });
+            }}
+          />
+        </SettingsContainer>
+        <SettingsContainer>
+          <SettingsTitle>Time</SettingsTitle>
+          <input
+            type={'checkbox'}
+            checked={!!data?.time}
+            onChange={async (event) => {
+              const newValue = event.target.checked;
+              setIsTime(newValue);
+              await updateQuestion({
+                id: questionId,
+                updateQuestionModel: {
+                  time: newValue ? 15 : null,
+                },
+              });
+            }}
+          />
+        </SettingsContainer>
+        {isTime && (
+          <SettingsContainer>
+            {timeChoices.map((time) => (
+              <Button
+                key={time}
+                color={'purple'}
+                variant={time === data?.time ? 'soft' : 'outline'}
+                onClick={async () => {
+                  await updateQuestion({
+                    id: questionId,
+                    updateQuestionModel: {
+                      time,
+                    },
+                  });
+                }}
+              >
+                {time}
+              </Button>
+            ))}
+          </SettingsContainer>
+        )}
+      </SubContainer>
       <CustomAlertDialog
         description={
           'This action cannot be undone. This will permanently delete this question and remove your data from our servers.'
@@ -73,6 +135,24 @@ const Container = styled.div`
   box-sizing: border-box;
 
   background: #ffffff;
+`;
+
+const SubContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+const SettingsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+`;
+
+const SettingsTitle = styled.p`
+  margin: 0;
+  color: #3d3d3d;
 `;
 
 export default QuestionsPropertiesSideBar;
