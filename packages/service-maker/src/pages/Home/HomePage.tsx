@@ -2,12 +2,14 @@ import { type ReactElement, useEffect, useState } from 'react';
 import HomeBody from 'pages/Home/Home/Body/HomeBody';
 import HomeHeader from 'pages/Home/Home/Header/HomeHeader';
 import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
-import { DefaultApi } from 'services/api/out';
-import styled from 'styled-components';
 import StatisticsBody from 'pages/Home/Statistics/Body/StatisticsBody';
 import StatisticsHeader from 'pages/Home/Statistics/Header/StatisticsHeader';
+import { SubscriptionBody } from 'pages/Home/Subscription/Body/SubscriptionBody';
+import { SubscriptionHeader } from 'pages/Home/Subscription/Header/SubscriptionHeader';
+import { DefaultApi } from 'services/api/out';
+import styled from 'styled-components';
 
-export type PageType = 'home' | 'statistics';
+export type PageType = 'home' | 'statistics' | 'subscription';
 
 function HomePage(): ReactElement {
   const [currentPage, setCurrentPage] = useState<PageType>('home');
@@ -32,6 +34,12 @@ function HomePage(): ReactElement {
         <SubContainer>
           <StatisticsHeader />
           <StatisticsBody />
+        </SubContainer>
+      )}
+      {currentPage === 'subscription' && (
+        <SubContainer>
+          <SubscriptionHeader />
+          <SubscriptionBody />
         </SubContainer>
       )}
     </Container>
