@@ -2,6 +2,7 @@ export enum AnswerType {
   FREE_ANSWER = 'FREE_ANSWER',
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   SQUARE_CHOICE = 'SQUARE_CHOICE',
+  ORDER_CHOICE = 'ORDER_CHOICE',
 }
 
 export enum QuestionDifficulty {

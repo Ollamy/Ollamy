@@ -30,6 +30,7 @@ function Question({
 }: QuestionProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
+  const [scrollEnable, setScrollEnable] = useState<boolean>(true);
 
   const [validate] = useValidateQuestionMutation();
 
@@ -83,6 +84,7 @@ function Question({
       </Text>
       <View maxHeight={'35%'}>
         <ScrollView
+          scrollEnabled={scrollEnable}
           contentContainerStyle={{
             flexGrow: 1,
             flexDirection: 'row',
@@ -95,6 +97,7 @@ function Question({
             answers,
             setAnswer: (answer) => setSelectedAnswer(answer),
             correctAnswer: trueAnswer,
+            setScrollEnable,
           })}
         </ScrollView>
       </View>
