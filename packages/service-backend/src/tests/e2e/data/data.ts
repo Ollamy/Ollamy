@@ -13,6 +13,7 @@ import {
   Status,
 } from '@prisma/client';
 import { UpdateOrderModel } from 'order/order.dto';
+import { end } from 'pactum/src/exports/reporter';
 
 const password = '1234aaBB@';
 const hashed_password = new UserService().hashPassword(password);
@@ -194,6 +195,24 @@ const returnUserToLesson = {
   complete_question: true,
 };
 
+const sessionData = {
+  id: uuidv4(),
+  session_id: uuidv4(),
+  current_question_id: questionData.id,
+  correct_answers: 10,
+  total_questions: 10,
+  created_at: new Date(),
+  updated_at: new Date(),
+  end_date: new Date(),
+  last_update: new Date(),
+  course_id: courseData.id,
+  section_id: sectionsData.id,
+  user_id: userId,
+  status: Status.COMPLETED,
+  preloaded_data: {},
+  lesson_id: lessonData.id,
+};
+
 export {
   password,
   hashed_password,
@@ -227,4 +246,5 @@ export {
   questionData,
   lectureArray,
   returnUserToLesson,
+  sessionData,
 };
