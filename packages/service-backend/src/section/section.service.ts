@@ -103,16 +103,16 @@ export class SectionService {
 
       const userToSection = !ctx.__device.isMaker
         ? await prisma.usertoSection.findUnique({
-            where: {
-              section_id_user_id: {
-                section_id: sectionId,
-                user_id: ctx.__user.id,
-              },
+          where: {
+            section_id_user_id: {
+              section_id: sectionId,
+              user_id: ctx.__user.id,
             },
-            select: {
-              status: true,
-            },
-          })
+          },
+          select: {
+            status: true,
+          },
+        })
         : undefined;
 
       return {
@@ -170,20 +170,18 @@ export class SectionService {
           section_id: sectionId,
         },
         include: {
-          _count: ctx.__device.isMaker
-            ? {
-                select: {
-                  Questions: true,
-                  Lecture: true,
-                },
-              }
-            : {},
+          _count: {
+            select: {
+              Questions: true,
+              Lecture: true,
+            },
+          },
           UsertoLesson: !ctx.__device.isMaker
             ? {
-                where: {
-                  user_id: ctx.__user.id,
-                },
-              }
+              where: {
+                user_id: ctx.__user.id,
+              },
+            }
             : undefined,
         },
       });
