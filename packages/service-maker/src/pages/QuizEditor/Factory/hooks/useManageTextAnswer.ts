@@ -7,9 +7,13 @@ interface UseManageTextAnswerProps {
   questionId: string;
 }
 
+export function formatString(input: string): string {
+  return input.replace(/\s*\/\s*/g, ' / ');
+}
+
 const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | undefined>(
-    undefined
+    undefined,
   );
 
   const { mutateAsync: updateQuestion } = questionActions.useUpdateQuestion();
@@ -36,12 +40,12 @@ const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
           id: name,
           updateAnswerModel: {
             questionId,
-            data: value,
+            data: formatString(value),
             picture: '',
           },
         });
       },
-      [questionId, updateAnswer]
+      [questionId, updateAnswer],
     );
 
   const handleCreateNewAnswer = useCallback(async () => {
@@ -57,7 +61,7 @@ const useManageTextAnswer = ({ questionId }: UseManageTextAnswerProps) => {
         numberWrongAnswers,
       });
     },
-    [generateFakeAnswer, questionId]
+    [generateFakeAnswer, questionId],
   );
 
   return {
