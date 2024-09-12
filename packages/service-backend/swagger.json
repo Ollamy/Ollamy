@@ -1968,7 +1968,7 @@
         "operationId": "AiController_generateText",
         "parameters": [
           {
-            "name": "numberofquestions",
+            "name": "numberOfQuestions",
             "required": true,
             "in": "query",
             "schema": {
@@ -2065,7 +2065,7 @@
     },
     "/ai/create-and-generate-question/{lessonId}": {
       "post": {
-        "operationId": "AiController_createAndGenerateText",
+        "operationId": "AiController_createAndGenerateQuestion",
         "parameters": [
           {
             "name": "lessonId",
@@ -2077,7 +2077,7 @@
             }
           },
           {
-            "name": "numberofquestions",
+            "name": "numberOfQuestions",
             "required": true,
             "in": "query",
             "schema": {
@@ -2138,7 +2138,7 @@
             }
           },
           {
-            "name": "numWrongAnswers",
+            "name": "numberWrongAnswers",
             "required": true,
             "in": "query",
             "schema": {
@@ -3286,7 +3286,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
@@ -3375,7 +3376,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
@@ -3501,12 +3503,18 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
             "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
+          },
+          "trust_answer_id": {
+            "type": "string",
+            "description": "The unique identifier of the trusted answer",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
@@ -3587,7 +3595,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
