@@ -46,7 +46,7 @@ export class AiController {
     type: [Question],
   })
   @ApiQuery({
-    name: 'numberofquestions',
+    name: 'numberOfQuestions',
     type: 'number',
     schema: {
       minimum: 1,
@@ -58,7 +58,7 @@ export class AiController {
   @Post('/generate-question')
   async generateText(
     @UploadedFile() file: Express.Multer.File,
-    @Query('numberofquestions') numberOfQuestions: number = 10,
+    @Query('numberOfQuestions') numberOfQuestions: number = 10,
   ): Promise<Question[]> {
     if (!file) {
       throw new ConflictException('File is empty');
@@ -124,7 +124,7 @@ export class AiController {
     description: 'The lesson id to create the questions for',
   })
   @ApiQuery({
-    name: 'numberofquestions',
+    name: 'numberOfQuestions',
     type: 'number',
     schema: {
       minimum: 1,
@@ -134,10 +134,10 @@ export class AiController {
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
   @Post('/create-and-generate-question/:lessonId')
-  async createAndGenerateText(
+  async createAndGenerateQuestion(
     @UploadedFile() file: Express.Multer.File,
     @Param('lessonId') lessonId: string,
-    @Query('numberofquestions') numberOfQuestions: number = 10,
+    @Query('numberOfQuestions') numberOfQuestions: number = 10,
   ) {
 
     const questions = await this.generateText(file, numberOfQuestions);
@@ -157,7 +157,7 @@ export class AiController {
     description: 'The question id to generate the fake answer for',
   })
   @ApiQuery({
-    name: 'numWrongAnswers',
+    name: 'numberWrongAnswers',
     type: 'number',
     schema: {
       minimum: 1,
@@ -169,8 +169,8 @@ export class AiController {
   @Post('/generate-fake-answer/:questionId')
   async generateFakeAnswer(
     @Param('questionId') questionId: string,
-    @Query('numWrongAnswers') numWrongAnswers: number = 3,
+    @Query('numberWrongAnswers') numberWrongAnswers: number = 3,
   ) {
-    return await this.aiService.generateFakeAnswer(questionId, numWrongAnswers);
+    return await this.aiService.generateFakeAnswer(questionId, numberWrongAnswers);
   }
 }
