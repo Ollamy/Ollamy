@@ -25,6 +25,7 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
   const handleClick = useCallback(
     (target: PageType) => {
       setCurrentPage(target);
+      navigate(`/${target}`);
     },
     [setCurrentPage],
   );

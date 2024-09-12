@@ -4,9 +4,11 @@ import styled from 'styled-components';
 
 import { PersonIcon, RocketIcon } from '@radix-ui/react-icons';
 import { Button } from '@radix-ui/themes';
+import { useNavigate } from 'react-router-dom';
 
 function StatisticsBody() {
   const { data } = api.user.useGetUserCourses();
+  const navigate = useNavigate();
 
   const totalOfStudent = useMemo(() => {
     if (!data) return null;
@@ -16,6 +18,10 @@ function StatisticsBody() {
       0,
     );
   }, [data]);
+
+  const handleClick = (id: string) => {
+    navigate(`/course/${id}/statistics`);
+  };
 
   return (
     <Container>
@@ -38,7 +44,11 @@ function StatisticsBody() {
               <CourseImage src={pictureId} />
               <CourseTitle>{title}</CourseTitle>
             </CourseInfosContainer>
-            <Button size={'1'} variant={'surface'}>
+            <Button
+              size={'1'}
+              variant={'surface'}
+              onClick={() => handleClick(id)}
+            >
               View
             </Button>
           </CourseItem>
@@ -72,7 +82,6 @@ const CardContainer = styled.div`
 
   padding: 16px;
   width: 250px;
-  //height: 160px;
   border-radius: 4px;
   background: #fdfbff;
   box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;

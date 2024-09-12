@@ -101,4 +101,76 @@ export class AiController {
   ) {
     return await this.aiService.createQuizz(questions, lessonId);
   }
+
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The questions generated from the pdf file',
+    type: [Question],
+  })
+  @ApiParam({
+    name: 'lessonId',
+    type: 'string',
+    description: 'The lesson id to create the questions for',
+  })
+  @ApiQuery({
+    name: 'numberofquestions',
+    type: 'number',
+    schema: {
+      minimum: 1,
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  @LoggedMiddleware(true)
+  @Post('/create-and-generate-question/:lessonId')
+  async createAndGenerateText(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('lessonId') lessonId: string,
+    @Query('numberofquestions') numberOfQuestions: number = 10,
+  ) {
+
+    const questions = await this.generateText(file, numberOfQuestions);
+    if (!questions) {
+      throw new ConflictException('Failed to generate questions');
+    }
+    return await this.createQuestion(questions, lessonId);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'The fake answer generated from the question',
+  })
+  @ApiParam({
+    name: 'questionId',
+    type: 'string',
+    description: 'The question id to generate the fake answer for',
+  })
+  @ApiQuery({
+    name: 'numWrongAnswers',
+    type: 'number',
+    schema: {
+      minimum: 1,
+      maximum: 10,
+      default: 3,
+    },
+  })
+  @LoggedMiddleware(true)
+  @Post('/generate-fake-answer/:questionId')
+  async generateFakeAnswer(
+    @Param('questionId') questionId: string,
+    @Query('numWrongAnswers') numWrongAnswers: number = 3,
+  ) {
+    return await this.aiService.generateFakeAnswer(questionId, numWrongAnswers);
+  }
 }
