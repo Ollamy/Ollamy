@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { STRIPE_PRIVATE_KEY, STRIPE_WEBHOOK_SECRET } from 'setup';
 import { CreateProductDto, CurrencyType } from './stripe.dto';
-import prisma from '../client';
+import prisma from 'client';
 
 @Injectable()
 export class StripeService {

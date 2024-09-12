@@ -13,7 +13,7 @@ import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StripeService } from './stripe.service';
 import { CurrencyType, CreateProductDto } from './stripe.dto';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
-import { OllContext } from '../context/context.decorator';
+import { OllContext } from 'context/context.decorator';
 
 @ApiTags('stripe')
 @Controller('stripe')
