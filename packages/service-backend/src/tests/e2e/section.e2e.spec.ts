@@ -3,14 +3,13 @@ import { AppModule } from 'app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as pactum from 'pactum';
 import { prismaMock } from './singleton';
-import { CourseModule } from 'course/course.module';
+import { SectionModule } from 'section/section.module';
 import { UserService } from 'user/user.service';
 import * as cookieParser from 'cookie-parser';
 import * as Data from './data';
 import { v4 as uuidv4 } from 'uuid';
-import { Durationtype } from 'course/course.dto';
 
-const PORT = 3334;
+const PORT = 3335;
 pactum.request.setBaseUrl(`http://localhost:${PORT}`);
 
 describe('AppController (e2e)', () => {
@@ -18,7 +17,7 @@ describe('AppController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule, CourseModule],
+      imports: [AppModule, SectionModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -38,7 +37,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('should create a course', async () => {
+  it('should create a section', async () => {
     const token = await new UserService().createToken(
       Data.userId,
       Data.userData.platform,
@@ -46,37 +45,38 @@ describe('AppController (e2e)', () => {
 
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.create.mockResolvedValue({
+    prismaMock.section.findMany.mockResolvedValue([]);
+    prismaMock.section.create.mockResolvedValue({
       id: uuidv4(),
-      ...Data.courseData,
+      ...Data.sectionsData,
     });
 
     await pactum
       .spec()
-      .post('/course')
+      .post('/section')
       .withCookies('session', token)
-      .withBody(Data.courseData)
+      .withBody(Data.createSectionData)
       .expectStatus(201);
   });
 
-  it('should delete a course', async () => {
+  it('should delete a section', async () => {
     const token = await new UserService().createToken(
       Data.userId,
       Data.userData.platform,
     );
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.delete.mockResolvedValue(Data.courseData);
+    prismaMock.section.delete.mockResolvedValue(Data.sectionsData);
 
     await pactum
       .spec()
-      .delete('/course')
+      .delete('/section')
       .withCookies('session', token)
-      .withBody({ id: Data.courseData.id })
+      .withBody({ id: Data.sectionsData.id })
       .expectStatus(200);
   });
 
-  it('should get a course', async () => {
+  it('should get a section', async () => {
     const token = await new UserService().createToken(
       Data.userId,
       Data.userData.platform,
@@ -84,13 +84,33 @@ describe('AppController (e2e)', () => {
 
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.findUnique.mockResolvedValue(Data.courseData);
-    prismaMock.usertoCourse.findUnique.mockResolvedValue(undefined);
+    prismaMock.section.findUnique.mockResolvedValue(Data.sectionsData);
 
     await pactum
       .spec()
-      .get('/course/:id')
+      .get('/section/:id')
       .withCookies('session', token)
+      .withQueryParams({ id: Data.sectionsData.id })
+      .expectStatus(200);
+  });
+
+  it('should update a course', async () => {
+    const token = await new UserService().createToken(
+      Data.userId,
+      Data.userData.platform,
+    );
+
+    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
+    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
+    prismaMock.section.update.mockResolvedValue(Data.returnSectionData);
+
+    await pactum
+      .spec()
+      .put('/section/:id')
+      .withCookies('session', token)
+      .withBody({
+        title: Data.sectionUpdatedTitle,
+      })
       .withQueryParams({ id: Data.courseData.id })
       .expectStatus(200);
   });
@@ -103,20 +123,17 @@ describe('AppController (e2e)', () => {
 
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.update.mockResolvedValue(Data.returnCourseData);
+    prismaMock.section.update.mockResolvedValue(Data.returnSectionData);
 
     await pactum
       .spec()
-      .put('/course/:id')
+      .put('/section/order')
       .withCookies('session', token)
-      .withBody({
-        title: Data.courseUpdatedTitle,
-      })
-      .withQueryParams({ id: Data.courseData.id })
+      .withBody(Data.orderUpdate)
       .expectStatus(200);
   });
 
-  it('should update a course', async () => {
+  it(`should get section's lessons`, async () => {
     const token = await new UserService().createToken(
       Data.userId,
       Data.userData.platform,
@@ -124,20 +141,17 @@ describe('AppController (e2e)', () => {
 
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.update.mockResolvedValue(Data.returnCourseData);
+    prismaMock.lesson.findMany.mockResolvedValue(Data.lessonArray);
 
     await pactum
       .spec()
-      .put('/course/:id')
+      .get('/section/lessons/:id')
       .withCookies('session', token)
-      .withBody({
-        title: Data.courseUpdatedTitle,
-      })
-      .withQueryParams({ id: Data.courseData.id })
+      .withQueryParams({ id: Data.sectionsData.id })
       .expectStatus(200);
   });
 
-  it(`should get course's sections`, async () => {
+  it(`should join section`, async () => {
     const token = await new UserService().createToken(
       Data.userId,
       Data.userData.platform,
@@ -145,76 +159,13 @@ describe('AppController (e2e)', () => {
 
     prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
     prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.section.findMany.mockResolvedValue(Data.sectionsArray);
+    prismaMock.usertoSection.create.mockResolvedValue(Data.returnUserToSection);
 
     await pactum
       .spec()
-      .get('/course/:id/sections')
+      .post('/section/:id/join')
       .withCookies('session', token)
-      .withQueryParams({ id: Data.courseData.id })
-      .expectStatus(200);
-  });
-
-  it(`should get course's sections`, async () => {
-    const token = await new UserService().createToken(
-      Data.userId,
-      Data.userData.platform,
-    );
-
-    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
-    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.findFirst.mockResolvedValue(Data.courseData);
-
-    await pactum
-      .spec()
-      .post('/course/:id/share')
-      .withCookies('session', token)
-      .withQueryParams({
-        id: Data.courseData.id,
-        duration: Durationtype.ONE_WEEK,
-      })
+      .withQueryParams({ id: Data.sectionsData.id })
       .expectStatus(201);
-  });
-
-  it(`should create a course share code`, async () => {
-    const token = await new UserService().createToken(
-      Data.userId,
-      Data.userData.platform,
-    );
-
-    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
-    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.course.findFirst.mockResolvedValue(Data.courseData);
-    prismaMock.usertoCourse.findUnique.mockResolvedValue(Data.userToCourseData);
-
-    await pactum
-      .spec()
-      .post('/course/:id/share')
-      .withCookies('session', token)
-      .withQueryParams({
-        id: Data.courseData.id,
-        duration: Durationtype.ONE_WEEK,
-      })
-      .expectStatus(201);
-  });
-
-  it(`should get user to course hp`, async () => {
-    const token = await new UserService().createToken(
-      Data.userId,
-      Data.userData.platform,
-    );
-
-    prismaMock.user.findUnique.mockResolvedValue(Data.returnData);
-    prismaMock.usertoCourse.findMany.mockResolvedValue([]);
-    prismaMock.usertoCourse.findUnique.mockResolvedValue(Data.userToCourseData);
-
-    await pactum
-      .spec()
-      .get('/course/:id/user/hp')
-      .withCookies('session', token)
-      .withQueryParams({
-        id: Data.courseData.id,
-      })
-      .expectStatus(200);
   });
 });
