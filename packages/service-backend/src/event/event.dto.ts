@@ -12,7 +12,7 @@ export class LogEventData {
 
   @ApiProperty({
     description: 'event data',
-    example: { value: 1 },
+    example: { courseCompleted: 1 },
     type: Object,
   })
   @IsString()
