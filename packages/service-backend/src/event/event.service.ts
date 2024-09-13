@@ -26,14 +26,12 @@ export class EventService {
       },
       include: {
         badge: {
+          where: {
+            tag: badgeName,
+          },
           select: {
             id: true,
-            trigger: true,
-          },
-          where: {
-            name: badgeName,
-          },
-          include: {
+            trigger: true, // Ensure that 'trigger' is part of your Badge model
             User: {
               select: {
                 user_id: true,
@@ -52,20 +50,22 @@ export class EventService {
     logEvent: any,
     event: any,
   ) {
+    const dynamicData = {
+      [eventName]: logEvent.data[eventName] + data[eventName],
+    };
+
     await prisma.$transaction([
       prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData, // Use the dynamic key in the data object
         },
       }),
       prisma.userBadges.create({
         data: {
           user_id: userId,
-          badge_id: event.badge[0].id,
+          badge_id: event.badge[0].id, // Ensure event.badge[0] exists
         },
       }),
     ]);
@@ -98,7 +98,7 @@ export class EventService {
     if (
       event.badge[0].trigger['courseCompleted'] >=
         logEvent.data['courseCompleted'] + data['courseCompleted'] &&
-      event.badge[0].User.includes({ user_id: userId }) === false
+      event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
         eventName,
@@ -109,13 +109,14 @@ export class EventService {
       );
       return true;
     } else {
-      prisma.logEvent.create({
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData,
         },
       });
     }
@@ -150,7 +151,7 @@ export class EventService {
     if (
       event.badge[0].trigger['questionCompleted'] >=
         logEvent.data['questionCompleted'] + data['questionCompleted'] &&
-      event.badge[0].User.includes({ user_id: userId }) === false
+      event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
         eventName,
@@ -161,13 +162,14 @@ export class EventService {
       );
       return true;
     } else {
-      prisma.logEvent.create({
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData,
         },
       });
     }
@@ -202,7 +204,7 @@ export class EventService {
     if (
       event.badge[0].trigger['quizzCompleted'] >=
         logEvent.data['quizzCompleted'] + data['quizzCompleted'] &&
-      event.badge[0].User.includes({ user_id: userId }) === false
+      event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
         eventName,
@@ -213,13 +215,14 @@ export class EventService {
       );
       return true;
     } else {
-      prisma.logEvent.create({
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData,
         },
       });
     }
@@ -254,7 +257,7 @@ export class EventService {
     if (
       event.badge[0].trigger['wrongAnswer'] >=
         logEvent.data['wrongAnswer'] + data['wrongAnswer'] &&
-      event.badge[0].User.includes({ user_id: userId }) === false
+      event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
         eventName,
@@ -265,13 +268,14 @@ export class EventService {
       );
       return true;
     } else {
-      prisma.logEvent.create({
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData,
         },
       });
     }
@@ -306,7 +310,7 @@ export class EventService {
     if (
       event.badge[0].trigger['lessonCompleted'] >=
         logEvent.data['lessonCompleted'] + data['lessonCompleted'] &&
-      event.badge[0].User.includes({ user_id: userId }) === false
+      event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
         eventName,
@@ -317,13 +321,67 @@ export class EventService {
       );
       return true;
     } else {
-      prisma.logEvent.create({
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
         data: {
           event_name: eventName,
           user_id: userId,
-          data: {
-            firstCourseCompleted: logEvent.data[eventName] + data[eventName],
-          },
+          data: dynamicData,
+        },
+      });
+    }
+
+    return false;
+  }
+
+  static async firstLoginCompleted(
+    eventName: string,
+    data: object,
+    userId: string,
+  ) {
+    const logEvent = await EventService.getLogEvent(eventName, userId);
+
+    if (!logEvent) {
+      await prisma.logEvent.create({
+        data: {
+          event_name: eventName,
+          user_id: userId,
+          data: data,
+        },
+      });
+
+      return false;
+    }
+
+    const event = await EventService.getEventWithBadge(
+      eventName,
+      'firstLoginCompleted',
+    );
+
+    if (
+      event.badge[0].trigger['loginCompleted'] <=
+        logEvent.data['loginCompleted'] + data['loginCompleted'] &&
+      event.badge[0].User.some((user) => user.user_id === userId) === false
+    ) {
+      await EventService.logEventUpdateBadge(
+        eventName,
+        data,
+        userId,
+        logEvent,
+        event,
+      );
+      return true;
+    } else {
+      const dynamicData = {
+        [eventName]: logEvent.data[eventName] + data[eventName],
+      };
+      await prisma.logEvent.create({
+        data: {
+          event_name: eventName,
+          user_id: userId,
+          data: dynamicData,
         },
       });
     }
@@ -420,6 +478,7 @@ const EVENTS_TYPES = {
   questionCompleted: EventService.firstQuestionCompleted,
   wrongAnswer: EventService.firstWrongAnswer,
   quizzCompleted: EventService.firstQuizzCompleted,
+  loginCompleted: EventService.firstLoginCompleted,
 };
 
 const logEvents = (eventName: string, data: object, userId: string): string => {

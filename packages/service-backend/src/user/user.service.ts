@@ -28,9 +28,8 @@ import {
   SubscriptionPlan,
 } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
-import { EventService } from '../event/event.service';
-import { userId } from '../tests/data/user.data';
-import { LogEventData } from '../event/event.dto';
+import { EventService } from 'event/event.service';
+import { LogEventData } from 'event/event.dto';
 
 @Injectable()
 export class UserService {
@@ -108,7 +107,7 @@ export class UserService {
           eventName: 'loginCompleted',
           data: { loginCompleted: 1 },
         } as LogEventData,
-        userId,
+        userDb.id,
       );
 
       return await this.createToken(userDb.id, platform);
@@ -145,7 +144,7 @@ export class UserService {
         eventName: 'loginCompleted',
         data: { loginCompleted: 1 },
       } as LogEventData,
-      userId,
+      userDb.id,
     );
 
     return this.createToken(userDb.id, userData.platform);
