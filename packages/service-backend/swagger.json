@@ -2532,20 +2532,9 @@
       }
     },
     "/event": {
-      "post": {
+      "get": {
         "operationId": "EventController_logEventandTriggerBadge",
         "parameters": [],
-        "requestBody": {
-          "required": true,
-          "description": "Log event data model",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LogEventData"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Event triggered response",
@@ -4137,44 +4126,23 @@
           }
         }
       },
-      "LogEventData": {
-        "type": "object",
-        "properties": {
-          "eventName": {
-            "type": "string",
-            "description": "name of the event",
-            "example": "courseCompleted"
-          },
-          "data": {
-            "type": "object",
-            "description": "event data",
-            "example": {
-              "value": 1
-            }
-          }
-        },
-        "required": [
-          "eventName",
-          "data"
-        ]
-      },
       "EventTriggered": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
             "description": "Event type triggered",
-            "example": "badge"
+            "example": "BADGE_UNLOCK"
           },
-          "id": {
+          "badge_name": {
             "type": "string",
-            "description": "Event id",
-            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
+            "description": "Badge name",
+            "example": "First Lesson"
           }
         },
         "required": [
           "type",
-          "id"
+          "badge_name"
         ]
       }
     }

@@ -25,12 +25,14 @@ import prisma from 'client';
 import { PictureService } from 'picture/picture.service';
 import { TasksService } from 'cron/cron.service';
 import RedisCacheService from 'redis/redis.service';
+import { EventService } from 'event/event.service';
+import { LogEventData } from '../event/event.dto';
 
 const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -399,7 +401,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };
@@ -429,6 +431,13 @@ export class CourseService {
     )`;
 
     if (remainingSection[0].nb_left === BigInt(0)) {
+      await EventService.logEventandTriggerBadge(
+        {
+          eventName: 'courseCompleted',
+          data: { courseCompleted: 1 },
+        } as LogEventData,
+        userId,
+      );
       const avg_percentage = await prisma.usertoSection.aggregate({
         _avg: {
           score: true,

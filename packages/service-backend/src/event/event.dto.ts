@@ -22,35 +22,17 @@ export class LogEventData {
 export class EventTriggered {
   @ApiProperty({
     description: 'Event type triggered',
-    example: 'badge',
+    example: 'BADGE_UNLOCK',
     type: String,
   })
   @IsString()
   type: string;
 
   @ApiProperty({
-    description: 'Event id',
-    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
-    type: String,
-  })
-  @IsUUID()
-  id: string;
-}
-
-export class EventNotTriggered {
-  @ApiProperty({
-    description: 'name of the event',
-    example: 'courseCompleted',
+    description: 'Badge name',
+    example: 'First Lesson',
     type: String,
   })
   @IsString()
-  eventName: string;
-
-  @ApiProperty({
-    description: 'name of the event',
-    example: true,
-    type: Boolean,
-  })
-  @IsBoolean()
-  logged: boolean;
+  badge_name: string;
 }

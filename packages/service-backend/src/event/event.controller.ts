@@ -14,7 +14,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { EventTriggered, EventNotTriggered, LogEventData } from './event.dto';
+import { EventTriggered, LogEventData } from './event.dto';
 import { EventService } from './event.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from '../context/context.decorator';
@@ -27,18 +27,13 @@ export class EventController {
 
   @ApiOkResponse({
     description: 'Event triggered response',
-    type: EventTriggered || EventNotTriggered,
-  })
-  @ApiBody({
-    type: LogEventData,
-    description: 'Log event data model',
+    type: EventTriggered || Array<[]>,
   })
   @LoggedMiddleware(true)
-  @Post()
+  @Get()
   async logEventandTriggerBadge(
-    @Body() body: LogEventData,
     @OllContext() ctx: any,
-  ): Promise<EventTriggered | EventNotTriggered> {
-    return this.eventService.logEventandTriggerBadge(body, ctx);
+  ): Promise<EventTriggered | Array<[]>> {
+    return this.eventService.getTriggeredEvents(ctx);
   }
 }

@@ -10,6 +10,9 @@ ALTER TABLE "Badge" ADD COLUMN     "event_name" TEXT,
 ADD COLUMN     "tag" TEXT NOT NULL,
 ADD COLUMN     "trigger" JSONB;
 
+-- AlterTable
+ALTER TABLE "UserBadges" ADD COLUMN     "seen" BOOLEAN NOT NULL DEFAULT false;
+
 -- CreateTable
 CREATE TABLE "Event" (
     "name" TEXT NOT NULL,

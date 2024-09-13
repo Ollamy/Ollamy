@@ -257,7 +257,6 @@ INSERT INTO "Subscription" (plan, slots) VALUES
 
 -- Event
 INSERT INTO "Event" (name, created_at) VALUES
-    ('lessonCompleted', NOW()),
     ('quizzCompleted', NOW()),
     ('wrongAnswer', NOW()),
     ('questionCompleted', NOW()),
@@ -265,7 +264,6 @@ INSERT INTO "Event" (name, created_at) VALUES
 
 -- Badge
 INSERT INTO "Badge" (id, name, description, image_name, color, "order", trigger, tag, event_name) VALUES
-    ('a030721b-ebb3-436a-a5b1-ed8837a58af4', 'First Lesson', 'You completed your first Lesson', 'first_lesson', '#DC8F69', 0, '{"lessonCompleted": 1}', 'firstLessonCompleted', 'lessonCompleted'),
     ('a4b85e6b-3ef1-4160-84ff-dbf42c6734d2', 'First Quizz', 'You completed your first quizz', 'second_lesson', '#787DA3', 1,'{"quizzCompleted": 1}', 'firstQuizzCompleted', 'quizzCompleted'),
     ('6b33a659-4cb3-4247-bbcf-b8bd9f61f077', 'First Wrong Answer', 'You had your first wrong answer', 'third_lesson', '#E0AD03', 2,'{"wrongAnswer": 1}', 'firstWrongAnswer', 'wrongAnswer'),
     ('682371e8-b486-4199-a5b4-6d2455f9926e', 'First Question Completed', 'You validated your first question', 'fourth_lesson', '#8EBBFF', 3,'{"questionCompleted": 1}', 'firstQuestionCompleted', 'questionCompleted'),

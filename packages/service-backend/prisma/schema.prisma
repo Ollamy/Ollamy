@@ -298,6 +298,7 @@ model UserBadges {
   badge      Badge    @relation(fields: [badge_id], references: [id], onDelete: Cascade)
   badge_id   String   @db.Uuid
   created_at DateTime @default(now())
+  seen       Boolean  @default(false)
 
   @@id([user_id, badge_id])
 }

@@ -13,6 +13,8 @@ import {
   ValidateQuestionSessionModel,
   ValidateQuestionSessionResponseModel,
 } from './session.dto';
+import { EventService } from '../event/event.service';
+import { LogEventData } from '../event/event.dto';
 
 @Injectable()
 export class SessionService {
@@ -161,6 +163,13 @@ export class SessionService {
         },
       });
 
+      await EventService.logEventandTriggerBadge(
+        {
+          eventName: 'quizzCompleted',
+          data: { quizzCompleted: 1 },
+        } as LogEventData,
+        session.user_id,
+      );
       await SectionService.UpdateSectionCompletionFromLesson(
         session.lesson_id,
         session.user_id,
@@ -227,6 +236,24 @@ export class SessionService {
       preloaded_data[indexOfCurrentQuestion].Answer[0].data ===
         body.answer.data ||
       bonus;
+
+    if (!isCorrect) {
+      await EventService.logEventandTriggerBadge(
+        {
+          eventName: 'wrongAnswer',
+          data: { wrongAnswer: 1 },
+        } as LogEventData,
+        session.user_id,
+      );
+    }
+
+    await EventService.logEventandTriggerBadge(
+      {
+        eventName: 'questionCompleted',
+        data: { questionCompleted: 1 },
+      } as LogEventData,
+      session.user_id,
+    );
 
     const percentage =
       ((isCorrect ? session.correct_answers + 1 : session.correct_answers) /

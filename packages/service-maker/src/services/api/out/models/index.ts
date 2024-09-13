@@ -570,11 +570,11 @@ export interface EventTriggered {
      */
     type: string;
     /**
-     * Event id
+     * Badge name
      * @type {string}
      * @memberof EventTriggered
      */
-    id: string;
+    badge_name: string;
 }
 /**
  * 
@@ -1167,25 +1167,6 @@ export const LessonModelStatusEnum = {
 } as const;
 export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
 
-/**
- * 
- * @export
- * @interface LogEventData
- */
-export interface LogEventData {
-    /**
-     * name of the event
-     * @type {string}
-     * @memberof LogEventData
-     */
-    eventName: string;
-    /**
-     * event data
-     * @type {object}
-     * @memberof LogEventData
-     */
-    data: object;
-}
 /**
  * 
  * @export
