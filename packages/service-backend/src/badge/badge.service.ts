@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import prisma from 'client';
-import { GetUsersBadges } from './badge.dto';
+import { BadgeModel, GetUsersBadges } from './badge.dto';
 
 @Injectable()
 export class BadgeService {
@@ -25,6 +25,21 @@ export class BadgeService {
       });
 
       return { badges: res.map((row) => row.badge) };
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException('Fail to retrieve badges!');
+    }
+  }
+
+  async getBadge(badgeId: string): Promise<BadgeModel> {
+    try {
+      const badge: BadgeModel = await prisma.badge.findUnique({
+        where: {
+          id: badgeId,
+        },
+      });
+
+      return badge;
     } catch (error) {
       Logger.error(error);
       throw new InternalServerErrorException('Fail to retrieve badges!');

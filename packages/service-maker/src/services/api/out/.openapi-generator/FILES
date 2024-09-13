@@ -3,6 +3,7 @@ apis/AnswerApi.ts
 apis/BadgeApi.ts
 apis/CourseApi.ts
 apis/DefaultApi.ts
+apis/EventApi.ts
 apis/LectureApi.ts
 apis/LessonApi.ts
 apis/QuestionApi.ts

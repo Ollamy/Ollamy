@@ -69,6 +69,7 @@ model User {
   UsertoSection    UsertoSection[]
   UserSession      UserSession[]
   Product          Product[]
+  LogEvent         LogEvent[]
 }
 
 model UsertoCourse {
@@ -283,8 +284,12 @@ model Badge {
   image_name  String
   color       String
   order       Int
+  trigger     Json?
+  tag        String @unique
 
-  User UserBadges[]
+  User      UserBadges[]
+  Event     Event?       @relation(fields: [event_name], references: [name])
+  event_name String?
 }
 
 model UserBadges {
@@ -293,6 +298,7 @@ model UserBadges {
   badge      Badge    @relation(fields: [badge_id], references: [id], onDelete: Cascade)
   badge_id   String   @db.Uuid
   created_at DateTime @default(now())
+  seen       Boolean  @default(false)
 
   @@id([user_id, badge_id])
 }
@@ -348,5 +354,22 @@ model Product {
   user_id    String   @db.Uuid
   renewals   Boolean  @default(false)
   active     Boolean  @default(true)
+  created_at DateTime @default(now())
+}
+
+model Event {
+  name       String     @id @unique
+  badge      Badge[]
+  created_at DateTime   @default(now())
+  LogEvent   LogEvent[]
+}
+
+model LogEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @db.Uuid
+  event      Event    @relation(fields: [event_name], references: [name], onDelete: Cascade)
+  event_name String
+  data       Json
   created_at DateTime @default(now())
 }

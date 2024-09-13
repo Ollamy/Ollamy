@@ -2530,6 +2530,30 @@
           "Statistic"
         ]
       }
+    },
+    "/event": {
+      "get": {
+        "operationId": "EventController_logEventandTriggerBadge",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Event triggered response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventTriggered"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
     }
   },
   "info": {
@@ -4105,6 +4129,25 @@
             "type": "string"
           }
         }
+      },
+      "EventTriggered": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Event type triggered",
+            "example": "BADGE_UNLOCK"
+          },
+          "badge_name": {
+            "type": "string",
+            "description": "Badge name",
+            "example": "First Lesson"
+          }
+        },
+        "required": [
+          "type",
+          "badge_name"
+        ]
       }
     }
   }

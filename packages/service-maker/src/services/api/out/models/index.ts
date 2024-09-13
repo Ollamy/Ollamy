@@ -560,6 +560,25 @@ export interface EnrollmentTotal {
 /**
  * 
  * @export
+ * @interface EventTriggered
+ */
+export interface EventTriggered {
+    /**
+     * Event type triggered
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    type: string;
+    /**
+     * Badge name
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    badge_name: string;
+}
+/**
+ * 
+ * @export
  * @interface GetCourseRequest
  */
 export interface GetCourseRequest {
