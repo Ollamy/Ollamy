@@ -20,6 +20,7 @@ import { BadgeModule } from './badge/badge.module';
 import { StripeModule } from './stripe/stripe.module';
 import { SessionModule } from './session/session.module';
 import { StatisticModule } from './statistic/statistic.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { StatisticModule } from './statistic/statistic.module';
     }),
     SessionModule,
     StatisticModule,
+    EventModule,
   ],
   controllers: [AppController, AlertController],
   providers: [

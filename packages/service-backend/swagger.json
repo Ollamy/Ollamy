@@ -2530,6 +2530,41 @@
           "Statistic"
         ]
       }
+    },
+    "/event": {
+      "post": {
+        "operationId": "EventController_logEventandTriggerBadge",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Log event data model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogEventData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event triggered response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventTriggered"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
     }
   },
   "info": {
@@ -4101,6 +4136,46 @@
             "type": "string"
           }
         }
+      },
+      "LogEventData": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string",
+            "description": "name of the event",
+            "example": "courseCompleted"
+          },
+          "data": {
+            "type": "object",
+            "description": "event data",
+            "example": {
+              "value": 1
+            }
+          }
+        },
+        "required": [
+          "eventName",
+          "data"
+        ]
+      },
+      "EventTriggered": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Event type triggered",
+            "example": "badge"
+          },
+          "id": {
+            "type": "string",
+            "description": "Event id",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
+          }
+        },
+        "required": [
+          "type",
+          "id"
+        ]
       }
     }
   }

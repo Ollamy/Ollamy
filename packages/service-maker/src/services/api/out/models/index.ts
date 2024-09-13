@@ -560,6 +560,25 @@ export interface EnrollmentTotal {
 /**
  * 
  * @export
+ * @interface EventTriggered
+ */
+export interface EventTriggered {
+    /**
+     * Event type triggered
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    type: string;
+    /**
+     * Event id
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
  * @interface GetCourseRequest
  */
 export interface GetCourseRequest {
@@ -1148,6 +1167,25 @@ export const LessonModelStatusEnum = {
 } as const;
 export type LessonModelStatusEnum = typeof LessonModelStatusEnum[keyof typeof LessonModelStatusEnum];
 
+/**
+ * 
+ * @export
+ * @interface LogEventData
+ */
+export interface LogEventData {
+    /**
+     * name of the event
+     * @type {string}
+     * @memberof LogEventData
+     */
+    eventName: string;
+    /**
+     * event data
+     * @type {object}
+     * @memberof LogEventData
+     */
+    data: object;
+}
 /**
  * 
  * @export
