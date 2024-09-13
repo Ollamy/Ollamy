@@ -62,6 +62,7 @@ function Question({
       setTrueAnswer(data.answerId);
       setIsEnd(!data.nextQuestionId);
       Keyboard.dismiss();
+      // Todo fix for ordered question
       if (data.success === false) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
