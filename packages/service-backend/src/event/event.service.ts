@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import {
   EventNotTriggered,
   EventTriggered,
@@ -330,5 +325,10 @@ const EVENTS_TYPES = {
 };
 
 const logEvents = (eventName: string, data: object, ctx: any): string => {
-  return EVENTS_TYPES[eventName](eventName, data, ctx);
+  try {
+    return EVENTS_TYPES[eventName](eventName, data, ctx);
+  } catch (error) {
+    Logger.error(error);
+    throw new BadRequestException('Error while logging event');
+  }
 };
