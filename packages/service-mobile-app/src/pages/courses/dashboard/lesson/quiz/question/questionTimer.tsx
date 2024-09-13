@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Text, View } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import TimerBar from 'src/components/TimerBar/TimerBar';
 import { QuestionDifficulty } from 'src/services/question/question.dto';
 
@@ -28,11 +28,10 @@ function QuestionTimer({ time, difficulty = QuestionDifficulty.BEGINNER, answer,
     const timer = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress > 1) return prevProgress - 1;
-        else {
-          clearInterval(timer);
-          onTimeUp();
-          return 0;
-        }
+
+        clearInterval(timer);
+        onTimeUp();
+        return 0;
       });
     }, 1000);
 
@@ -46,7 +45,7 @@ function QuestionTimer({ time, difficulty = QuestionDifficulty.BEGINNER, answer,
 
   return (
     <View style={{ width: `${settings.width}%`, right: settings.padding, padding: 12, height: 60 }}>
-      <TimerBar progress={progressPercentage} progressColor="#007aff" />
+      <TimerBar progress={progressPercentage} progressColor={'#007aff'} />
       <Text>{progress}s</Text>
     </View>
   );

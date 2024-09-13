@@ -1,15 +1,14 @@
-import { ScrollView, Spinner, Text, Image, View, VStack } from 'native-base';
+import { Image, ScrollView, Spinner, Text, View, VStack } from 'native-base';
 import React, { createElement, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
-import QuestionTimer from 'src/pages/courses/dashboard/lesson/quiz/question/questionTimer';
 import QuestionDifficultyStars from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
+import QuestionTimer from 'src/pages/courses/dashboard/lesson/quiz/question/questionTimer';
 import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
 import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/question';
-import { AnswerType } from 'src/services/question/question.dto';
+import { AnswerType, QuestionDifficulty } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
-import { QuestionDifficulty } from 'src/services/question/question.dto';
 
 interface QuestionProps {
   questionId: string;
