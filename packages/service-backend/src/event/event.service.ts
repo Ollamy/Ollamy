@@ -346,6 +346,7 @@ export class EventService {
         badge: {
           select: {
             name: true,
+            id: true,
           },
         },
       },
@@ -354,6 +355,18 @@ export class EventService {
     if (!lastUserBadge) {
       return [];
     }
+
+    await prisma.userBadges.update({
+      where: {
+        user_id_badge_id: {
+          user_id: userId,
+          badge_id: lastUserBadge.badge.id,
+        },
+      },
+      data: {
+        seen: true,
+      },
+    });
     return {
       type: 'BADGE_UNLOCK',
       badge_name: lastUserBadge.badge.name,

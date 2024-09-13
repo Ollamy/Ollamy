@@ -28,6 +28,9 @@ import {
   SubscriptionPlan,
 } from '@prisma/client';
 import SessionService from 'redis/session/session.service';
+import { EventService } from '../event/event.service';
+import { userId } from '../tests/data/user.data';
+import { LogEventData } from '../event/event.dto';
 
 @Injectable()
 export class UserService {
@@ -100,6 +103,14 @@ export class UserService {
         },
       });
 
+      await EventService.logEventandTriggerBadge(
+        {
+          eventName: 'loginCompleted',
+          data: { loginCompleted: 1 },
+        } as LogEventData,
+        userId,
+      );
+
       return await this.createToken(userDb.id, platform);
     } catch (error) {
       Logger.error(error);
@@ -128,6 +139,15 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
+
+    await EventService.logEventandTriggerBadge(
+      {
+        eventName: 'loginCompleted',
+        data: { loginCompleted: 1 },
+      } as LogEventData,
+      userId,
+    );
+
     return this.createToken(userDb.id, userData.platform);
   }
 

@@ -14,7 +14,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { EventTriggered, LogEventData } from './event.dto';
+import { EventTriggered } from './event.dto';
 import { EventService } from './event.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { OllContext } from '../context/context.decorator';
