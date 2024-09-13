@@ -43,7 +43,7 @@ function Question({
 
   if (question === undefined || answers === undefined) return <Spinner />;
 
-  const validateAnswer = async (answer: string | undefined, answerType: AnswerType) => {
+  const validateAnswer = async (answer: string, answerType: AnswerType) => {
     try {
       const data = await validate({
         sessionId,
@@ -67,9 +67,19 @@ function Question({
 
   const handleTimeUp = () => {
     if (!selectedAnswer) {
-      validateAnswer(undefined, question.typeAnswer);
       setTimeUp(true);
+      answers.forEach((answer) => {
+        if (answer.id !== trueAnswer) {
+          setSelectedAnswer(answer.id);
+        }
+      });
+      validateAnswer(selectedAnswer!, question.typeAnswer);
     }
+  };
+
+  const sendToNextQuestion = () => {
+    nextQuestion();
+    setTimeUp(false);
   };
 
   return (
@@ -110,7 +120,7 @@ function Question({
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>
             selectedAnswer &&
-            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
+            (trueAnswer !== undefined ? sendToNextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
           }
           rightIconName={'arrow-forward'}
         />
