@@ -86,10 +86,11 @@ class BaseQuestion {
     description: 'The time allowed for the response to the question',
     required: false,
     example: 1,
+    nullable: true,
   })
   @IsNumber()
   @IsOptional()
-  time?: number;
+  time?: number | null;
 
   @ApiProperty({
     description:
@@ -104,7 +105,16 @@ class BaseQuestion {
 
 export class QuestionModel extends BaseQuestion {}
 
-export class GetQuestionModel extends OmitType(BaseQuestion, ['id']) {}
+export class GetQuestionModel extends OmitType(BaseQuestion, ['id']) {
+  @ApiProperty({
+    description: 'The unique identifier of the trusted answer',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
+    required: false,
+  })
+  @IsOptional()
+  @IsUUID()
+  trust_answer_id?: string;
+}
 
 export class LessonLectureModel {
   @ApiProperty({ description: 'The unique identifier of the lecture' })

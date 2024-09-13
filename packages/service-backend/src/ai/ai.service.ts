@@ -199,4 +199,124 @@ export class AiService {
 
     return { success: true } as CourseTrueResponse;
   }
+
+  async generateFakeAnswer(questionId: string, numberWrongAnswers = 3) {
+    const question = await prisma.question.findUnique({
+      where: { id: questionId },
+      select: {
+        title: true,
+        description: true,
+        trust_answer_id: true,
+        Lesson: {
+          select: {
+            Lecture: {
+              select: {
+                data: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!question) {
+      throw new ConflictException('Question not found');
+    }
+
+    const existingAnswers = await prisma.answer.findMany({
+      where: { question_id: questionId },
+      select: { data: true, id: true, order: true },
+      orderBy: { order: 'asc' }
+    });
+
+    const correctAnswer = existingAnswers.find(a => a.id === question.trust_answer_id)?.data;
+    const incorrectAnswers = existingAnswers.filter(a => a.id !== question.trust_answer_id).map(a => a.data);
+
+    const context = `
+    Question: ${question.title}
+    ${question.description ? `Description: ${question.description}` : ''}
+    Lesson Content: ${question.Lesson.Lecture.map(l => l.data).join('\n')}
+    Correct Answer if available: ${correctAnswer || 'Not available'}
+    Existing Incorrect Answers if available: ${incorrectAnswers.join(', ') || 'Not available'}
+  `;
+
+    const prompt = `
+    Generate ${numberWrongAnswers} plausible but incorrect answer choices for the multiple-choice question above.
+    These should be distinct from the correct answer and existing incorrect answers.
+    Make sure the fake answers are relevant to the context of the question and lesson.
+  `;
+
+    const req: GenerateContentRequest = {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: prompt + context }]
+        }
+      ],
+      systemInstruction: {
+        role: 'model',
+        parts: [{
+          text: `You are an AI assistant designed to generate plausible but incorrect answer choices for multiple-choice questions. 
+
+          You will be given:
+          - The question itself
+          - A description of the question (if available)
+          - Relevant lesson content
+          - The correct answer
+          - Any existing incorrect answers
+
+          Your task is to:
+          - Generate a specified number of new incorrect answer choices
+          - Ensure these are distinct from the correct answer and existing incorrect options
+          - Make sure the fake answers are relevant to the question and lesson context
+          - Present the answers in a JSON array format:
+            \`\`\`json
+            [
+              "incorrect answer 1",
+              "incorrect answer 2",
+              ...
+            ]
+            \`\`\` `
+        }]
+      }
+    };
+
+    let response;
+    try {
+      response = await AiService.generativeModel.generateContent(req);
+    } catch (e) {
+      Logger.error(e);
+      throw new ConflictException('Failed to generate fake answers');
+    }
+
+    const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
+
+    if (data.error) {
+      throw new ConflictException(data);
+    }
+
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    let lastAnswerOrder = existingAnswers[existingAnswers.length - 1]?.order || null;
+
+    for (const answer of data) {
+      lastAnswerOrder = generateKeyBetween(lastAnswerOrder, null);
+
+      answersToCreate.push({
+        id: uuidv4(),
+        question_id: questionId,
+        data: answer,
+        order: lastAnswerOrder
+      });
+    }
+
+    try {
+      await prisma.answer.createMany({ data: answersToCreate });
+    } catch (e) {
+      Logger.error('Failed to create fake answers !');
+      throw new ConflictException('Failed to create fake answers');
+    }
+
+    return { success: true };
+  }
 }

@@ -229,6 +229,66 @@ export interface CreateLessonModel {
 /**
  * 
  * @export
+ * @interface CreateProductDto
+ */
+export interface CreateProductDto {
+    /**
+     * The name of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    name: string;
+    /**
+     * The description of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    description?: string;
+    /**
+     * The price of the product in cents
+     * @type {number}
+     * @memberof CreateProductDto
+     */
+    price: number;
+    /**
+     * The currency of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    currency: CreateProductDtoCurrencyEnum;
+    /**
+     * The renewal of the product
+     * @type {string}
+     * @memberof CreateProductDto
+     */
+    renewal: CreateProductDtoRenewalEnum;
+}
+
+
+/**
+ * @export
+ */
+export const CreateProductDtoCurrencyEnum = {
+    Usd: 'usd',
+    Eur: 'eur',
+    Gbp: 'gbp'
+} as const;
+export type CreateProductDtoCurrencyEnum = typeof CreateProductDtoCurrencyEnum[keyof typeof CreateProductDtoCurrencyEnum];
+
+/**
+ * @export
+ */
+export const CreateProductDtoRenewalEnum = {
+    Day: 'day',
+    Month: 'month',
+    Week: 'week',
+    Year: 'year'
+} as const;
+export type CreateProductDtoRenewalEnum = typeof CreateProductDtoRenewalEnum[keyof typeof CreateProductDtoRenewalEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateQuestionModel
  */
 export interface CreateQuestionModel {
@@ -273,7 +333,7 @@ export interface CreateQuestionModel {
      * @type {number}
      * @memberof CreateQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -611,13 +671,19 @@ export interface GetQuestionModel {
      * @type {number}
      * @memberof GetQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
      * @memberof GetQuestionModel
      */
     bonus?: boolean;
+    /**
+     * The unique identifier of the trusted answer
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    trust_answer_id?: string;
 }
 
 
@@ -1246,7 +1312,7 @@ export interface QuestionModel {
      * @type {number}
      * @memberof QuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -1551,7 +1617,7 @@ export interface UpdateQuestionModel {
      * @type {number}
      * @memberof UpdateQuestionModel
      */
-    time?: number;
+    time?: number | null;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
