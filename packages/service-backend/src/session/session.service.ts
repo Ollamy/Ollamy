@@ -163,6 +163,8 @@ export class SessionService {
         },
       });
 
+      // TODO
+      // Check if next question is null
       await EventService.logEventandTriggerBadge(
         {
           eventName: 'quizzCompleted',

@@ -36,6 +36,8 @@ export class EventService {
               select: {
                 user_id: true,
               },
+              // TODO
+              // need to add userID where filter
             },
           },
         },
@@ -78,6 +80,8 @@ export class EventService {
   ) {
     const logEvent = await EventService.getLogEvent(eventName, userId);
 
+    // TODO
+    // need to fix this, every event is skip the first time
     if (!logEvent) {
       await prisma.logEvent.create({
         data: {
@@ -95,6 +99,8 @@ export class EventService {
       'firstCourseCompleted',
     );
 
+    // TODO
+    // Wrong comparator >= need to be <=
     if (
       event.badge[0].trigger['courseCompleted'] >=
         logEvent.data['courseCompleted'] + data['courseCompleted'] &&
@@ -452,6 +458,8 @@ export class EventService {
       Logger.warn('Event not found');
       return;
     }
+    // TODO
+    // Need await
     const logEvent = logEvents(eventData.eventName, eventData.data, userId);
 
     if (logEvent) {
@@ -473,6 +481,8 @@ export class EventService {
   }
 }
 
+// TODO
+// Add Record Typing
 const EVENTS_TYPES = {
   courseCompleted: EventService.firstCourseCompleted,
   questionCompleted: EventService.firstQuestionCompleted,
@@ -481,6 +491,8 @@ const EVENTS_TYPES = {
   loginCompleted: EventService.firstLoginCompleted,
 };
 
+// TODO
+// Fix return type
 const logEvents = (eventName: string, data: object, userId: string): string => {
   try {
     return EVENTS_TYPES[eventName](eventName, data, userId);
