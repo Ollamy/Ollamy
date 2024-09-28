@@ -5,6 +5,9 @@
   - Added the required column `tag` to the `Badge` table without a default value. This is not possible if the table is not empty.
 
 */
+
+DELETE FROM "Badge" *;
+
 -- AlterTable
 ALTER TABLE "Badge" ADD COLUMN     "event_name" TEXT,
 ADD COLUMN     "tag" TEXT NOT NULL,
