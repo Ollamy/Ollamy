@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -93,16 +93,18 @@ export class CourseService {
 
   async getCourse(courseId: string, ctx: any): Promise<GetCourseRequest> {
     try {
-      const courseDb: Course = await prisma.course.findFirst({
+      const courseDb: Course = await prisma.course.findUnique({
         where: {
           id: courseId,
         },
       });
 
-      const userToCourse = await prisma.usertoCourse.findFirst({
+      const userToCourse = await prisma.usertoCourse.findUnique({
         where: {
-          user_id: ctx.__user.id,
-          course_id: courseId,
+          course_id_user_id: {
+            user_id: ctx.__user.id,
+            course_id: courseId,
+          },
         },
       });
 
@@ -340,10 +342,12 @@ export class CourseService {
     userId: string,
   ): Promise<UserCourseHp> {
     try {
-      const data = await prisma.usertoCourse.findFirst({
+      const data = await prisma.usertoCourse.findUnique({
         where: {
-          user_id: userId,
-          course_id: courseId,
+          course_id_user_id: {
+            user_id: userId,
+            course_id: courseId,
+          },
         },
         select: {
           hp: true,
@@ -399,7 +403,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };

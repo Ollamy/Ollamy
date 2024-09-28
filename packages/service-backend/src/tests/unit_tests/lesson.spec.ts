@@ -3,7 +3,7 @@ import prisma from 'client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { LessonService } from 'lesson/lesson.service';
 
-import { context, userId } from './data/user.data';
+import { context, userId } from '../data/user.data';
 import {
   mockCreatedLesson,
   mockLessonData,
