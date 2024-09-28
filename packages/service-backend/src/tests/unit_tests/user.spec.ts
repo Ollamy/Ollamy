@@ -153,7 +153,7 @@ describe('getUser', () => {
       const result = await userService.getUser(context);
 
       // Perform assertions
-      expect(prisma.user.findUnique).toHaveBeenCalledTimes(4);
+      expect(prisma.user.findUnique).toHaveBeenCalledTimes(1);
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: {
           id: expect.any(String),

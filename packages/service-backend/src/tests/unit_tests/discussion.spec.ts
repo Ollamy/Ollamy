@@ -93,7 +93,7 @@ describe('DiscussionService', () => {
       );
 
       // Perform assertions
-      expect(prisma.userDiscussions.create).toHaveBeenCalledTimes(4);
+      expect(prisma.userDiscussions.create).toHaveBeenCalledTimes(1);
       expect(prisma.userDiscussions.create).toHaveBeenCalledWith({
         data: {
           user_id: context.__user.id,

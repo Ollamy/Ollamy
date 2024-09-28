@@ -10,8 +10,8 @@ import {
 import { TasksService } from 'cron/cron.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { SessionService } from 'session/session.service';
-import { mockLessonId } from './data/lesson.data';
-import { context } from './data/user.data';
+import { mockLessonId } from '../data/lesson.data';
+import { context } from '../data/user.data';
 
 describe('createSession', () => {
   let sessionService: SessionService;
