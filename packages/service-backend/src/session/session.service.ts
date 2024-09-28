@@ -163,15 +163,15 @@ export class SessionService {
         },
       });
 
-      // TODO
-      // Check if next question is null
-      await EventService.logEventandTriggerBadge(
-        {
-          eventName: 'quizzCompleted',
-          data: { quizzCompleted: 1 },
-        } as LogEventData,
-        session.user_id,
-      );
+      if (!nextQuestion) {
+        await EventService.logEventandTriggerBadge(
+          {
+            eventName: 'quizzCompleted',
+            data: { quizzCompleted: 1 },
+          } as LogEventData,
+          session.user_id,
+        );
+      }
       await SectionService.UpdateSectionCompletionFromLesson(
         session.lesson_id,
         session.user_id,
