@@ -69,25 +69,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
@@ -117,25 +111,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
@@ -165,25 +153,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
@@ -213,25 +195,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
@@ -260,25 +236,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
@@ -308,25 +278,19 @@ export class EventService {
   ) {
     let logEvent = await EventService.getLogEvent(eventName, userId);
 
-    if (!logEvent) {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: data,
-        },
-      });
-    } else {
-      logEvent = await prisma.logEvent.create({
-        data: {
-          event_name: eventName,
-          user_id: userId,
-          data: {
-            [eventName]: logEvent.data[eventName] + data[eventName],
-          },
-        },
-      });
-    }
+    const eventData = !logEvent
+      ? data
+      : {
+          [eventName]: logEvent.data[eventName] + data[eventName],
+        };
+
+    logEvent = await prisma.logEvent.create({
+      data: {
+        event_name: eventName,
+        user_id: userId,
+        data: eventData,
+      },
+    });
 
     const event = await EventService.getEventWithBadge(
       eventName,
