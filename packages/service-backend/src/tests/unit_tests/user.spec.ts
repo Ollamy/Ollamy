@@ -15,7 +15,7 @@ import {
   mockUserDb,
   userId,
 } from 'tests/data/user.data';
-import { EventService } from '../event/event.service';
+import { EventService } from 'event/event.service';
 
 describe('UserController', () => {
   let userService: UserService;
