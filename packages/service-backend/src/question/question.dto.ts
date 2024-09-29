@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType, OmitType, PartialType } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
@@ -10,17 +10,24 @@ import {
 import { AnswerType, QuestionType, QuestionDifficulty } from '@prisma/client';
 import { UpdateOrderModel } from 'order/order.dto';
 
-abstract class BaseQuestion {
-  @ApiProperty({ description: 'The unique identifier of the question' })
+class BaseQuestion {
+  @ApiProperty({
+    description: 'The unique identifier of the question',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
+  })
   @IsUUID()
   id: string;
 
-  @ApiProperty({ description: 'The title of the question' })
+  @ApiProperty({
+    description: 'The title of the question',
+    example: 'My title',
+  })
   @IsString()
   title: string;
 
   @ApiProperty({
     description: 'The description of the question',
+    example: 'My perfect description',
     required: false,
   })
   @IsString()
@@ -29,18 +36,24 @@ abstract class BaseQuestion {
 
   @ApiProperty({
     description: 'The type of answer for the question',
+    example: AnswerType.FREE_ANSWER,
     enum: AnswerType,
   })
   @IsEnum(AnswerType)
   typeAnswer: AnswerType;
 
-  @ApiProperty({ description: 'The type of question', enum: QuestionType })
+  @ApiProperty({
+    description: 'The type of question',
+    enum: QuestionType,
+    example: QuestionType.AUDIO,
+  })
   @IsEnum(QuestionType)
   typeQuestion: QuestionType;
 
   @ApiProperty({
     description: 'The unique identifier of the picture',
     required: false,
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
   })
   @IsUUID()
   @IsOptional()
@@ -48,6 +61,7 @@ abstract class BaseQuestion {
 
   @ApiProperty({
     description: 'The difficulty level of the question',
+    example: QuestionDifficulty.ADVANCED,
     required: false,
     enum: QuestionDifficulty,
   })
@@ -55,76 +69,51 @@ abstract class BaseQuestion {
   @IsOptional()
   difficulty?: QuestionDifficulty;
 
-  @ApiProperty({ description: 'The order of the question' })
+  @ApiProperty({ description: 'The order of the question', example: 'a0' })
   @IsString()
   order: string;
 
-  @ApiProperty({ description: 'The points for the question', required: false })
+  @ApiProperty({
+    description: 'The points for the question',
+    required: false,
+    example: 2,
+  })
   @IsNumber()
   @IsOptional()
   points?: number;
+
+  @ApiProperty({
+    description: 'The time allowed for the response to the question',
+    required: false,
+    example: 1,
+    nullable: true,
+  })
+  @IsNumber()
+  @IsOptional()
+  time?: number | null;
+
+  @ApiProperty({
+    description:
+      'Define a bonus question that will not count in the user evaluation',
+    required: false,
+    example: true,
+  })
+  @IsBoolean()
+  @IsOptional()
+  bonus?: boolean;
 }
 
 export class QuestionModel extends BaseQuestion {}
 
-export class GetQuestionModel implements Omit<BaseQuestion, 'id'> {
-  @ApiProperty({ description: 'The lesson id of the question' })
-  @IsUUID()
-  lessonId: string;
-
-  @ApiProperty({ description: 'The title of the question' })
-  @IsString()
-  title: string;
-
+export class GetQuestionModel extends OmitType(BaseQuestion, ['id']) {
   @ApiProperty({
-    description: 'The description of the question',
+    description: 'The unique identifier of the trusted answer',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
     required: false,
   })
-  @IsString()
-  @IsOptional()
-  description: string;
-
-  @ApiProperty({
-    description: 'The type of answer for the question',
-    enum: AnswerType,
-  })
-  @IsEnum(AnswerType)
-  typeAnswer: AnswerType;
-
-  @ApiProperty({ description: 'The type of question', enum: QuestionType })
-  @IsEnum(QuestionType)
-  typeQuestion: QuestionType;
-
-  @ApiProperty({
-    description: 'The unique identifier of the picture',
-    required: false,
-  })
-  @IsUUID()
-  @IsOptional()
-  pictureId?: string;
-
-  @ApiProperty({
-    description: 'The difficulty level of the question',
-    required: false,
-    enum: QuestionDifficulty,
-  })
-  @IsEnum(QuestionDifficulty)
-  @IsOptional()
-  difficulty?: QuestionDifficulty;
-
-  @ApiProperty({ description: 'The order of the question', required: false })
   @IsOptional()
   @IsUUID()
   trust_answer_id?: string;
-
-  @ApiProperty({ description: 'The order of the question' })
-  @IsString()
-  order: string;
-
-  @ApiProperty({ description: 'The points for the question', required: false })
-  @IsNumber()
-  @IsOptional()
-  points?: number;
 }
 
 export class LessonLectureModel {
@@ -167,104 +156,63 @@ export class betweenOrder {
   after?: string | null;
 }
 
-export class CreateQuestionModel {
-  @ApiProperty({ description: 'The unique identifier of the lesson' })
+export class CreateQuestionModel extends OmitType(BaseQuestion, [
+  'description',
+  'id',
+  'order',
+]) {
+  @ApiProperty({
+    description: 'The unique identifier of the lesson',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
+  })
   @IsUUID()
   lessonId: string;
 
-  @ApiProperty({ description: 'The title of the question' })
-  @IsString()
-  title: string;
-
-  @ApiProperty({ description: 'The description of the question' })
+  @ApiProperty({
+    description: 'The description of the question',
+    example: 'My perfect example',
+  })
   @IsString()
   description: string;
 
-  @ApiProperty({ enum: AnswerType })
-  @IsString()
-  typeAnswer: AnswerType;
-
-  @ApiProperty({ enum: QuestionType })
-  @IsString()
-  typeQuestion: QuestionType;
-
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, example: 'https://google.com/images' })
   @IsOptional()
   picture?: string;
-
-  @ApiProperty({ required: false, enum: QuestionDifficulty })
-  @IsEnum(QuestionDifficulty)
-  @IsOptional()
-  difficulty?: QuestionDifficulty;
-
-  @ApiProperty({ required: false })
-  @IsNumber()
-  @IsOptional()
-  points?: number;
 
   @ApiProperty({
     description: 'The unique identifier of the trusted answer',
     required: false,
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
   })
   @IsUUID()
   @IsOptional()
   trustAnswerId: string;
 }
 
-export class IdQuestionModel {
-  @ApiProperty({ description: 'The unique identifier of the question' })
-  @IsUUID()
-  id: string;
-}
+export class IdQuestionModel extends PickType(BaseQuestion, ['id']) {}
 
-export class UpdateQuestionModel {
+export class UpdateQuestionModel extends PartialType(BaseQuestion) {
   @ApiProperty({
     description: 'The unique identifier of the lesson',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
+
     required: false,
   })
   @IsOptional()
   @IsUUID()
   lessonId?: string;
 
-  @ApiProperty({ description: 'The title of the question', required: false })
-  @IsString()
-  @IsOptional()
-  title?: string;
-
   @ApiProperty({
-    description: 'The description of the question',
     required: false,
+    nullable: true,
+    example: 'https://google.com/images',
   })
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @ApiProperty({ required: false, enum: AnswerType })
-  @IsString()
-  @IsOptional()
-  typeAnswer?: AnswerType;
-
-  @ApiProperty({ required: false, enum: QuestionType })
-  @IsString()
-  @IsOptional()
-  typeQuestion?: QuestionType;
-
-  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   picture?: string | null;
 
-  @ApiProperty({ required: false, enum: QuestionDifficulty })
-  @IsEnum(QuestionDifficulty)
-  @IsOptional()
-  difficulty?: QuestionDifficulty;
-
-  @ApiProperty({ required: false })
-  @IsNumber()
-  @IsOptional()
-  points?: number;
-
   @ApiProperty({
     description: 'The unique identifier of the trusted answer',
+    example: '3a962c98-8f03-4b55-a6a7-31422cbd033a',
     required: false,
   })
   @IsOptional()

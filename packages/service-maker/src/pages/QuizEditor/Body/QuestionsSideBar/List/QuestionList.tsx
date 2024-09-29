@@ -2,7 +2,7 @@ import QuestionRow from 'pages/QuizEditor/Body/QuestionsSideBar/List/Row/Questio
 import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
 
-import { Spinner, Text } from '@radix-ui/themes';
+import { Skeleton, Text } from '@radix-ui/themes';
 
 interface QuestionListProps {
   lessonId: string;
@@ -22,10 +22,10 @@ function QuestionList({ lessonId }: QuestionListProps) {
       <Text>No questions created…</Text>
     </LoadingContainer>
   ) : (
-    <LoadingContainer>
-      <Spinner />
-      <Text>Loading…</Text>
-    </LoadingContainer>
+    <Container>
+      <Skeleton width="100%" height="44px" />
+      <Skeleton width="100%" height="44px" />
+    </Container>
   );
 }
 

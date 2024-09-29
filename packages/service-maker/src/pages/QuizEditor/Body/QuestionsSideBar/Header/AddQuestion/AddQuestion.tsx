@@ -14,6 +14,7 @@ const answerTypeMap: Record<CreateQuestionModelTypeAnswerEnum, string> = {
   [CreateQuestionModelTypeAnswerEnum.FreeAnswer]: 'free',
   [CreateQuestionModelTypeAnswerEnum.MultipleChoice]: 'multiple choice',
   [CreateQuestionModelTypeAnswerEnum.SquareChoice]: 'square',
+  [CreateQuestionModelTypeAnswerEnum.OrderChoice]: 'order',
 };
 
 interface AddQuestionProps {

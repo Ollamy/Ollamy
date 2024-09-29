@@ -30,7 +30,7 @@ const CODE_LENGTH: number = 4;
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly cronService: TasksService) { }
+  constructor(private readonly cronService: TasksService) {}
 
   async postCourse(
     courseData: CreateCourseModel,
@@ -93,16 +93,18 @@ export class CourseService {
 
   async getCourse(courseId: string, ctx: any): Promise<GetCourseRequest> {
     try {
-      const courseDb: Course = await prisma.course.findFirst({
+      const courseDb: Course = await prisma.course.findUnique({
         where: {
           id: courseId,
         },
       });
 
-      const userToCourse = await prisma.usertoCourse.findFirst({
+      const userToCourse = await prisma.usertoCourse.findUnique({
         where: {
-          user_id: ctx.__user.id,
-          course_id: courseId,
+          course_id_user_id: {
+            user_id: ctx.__user.id,
+            course_id: courseId,
+          },
         },
       });
 
@@ -297,7 +299,7 @@ export class CourseService {
       if (!userToCourse) {
         throw new ConflictException('Failed to add user to course');
       }
-  
+
       const userToSectionDb = await prisma.section.findMany({
         where: {
           course_id: joinCourseId,
@@ -340,10 +342,12 @@ export class CourseService {
     userId: string,
   ): Promise<UserCourseHp> {
     try {
-      const data = await prisma.usertoCourse.findFirst({
+      const data = await prisma.usertoCourse.findUnique({
         where: {
-          user_id: userId,
-          course_id: courseId,
+          course_id_user_id: {
+            user_id: userId,
+            course_id: courseId,
+          },
         },
         select: {
           hp: true,
@@ -399,7 +403,7 @@ export class CourseService {
     const expirationDate = new Date();
     expirationDate.setSeconds(
       expirationDate.getSeconds() +
-      ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
+        ExpirationMap[duration ?? Durationtype.FIFTEEN_MINUTES],
     );
 
     return { code, expiresAt: expirationDate };
@@ -436,7 +440,7 @@ export class CourseService {
         where: {
           user_id: userId,
           section_id: sectionId,
-        }
+        },
       });
 
       await prisma.usertoCourse.update({
@@ -454,32 +458,31 @@ export class CourseService {
     }
   }
 
-  private calculateCumulativeEnrollments(enrollments: EnrollmentResponse[]): EnrollmentTotal[] {
+  private calculateCumulativeEnrollments(
+    enrollments: EnrollmentResponse[],
+  ): EnrollmentTotal[] {
     let total = 0;
 
     enrollments.sort((a, b) => a.epoch - b.epoch);
 
-    return enrollments.map(enrollment => (
-      {
-        epoch: enrollment.epoch,
-        total: ++total,
-      }
-    ));
+    return enrollments.map((enrollment) => ({
+      epoch: enrollment.epoch,
+      total: ++total,
+    }));
   }
 
-  async getEnrollmentsForOwnerCourse(ownerId: string, courseId?: string | undefined): Promise<EnrollmentResponseTotal> {
+  async getEnrollmentsForOwnerCourse(
+    ownerId: string,
+    courseId?: string | undefined,
+  ): Promise<EnrollmentResponseTotal> {
     try {
       const enrollments = await prisma.usertoCourse.findMany({
-        where: courseId ? {
+        where: {
           course_id: courseId,
           course: {
             id: courseId,
-            owner_id: ownerId
-          }
-        } : {
-          course: {
-            owner_id: ownerId
-          }
+            owner_id: ownerId,
+          },
         },
         select: {
           user_id: true,
@@ -487,16 +490,10 @@ export class CourseService {
         },
       });
 
-      if (!enrollments.length) {
-        throw new NotFoundException(`No enrollments found for course with id: ${courseId}`);
-      }
-
-      const response: EnrollmentResponse[] = enrollments.map(enrollment => (
-        {
-          userId: enrollment.user_id,
-          epoch: enrollment.created_at.getTime(),
-        }
-      ));
+      const response: EnrollmentResponse[] = enrollments.map((enrollment) => ({
+        userId: enrollment.user_id,
+        epoch: enrollment.created_at.getTime(),
+      }));
 
       const cumulative = this.calculateCumulativeEnrollments(response);
 
@@ -507,7 +504,7 @@ export class CourseService {
       };
     } catch (error) {
       Logger.error(error);
-      throw new ConflictException('Failed to get enrollments for course.');
+      throw new ConflictException(error.message);
     }
   }
 }

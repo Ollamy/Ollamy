@@ -14,7 +14,7 @@ interface TextButtonProps {
 function TextButton({ onPress, title, style, rightIconName, disabled }: TextButtonProps) {
   return (
     <Pressable
-      width={'80%'}
+      width={'100%'}
       backgroundColor={'#876BF6'}
       borderRadius={12}
       paddingY={'20px'}

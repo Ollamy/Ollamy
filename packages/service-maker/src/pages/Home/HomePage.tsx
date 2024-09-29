@@ -1,11 +1,15 @@
 import { type ReactElement, useEffect, useState } from 'react';
-import HomeBody from 'pages/Home/Body/HomeBody';
-import HomeHeader from 'pages/Home/Header/HomeHeader';
+import HomeBody from 'pages/Home/Home/Body/HomeBody';
+import HomeHeader from 'pages/Home/Home/Header/HomeHeader';
 import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
+import StatisticsBody from 'pages/Home/Statistics/Body/StatisticsBody';
+import StatisticsHeader from 'pages/Home/Statistics/Header/StatisticsHeader';
+import { SubscriptionBody } from 'pages/Home/Subscription/Body/SubscriptionBody';
+import { SubscriptionHeader } from 'pages/Home/Subscription/Header/SubscriptionHeader';
 import { DefaultApi } from 'services/api/out';
 import styled from 'styled-components';
 
-export type PageType = 'home' | 'profile' | 'settings';
+export type PageType = 'home' | 'statistics' | 'subscription';
 
 function HomePage(): ReactElement {
   const [currentPage, setCurrentPage] = useState<PageType>('home');
@@ -20,10 +24,24 @@ function HomePage(): ReactElement {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      <HomeContainer>
-        <HomeHeader />
-        <HomeBody />
-      </HomeContainer>
+      {currentPage === 'home' && (
+        <SubContainer>
+          <HomeHeader />
+          <HomeBody />
+        </SubContainer>
+      )}
+      {currentPage === 'statistics' && (
+        <SubContainer>
+          <StatisticsHeader />
+          <StatisticsBody />
+        </SubContainer>
+      )}
+      {currentPage === 'subscription' && (
+        <SubContainer>
+          <SubscriptionHeader />
+          <SubscriptionBody />
+        </SubContainer>
+      )}
     </Container>
   );
 }
@@ -37,7 +55,7 @@ const Container = styled.div`
   background: #f1f3f6;
 `;
 
-const HomeContainer = styled.div`
+const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 76px;
