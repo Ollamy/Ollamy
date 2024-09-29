@@ -21,6 +21,11 @@ function AppSafeArea(): JSX.Element {
 
   const { data: event, refetch } = useGetEventQuery();
 
+  const closeModal = () => {
+    setModalVisible(false);
+    refetch();
+  };
+
   useEffect(() => {
     const interval = setInterval(refetch, 5000);
     return () => clearInterval(interval);
@@ -42,7 +47,7 @@ function AppSafeArea(): JSX.Element {
             <Outlet />
           </VStack>
           <BottomBar />
-          <EventModal data={modalData} isModalVisible={isModalVisible} setModalVisible={setModalVisible} />
+          <EventModal data={modalData} isModalVisible={isModalVisible} closeModal={closeModal} />
         </>
       ) : (
         <Outlet />

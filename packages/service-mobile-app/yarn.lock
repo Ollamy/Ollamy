@@ -6663,6 +6663,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-av@npm:^14.0.7":
+  version: 14.0.7
+  resolution: "expo-av@npm:14.0.7"
+  peerDependencies:
+    expo: "*"
+  checksum: 7518a8972b0d1b3b362d4dc9c4d21a39c7cf98b46abbdbb2349451115f4edf6e97fb6c723674fd3c62fa037fc77e00172955082d21b1c3fdf5273f33781ce78d
+  languageName: node
+  linkType: hard
+
 "expo-constants@npm:~16.0.0":
   version: 16.0.2
   resolution: "expo-constants@npm:16.0.2"
@@ -12375,6 +12384,7 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.0
     eslint: ^8.51.0
     expo: ~51.0.12
+    expo-av: ^14.0.7
     expo-dev-client: ~4.0.16
     expo-linking: ^6.0.0
     native-base: ^3.4.28
