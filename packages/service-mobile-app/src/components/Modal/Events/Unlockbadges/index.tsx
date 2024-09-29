@@ -9,7 +9,7 @@ interface EventModalProps {
 
 function EventBadge({ data }: EventModalProps): JSX.Element {
   // @ts-ignore
-  const badgeName = data.data.badge_name;
+  const badgeName = data.image_name ?? 'fifth_lesson';
 
   return (
     <View>
@@ -21,6 +21,10 @@ function EventBadge({ data }: EventModalProps): JSX.Element {
         alt={`icon-${badgeName}`}
       />
       <Text>A new Badge have been Unlocked !</Text>
+      <Text bold alignSelf={'center'}>
+        {/* @ts-ignore */}
+        {data?.badge_name ?? 'test'}
+      </Text>
     </View>
   );
 }

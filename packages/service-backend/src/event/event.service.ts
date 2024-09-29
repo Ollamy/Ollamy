@@ -132,7 +132,7 @@ export class EventService {
     );
 
     if (
-      event.badge[0].trigger['questionCompleted'] >=
+      event.badge[0].trigger['questionCompleted'] <=
         logEvent.data['questionCompleted'] &&
       event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
@@ -174,7 +174,7 @@ export class EventService {
     );
 
     if (
-      event.badge[0].trigger['quizzCompleted'] >=
+      event.badge[0].trigger['quizzCompleted'] <=
         logEvent.data['quizzCompleted'] &&
       event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
@@ -216,7 +216,7 @@ export class EventService {
     );
 
     if (
-      event.badge[0].trigger['wrongAnswer'] >= logEvent.data['wrongAnswer'] &&
+      event.badge[0].trigger['wrongAnswer'] <= logEvent.data['wrongAnswer'] &&
       event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
       await EventService.logEventUpdateBadge(
@@ -257,7 +257,7 @@ export class EventService {
     );
 
     if (
-      event.badge[0].trigger['lessonCompleted'] >=
+      event.badge[0].trigger['lessonCompleted'] <=
         logEvent.data['lessonCompleted'] &&
       event.badge[0].User.some((user) => user.user_id === userId) === false
     ) {
@@ -329,6 +329,7 @@ export class EventService {
           select: {
             name: true,
             id: true,
+            image_name: true,
           },
         },
       },
@@ -352,6 +353,7 @@ export class EventService {
     return {
       type: 'BADGE_UNLOCK',
       badge_name: lastUserBadge.badge.name,
+      image_name: lastUserBadge.badge.image_name,
     } as EventTriggered;
   }
 

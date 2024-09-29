@@ -6,23 +6,32 @@ import BottomBar from 'src/components/layout/BottomBar/BottomBar';
 import TopBar from 'src/components/layout/TopBar/TopBar';
 import EventModal from 'src/components/Modal/Events';
 import type { FactoryEventComponentData } from 'src/components/Modal/Events/eventFactory';
-import { fetchEventData } from 'src/features/backgroundJobs';
+import { useGetEventQuery } from 'src/services/user/user';
 
 function AppSafeArea(): JSX.Element {
   const route = useLocation();
   const disableBars = route.pathname.includes('/lesson/');
 
-  const [isModalVisible, setModalVisible] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState<FactoryEventComponentData | undefined>(undefined);
   const triggerModal = (data: FactoryEventComponentData) => {
     setModalData(data);
     setModalVisible(true);
   };
 
+  const { data: event, refetch } = useGetEventQuery();
+
   useEffect(() => {
-    const interval = setInterval(() => fetchEventData(triggerModal), 5000);
+    const interval = setInterval(refetch, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [refetch]);
+
+  useEffect(() => {
+    if (event && !(event instanceof Array)) {
+      // @ts-ignore
+      triggerModal(event);
+    }
+  }, [event]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
