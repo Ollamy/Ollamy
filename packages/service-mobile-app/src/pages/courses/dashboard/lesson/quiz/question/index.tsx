@@ -117,6 +117,7 @@ function Question({
             time={question.time}
             setTimeUp={wrapperSetTimeUp}
             questionId={question.id}
+            isBonus={question.bonus}
           />
         )}
       </View>

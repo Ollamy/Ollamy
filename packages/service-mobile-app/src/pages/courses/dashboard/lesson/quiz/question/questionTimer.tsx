@@ -1,16 +1,16 @@
 import { Text, View } from 'native-base';
 import React, { useEffect, useMemo, useState } from 'react';
 import TimerBar from 'src/components/TimerBar/TimerBar';
-import { QuestionDifficulty } from 'src/services/question/question.dto';
 
 interface QuestionTimerProps {
   time: number;
   answer: string | undefined;
   setTimeUp: (v: boolean) => void;
   questionId: string;
+  isBonus: boolean;
 }
 
-function QuestionTimer({ time, answer, setTimeUp, questionId }: QuestionTimerProps) {
+function QuestionTimer({ time, answer, setTimeUp, questionId, isBonus }: QuestionTimerProps) {
   const [progress, setProgress] = useState(time);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function QuestionTimer({ time, answer, setTimeUp, questionId }: QuestionTimerPro
 
   return (
     <View style={{ flexGrow: 100, paddingTop: 12, height: 60 }}>
-      <TimerBar progress={progressPercentage} progressColor={'#007aff'} />
+      <TimerBar progress={progressPercentage} progressColor={isBonus ? '#F7AC16' : '#007aff'} />
       <Text>{progress}s</Text>
     </View>
   );
