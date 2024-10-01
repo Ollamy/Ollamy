@@ -92,7 +92,7 @@ function Question({
 
   return (
     <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         {question.difficulty && <QuestionDifficultyStars difficulty={question.difficulty} />}
         {question.time && (
           <QuestionTimer

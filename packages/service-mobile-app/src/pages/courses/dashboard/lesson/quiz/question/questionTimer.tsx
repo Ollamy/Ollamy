@@ -57,7 +57,7 @@ function QuestionTimer({
   const progressPercentage = (progress / time) * 100;
 
   return (
-    <View style={{ width: `${settings.width}%`, right: settings.padding, padding: 12, height: 60 }}>
+    <View style={{ flexGrow: 100, paddingTop: 12, height: 60 }}>
       <TimerBar progress={progressPercentage} progressColor={'#007aff'} />
       <Text>{progress}s</Text>
     </View>
