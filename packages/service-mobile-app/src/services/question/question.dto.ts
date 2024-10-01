@@ -22,6 +22,7 @@ export interface GetQuestionResponse {
   pictureId?: string;
   difficulty?: QuestionDifficulty;
   order: number;
+  time?: number | null;
 }
 
 export interface GetAnswerRequest {

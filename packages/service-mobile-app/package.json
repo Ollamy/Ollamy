@@ -19,7 +19,7 @@
         "babel-plugin-module-resolve": "^1.5.0",
         "babel-plugin-module-resolver": "^5.0.0",
         "expo": "~51.0.12",
-        "expo-dev-client": "~4.0.16",
+        "expo-dev-client": "~4.0.26",
         "expo-linking": "^6.0.0",
         "native-base": "^3.4.28",
         "react": "18.2.0",
