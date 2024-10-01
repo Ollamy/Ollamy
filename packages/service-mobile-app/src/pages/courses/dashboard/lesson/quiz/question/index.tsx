@@ -98,9 +98,8 @@ function Question({
           <QuestionTimer
             answer={trueAnswer}
             time={question.time}
-            difficulty={question.difficulty}
             setTimeUp={wrapperSetTimeUp}
-            questionId={questionId}
+            questionId={question.id}
           />
         )}
       </View>

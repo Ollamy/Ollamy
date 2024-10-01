@@ -5,29 +5,13 @@ import { QuestionDifficulty } from 'src/services/question/question.dto';
 
 interface QuestionTimerProps {
   time: number;
-  difficulty?: QuestionDifficulty;
   answer: string | undefined;
   setTimeUp: (v: boolean) => void;
   questionId: string;
 }
 
-const difficultySettings = {
-  [QuestionDifficulty.BEGINNER]: { padding: 330, width: 90 },
-  [QuestionDifficulty.INTERMEDIATE]: { padding: 290, width: 80 },
-  [QuestionDifficulty.ADVANCED]: { padding: 270, width: 75 },
-  [QuestionDifficulty.MASTER]: { padding: 230, width: 65 },
-};
-
-function QuestionTimer({
-  time,
-  difficulty = QuestionDifficulty.BEGINNER,
-  answer,
-  setTimeUp,
-  questionId,
-}: QuestionTimerProps) {
+function QuestionTimer({ time, answer, setTimeUp, questionId }: QuestionTimerProps) {
   const [progress, setProgress] = useState(time);
-
-  const settings = difficultySettings[difficulty] || difficultySettings[QuestionDifficulty.BEGINNER];
 
   useEffect(() => {
     setProgress(time);
@@ -39,7 +23,6 @@ function QuestionTimer({
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
-        console.log('Count');
         if (prevProgress > 1) return prevProgress - 1;
         return 0;
       });
@@ -54,7 +37,7 @@ function QuestionTimer({
     }
   }, [progress]);
 
-  const progressPercentage = (progress / time) * 100;
+  const progressPercentage = useMemo(() => (progress / time) * 100, [progress, time]);
 
   return (
     <View style={{ flexGrow: 100, paddingTop: 12, height: 60 }}>

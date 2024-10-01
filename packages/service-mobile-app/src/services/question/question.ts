@@ -14,6 +14,10 @@ export const lessonApi = api.injectEndpoints({
         url: `question/${id}`,
         method: 'GET',
       }),
+      transformResponse: (data: GetQuestionResponse, _, { id }) => ({
+        ...data,
+        id,
+      }),
       providesTags: ['Question'],
     }),
     getAnswer: build.query<GetAnswerRequest[], { id: string }>({
