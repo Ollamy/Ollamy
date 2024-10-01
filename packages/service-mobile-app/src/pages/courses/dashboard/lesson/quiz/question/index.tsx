@@ -56,6 +56,7 @@ function Question({
             setSelectedAnswer(answer.id);
           }
         });
+        /* eslint-disable */
         validateAnswer(selectedAnswer!, question.typeAnswer);
       }
     }

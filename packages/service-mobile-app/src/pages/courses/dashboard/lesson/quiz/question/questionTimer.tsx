@@ -17,9 +17,9 @@ function QuestionTimer({ time, answer, setTimeUp, questionId }: QuestionTimerPro
     setProgress(time);
   }, [questionId]);
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     // Clear interval if user give answer
-    if (answer) return;
+    if (answer) return () => {};
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
