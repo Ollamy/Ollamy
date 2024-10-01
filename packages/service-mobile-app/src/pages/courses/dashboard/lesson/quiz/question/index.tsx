@@ -1,12 +1,13 @@
-import { ScrollView, Spinner, Text, View, VStack } from 'native-base';
-import React, { createElement, useEffect, useState } from 'react';
+import { Image, ScrollView, Spinner, Text, View, VStack } from 'native-base';
+import React, { createElement, useCallback, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
-import QuestionDifficulty from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
+import QuestionDifficultyStars from 'src/pages/courses/dashboard/lesson/quiz/question/questionDifficulty';
+import QuestionTimer from 'src/pages/courses/dashboard/lesson/quiz/question/questionTimer';
 import QuestionTitle from 'src/pages/courses/dashboard/lesson/quiz/question/questionTitle';
 import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/question';
-import { AnswerType } from 'src/services/question/question.dto';
+import { AnswerType, QuestionDifficulty } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
 
 import ImageModal from './image';
@@ -32,16 +33,38 @@ function Question({
   const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
   const [scrollEnable, setScrollEnable] = useState<boolean>(true);
+  const [timeUp, setTimeUp] = useState<boolean>(false);
 
   const [validate] = useValidateQuestionMutation();
 
   const { data: question } = useGetQuestionQuery({ id: questionId });
   const { data: answers } = useGetAnswerQuery({ id: questionId });
 
+  const wrapperSetTimeUp = useCallback(
+    (val: boolean) => {
+      setTimeUp(val);
+    },
+    [setTimeUp],
+  );
+
   useEffect(() => {
     setTrueAnswer(undefined);
     setSelectedAnswer(undefined);
   }, [questionId]);
+
+  useEffect(() => {
+    if (timeUp) {
+      if (!selectedAnswer && answers && question) {
+        answers.forEach((answer) => {
+          if (answer.id !== trueAnswer) {
+            setSelectedAnswer(answer.id);
+          }
+        });
+        /* eslint-disable */
+        validateAnswer(selectedAnswer!, question.typeAnswer);
+      }
+    }
+  }, [timeUp]);
 
   if (question === undefined || answers === undefined) return <Spinner />;
 
@@ -68,6 +91,12 @@ function Question({
       console.error('rejected', error);
     }
   };
+
+  const sendToNextQuestion = () => {
+    nextQuestion();
+    setTimeUp(false);
+  };
+
   return (
     <VStack
       height={'100%'}
@@ -76,11 +105,21 @@ function Question({
       paddingX={'20px'}
       backgroundColor={question.bonus ? '#876BF6' : undefined}
     >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
       {question.bonus ? (
         <QuestionBonusIndicator />
       ) : (
-        question.difficulty && <QuestionDifficulty difficulty={question.difficulty} />
+        question.difficulty && <QuestionDifficultyStars difficulty={question.difficulty} />
       )}
+        {question.time && (
+          <QuestionTimer
+            answer={trueAnswer}
+            time={question.time}
+            setTimeUp={wrapperSetTimeUp}
+            questionId={question.id}
+          />
+        )}
+      </View>
       <QuestionTitle title={question.title} color={question.bonus ? 'white' : undefined} />
       {question.pictureId ? (
         <ImageModal uri={question.pictureId} />
@@ -111,14 +150,15 @@ function Question({
       <View style={{ alignItems: 'center', width: '100%' }}>
         <TextButton
           style={question.bonus ? { backgroundColor: '#F7AC16' } : undefined}
-          disabled={selectedAnswer === undefined}
+          disabled={selectedAnswer === undefined && timeUp !== true}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>
             selectedAnswer &&
-            (trueAnswer !== undefined ? nextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
+            (trueAnswer !== undefined ? sendToNextQuestion() : validateAnswer(selectedAnswer, question.typeAnswer))
           }
           rightIconName={'arrow-forward'}
         />
+        {timeUp === true && <Text style={{ top: 10, color: 'red' }}>Time is up !</Text>}
       </View>
     </VStack>
   );

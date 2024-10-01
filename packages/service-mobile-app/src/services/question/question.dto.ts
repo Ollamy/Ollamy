@@ -24,6 +24,7 @@ export interface GetQuestionResponse {
   difficulty?: QuestionDifficulty;
   order: number;
   bonus: boolean;
+  time?: number | null;
 }
 
 export interface GetAnswerRequest {
