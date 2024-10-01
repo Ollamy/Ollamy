@@ -2531,6 +2531,43 @@
         ]
       }
     },
+    "/statistic/user": {
+      "get": {
+        "operationId": "StatisticController_user",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "query",
+            "description": "course id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseUserStatistic"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Statistic"
+        ]
+      }
+    },
     "/event": {
       "get": {
         "operationId": "EventController_logEventandTriggerBadge",
@@ -3310,8 +3347,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -3400,8 +3436,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -3527,18 +3562,12 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
             "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
-          },
-          "trust_answer_id": {
-            "type": "string",
-            "description": "The unique identifier of the trusted answer",
-            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
@@ -3619,8 +3648,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -4129,6 +4157,59 @@
             "type": "string"
           }
         }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "correctAnswers": {
+            "type": "number"
+          },
+          "totalQuestions": {
+            "type": "number"
+          },
+          "timeTakenInSeconds": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "correctAnswers",
+          "totalQuestions",
+          "timeTakenInSeconds"
+        ]
+      },
+      "CourseUserStatistic": {
+        "type": "object",
+        "properties": {
+          "lessonId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "average": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            }
+          }
+        },
+        "required": [
+          "lessonId",
+          "title",
+          "average",
+          "max",
+          "min",
+          "sessions"
+        ]
       },
       "EventTriggered": {
         "type": "object",
