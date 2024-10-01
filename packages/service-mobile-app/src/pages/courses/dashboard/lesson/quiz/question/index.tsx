@@ -1,5 +1,5 @@
 import { Image, ScrollView, Spinner, Text, View, VStack } from 'native-base';
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useCallback, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import TextButton from 'src/components/Buttons/TextButton';
 import { quizFactory } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
@@ -36,10 +36,30 @@ function Question({
   const { data: question } = useGetQuestionQuery({ id: questionId });
   const { data: answers } = useGetAnswerQuery({ id: questionId });
 
+  const wrapperSetTimeUp = useCallback(
+    (val: boolean) => {
+      setTimeUp(val);
+    },
+    [setTimeUp],
+  );
+
   useEffect(() => {
     setTrueAnswer(undefined);
     setSelectedAnswer(undefined);
   }, [questionId]);
+
+  useEffect(() => {
+    if (timeUp) {
+      if (!selectedAnswer && answers && question) {
+        answers.forEach((answer) => {
+          if (answer.id !== trueAnswer) {
+            setSelectedAnswer(answer.id);
+          }
+        });
+        validateAnswer(selectedAnswer!, question.typeAnswer);
+      }
+    }
+  }, [timeUp]);
 
   if (question === undefined || answers === undefined) return <Spinner />;
 
@@ -65,18 +85,6 @@ function Question({
     }
   };
 
-  const handleTimeUp = () => {
-    if (!selectedAnswer) {
-      setTimeUp(true);
-      answers.forEach((answer) => {
-        if (answer.id !== trueAnswer) {
-          setSelectedAnswer(answer.id);
-        }
-      });
-      validateAnswer(selectedAnswer!, question.typeAnswer);
-    }
-  };
-
   const sendToNextQuestion = () => {
     nextQuestion();
     setTimeUp(false);
@@ -91,7 +99,8 @@ function Question({
             answer={trueAnswer}
             time={question.time}
             difficulty={question.difficulty}
-            onTimeUp={handleTimeUp}
+            setTimeUp={wrapperSetTimeUp}
+            questionId={questionId}
           />
         )}
       </View>

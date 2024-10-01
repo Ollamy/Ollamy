@@ -1,5 +1,5 @@
 import { Text, View } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import TimerBar from 'src/components/TimerBar/TimerBar';
 import { QuestionDifficulty } from 'src/services/question/question.dto';
 
@@ -7,7 +7,8 @@ interface QuestionTimerProps {
   time: number;
   difficulty?: QuestionDifficulty;
   answer: string | undefined;
-  onTimeUp: () => void;
+  setTimeUp: (v: boolean) => void;
+  questionId: string;
 }
 
 const difficultySettings = {
@@ -17,29 +18,41 @@ const difficultySettings = {
   [QuestionDifficulty.MASTER]: { padding: 230, width: 65 },
 };
 
-function QuestionTimer({ time, difficulty = QuestionDifficulty.BEGINNER, answer, onTimeUp }: QuestionTimerProps) {
+function QuestionTimer({
+  time,
+  difficulty = QuestionDifficulty.BEGINNER,
+  answer,
+  setTimeUp,
+  questionId,
+}: QuestionTimerProps) {
   const [progress, setProgress] = useState(time);
 
   const settings = difficultySettings[difficulty] || difficultySettings[QuestionDifficulty.BEGINNER];
 
   useEffect(() => {
     setProgress(time);
+  }, [questionId]);
 
-    const timer = setInterval(() => {
+  useEffect(() => {
+    // Clear interval if user give answer
+    if (answer) return;
+
+    const interval = setInterval(() => {
       setProgress((prevProgress) => {
+        console.log('Count');
         if (prevProgress > 1) return prevProgress - 1;
-
-        clearInterval(timer);
-        onTimeUp();
         return 0;
       });
     }, 1000);
 
-    if (answer) {
-      clearInterval(timer);
+    return () => clearInterval(interval);
+  }, [answer]);
+
+  useEffect(() => {
+    if (progress < 1) {
+      setTimeUp(true);
     }
-    return () => clearInterval(timer);
-  }, [time, difficulty, answer]);
+  }, [progress]);
 
   const progressPercentage = (progress / time) * 100;
 
