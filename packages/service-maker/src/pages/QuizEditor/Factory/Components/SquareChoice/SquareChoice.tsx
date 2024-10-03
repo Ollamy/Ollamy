@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
@@ -6,7 +6,25 @@ import useManageTextAnswer from 'pages/QuizEditor/Factory/hooks/useManageTextAns
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button, RadioGroup, Text } from '@radix-ui/themes';
+import { Button, Flex, RadioGroup, Text } from '@radix-ui/themes';
+import { answerActions } from 'services/api/routes/answer';
+
+type SquareChoiceState = {
+  trustAnswerId: string;
+  answers: {
+    id: string;
+    data: string;
+  }[];
+};
+
+export function deepEqual(x, y): boolean {
+  return x && y && typeof x === 'object' && typeof y === 'object'
+    ? Object.keys(x).length === Object.keys(y).length &&
+        Object.keys(x).reduce((isEqual, key) => {
+          return isEqual && deepEqual(x[key], y[key]);
+        }, true)
+    : x === y;
+}
 
 function SquareChoice({ questionId }: FactoryComponentInterface) {
   const { data: questionData } = questionActions.useQuestion({
@@ -15,6 +33,11 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
   const { data: answerData } = questionActions.useGetQuestionAnswers({
     id: questionId,
   });
+
+  const { mutateAsync: updateQuestion, isLoading: isUpdateQuestionLoading } =
+    questionActions.useUpdateQuestion();
+  const { mutateAsync: updateAnswer, isLoading: isUpdateAnswerLoading } =
+    answerActions.useUpdateAnswer();
 
   const {
     correctAnswer,
@@ -25,15 +48,17 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
   } = useManageTextAnswer({ questionId });
 
   useEffect(() => {
-    if (answerData && !answerData.length && !!handleCreateNewAnswer) {
-      handleCreateNewAnswer().then(() => {
-        handleCreateNewAnswer().then(() => {
-          handleCreateNewAnswer().then(() => {
-            handleCreateNewAnswer();
-          });
-        });
-      });
-    }
+    const createBaseQuestions = async () => {
+      if (answerData && !answerData.length && !!handleCreateNewAnswer) {
+        await Promise.all([
+          handleCreateNewAnswer(),
+          handleCreateNewAnswer(),
+          handleCreateNewAnswer(),
+          handleCreateNewAnswer(),
+        ]);
+      }
+    };
+    createBaseQuestions();
   }, [answerData, handleCreateNewAnswer]);
 
   useEffect(() => {
@@ -56,31 +81,119 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
     questionData?.trust_answer_id,
   ]);
 
+  const [currentState, setCurrentState] = useState<SquareChoiceState>({
+    trustAnswerId: '',
+    answers: [],
+  });
+
+  const handleAnswerDataChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name: id, value } = e.target;
+
+    setCurrentState((old) => {
+      return {
+        ...old,
+        answers: old.answers.map((a) =>
+          a.id === id
+            ? {
+                ...a,
+                data: value,
+              }
+            : a,
+        ),
+      };
+    });
+  };
+
+  const handleCorrectAnswerChange = (id: string) => {
+    setCurrentState((old) => {
+      return {
+        ...old,
+        trustAnswerId: id,
+      };
+    });
+  };
+
+  const saveChanges = async () => {
+    try {
+      await updateQuestion({
+        id: questionId,
+        updateQuestionModel: {
+          trustAnswerId: currentState?.trustAnswerId,
+        },
+      });
+      await Promise.all(
+        currentState.answers.map(async (answer, idx) => {
+          await updateAnswer({
+            id: currentState.answers[idx].id,
+            updateAnswerModel: {
+              questionId,
+              data: answer.data,
+            },
+          });
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentState((old) => ({
+      ...old,
+      trustAnswerId: questionData?.trust_answer_id ?? '',
+      answers: (answerData ?? []).map(({ id, data }) => ({
+        id,
+        data: data ?? '',
+      })),
+    }));
+  }, [questionData, answerData]);
+
+  const hasChangesToSave = useMemo(
+    () =>
+      deepEqual(currentState, {
+        trustAnswerId: questionData?.trust_answer_id,
+        answers: answerData?.map(({ order, ...data }) => data),
+      }),
+    [currentState, answerData, questionData],
+  );
+
   return (
     <Container>
       <QuizQuestionManager questionId={questionId} />
-      <Text weight={'bold'}>Answer</Text>
-      <RadioGroup.Root color={'green'} value={correctAnswer}>
-        {answerData?.map(({ id, data }, index) => (
-          <AnswerRow key={id}>
-            <RadioGroup.Item
-              value={id}
-              onClick={() => handleChangeCorrectAnswer(id)}
-            />
-            <QuizAnswerInput
-              key={id}
-              name={id}
-              answerId={id}
-              removable={false}
-              defaultValue={data}
-              takesPictures={false}
-              questionId={questionId}
-              onChange={handleChangeAnswerValue}
-              placeholder={`Answer ${index + 1}`}
-            />
-          </AnswerRow>
-        ))}
-      </RadioGroup.Root>
+      <Flex justify="between">
+        <Text weight={'bold'}>Answer</Text>
+        <Button
+          loading={isUpdateAnswerLoading || isUpdateQuestionLoading}
+          disabled={hasChangesToSave}
+          onClick={saveChanges}
+          style={{ width: 'min-content' }}
+        >
+          Save
+        </Button>
+      </Flex>
+      {correctAnswer && (
+        <RadioGroup.Root color={'green'} defaultValue={correctAnswer}>
+          {answerData?.map(({ id, data }, index) => (
+            <AnswerRow key={id}>
+              <RadioGroup.Item
+                value={id}
+                onClick={() => handleCorrectAnswerChange(id)}
+              />
+              <QuizAnswerInput
+                key={id}
+                name={id}
+                answerId={id}
+                removable={false}
+                defaultValue={data}
+                takesPictures={false}
+                questionId={questionId}
+                onChange={handleAnswerDataChange}
+                placeholder={`Answer ${index + 1}`}
+              />
+            </AnswerRow>
+          ))}
+        </RadioGroup.Root>
+      )}
     </Container>
   );
 }
@@ -100,17 +213,6 @@ const AnswerRow = styled.div`
   align-items: center;
 
   gap: 12px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-
-  width: 100%;
-`;
-
-const CustomButton = styled(Button)`
-  margin-right: 0;
 `;
 
 export default SquareChoice;
