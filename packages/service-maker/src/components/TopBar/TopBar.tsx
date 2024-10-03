@@ -26,8 +26,11 @@ function TopBar({ isProfileDisplayed = true }: TopBarProps) {
   );
 
   const handleClick = useCallback(() => {
-    if (lessonId) navigate(`/course/${urlParams.courseId}`);
-    else navigate('/home');
+    if (urlParams.courseId) {
+      navigate(`/course/${urlParams.courseId}`);
+    } else {
+      navigate('/home');
+    }
   }, [lessonId, navigate, urlParams.courseId]);
 
   const handleClickProfile = useCallback(() => {

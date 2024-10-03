@@ -13,9 +13,12 @@ interface QuestionRowProps {
 function QuestionRow({ index, questionId, title }: QuestionRowProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentQuestionId = searchParams.get('questionId');
+  const courseId = searchParams.get('courseId');
 
   const handleClick = useCallback(() => {
-    setSearchParams({ questionId });
+    if (courseId) {
+      setSearchParams({ courseId, questionId });
+    }
   }, [questionId, setSearchParams]);
 
   return (
