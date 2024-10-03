@@ -15,6 +15,7 @@ import {
   mockUserDb,
   userId,
 } from 'tests/data/user.data';
+import { EventService } from 'event/event.service';
 
 describe('UserController', () => {
   let userService: UserService;
@@ -76,6 +77,7 @@ describe('loginUser', () => {
       jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUserDb);
       jest.spyOn(userService, 'hashPassword').mockReturnValue('hashedPassword');
       jest.spyOn(userService, 'createToken').mockResolvedValue('mockToken');
+      jest.spyOn(EventService, 'logEventandTriggerBadge').mockResolvedValue();
     }
 
     {

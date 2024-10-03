@@ -14,7 +14,7 @@ function getSquareColors(currentId: string, selectAnswerId?: string, trueAnswerI
       return { borderColor: '#F4ADAD', background: '#F7CDCD', textColor: '#530000' };
     if (currentId === trueAnswerId) return { borderColor: '#3BB765', background: '#D1FED9', textColor: '#002F08' };
   } else if (currentId === selectAnswerId) {
-    return { borderColor: '#876BF6', background: 'white', textColor: '#1d0040' };
+    return { borderColor: '#F7AC16', background: 'white', textColor: '#1d0040' };
   }
   return { borderColor: '#D9D9D9', background: 'white', textColor: 'black' };
 }

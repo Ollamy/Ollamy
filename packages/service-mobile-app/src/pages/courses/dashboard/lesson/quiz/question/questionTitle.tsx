@@ -2,11 +2,12 @@ import { Text } from 'native-base';
 
 interface QuestionTitleProps {
   title: string;
+  color?: string;
 }
 
-function QuestionTitle({ title }: QuestionTitleProps) {
+function QuestionTitle({ title, color }: QuestionTitleProps) {
   return (
-    <Text color={'#876BF6'} fontWeight={'bold'} fontSize={24} lineHeight={24}>
+    <Text color={color ?? '#876BF6'} fontWeight={'bold'} fontSize={24} lineHeight={24}>
       {title}
     </Text>
   );

@@ -103,16 +103,16 @@ export class SectionService {
 
       const userToSection = !ctx.__device.isMaker
         ? await prisma.usertoSection.findUnique({
-          where: {
-            section_id_user_id: {
-              section_id: sectionId,
-              user_id: ctx.__user.id,
+            where: {
+              section_id_user_id: {
+                section_id: sectionId,
+                user_id: ctx.__user.id,
+              },
             },
-          },
-          select: {
-            status: true,
-          },
-        })
+            select: {
+              status: true,
+            },
+          })
         : undefined;
 
       return {
@@ -178,10 +178,10 @@ export class SectionService {
           },
           UsertoLesson: !ctx.__device.isMaker
             ? {
-              where: {
-                user_id: ctx.__user.id,
-              },
-            }
+                where: {
+                  user_id: ctx.__user.id,
+                },
+              }
             : undefined,
         },
       });
@@ -218,19 +218,25 @@ export class SectionService {
     sectionId: string,
     userId: string,
   ): Promise<SectionIdResponse> {
-    const userToSection = await prisma.usertoSection.create({
-      data: {
-        user_id: userId,
-        section_id: sectionId,
-        status: Status.IN_PROGRESS,
-      },
-    });
-
-    if (!userToSection) {
-      Logger.error('Failed to create user section !');
+    try {
+      const userToSection = await prisma.usertoSection.create({
+        data: {
+          user_id: userId,
+          section_id: sectionId,
+          status: Status.IN_PROGRESS,
+        },
+      });
+      return { id: userToSection.section_id } as SectionIdResponse;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // P2022: Unique constraint failed
+        if (error.code === 'P2002') {
+          return { id: sectionId };
+        }
+      }
+      Logger.error('Failed to create user section !', error);
       throw new NotFoundException('Failed to create user section !');
     }
-    return { id: userToSection.section_id } as SectionIdResponse;
   }
 
   static async UpdateSectionCompletionFromLesson(

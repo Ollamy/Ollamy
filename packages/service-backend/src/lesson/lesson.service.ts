@@ -130,7 +130,6 @@ export class LessonService {
         },
       });
 
-      Logger.error(lessonDb);
       if (!lessonDb || lessonDb?.UsertoLesson?.length === 0) {
         Logger.error('Lesson does not exists !');
         throw new ConflictException('Lesson does not exists !');
@@ -260,6 +259,12 @@ export class LessonService {
 
       return { id: userToLesson.lesson_id } as LessonIdResponse;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // P2022: Unique constraint failed
+        if (error.code === 'P2002') {
+          return { id: lessonId };
+        }
+      }
       Logger.error(error);
       throw new ConflictException('User Lesson not created !');
     }

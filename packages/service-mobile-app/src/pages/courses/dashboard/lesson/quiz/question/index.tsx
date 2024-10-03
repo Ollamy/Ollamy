@@ -10,6 +10,9 @@ import { useGetAnswerQuery, useGetQuestionQuery } from 'src/services/question/qu
 import { AnswerType, QuestionDifficulty } from 'src/services/question/question.dto';
 import { useValidateQuestionMutation } from 'src/services/session/section';
 
+import ImageModal from './image';
+import QuestionBonusIndicator from './questionBonus';
+
 interface QuestionProps {
   questionId: string;
   sessionId: string;
@@ -29,6 +32,7 @@ function Question({
 }: QuestionProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
   const [trueAnswer, setTrueAnswer] = useState<string | undefined>(undefined);
+  const [scrollEnable, setScrollEnable] = useState<boolean>(true);
   const [timeUp, setTimeUp] = useState<boolean>(false);
 
   const [validate] = useValidateQuestionMutation();
@@ -76,11 +80,13 @@ function Question({
           },
         },
       }).unwrap();
+
       setNextQuestionId(data.nextQuestionId ?? undefined);
       setTrueAnswer(data.answerId);
       setIsEnd(!data.nextQuestionId);
       Keyboard.dismiss();
-      if (!data.success) setCurrentErrorNumber((old) => old + 1);
+      // Todo fix for ordered question
+      if (data.success === false) setCurrentErrorNumber((old) => old + 1);
     } catch (error) {
       console.error('rejected', error);
     }
@@ -92,22 +98,40 @@ function Question({
   };
 
   return (
-    <VStack height={'100%'} space={'24px'} marginTop={23} paddingX={'20px'}>
+    <VStack
+      height={'100%'}
+      space={'24px'}
+      paddingTop={23}
+      paddingX={'20px'}
+      backgroundColor={question.bonus ? '#876BF6' : undefined}
+    >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        {question.difficulty && <QuestionDifficultyStars difficulty={question.difficulty} />}
+      {question.bonus ? (
+        <QuestionBonusIndicator />
+      ) : (
+        question.difficulty && <QuestionDifficultyStars difficulty={question.difficulty} />
+      )}
         {question.time && (
           <QuestionTimer
             answer={trueAnswer}
             time={question.time}
             setTimeUp={wrapperSetTimeUp}
             questionId={question.id}
+            isBonus={question.bonus}
           />
         )}
       </View>
-      <QuestionTitle title={question.title} />
-      <Text fontSize={'md'}>{question.description}</Text>
+      <QuestionTitle title={question.title} color={question.bonus ? 'white' : undefined} />
+      {question.pictureId ? (
+        <ImageModal uri={question.pictureId} />
+      ) : (
+        <Text fontSize={'md'} color={question.bonus ? 'white' : undefined}>
+          {question.description}
+        </Text>
+      )}
       <View maxHeight={'35%'}>
         <ScrollView
+          scrollEnabled={scrollEnable}
           contentContainerStyle={{
             flexGrow: 1,
             flexDirection: 'row',
@@ -120,11 +144,13 @@ function Question({
             answers,
             setAnswer: (answer) => setSelectedAnswer(answer),
             correctAnswer: trueAnswer,
+            setScrollEnable,
           })}
         </ScrollView>
       </View>
       <View style={{ alignItems: 'center', width: '100%' }}>
         <TextButton
+          style={question.bonus ? { backgroundColor: '#F7AC16' } : undefined}
           disabled={selectedAnswer === undefined && timeUp !== true}
           title={trueAnswer !== undefined ? 'Next' : 'Submit'}
           onPress={() =>

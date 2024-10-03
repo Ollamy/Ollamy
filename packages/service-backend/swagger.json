@@ -2567,6 +2567,30 @@
           "Statistic"
         ]
       }
+    },
+    "/event": {
+      "get": {
+        "operationId": "EventController_logEventandTriggerBadge",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Event triggered response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventTriggered"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
     }
   },
   "info": {
@@ -3323,8 +3347,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -3413,8 +3436,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -3540,18 +3562,12 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
             "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
-          },
-          "trust_answer_id": {
-            "type": "string",
-            "description": "The unique identifier of the trusted answer",
-            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
@@ -3632,8 +3648,7 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1,
-            "nullable": true
+            "example": 1
           },
           "bonus": {
             "type": "boolean",
@@ -4194,6 +4209,25 @@
           "max",
           "min",
           "sessions"
+        ]
+      },
+      "EventTriggered": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Event type triggered",
+            "example": "BADGE_UNLOCK"
+          },
+          "badge_name": {
+            "type": "string",
+            "description": "Badge name",
+            "example": "First Lesson"
+          }
+        },
+        "required": [
+          "type",
+          "badge_name"
         ]
       }
     }

@@ -49,8 +49,7 @@ function LessonsList() {
 
   const handleJoinLesson = async (id: string, isNotJoined: boolean | undefined) => {
     try {
-      // TODO: FIX
-      // if (isNotJoined) await joinLesson(id).unwrap();
+      if (isNotJoined) await joinLesson(id).unwrap();
       navigate(`lesson/${id}`);
     } catch (error) {
       showToast({

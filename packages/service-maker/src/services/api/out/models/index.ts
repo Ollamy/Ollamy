@@ -376,7 +376,7 @@ export interface CreateQuestionModel {
      * @type {number}
      * @memberof CreateQuestionModel
      */
-    time?: number | null;
+    time?: number;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -603,6 +603,25 @@ export interface EnrollmentTotal {
 /**
  * 
  * @export
+ * @interface EventTriggered
+ */
+export interface EventTriggered {
+    /**
+     * Event type triggered
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    type: string;
+    /**
+     * Badge name
+     * @type {string}
+     * @memberof EventTriggered
+     */
+    badge_name: string;
+}
+/**
+ * 
+ * @export
  * @interface GetCourseRequest
  */
 export interface GetCourseRequest {
@@ -714,19 +733,13 @@ export interface GetQuestionModel {
      * @type {number}
      * @memberof GetQuestionModel
      */
-    time?: number | null;
+    time?: number;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
      * @memberof GetQuestionModel
      */
     bonus?: boolean;
-    /**
-     * The unique identifier of the trusted answer
-     * @type {string}
-     * @memberof GetQuestionModel
-     */
-    trust_answer_id?: string;
 }
 
 
@@ -1355,7 +1368,7 @@ export interface QuestionModel {
      * @type {number}
      * @memberof QuestionModel
      */
-    time?: number | null;
+    time?: number;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
@@ -1685,7 +1698,7 @@ export interface UpdateQuestionModel {
      * @type {number}
      * @memberof UpdateQuestionModel
      */
-    time?: number | null;
+    time?: number;
     /**
      * Define a bonus question that will not count in the user evaluation
      * @type {boolean}
