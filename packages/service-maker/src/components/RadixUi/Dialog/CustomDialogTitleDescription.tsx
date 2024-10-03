@@ -85,7 +85,7 @@ function CustomDialogTitleDescription<T>({
                   {...register('title', { required: true })}
                   id={'title'}
                   className={'DialogInput'}
-                  placeholder={'Section title'}
+                  placeholder={'Title'}
                 />
                 {errors.title && <span>This field is required</span>}
               </CustomFieldset>
@@ -102,14 +102,14 @@ function CustomDialogTitleDescription<T>({
                       {...register('description', { required: true })}
                       id={'description'}
                       className={'DialogTextarea'}
-                      placeholder={'Section description…'}
+                      placeholder={'Description…'}
                     />
                   ) : (
                     <CustomInput
                       {...register('description', { required: true })}
                       id={'description'}
                       className={'DialogInput'}
-                      placeholder={'Section title'}
+                      placeholder={'Title'}
                     />
                   )}
                   {errors.description && <span>This field is required</span>}

@@ -7,6 +7,8 @@ import type { PageType } from 'pages/Home/HomePage';
 import HomeSidePanel from 'pages/Home/SidePanel/HomeSidePanel';
 import StatisticsBody from 'pages/Home/Statistics/Body/StatisticsBody';
 import StatisticsHeader from 'pages/Home/Statistics/Header/StatisticsHeader';
+import { SubscriptionBody } from 'pages/Home/Subscription/Body/SubscriptionBody';
+import { SubscriptionHeader } from 'pages/Home/Subscription/Header/SubscriptionHeader';
 import { DefaultApi } from 'services/api/out';
 import styled from 'styled-components';
 
@@ -51,6 +53,15 @@ function Dashboard() {
             <SubContainer>
               <StatisticsHeader />
               <CourseStatistics />
+            </SubContainer>
+          }
+        />
+        <Route
+          path={'subscription'}
+          element={
+            <SubContainer>
+              <SubscriptionHeader />
+              <SubscriptionBody />
             </SubContainer>
           }
         />
