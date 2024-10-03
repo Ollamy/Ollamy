@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
@@ -6,7 +6,8 @@ import useManageTextAnswer from 'pages/QuizEditor/Factory/hooks/useManageTextAns
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button, RadioGroup, Text } from '@radix-ui/themes';
+import { Button, Flex, RadioGroup, Text } from '@radix-ui/themes';
+import { answerActions } from 'services/api/routes/answer';
 
 function FreeAnswer({ questionId }: FactoryComponentInterface) {
   const { data: questionData } = questionActions.useQuestion({
@@ -23,6 +24,17 @@ function FreeAnswer({ questionId }: FactoryComponentInterface) {
     handleChangeAnswerValue,
     handleChangeCorrectAnswer,
   } = useManageTextAnswer({ questionId });
+
+  const { mutateAsync: updateAnswer, isLoading: isUpdateAnswerLoading } =
+    answerActions.useUpdateAnswer();
+  const [currentState, setCurrentState] = useState<{
+    id: string;
+    data: string;
+  }>({ id: '', data: '' });
+
+  const handleAnswerDataChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCurrentState((old) => ({ ...old, data: e.target.value }));
+  };
 
   useEffect(() => {
     if (answerData && !answerData.length && !!handleCreateNewAnswer) {
@@ -50,10 +62,47 @@ function FreeAnswer({ questionId }: FactoryComponentInterface) {
     questionData?.trust_answer_id,
   ]);
 
+  useEffect(() => {
+    if (answerData && answerData.length > 0) {
+      setCurrentState({ data: answerData[0].data ?? '', id: answerData[0].id });
+    }
+  }, [questionData, answerData]);
+
+  const hasChangesToSave = useMemo(() => {
+    if (answerData && answerData?.length > 0) {
+      return currentState.data !== answerData[0].data;
+    }
+    return false;
+  }, [currentState, answerData, questionData]);
+
+  const saveChanges = async () => {
+    try {
+      await updateAnswer({
+        id: currentState.id,
+        updateAnswerModel: {
+          questionId,
+          data: currentState.data,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Container>
       <QuizQuestionManager questionId={questionId} />
-      <Text weight={'bold'}>Answer</Text>
+      <Flex justify="between">
+        <Text weight={'bold'}>Answer</Text>
+        <Button
+          loading={isUpdateAnswerLoading}
+          disabled={!hasChangesToSave}
+          onClick={saveChanges}
+          style={{ width: 'min-content' }}
+        >
+          Save
+        </Button>
+      </Flex>
       <RadioGroup.Root color={'green'} value={correctAnswer}>
         {answerData?.map(({ id, data }, index) => (
           <AnswerRow key={id}>
@@ -69,7 +118,7 @@ function FreeAnswer({ questionId }: FactoryComponentInterface) {
               defaultValue={data}
               takesPictures={false}
               questionId={questionId}
-              onChange={handleChangeAnswerValue}
+              onChange={handleAnswerDataChange}
               placeholder={`Answer ${index + 1}`}
             />
           </AnswerRow>

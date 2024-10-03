@@ -31,11 +31,11 @@ function StatisticsBody() {
           Students Enrolled
           <Number>{totalOfStudent}</Number>
         </CardContainer>
-        <CardContainer>
+        {/* <CardContainer>
           <RocketIcon />
           Average grades
           <Number>89 %</Number>
-        </CardContainer>
+        </CardContainer> */}
       </CardSection>
       <CourseSection>
         {data?.courses?.map(({ title, id, pictureId }) => (

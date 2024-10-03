@@ -58,7 +58,7 @@ const CourseStatistics = () => {
         <CardContainer>
           <RocketIcon />
           Average grades
-          <Number>{courseStatisticsData.data[0].average} %</Number>
+          <Number>{lessonsData.data[0].average} %</Number>
         </CardContainer>
       </CardSection>
 
