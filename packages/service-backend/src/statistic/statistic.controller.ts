@@ -9,6 +9,7 @@ import {
 import { OllContext } from 'context/context.decorator';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import {
+  CourseUserStatistic,
   GradeStatisticModel,
   StatisticOperation,
   StatisticType,
@@ -48,5 +49,22 @@ export class StatisticController {
     @Query('courseId') courseId?: string,
   ): Promise<GradeStatisticModel[]> {
     return this.statisticService.grade(type, operation, ctx, courseId);
+  }
+
+  @ApiOkResponse({
+    description: 'User statistics',
+    type: [CourseUserStatistic],
+  })
+  @ApiQuery({
+    name: 'courseId',
+    description: 'course id',
+  })
+  @LoggedMiddleware(true)
+  @Get('user')
+  async user(
+    @OllContext() ctx: any,
+    @Query('courseId') courseId?: string,
+  ): Promise<CourseUserStatistic[]> {
+    return this.statisticService.user(ctx, courseId);
   }
 }

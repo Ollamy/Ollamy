@@ -1968,7 +1968,7 @@
         "operationId": "AiController_generateText",
         "parameters": [
           {
-            "name": "numberofquestions",
+            "name": "numberOfQuestions",
             "required": true,
             "in": "query",
             "schema": {
@@ -2063,6 +2063,104 @@
         ]
       }
     },
+    "/ai/create-and-generate-question/{lessonId}": {
+      "post": {
+        "operationId": "AiController_createAndGenerateQuestion",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "description": "The lesson id to create the questions for",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numberOfQuestions",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The questions generated from the pdf file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Ai"
+        ]
+      }
+    },
+    "/ai/generate-fake-answer/{questionId}": {
+      "post": {
+        "operationId": "AiController_generateFakeAnswer",
+        "parameters": [
+          {
+            "name": "questionId",
+            "required": true,
+            "in": "path",
+            "description": "The question id to generate the fake answer for",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numberWrongAnswers",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 10,
+              "default": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The fake answer generated from the question"
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Ai"
+        ]
+      }
+    },
     "/stripe/create-payment-intent": {
       "get": {
         "operationId": "StripeController_createPaymentIntent",
@@ -2115,6 +2213,126 @@
         "responses": {
           "201": {
             "description": ""
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/create-product": {
+      "post": {
+        "operationId": "StripeController_createProduct",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/retrieve-products": {
+      "get": {
+        "operationId": "StripeController_retrieveProducts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Product created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/delete-products": {
+      "delete": {
+        "operationId": "StripeController_deleteProducts",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "examples": {
+                "example1": {
+                  "value": [
+                    "prod_1",
+                    "prod_2"
+                  ],
+                  "summary": "Example of products to delete"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Products deleted successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/create-payment-link": {
+      "get": {
+        "operationId": "StripeController_createPaymentLink",
+        "parameters": [
+          {
+            "name": "product_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment link created successfully"
+          }
+        },
+        "tags": [
+          "stripe"
+        ]
+      }
+    },
+    "/stripe/check-session-status": {
+      "get": {
+        "operationId": "StripeController_checkSessionStatus",
+        "parameters": [
+          {
+            "name": "session_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session status checked successfully"
           }
         },
         "tags": [
@@ -2299,6 +2517,43 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/GradeStatisticModel"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Statistic"
+        ]
+      }
+    },
+    "/statistic/user": {
+      "get": {
+        "operationId": "StatisticController_user",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": true,
+            "in": "query",
+            "description": "course id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseUserStatistic"
                   }
                 }
               }
@@ -3068,7 +3323,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
@@ -3157,7 +3413,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
@@ -3283,12 +3540,18 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
             "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
+          },
+          "trust_answer_id": {
+            "type": "string",
+            "description": "The unique identifier of the trusted answer",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [
@@ -3369,7 +3632,8 @@
           "time": {
             "type": "number",
             "description": "The time allowed for the response to the question",
-            "example": 1
+            "example": 1,
+            "nullable": true
           },
           "bonus": {
             "type": "boolean",
@@ -3736,6 +4000,53 @@
           "answers"
         ]
       },
+      "CreateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the product",
+            "example": "My product"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the product",
+            "example": "My perfect description"
+          },
+          "price": {
+            "type": "number",
+            "description": "The price of the product in cents",
+            "example": 1000
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of the product",
+            "example": "usd",
+            "enum": [
+              "usd",
+              "eur",
+              "gbp"
+            ]
+          },
+          "renewal": {
+            "type": "string",
+            "description": "The renewal of the product",
+            "example": "month",
+            "enum": [
+              "day",
+              "month",
+              "week",
+              "year"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "currency",
+          "renewal"
+        ]
+      },
       "CreateSessionModel": {
         "type": "object",
         "properties": {
@@ -3831,6 +4142,59 @@
             "type": "string"
           }
         }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "correctAnswers": {
+            "type": "number"
+          },
+          "totalQuestions": {
+            "type": "number"
+          },
+          "timeTakenInSeconds": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "correctAnswers",
+          "totalQuestions",
+          "timeTakenInSeconds"
+        ]
+      },
+      "CourseUserStatistic": {
+        "type": "object",
+        "properties": {
+          "lessonId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "average": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            }
+          }
+        },
+        "required": [
+          "lessonId",
+          "title",
+          "average",
+          "max",
+          "min",
+          "sessions"
+        ]
       }
     }
   }

@@ -1,4 +1,3 @@
-import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 import QuizAnswerInput from 'components/input/QuizAnswerInput/QuizAnswerInput';
 import QuizQuestionManager from 'pages/QuizEditor/Factory/Components/Common/QuestionManager/QuizQuestionManager';
 import type { FactoryComponentInterface } from 'pages/QuizEditor/Factory/Components/interface';
@@ -6,9 +5,11 @@ import useManageTextAnswer from 'pages/QuizEditor/Factory/hooks/useManageTextAns
 import { questionActions } from 'services/api/routes/question';
 import styled from 'styled-components';
 
-import { Button, Flex, RadioGroup, Skeleton, Text } from '@radix-ui/themes';
+import { SymbolIcon } from '@radix-ui/react-icons';
+import { Button, RadioGroup, Skeleton, Text, Flex } from '@radix-ui/themes';
 import { answerActions } from 'services/api/routes/answer';
 import { deepEqual } from 'pages/QuizEditor/Factory/Components/SquareChoice/SquareChoice';
+import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
 type MultipleChoiceState = {
   trustAnswerId: string;
@@ -25,18 +26,20 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
   const { data: answerData } = questionActions.useGetQuestionAnswers({
     id: questionId,
   });
-
+  
   const { mutateAsync: updateQuestion, isLoading: isUpdateQuestionLoading } =
-    questionActions.useUpdateQuestion();
+  questionActions.useUpdateQuestion();
   const { mutateAsync: updateAnswer, isLoading: isUpdateAnswerLoading } =
-    answerActions.useUpdateAnswer();
-
+  answerActions.useUpdateAnswer();
+  
+  const [isGenerating, setIsGenerating] = useState(false);
   const {
     correctAnswer,
     setCorrectAnswer,
     handleCreateNewAnswer,
     handleChangeAnswerValue,
     handleChangeCorrectAnswer,
+    handleCreateFalseAnswers,
   } = useManageTextAnswer({ questionId });
 
   useEffect(() => {
@@ -150,6 +153,24 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
         </Button>
       </Flex>
       <ButtonContainer>
+        <Button
+          color={'orange'}
+          variant={'soft'}
+          onClick={async () => {
+            setIsGenerating(true);
+            try {
+              await handleCreateFalseAnswers(3);
+            } catch (error) {
+              /* ignore this catch block */
+            } finally {
+              setIsGenerating(false);
+            }
+          }}
+          disabled={isGenerating}
+        >
+          <SymbolIcon />{' '}
+          {isGenerating ? 'Generating...' : 'Generate False Answers'}
+        </Button>
         <CustomButton
           variant={'ghost'}
           loading={!answerData}
@@ -216,6 +237,8 @@ const ButtonContainer = styled.div`
   justify-content: flex-end;
 
   width: 100%;
+  gap: 12px;
+  align-items: center;
 `;
 
 const CustomButton = styled(Button)`

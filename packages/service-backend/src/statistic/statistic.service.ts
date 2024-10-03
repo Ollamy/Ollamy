@@ -3,6 +3,7 @@ import { Role, Status } from '@prisma/client';
 import prisma from 'client';
 import {
   CourseGradeStatisticModel,
+  CourseUserStatistic,
   GradeStatisticModel,
   LessonGradeStatisticModel,
   SectionGradeStatisticModel,
@@ -13,40 +14,31 @@ import {
 
 @Injectable()
 export class StatisticService {
+
+  async user(ctx: any, courseId: string): Promise<CourseUserStatistic[]> {
+    const result = await StatisticService.getGradeForStudent(
+      ctx.__user.id,
+      courseId,
+    );
+
+    return result as CourseUserStatistic[];
+  }
+
   async grade(
     type: StatisticType,
     operation: StatisticOperation,
     ctx: any,
     courseId?: string,
   ): Promise<GradeStatisticModel[]> {
-    const { role_user } = await prisma.usertoCourse.findFirst({
-      where: {
-        course_id: courseId,
-        user_id: ctx.__user.id,
-      },
-      select: {
-        role_user: true,
-      },
-    }) ?? { role_user: null };
-
-    if (!role_user) throw new ConflictException('Course not found');
-
     let result = undefined;
 
     switch (type) {
       case StatisticType.STUDENT:
-        if (role_user === Role.OWNER) {
-          result = await StatisticService.getGradeByTypeOfUser(
-            operation,
-            ctx.__user.id,
-            courseId,
-          );
-        } else if (role_user === Role.MEMBER) {
-          result = await StatisticService.getGradeForStudent(
-            ctx.__user.id,
-            courseId,
-          );
-        }
+        result = await StatisticService.getGradeByTypeOfUser(
+          operation,
+          ctx.__user.id,
+          courseId,
+        );
         break;
       case StatisticType.COURSE:
         result = await StatisticService.getGradeByTypeOfCourse(

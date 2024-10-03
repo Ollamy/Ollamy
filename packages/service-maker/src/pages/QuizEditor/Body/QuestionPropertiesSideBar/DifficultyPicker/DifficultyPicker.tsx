@@ -1,6 +1,8 @@
 import { Difficulty } from 'pages/QuizEditor/Factory/factory.types';
 import styled from 'styled-components';
+
 import { Heading } from '@radix-ui/themes';
+import { TitlePart } from 'pages/QuizEditor/Body/QuestionPropertiesSideBar/style';
 
 interface DifficultyPickerProps {
   questionId: string;
@@ -23,7 +25,7 @@ function DifficultyPicker({
 }: DifficultyPickerProps) {
   return (
     <Container>
-      <Heading>Difficulty</Heading>
+      <TitlePart>Difficulty</TitlePart>
       <StarsContainer>
         {Array.from({ length: maxDifficulty }).map((_, index) => (
           <Star

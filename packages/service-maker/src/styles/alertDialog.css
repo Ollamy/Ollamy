@@ -81,6 +81,16 @@
 .AlertDialogButton.red:focus {
     box-shadow: 0 0 0 2px var(--red-7);
 }
+.AlertDialogButton.green {
+    background-color: var(--green-4);
+    color: var(--green-11);
+}
+.AlertDialogButton.green:hover {
+    background-color: var(--green-5);
+}
+.AlertDialogButton.green:focus {
+    box-shadow: 0 0 0 2px var(--green-7);
+}
 .AlertDialogButton.mauve {
     background-color: var(--mauve-4);
     color: var(--mauve-11);
