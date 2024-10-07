@@ -1,12 +1,21 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { PageType } from 'pages/Home/HomePage';
+import { capitalizeFirstLetterOfEachWord } from 'pages/UserProfile/UserGeneralSettings/UserGeneralSettings';
+import { userActions } from 'services/api/routes/user';
 import styled from 'styled-components';
 
 import 'styles/navigationMenu.css';
 
-import { GearIcon, HomeIcon, PersonIcon } from '@radix-ui/react-icons';
+import {
+  HomeIcon,
+  IdCardIcon,
+  LightningBoltIcon,
+  PersonIcon,
+} from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { Button } from '@radix-ui/themes';
 
 interface HomeSidePanelProps {
   currentPage: PageType;
@@ -14,12 +23,26 @@ interface HomeSidePanelProps {
 }
 
 function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
+  const navigate = useNavigate();
+  const { mutateAsync } = userActions.useLogout();
+  const { data } = userActions.useGetUser();
+
   const handleClick = useCallback(
     (target: PageType) => {
       setCurrentPage(target);
+      navigate(`/${target}`);
     },
-    [setCurrentPage],
+    [setCurrentPage]
   );
+
+  const handleLogout = useCallback(() => {
+    mutateAsync({});
+    navigate('/');
+  }, [mutateAsync, navigate]);
+
+  const handleClickProfile = useCallback(() => {
+    navigate('/user');
+  }, [navigate]);
 
   return (
     <Container>
@@ -38,22 +61,24 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
                 Home
               </LinkNav>
             </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('profile')}>
+
+            <NavigationMenu.Item onClick={() => handleClick('statistics')}>
               <LinkNav
-                active={currentPage === 'profile'}
+                active={currentPage === 'statistics'}
                 className={'NavigationMenuLink'}
               >
-                <PersonIcon />
-                Profile
+                <IdCardIcon />
+                Statistics
               </LinkNav>
             </NavigationMenu.Item>
-            <NavigationMenu.Item onClick={() => handleClick('settings')}>
+
+            <NavigationMenu.Item onClick={() => handleClick('subscription')}>
               <LinkNav
-                active={currentPage === 'settings'}
+                active={currentPage === 'subscription'}
                 className={'NavigationMenuLink'}
               >
-                <GearIcon />
-                Settings
+                <LightningBoltIcon />
+                Subscription
               </LinkNav>
             </NavigationMenu.Item>
 
@@ -66,12 +91,27 @@ function HomeSidePanel({ currentPage, setCurrentPage }: HomeSidePanelProps) {
             <NavigationMenu.Viewport className={'NavigationMenuViewport'} />
           </div>
         </NavigationMenu.Root>
+        <FooterContainer>
+          <ProfileButton onClick={handleClickProfile}>
+            <PersonIcon />
+            {capitalizeFirstLetterOfEachWord(data?.firstname || '')}{' '}
+            {capitalizeFirstLetterOfEachWord(data?.lastname || '')}
+          </ProfileButton>
+          <Button
+            color={'red'}
+            variant={'soft'}
+            onClick={handleLogout}
+            style={{ width: '100%' }}
+          >
+            Logout
+          </Button>
+        </FooterContainer>
       </Body>
     </Container>
   );
 }
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -82,7 +122,7 @@ const Container = styled.div`
   border: 1px solid rgba(233, 233, 233, 0.83);
 `;
 
-const Header = styled.div`
+export const Header = styled.div`
   display: flex;
   align-items: center;
 
@@ -93,7 +133,11 @@ const Header = styled.div`
   box-sizing: border-box;
 `;
 
-const Body = styled.div`
+export const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   width: 100%;
   height: 100%;
 
@@ -101,9 +145,9 @@ const Body = styled.div`
   box-sizing: border-box;
 `;
 
-const LogoOllamy = styled.img``;
+export const LogoOllamy = styled.img``;
 
-const List = styled(NavigationMenu.List)`
+export const List = styled(NavigationMenu.List)`
   flex-direction: column;
   box-shadow: none;
   background-color: rgba(255, 255, 255, 0);
@@ -113,7 +157,7 @@ const List = styled(NavigationMenu.List)`
   box-sizing: border-box;
 `;
 
-const LinkNav = styled(NavigationMenu.Link)`
+export const LinkNav = styled(NavigationMenu.Link)`
   display: flex;
   align-items: center;
   gap: 66px;
@@ -129,6 +173,32 @@ const LinkNav = styled(NavigationMenu.Link)`
     color: white;
     background-color: #021e2e;
   }
+`;
+
+const FooterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const ProfileButton = styled.button`
+  height: 48px;
+
+  margin: 0 15px;
+  box-sizing: border-box;
+
+  color: white;
+  background-color: #021e2e;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  padding: 12px;
 `;
 
 export default HomeSidePanel;

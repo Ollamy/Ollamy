@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
+import { lessonActions } from 'services/api/routes/lesson';
 import { sectionActions } from 'services/api/routes/section';
 import styled from 'styled-components';
 
 import { GearIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Heading, IconButton, Text } from '@radix-ui/themes';
-import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
-import { lessonActions } from 'services/api/routes/lesson';
 
 interface SectionHeaderProps {
   sectionId: string;
@@ -17,6 +17,7 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
   const [, setSearchParams] = useSearchParams();
 
   const { data } = sectionActions.useSection({ id: sectionId });
+  const { mutateAsync: updateSection } = sectionActions.useUpdateSection();
   const { mutateAsync: removeSection } = sectionActions.useRemoveSection();
   const { mutateAsync: createNewLesson } = lessonActions.useCreateLesson();
 
@@ -36,6 +37,16 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
       });
     },
     [createNewLesson, sectionId],
+  );
+
+  const handleEditSection = useCallback(
+    async (title: string, description: string) => {
+      await updateSection({
+        id: sectionId,
+        updateSectionModel: { title, description },
+      });
+    },
+    [updateSection, sectionId],
   );
 
   return (
@@ -61,9 +72,22 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
         />
 
         <EditSectionButtonContainer>
-          <IconButton disabled variant={'surface'} color={'orange'}>
-            <GearIcon />
-          </IconButton>
+          <CustomDialogTitleDescription
+            dialogTitle={'Edit section'}
+            dialogDescription={
+              'Edit the title and description of your current section.'
+            }
+            defaultTitle={data?.title}
+            defaultDescription={data?.description}
+            actionButtonValue={'Update'}
+            TriggerButton={
+              <IconButton variant={'surface'} color={'orange'}>
+                <GearIcon />
+              </IconButton>
+            }
+            createFunction={handleEditSection}
+          />
+
           <CustomAlertDialog
             description={
               'This action cannot be undone. This will permanently delete this section and remove your data from our servers.'

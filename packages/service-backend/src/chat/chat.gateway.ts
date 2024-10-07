@@ -39,13 +39,15 @@ export class ChatGateway
     payload: { sender: string; room: string; message: string },
   ) {
     this.logger.log(payload);
-    this.wss.to(payload.room).emit('chatToClient', { ...payload, id: randomUUID() });
+    this.wss
+      .to(payload.room)
+      .emit('chatToClient', { ...payload, id: randomUUID() });
   }
 
   @SubscribeMessage('deleteChatToServer')
   handleDeleteChatMessage(
     client: Socket,
-    payload: { id: string, room: string},
+    payload: { id: string; room: string },
   ) {
     this.logger.log(payload);
     this.wss.to(payload.room).emit('deleteChatToClient', payload);
@@ -54,7 +56,7 @@ export class ChatGateway
   @SubscribeMessage('editChatToServer')
   handleEditChatMessage(
     client: Socket,
-    payload: { id: string, room: string, message: string},
+    payload: { id: string; room: string; message: string },
   ) {
     this.logger.log(payload);
     this.wss.to(payload.room).emit('editChatToClient', payload);

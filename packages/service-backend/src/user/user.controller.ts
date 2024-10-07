@@ -6,6 +6,7 @@ import {
   GetUserModel,
   GetUserScoreModel,
   LoginUserModel,
+  PlatformEnum,
   SuccessBody,
   UpdateUserModel,
   UserCoursesResponse,
@@ -32,6 +33,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { MODE } from 'setup';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('User')
@@ -57,31 +59,19 @@ export class UserController {
           lastname: 'lastname',
           email: 'test@test.test',
           password: '1234aaBB@',
+          platform: PlatformEnum.MAKER,
         } as CreateUserModel,
       },
     },
   })
   @Post('/register')
-  async registerUser(
-    @Req() request,
-    @Response() res,
-    @Body() body: CreateUserModel,
-  ) {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
-    res.cookie(
-      'session',
-      await this.userService.registerUser(body),
-      cookiesParams,
-    );
+  async registerUser(@Response() res, @Body() body: CreateUserModel) {
+    res.cookie('session', await this.userService.registerUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
     return res.send({ success: true });
   }
 
@@ -98,31 +88,19 @@ export class UserController {
         value: {
           email: 'test@test.test',
           password: '1234aaBB@',
+          platform: PlatformEnum.MAKER,
         } as LoginUserModel,
       },
     },
   })
   @Post('/login')
-  async loginUser(
-    @Req() request,
-    @Response() res,
-    @Body() body: LoginUserModel,
-  ): Promise<any> {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
-    res.cookie(
-      'session',
-      await this.userService.loginUser(body),
-      cookiesParams,
-    );
+  async loginUser(@Response() res, @Body() body: LoginUserModel): Promise<any> {
+    res.cookie('session', await this.userService.loginUser(body), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
     return res.send({ success: true });
   }
 
@@ -158,26 +136,16 @@ export class UserController {
   @LoggedMiddleware(true)
   @Put()
   async updateUser(
-    @Req() request,
     @Response() res,
     @Body() body: UpdateUserModel,
     @OllContext() ctx: any,
   ): Promise<SuccessBody> {
-    const idx = request.rawHeaders.findIndex((e) => e === 'User-Agent');
-    const cookiesParams =
-      idx !== -1 && !!request.rawHeaders[idx + 1].match('Expo')
-        ? { httpOnly: true, maxAge: SessionService.TTL }
-        : {
-            httpOnly: true,
-            maxAge: SessionService.TTL,
-            // sameSite: 'none' as const,
-            // secure: true,
-          };
-    res.cookie(
-      'session',
-      await this.userService.updateUser(body, ctx),
-      cookiesParams,
-    );
+    res.cookie('session', await this.userService.updateUser(body, ctx), {
+      httpOnly: true,
+      maxAge: SessionService.TTL,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
 
     return res.send({ success: true });
   }
@@ -210,5 +178,26 @@ export class UserController {
   @Get('/score')
   async getUserScore(@OllContext() ctx: any): Promise<GetUserScoreModel> {
     return this.userService.getUserScore(ctx);
+  }
+
+  @ApiCookieAuth()
+  @ApiOkResponse({
+    description: 'success body',
+    type: SuccessBody,
+  })
+  @LoggedMiddleware(true)
+  @Post('/logout')
+  async logoutUser(
+    @Response() res,
+    @OllContext() ctx: any,
+  ): Promise<SuccessBody> {
+    res.cookie('session', await this.userService.logoutUser(ctx), {
+      httpOnly: true,
+      maxAge: 0,
+      sameSite: MODE === 'prod' ? 'none' : undefined,
+      secure: MODE === 'prod',
+    });
+
+    return res.send({ success: true });
   }
 }

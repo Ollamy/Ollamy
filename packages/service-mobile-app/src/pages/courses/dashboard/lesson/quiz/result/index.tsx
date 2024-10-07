@@ -23,45 +23,45 @@ function ResultPage({ totalQuestionNb, errorNb }: LectureProps) {
   return (
     <>
       <TopBar />
-      <VStack backgroundColor="#EDE8FF" width="100%" height="100%" alignItems="center">
+      <VStack backgroundColor={'#EDE8FF'} width={'100%'} height={'100%'} alignItems={'center'}>
         <View style={{ marginTop: 40, marginBottom: 65, width: 300 }}>
           <VStack
-            width="100%"
+            width={'100%'}
             borderRadius={8}
-            borderColor="#BDBDBD"
+            borderColor={'#BDBDBD'}
             borderWidth={1}
             shadow={10}
             padding={28}
-            paddingBottom="95px"
+            paddingBottom={'95px'}
             space={34}
-            justifyContent="flex-start"
-            alignItems="center"
-            backgroundColor="white"
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+            backgroundColor={'white'}
           >
-            <Text fontSize={15} fontWeight="500" textAlign="center">
+            <Text fontSize={15} fontWeight={'500'} textAlign={'center'}>
               {' '}
               {haveFailled ? 'Do it again!' : 'Good job!'}
             </Text>
-            <Box height="100px" width="100px">
+            <Box height={'100px'} width={'100px'}>
               {haveFailled ? (
-                <Image style={{ height: '100%', width: '100%' }} source={FAIL} alt="Fail body" />
+                <Image style={{ height: '100%', width: '100%' }} source={FAIL} alt={'Fail body'} />
               ) : (
-                <Image style={{ height: '100%', width: '100%' }} source={CUP} alt="Result cup" />
+                <Image style={{ height: '100%', width: '100%' }} source={CUP} alt={'Result cup'} />
               )}
             </Box>
-            <HStack width="100%" justifyContent="space-between">
-              <VStack alignItems="center">
-                <Box height="24px" width="24px">
-                  <Image height="100%" width="100%" source={GOODCHECK} alt="Good heck" />
+            <HStack width={'100%'} justifyContent={'space-between'}>
+              <VStack alignItems={'center'}>
+                <Box height={'24px'} width={'24px'}>
+                  <Image height={'100%'} width={'100%'} source={GOODCHECK} alt={'Good heck'} />
                 </Box>
                 <Text>
                   {totalQuestionNb - errorNb} / {totalQuestionNb}
                 </Text>
                 <Text>Good Answers</Text>
               </VStack>
-              <VStack alignItems="center">
-                <Box height="24px" width="24px">
-                  <Image height="100%" width="100%" source={BADCHECK} alt="Bad heck" />
+              <VStack alignItems={'center'}>
+                <Box height={'24px'} width={'24px'}>
+                  <Image height={'100%'} width={'100%'} source={BADCHECK} alt={'Bad heck'} />
                 </Box>
                 <Text>
                   {errorNb} / {totalQuestionNb}
@@ -71,7 +71,7 @@ function ResultPage({ totalQuestionNb, errorNb }: LectureProps) {
             </HStack>
           </VStack>
         </View>
-        <TextButton title="Main Menu" onPress={() => navigate('/home')} />
+        <TextButton title={'Main Menu'} onPress={() => navigate('/home')} />
       </VStack>
     </>
   );

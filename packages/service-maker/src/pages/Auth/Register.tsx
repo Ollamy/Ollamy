@@ -1,155 +1,221 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { ButtonMaker } from 'components/button/button';
-import { FormMaker } from 'components/form/form';
-import { InputMaker } from 'components/input/input';
-import { SideBarMaker } from 'components/sidebar/sidebar';
-import api from 'services/api';
-
-type Inputs = {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-  rePassword: string;
-};
-
-enum State {
-  PERSONALDATA,
-  CONFIDENTIALDATA,
-}
+import { useNavigate } from 'react-router-dom';
+import { userActions } from 'services/api/routes/user';
+import { styled } from 'styled-components';
+import { CreateUserModel } from 'services/api/out';
 
 export function Register() {
-  const [state, setState] = useState<State>(State.PERSONALDATA);
+  const navigate = useNavigate();
+  const { mutateAsync: registerMutation } = userActions.useRegister();
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>();
-  const { mutateAsync: registerMutation } = api.user.useRegister();
-  const buildRes = api.mobileApp.useLastMobileBuild();
+  } = useForm<CreateUserModel>();
 
-  const onSubmit = async (data: Inputs): Promise<void> => {
-    try {
-      const { firstname, lastname, email, password } = data;
-      await registerMutation({
-        createUserModel: { firstname, lastname, email, password },
+  const onSubmit = useCallback(
+    (values: CreateUserModel) => {
+      registerMutation({
+        createUserModel: { ...values, platform: 'MAKER' },
+      }).then(() => {
+        navigate('/home');
       });
-      window.location.href = '/home';
-    } catch (err) {
-      /* empty */
-    }
-  };
-  const handleLoginClick = (): void => {
-    window.location.href = 'login';
-  };
-
-  const downloadLastBuild = () => {
-    if (buildRes.status === 'success') window.location.href = buildRes.data.url;
-  };
+    },
+    [registerMutation, navigate],
+  );
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '100vw',
-        height: '100vh',
-        flexDirection: 'row',
-      }}
-    >
-      <SideBarMaker>
-        <img
-          alt={'logo Ollamy'}
-          src={'/assets/imageSideBar.png'}
-          width={'auto'}
-          height={'auto'}
-        />
-      </SideBarMaker>
-      <FormMaker>
-        <h1
-          style={{
-            color: '#E6674F',
-            marginTop: '140px',
-            marginBottom: '60px',
-            fontWeight: 'bolder',
-            fontSize: '40px',
-          }}
-        >
-          Register
-        </h1>
-        {state === State.PERSONALDATA && (
-          <>
-            <label htmlFor={'firstName'}>First name</label>
-            <InputMaker
-              padding={'24px'}
-              register={{ ...register('firstname', { required: true }) }}
-            />
-            <label htmlFor={'lastName'}>Last name</label>
-            <InputMaker
-              padding={'24px'}
-              register={{ ...register('lastname', { required: true }) }}
-            />
-            <ButtonMaker
-              textButton={'Continue'}
-              onClick={() => setState(State.CONFIDENTIALDATA)}
-            />
-          </>
-        )}
-        {state === State.CONFIDENTIALDATA && (
-          <>
-            <label htmlFor={'email'}>Email</label>
-            <InputMaker
-              padding={'24px'}
-              register={{ ...register('email', { required: true }) }}
-            />
-            <label htmlFor={'password'}>Password</label>
-            <InputMaker
-              type={'password'}
-              padding={'24px'}
-              register={{ ...register('password', { required: true }) }}
-            />
-            <label htmlFor={'ConfirmPassword'}>Confirm Password</label>
-            <InputMaker
-              type={'password'}
-              padding={'24px'}
-              errorMessage={errors.rePassword && errors.rePassword.message}
-              register={{
-                ...register('rePassword', {
-                  required: true,
-                  // eslint-disable-next-line consistent-return
-                  validate: (val: string) => {
-                    if (watch('password') !== val) {
-                      return 'Your passwords do no match';
-                    }
-                  },
-                }),
-              }}
-            />
-            <ButtonMaker
-              textButton={'Register'}
-              onClick={handleSubmit(onSubmit)}
-            />
-          </>
-        )}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <p>
-            Already have an account?{' '}
-            <span
-              style={{ color: '#876BF6', cursor: 'pointer' }}
-              onClick={handleLoginClick}
-            >
-              Login
-            </span>
-          </p>
-          <span
-            style={{ color: '#876BF6', cursor: 'pointer', alignSelf: 'center' }}
-            onClick={downloadLastBuild}
-          >
-            Download mobile app
-          </span>
-        </div>
-      </FormMaker>
-    </div>
+    <Container>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <OllamyContainer>
+          <Logo src={'/assets/Ollamy.svg'} />
+          Ollamy
+        </OllamyContainer>
+        <Title>Register</Title>
+        <InputContainer>
+          <Label htmlFor={'firstname'}>First Name</Label>
+          <Input
+            id={'firstname'}
+            {...register('firstname', {
+              required: 'Required',
+              minLength: {
+                value: 1,
+                message: 'First name must be at least 1 characters',
+              },
+            })}
+          />
+          {errors.firstname && (
+            <ErrorMessage>{errors.firstname.message}</ErrorMessage>
+          )}
+        </InputContainer>
+        <InputContainer>
+          <Label htmlFor={'lastname'}>Last Name</Label>
+          <Input
+            id={'lastname'}
+            {...register('lastname', {
+              required: 'Required',
+              minLength: {
+                value: 1,
+                message: 'Last name must be at least 1 characters',
+              },
+            })}
+          />
+          {errors.lastname && (
+            <ErrorMessage>{errors.lastname.message}</ErrorMessage>
+          )}
+        </InputContainer>
+        <InputContainer>
+          <Label htmlFor={'email'}>Email</Label>
+          <Input
+            id={'email'}
+            {...register('email', {
+              required: 'Required',
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: 'Invalid email address',
+              },
+            })}
+          />
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+        </InputContainer>
+        <InputContainer>
+          <Label htmlFor={'password'}>Password</Label>
+          <Input
+            id={'password'}
+            type={'password'}
+            {...register('password', {
+              required: 'Required',
+              minLength: {
+                value: 1,
+                message: 'Password must be at least 1 characters',
+              },
+            })}
+          />
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
+        </InputContainer>
+        <Button type={'submit'}>Register</Button>
+        <RegisterLink>
+          {'Already an account?'} <a href={'/login'}>Login</a>
+        </RegisterLink>
+      </Form>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100vh;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('/assets/background.svg');
+`;
+
+const Form = styled.form`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  height: 100%;
+  width: 100%;
+
+  padding: 84px;
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
+  background: white;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  @media screen and (min-width: 600px) {
+    width: 700px;
+  }
+`;
+
+const OllamyContainer = styled.div`
+  position: absolute;
+  top: 84px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+
+  width: 100%;
+  font-size: 40px;
+  font-weight: 700;
+  color: #876bf6;
+`;
+
+const Logo = styled.img`
+  height: 60px;
+`;
+
+const Title = styled.h1`
+  margin-bottom: 1rem;
+  color: #333;
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 1rem;
+  text-align: left;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  &:focus {
+    border-color: #007bff;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 0.5rem;
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  background: #f0a500;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  &:hover {
+    background: #d38b00;
+  }
+`;
+
+const RegisterLink = styled.div`
+  margin-top: 1rem;
+  color: #555;
+  a {
+    color: #007bff;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;

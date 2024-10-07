@@ -2,6 +2,14 @@ export enum AnswerType {
   FREE_ANSWER = 'FREE_ANSWER',
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   SQUARE_CHOICE = 'SQUARE_CHOICE',
+  ORDER_CHOICE = 'ORDER_CHOICE',
+}
+
+export enum QuestionDifficulty {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+  MASTER = 'MASTER',
 }
 
 export interface GetQuestionResponse {
@@ -13,8 +21,10 @@ export interface GetQuestionResponse {
   typeQuestion: 'TEXT';
   trustAnswerId: string;
   pictureId?: string;
-  difficulty?: string;
+  difficulty?: QuestionDifficulty;
   order: number;
+  bonus: boolean;
+  time?: number | null;
 }
 
 export interface GetAnswerRequest {

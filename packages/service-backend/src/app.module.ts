@@ -18,6 +18,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { BadgeModule } from './badge/badge.module';
+import { StripeModule } from './stripe/stripe.module';
+import { SessionModule } from './session/session.module';
+import { StatisticModule } from './statistic/statistic.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -32,10 +36,14 @@ import { BadgeModule } from './badge/badge.module';
     MobileAppModule,
     BadgeModule,
     AiModule,
+    StripeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
+    SessionModule,
+    StatisticModule,
+    EventModule,
   ],
   controllers: [AppController, AlertController],
   providers: [

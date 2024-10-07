@@ -1,4 +1,4 @@
-export enum LessonStatus {
+export enum Status {
   NOT_STARTED = 'NOT_STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
@@ -7,11 +7,11 @@ export enum LessonStatus {
 export interface CourseSection {
   id: string;
   title: string;
-  status: LessonStatus;
+  status: Status;
 }
 
 export interface Lesson {
   id: string;
   title: string;
-  status: LessonStatus;
+  status: Status;
 }

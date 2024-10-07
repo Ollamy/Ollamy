@@ -1,16 +1,17 @@
-import useExtractSectionId from 'hooks/useExtractSectionId';
+import { useSearchParams } from 'react-router-dom';
 import type { CustomCourseSectionModel } from 'pages/CourseManager/SidePanel/CourseSidePanel';
 import SectionRow from 'pages/CourseManager/SidePanel/List/Row/SectionRow';
 import styled from 'styled-components';
 
-import { Spinner, Text } from '@radix-ui/themes';
+import { Skeleton, Text } from '@radix-ui/themes';
 
 interface SectionListProps {
   data?: CustomCourseSectionModel[];
 }
 
 function SectionList({ data }: SectionListProps) {
-  const { sectionId } = useExtractSectionId();
+  const [searchParams] = useSearchParams();
+  const sectionId = searchParams.get('sectionId');
 
   return data && data.length ? (
     <Container>
@@ -31,14 +32,15 @@ function SectionList({ data }: SectionListProps) {
     </LoadingContainer>
   ) : (
     <LoadingContainer>
-      <Spinner />
-      <Text>Loading…</Text>
+      <Skeleton width="258px" height="40px" />
+      <Skeleton width="258px" height="40px" />
     </LoadingContainer>
   );
 }
 
 const LoadingContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
 

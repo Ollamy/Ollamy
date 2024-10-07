@@ -11,16 +11,25 @@ import {
   GetUserScoreModel,
   LoginUserModel,
   UpdateUserModel,
-  UserCourses,
   UserCoursesResponse,
   UserIdResponse,
+  PlatformEnum,
 } from './user.dto';
 import { PictureService } from 'picture/picture.service';
 import prisma from 'client';
 import { SECRET_KEY } from 'setup';
 import * as pbkdf2 from 'pbkdf2';
-import { Prisma, Role, User, UsertoScore } from '@prisma/client';
+import {
+  Prisma,
+  Role,
+  Status,
+  User,
+  UsertoScore,
+  SubscriptionPlan,
+} from '@prisma/client';
 import SessionService from 'redis/session/session.service';
+import { EventService } from 'event/event.service';
+import { LogEventData } from 'event/event.dto';
 
 @Injectable()
 export class UserService {
@@ -36,10 +45,11 @@ export class UserService {
       .toString('hex');
   }
 
-  async createToken(id: string): Promise<string> {
+  async createToken(id: string, platform: PlatformEnum): Promise<string> {
     const session: string = UserService.generateSessionId();
     const res = await SessionService.set(session, {
       id,
+      platform,
     });
 
     if (res !== 'OK') {
@@ -73,8 +83,10 @@ export class UserService {
   }
 
   async registerUser(userData: CreateUserModel): Promise<string> {
+    const platform = userData.platform;
     userData.password = this.hashPassword(userData.password);
 
+    delete userData.platform;
     try {
       const userDb: User = await prisma.user.create({
         data: {
@@ -83,7 +95,22 @@ export class UserService {
         },
       });
 
-      return await this.createToken(userDb.id);
+      await prisma.userSubscription.create({
+        data: {
+          user_id: userDb.id,
+          subscription_plan: SubscriptionPlan.BASIC,
+        },
+      });
+
+      await EventService.logEventandTriggerBadge(
+        {
+          eventName: 'loginCompleted',
+          data: { loginCompleted: 1 },
+        } as LogEventData,
+        userDb.id,
+      );
+
+      return await this.createToken(userDb.id, platform);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -111,7 +138,16 @@ export class UserService {
       Logger.error('Wrong password !');
       throw new BadRequestException('Wrong password !');
     }
-    return this.createToken(userDb.id);
+
+    await EventService.logEventandTriggerBadge(
+      {
+        eventName: 'loginCompleted',
+        data: { loginCompleted: 1 },
+      } as LogEventData,
+      userDb.id,
+    );
+
+    return this.createToken(userDb.id, userData.platform);
   }
 
   async getUser(ctx: any): Promise<GetUserModel> {
@@ -149,7 +185,7 @@ export class UserService {
         data: userData,
       });
 
-      return await this.createToken(userDb.id);
+      return await this.createToken(userDb.id, ctx.__device.platform);
     } catch (error) {
       Logger.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -184,64 +220,51 @@ export class UserService {
 
   async getUserCourses(ctx: any): Promise<UserCoursesResponse> {
     try {
-      const userDb = await prisma.user.findUnique({
+      const userCourses = await prisma.usertoCourse.findMany({
         where: {
-          id: ctx.__user.id,
+          user_id: ctx.__user.id,
         },
         include: {
-          UsertoCourse: true,
-        },
-      });
-
-      if (!userDb) {
-        Logger.error('User does not exists !');
-        throw new NotFoundException('User does not exists !');
-      }
-
-      const courses_id = userDb.UsertoCourse.map((course) => course.course_id);
-
-      if (courses_id.length === 0) {
-        return { courses: [] };
-      }
-
-      const courses = await prisma.course.findMany({
-        where: {
-          id: {
-            in: courses_id,
+          course: {
+            select: {
+              owner_id: true,
+              title: true,
+              description: true,
+              picture_id: true,
+            },
           },
         },
       });
 
       return {
         courses: await Promise.all(
-          courses.map(async (course) => {
-            const {
-              last_lesson_id: lastLessonId,
-              last_section_id: lastSectionId,
-            } = userDb.UsertoCourse.find((c) => c.course_id === course.id);
+          userCourses.map(async (userCourse) => {
+            const isOwner = userCourse.course.owner_id === ctx.__user.id;
+            let users: number = undefined;
 
-            const isOwner = course.owner_id === ctx.__user.id;
-            const pictureId = await PictureService.getPicture(course.picture_id);
-
-            delete course.owner_id;
-            delete course.picture_id;
-
-            const users = await prisma.usertoCourse.count({
-              where: {
-                course_id: course.id,
-                role_user: {
-                  equals: Role.MEMBER,
+            if (ctx.__device.isMaker) {
+              users = await prisma.usertoCourse.count({
+                where: {
+                  course_id: userCourse.course_id,
+                  role_user: {
+                    equals: Role.MEMBER,
+                  },
                 },
-              },
-            });
+              });
+            }
 
             return {
-              ...course,
-              pictureId,
-              lastLessonId,
-              lastSectionId,
+              id: userCourse.course_id,
+              title: userCourse.course.title,
+              description: userCourse.course.description,
+              pictureId: await PictureService.getPicture(
+                userCourse.course.picture_id,
+              ),
               owner: isOwner,
               numberOfUsers: users,
+              status: !ctx.__device.isMaker
+                ? userCourse.status ?? Status.NOT_STARTED
+                : undefined,
             };
           }),
         ),
@@ -276,6 +299,15 @@ export class UserService {
       } as GetUserScoreModel;
     } catch (error) {
       Logger.error(error);
+    }
+  }
+
+  async logoutUser(ctx: any) {
+    try {
+      await SessionService.delete(ctx.cookies.session);
+    } catch (error) {
+      Logger.error(error);
+      throw new ConflictException('User not logged out !');
     }
   }
 }

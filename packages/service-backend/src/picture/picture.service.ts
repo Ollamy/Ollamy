@@ -11,12 +11,12 @@ import { resolve, join } from 'path';
 import { writeFile } from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
 import { extension } from 'mime-types';
-import { BACKEND_PORT, FRONTEND_URL } from 'setup';
+import { BACKEND_URL } from 'setup';
 
 @Injectable()
 export class PictureService {
   static publicFolder = resolve(process.cwd(), 'public');
-  static backendURL = `${FRONTEND_URL}:${BACKEND_PORT}/public`;
+  static backendURL = `${BACKEND_URL}/public`;
 
   static isValidUrl(string) {
     try {

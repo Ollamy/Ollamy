@@ -1,12 +1,15 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomAlertDialog from 'components/RadixUi/AlertDialog/CustomAlertDialog';
+import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialogTitleDescription';
 import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
 import * as Collapsible from '@radix-ui/react-collapsible';
 import {
+  CopyIcon,
   Cross2Icon,
+  EyeOpenIcon,
   InfoCircledIcon,
   RowSpacingIcon,
 } from '@radix-ui/react-icons';
@@ -28,15 +31,48 @@ function CourseManager({ courseId }: CourseManagerProps) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [shareCode, setShareCode] = useState<string | undefined>('');
 
   const { data } = courseActions.useCourse({ id: courseId });
+  const { mutateAsync: updateCourse } = courseActions.useUpdateCourse();
   const { mutateAsync: removeCourse } = courseActions.useRemoveCourse();
+  const { mutateAsync: generateShareCode } =
+    courseActions.useGenerateShareCode();
+
+  const handleEditCourse = useCallback(
+    async (title: string, description: string) => {
+      await updateCourse({
+        id: courseId,
+        updateCourseModel: { title, description },
+      });
+    },
+    [updateCourse, courseId],
+  );
 
   const handleRemoveCourse = useCallback(async () => {
     await removeCourse({ idCourseModel: { id: courseId } }).then(() => {
       navigate('/home');
     });
   }, [courseId, navigate, removeCourse]);
+
+  const handleGenerateCode = useCallback(async () => {
+    const result = await generateShareCode({
+      id: courseId,
+      duration: 'TWELVE_HOURS',
+    });
+
+    setShareCode(result.code);
+  }, [courseId, generateShareCode]);
+
+  const handleCopyShareLink = useCallback(async () => {
+    const temp = `ollamy-app://course/${courseId}/join`;
+    try {
+      await navigator.clipboard.writeText(temp);
+      console.log('Sharing URL copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  }, [courseId]);
 
   return (
     <Container>
@@ -80,11 +116,60 @@ function CourseManager({ courseId }: CourseManagerProps) {
                   </Badge>
                 </DataList.Value>
               </DataList.Item>
+              <DataList.Item align={'center'}>
+                <DataList.Label minWidth={'88px'}>Link to join</DataList.Label>
+                <DataList.Value>
+                  <IconButton
+                    size={'1'}
+                    variant={'ghost'}
+                    color={'orange'}
+                    onClick={handleCopyShareLink}
+                  >
+                    <CopyIcon />
+                  </IconButton>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item align={'center'}>
+                <DataList.Label minWidth={'88px'}>Code to join</DataList.Label>
+                <DataList.Value>
+                  <IconButton
+                    size={'1'}
+                    color={'ruby'}
+                    variant={'ghost'}
+                    disabled={!!shareCode}
+                    onClick={handleGenerateCode}
+                  >
+                    {shareCode ? (
+                      <Badge style={{ fontFamily: 'monospace' }}>
+                        {shareCode}
+                      </Badge>
+                    ) : (
+                      <EyeOpenIcon />
+                    )}
+                  </IconButton>
+                </DataList.Value>
+              </DataList.Item>
             </DataList.Root>
             <ButtonContainer>
-              <Button disabled color={'gray'} variant={'outline'}>
-                Edit
-              </Button>
+              <CustomDialogTitleDescription
+                dialogTitle={'Edit course'}
+                dialogDescription={
+                  'Edit the title and description of your current course.'
+                }
+                defaultTitle={data?.title}
+                defaultDescription={data?.description}
+                actionButtonValue={'Update'}
+                TriggerButton={
+                  <Button
+                    color={'gray'}
+                    variant={'outline'}
+                    style={{ width: '100%' }}
+                  >
+                    Edit
+                  </Button>
+                }
+                createFunction={handleEditCourse}
+              />
               <CustomAlertDialog
                 description={
                   'This action cannot be undone. This action will permanently delete the entire course from our servers, along with all related sections, quizzes and lectures.'

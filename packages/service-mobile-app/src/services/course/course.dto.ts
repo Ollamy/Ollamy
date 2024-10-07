@@ -6,8 +6,6 @@ export interface CourseResponse {
   description: string;
   picture: string;
   ownerId: string;
-  lastLessonId?: string;
-  lastSectionId?: string;
 }
 
 export interface CourseInfo {
@@ -20,5 +18,5 @@ export interface CourseInfo {
 
 export interface GetCourseHpResponse {
   hp: number;
-  timer: string;
+  timer?: string;
 }

@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '@prisma/client';
 
 export class CourseModel {
   @ApiProperty()
@@ -30,19 +31,14 @@ export class CourseModel {
 }
 
 export class GetCourseRequest extends CourseModel {
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastLessonId?: string;
-
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
-  lastSectionId?: string;
-
   @ApiProperty()
   @IsNumber()
   numberOfUsers: number;
+
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class CreateCourseModel {
@@ -82,7 +78,7 @@ export class UpdateCourseModel {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ required: false, nullable: true, })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
   picture?: string | null;
@@ -107,7 +103,8 @@ export class UserCourseHp {
 
   @ApiProperty()
   @IsString()
-  timer: string;
+  @IsOptional()
+  timer?: string;
 }
 
 export enum Durationtype {
@@ -137,7 +134,7 @@ export class ShareCourseCode {
   @IsString()
   code: string;
 
-  @ApiProperty({ description: `Code's date of expiration`, type: Date})
+  @ApiProperty({ description: `Code's date of expiration`, type: Date })
   @IsDate()
   expiresAt: Date;
 }
@@ -147,4 +144,36 @@ export class CourseCodeModel {
   @IsString()
   @IsOptional()
   code?: string;
+}
+
+export class EnrollmentResponse {
+  @ApiProperty()
+  @IsUUID()
+  userId: string;
+
+  @ApiProperty()
+  @IsNumber()
+  epoch: number;
+}
+
+export class EnrollmentTotal {
+  @ApiProperty()
+  @IsNumber()
+  epoch: number;
+
+  @ApiProperty()
+  @IsNumber()
+  total: number;
+}
+
+export class EnrollmentResponseTotal {
+  @ApiProperty()
+  @IsNumber()
+  total: number;
+
+  @ApiProperty({ type: [EnrollmentResponse] })
+  enrollments: EnrollmentResponse[];
+
+  @ApiProperty({ type: [EnrollmentTotal] })
+  cumulative: EnrollmentTotal[];
 }

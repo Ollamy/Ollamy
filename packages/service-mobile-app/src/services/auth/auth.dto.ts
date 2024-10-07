@@ -1,6 +1,7 @@
 export interface LoginRequest {
   email: string;
   password: string;
+  platform: 'MOBILE';
 }
 
 export interface RegisterRequest {
@@ -8,4 +9,5 @@ export interface RegisterRequest {
   password: string;
   firstname: string;
   lastname: string;
+  platform: 'MOBILE';
 }

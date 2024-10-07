@@ -18,7 +18,14 @@ export const userApi = api.injectEndpoints({
       providesTags: [{ type: 'Course', id: 'LIST' }],
       forceRefetch: () => true,
     }),
+    getEvent: build.query<object, void>({
+      query: () => ({
+        url: '/event',
+        method: 'GET',
+      }),
+      forceRefetch: () => true,
+    }),
   }),
 });
 
-export const { useGetUserQuery, useGetUserCoursesQuery } = userApi;
+export const { useGetUserQuery, useGetUserCoursesQuery, useGetEventQuery } = userApi;

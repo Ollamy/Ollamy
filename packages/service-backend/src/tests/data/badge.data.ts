@@ -22,6 +22,9 @@ export const mockBadgeDb: {
       image_name: 'image name',
       order: 0,
       color: 'color',
+      trigger: {},
+      event_name: 'event name',
+      tag: '',
     },
   },
 ];
@@ -35,6 +38,9 @@ export const mockResultBadgeDb: { badges: Badge[] } = {
       image_name: 'image name',
       order: 0,
       color: 'color',
+      trigger: {},
+      event_name: 'event name',
+      tag: '',
     },
   ],
 };

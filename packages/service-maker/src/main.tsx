@@ -8,15 +8,18 @@ import {
 } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from 'pages/Auth/Login';
+import ProtectedRoute from 'pages/Auth/ProtectedRoute';
 import { Register } from 'pages/Auth/Register';
-import HomePage from 'pages/Home/HomePage';
 import CourseManagerPage from 'pages/CourseManager/CourseManagerPage';
+import LectureEditorPage from 'pages/LectureEditor/LectureEditorPage';
 import QuizEditorPage from 'pages/QuizEditor/QuizEditorPage';
 import { createGlobalStyle } from 'styled-components';
 
 import '@radix-ui/themes/styles.css';
 
 import { Theme } from '@radix-ui/themes';
+import UserProfilePage from 'pages/UserProfile/UserProfilePage';
+import Dashboard from 'pages/Dashboard/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -32,29 +35,45 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/home',
-    element: <HomePage />,
-  },
-  {
     path: '/course/:courseId',
-    element: <CourseManagerPage />,
+    element: (
+      <ProtectedRoute>
+        <CourseManagerPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/quizEditor/:lessonId',
-    element: <QuizEditorPage />,
+    element: (
+      <ProtectedRoute>
+        <QuizEditorPage />
+      </ProtectedRoute>
+    ),
   },
-  // {
-  //   path: '/profile',
-  //   element: <ProfilePage />,
-  // },
-  // {
-  //   path: '/setting',
-  //   element: <SettingPage />,
-  // },
-  // {
-  //   path: '/formation',
-  //   element: <FormationSetting />,
-  // },
+  {
+    path: '/lectureEditor/:lessonId',
+    element: (
+      <ProtectedRoute>
+        <LectureEditorPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/user',
+    element: (
+      <ProtectedRoute>
+        <UserProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 // React Query setup (use to query the backend)

@@ -1,4 +1,4 @@
-import { AnswerType, LessonStatus, Question, UsertoLesson } from '@prisma/client';
+import { AnswerType, Status, Question, UsertoLesson } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateQuestionModel,
@@ -39,6 +39,8 @@ export const mockQuestionDb: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
+  bonus: false,
 };
 
 export const mockQuestionDb2: Question = {
@@ -53,6 +55,8 @@ export const mockQuestionDb2: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
+  bonus: false,
 };
 
 export const mockQuestionId3 = uuidv4();
@@ -82,6 +86,8 @@ export const mockQuestionDb3: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
+  bonus: false,
 };
 
 export const mockBodyIncorrect: ValidateAnswerModel = {
@@ -101,6 +107,8 @@ export const mockQuestionDb4: Question = {
   points: 0,
   difficulty: 'BEGINNER',
   order: 'a0',
+  time: 0,
+  bonus: false,
 };
 
 export const mockUserLesson: UsertoLesson = {
@@ -110,7 +118,7 @@ export const mockUserLesson: UsertoLesson = {
   score: 1,
   complete_lecture: false,
   complete_question: false,
-  status: LessonStatus.NOT_STARTED,
+  status: Status.NOT_STARTED,
   created_at: new Date(),
   updated_at: new Date(),
 };

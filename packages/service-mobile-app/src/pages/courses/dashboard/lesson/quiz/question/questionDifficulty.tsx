@@ -1,28 +1,36 @@
 // @ts-ignore
 import STAR from 'assets/icons/star.png';
 import { Box, HStack, Image } from 'native-base';
+import { QuestionDifficulty } from 'src/services/question/question.dto';
 
-interface QuestionDifficultyProps {
-  difficulty: number;
+interface QuestionDifficultyStarsProps {
+  difficulty: QuestionDifficulty;
 }
 
-function QuestionDifficulty({ difficulty }: QuestionDifficultyProps) {
+const DIFFICULTY_TO_NUMBER: Record<QuestionDifficulty, number> = {
+  [QuestionDifficulty.BEGINNER]: 1,
+  [QuestionDifficulty.INTERMEDIATE]: 2,
+  [QuestionDifficulty.ADVANCED]: 3,
+  [QuestionDifficulty.MASTER]: 4,
+};
+
+function QuestionDifficultyStars({ difficulty }: QuestionDifficultyStarsProps) {
   return (
     <HStack
-      width={`${difficulty * 33}px`}
+      width={`${DIFFICULTY_TO_NUMBER[difficulty] * 33}px`}
       borderRadius={8}
-      paddingY="6px"
-      backgroundColor="#ECE6FC"
+      paddingY={'6px'}
+      backgroundColor={'#ECE6FC'}
       style={{ gap: 5 }}
-      justifyContent="center"
+      justifyContent={'center'}
     >
-      {Array.from({ length: difficulty }, (_, idx) => (
-        <Box key={idx} height="20px" width="20px">
-          <Image style={{ height: '100%', width: '100%' }} source={STAR} alt="difficulty star" />
+      {Array.from({ length: DIFFICULTY_TO_NUMBER[difficulty] }, (_, idx) => (
+        <Box key={idx} height={'20px'} width={'20px'}>
+          <Image style={{ height: '100%', width: '100%' }} source={STAR} alt={'difficulty star'} />
         </Box>
       ))}
     </HStack>
   );
 }
 
-export default QuestionDifficulty;
+export default QuestionDifficultyStars;

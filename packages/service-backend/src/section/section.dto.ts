@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { Status } from '@prisma/client';
+import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { UpdateOrderModel } from 'order/order.dto';
 
 export class CourseSectionModel {
   @ApiProperty()
@@ -13,6 +15,10 @@ export class CourseSectionModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
 }
 
 export class SectionModel {
@@ -27,6 +33,24 @@ export class SectionModel {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  order: string;
+}
+
+export class GetSectionModel extends SectionModel {
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
+}
+
+export class GetSectionsModel extends CourseSectionModel {
+  @ApiProperty({ required: false, enum: Status })
+  @IsEnum(Status)
+  @IsOptional()
+  status?: Status;
 }
 
 export class CreateSectionModel {
@@ -71,3 +95,5 @@ export class SectionIdResponse {
   @IsUUID()
   id: string;
 }
+
+export class UpdateSectionOrderModel extends UpdateOrderModel {}

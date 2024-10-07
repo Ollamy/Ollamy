@@ -47,19 +47,6 @@ export class QuestionController {
   @ApiBody({
     type: CreateQuestionModel,
     description: 'user data model',
-    examples: {
-      template: {
-        value: {
-          lessonId: 'Lesson Id',
-          title: 'Question Title',
-          description: 'Question decsription',
-          typeAnswer: AnswerType.FREE_ANSWER,
-          typeQuestion: QuestionType.TEXT,
-          difficulty: QuestionDifficulty.BEGINNER,
-          points: 0,
-        } as CreateQuestionModel,
-      },
-    },
   })
   @LoggedMiddleware(true)
   @Post()
@@ -119,20 +106,6 @@ export class QuestionController {
   @ApiBody({
     type: UpdateQuestionModel,
     description: 'user data model',
-    examples: {
-      template: {
-        value: {
-          lessonId: 'Lesson Id',
-          title: 'Question Title',
-          description: 'Question decsription',
-          typeAnswer: AnswerType.MULTIPLE_CHOICE,
-          typeQuestion: QuestionType.TEXT,
-          trustAnswerId: 'TrustAnswer Id',
-          pictureId: 'Question picture',
-          difficulty: QuestionDifficulty.BEGINNER,
-        } as UpdateQuestionModel,
-      },
-    },
   })
   @LoggedMiddleware(true)
   @Put('/:id')
@@ -149,7 +122,7 @@ export class QuestionController {
   })
   @ApiBody({
     type: UpdateQuestionOrderModel,
-    description: 'user data model',
+    description: 'update question order data model',
     examples: {
       template: {
         value: {
@@ -161,7 +134,7 @@ export class QuestionController {
     },
   })
   @LoggedMiddleware(true)
-  @Put()
+  @Put('/order')
   async updateQuestionOrder(
     @Body() body: UpdateQuestionOrderModel,
   ): Promise<object> {

@@ -13,26 +13,40 @@ export class FileAi {
 }
 
 export class Answer {
+  @ApiProperty()
   @IsString()
   answer: string;
 
+  @ApiProperty()
   @IsBoolean()
   correct: boolean;
 }
 
 export class Question {
+  @ApiProperty()
   @IsString()
   question: string;
 
+  @ApiProperty({type: [Answer]})
   @Type(() => Answer)
   @ValidateNested({ each: true })
   @IsArray()
   answers: Answer[];
 }
 
-export class QuestionResponse {
-  @Type(() => Question)
-  @ValidateNested({ each: true })
-  @IsArray()
-  root: Question[];
+export enum AllowedMimeType {
+  PDF = 'application/pdf',
+  MP3 = 'audio/mpeg',
+  WAV = 'audio/wav',
+  PNG = 'image/png',
+  JPEG = 'image/jpeg',
+  TXT = 'text/plain',
+  MOV = 'video/mov',
+  MPEG = 'video/mpeg',
+  MP4 = 'video/mp4',
+  MPG = 'video/mpg',
+  AVI = 'video/avi',
+  WMV = 'video/wmv',
+  MPEGPS = 'video/mpegps',
+  FLV = 'video/flv',
 }

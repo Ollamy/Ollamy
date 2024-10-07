@@ -27,15 +27,6 @@
       ".ios",
       ""
     ],
-    "paths": {
-      "@ollamy/design-system/*": [
-        "../util-design-system/*"
-      ],
-      "@ollamy/utils/*": [
-        "../util-utils/*"
-      ],
-    }
-
   },
   "extends": "expo/tsconfig.base"
 }

@@ -17,33 +17,35 @@ function buildSwagger(
 ) {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  writeFileSync('./swagger.json', JSON.stringify(document));
+  writeFileSync('./swagger.json', JSON.stringify(document, null, 2));
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   app.useStaticAssets(join(__dirname, '..', 'static'));
 
-  if (MODE === 'dev') {
-    const config = new DocumentBuilder()
-      .setTitle('Ollamy API')
-      .setDescription('So insane API')
-      .setVersion('1.0')
-      .addCookieAuth('session')
-      .build();
+  // if (MODE === 'dev') {
+  const config = new DocumentBuilder()
+    .setTitle('Ollamy API')
+    .setDescription('So insane API')
+    .setVersion('1.0')
+    .addCookieAuth('session')
+    .build();
 
-    app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
-    buildSwagger(app, config);
-    Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
-  }
+  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
+  buildSwagger(app, config);
+  Logger.debug(`Swagger available at http://localhost:${BACKEND_PORT}/api`);
+  // }
 
   await RedisCacheService.connect();
   Logger.debug('Redis Connected!');
 
   app.enableCors({
-    // origin: [`http://localhost:19006`], // For dev Mobile
     origin: [
       `${FRONTEND_URL}:${FRONTEND_PORT}`,
+      'https://app.ollamy.com',
       'http://127.0.0.1:5173',
       'http://localhost:19006',
       'http://localhost:5173',
@@ -55,7 +57,13 @@ async function bootstrap() {
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   });
   app.use(cookieParser());
-  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use((req, res, next) => {
+    if (req.path === '/stripe/webhook') {
+      next();
+    } else {
+      bodyParser.json({ limit: '10mb' })(req, res, next);
+    }
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       stopAtFirstError: true,
@@ -65,6 +73,7 @@ async function bootstrap() {
       },
     }),
   );
+
 
   await app.listen(BACKEND_PORT);
 }
