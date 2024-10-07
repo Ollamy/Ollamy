@@ -36,7 +36,6 @@ async function downloadFile(
 @Injectable()
 export class MobileAppService {
   private publicFolder = resolve(process.cwd(), 'public', 'mobile_build');
-  private backendURL = `${FRONTEND_URL}:${BACKEND_PORT}/public/mobile_build`;
 
   async handleNewBuild(
     headers: WebHookMobileBuildHeader,
@@ -69,6 +68,6 @@ export class MobileAppService {
     if (!fileName.endsWith('.apk')) {
       throw new Error('There is no apk available!');
     }
-    return { url: `${this.backendURL}/${fileName}` };
+    return { url: `public/mobile_build/${fileName}` };
   }
 }
