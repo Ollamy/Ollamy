@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common';
 import {
   GenerateContentRequest,
+  GenerateContentResult,
   GenerativeModelPreview,
   HarmBlockThreshold,
   HarmCategory,
@@ -54,15 +55,14 @@ export class AiService {
     });
   }
 
-
-  async generateText(file: FileAi, numberOfQuestions: number): Promise<Question[]> {
+  async generateText(file: FileAi, numberOfQuestions: number, questionType: AnswerType = 'MULTIPLE_CHOICE'): Promise<Question[]> {
     const req: GenerateContentRequest = {
       contents: [
         {
           role: 'user',
           parts: [
             {
-              text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate multiple choice questions from. Please create **${numberOfQuestions}** questions with four answer choices each. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`
+              text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate ${questionType} questions from. Please create **${numberOfQuestions}** questions. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`
             },
             {
               inlineData: file
@@ -73,20 +73,76 @@ export class AiService {
       systemInstruction: {
         role: 'model',
         parts: [{
-          text: `You are an AI assistant designed to create multiple-choice questions from PDF files. You will receive a PDF file and the desired number of questions as input.
+          text: `You are an AI assistant designed to create different types of questions from PDF files. You will receive a PDF file, the desired number of questions, and the question type as input.
+
+    **Supported Question Types:**
+
+    - **FREE_ANSWER:** Generate one correct answer.
+      *Example:*
+      \`\`\`json
+      {
+        "type": "FREE_ANSWER",
+        "question": "What is your favorite color?",
+        "answers": [
+          { "answer": "BLUE", "correct": true }
+        ]
+      }
+      \`\`\`
+
+    - **MULTIPLE_CHOICE:** Generate four answer choices with one correct answer.
+      *Example:*
+      \`\`\`json
+      {
+        "type": "MULTIPLE_CHOICE",
+        "question": "What is the capital of France?",
+        "answers": [
+          { "answer": "PARIS", "correct": true },
+          { "answer": "LONDON", "correct": false },
+          { "answer": "MADRID", "correct": false },
+          { "answer": "BERLIN", "correct": false }
+        ]
+      }
+      \`\`\`
+
+    - **SQUARE_CHOICE:** Generate four short answer choices with one correct answer.
+      *Example:*
+      \`\`\`json
+      {
+        "type": "SQUARE_CHOICE",
+        "question": "What is the capital of France?",
+        "answers": [
+          { "answer": "PARIS", "correct": true },
+          { "answer": "LONDON", "correct": false },
+          { "answer": "MADRID", "correct": false },
+          { "answer": "BERLIN", "correct": false }
+        ]
+      }
+      \`\`\`
+
+    - **ORDER_CHOICE:** Generate one sentence answer that needs to be ordered correctly. Words in the sentence should be separated by '/'.
+      *Example:*
+      \`\`\`json
+      {
+        "type": "ORDER_CHOICE",
+        "question": "What is the color of the fox?",
+        "answers": [
+          { "answer": "The / color / of / the / fox / is / red!", "correct": true }
+        ]
+      }
+      \`\`\`
 
     **Your Task**
 
     1. **Validate Input:**
        - Ensure the ${AllowedMimeType[file.mimeType]} file is readable and contains sufficient information for question generation.
        - Check that the requested number of questions is a positive integer. If not, return an error message: { "error": "Invalid number of questions. Please provide a positive integer." }.
+       - Check that the question type is one of the supported types. If not, return an error message: { "error": "Invalid question type. Please choose from: FREE_ANSWER, MULTIPLE_CHOICE, SQUARE_CHOICE, ORDER_CHOICE" }.
 
     2. **Extract Information:**
        - Analyze the ${AllowedMimeType[file.mimeType]} to identify key concepts, facts, and relationships.
 
     3. **Formulate Questions:**
-       - Craft clear, concise, and relevant multiple-choice questions that test the user's understanding of the material.
-       - Provide four answer choices for each question, with only one correct answer.
+       - Craft clear, concise, and relevant questions of the specified type.
 
     4. **Handle Errors:**
        - If the ${AllowedMimeType[file.mimeType]} is unreadable, lacks sufficient content, or there's an issue generating the specified number of questions, return an error message: { "error": "Your specific error message here" }.
@@ -97,12 +153,12 @@ export class AiService {
        \`\`\`json
         [
           {
+            "type": "...", // Type of question (FREE_ANSWER, MULTIPLE_CHOICE, SQUARE_CHOICE, ORDER_CHOICE)
             "question": "...",
             "answers": [
               { "answer": "...", "correct": true },
               { "answer": "...", "correct": false },
-              { "answer": "...", "correct": false },
-              { "answer": "...", "correct": false }
+              // ... more answers depending on the question type
             ]
           },
           ... (more questions)
@@ -114,7 +170,7 @@ export class AiService {
     };
 
 
-    let response;
+    let response: GenerateContentResult;
     try {
       response = await AiService.generativeModel.generateContent(req);
     } catch (e) {
@@ -179,7 +235,7 @@ export class AiService {
         lesson_id: lessonId,
         title: questionData.question,
         type_question: QuestionType.TEXT,
-        type_answer: AnswerType.MULTIPLE_CHOICE,
+        type_answer: questionData.type,
         order: questionOrder,
         trust_answer_id: trustAnswerId,
       });

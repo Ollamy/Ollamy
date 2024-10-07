@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import {
   GetLastBuildUrlResponse,
   WebHookMobileBuild,
@@ -66,7 +66,7 @@ export class MobileAppService {
     const fileName = readdirSync(this.publicFolder).sort().at(-1);
 
     if (!fileName.endsWith('.apk')) {
-      throw new Error('There is no apk available!');
+      throw new HttpException('No apk available, launch at least one build!', 404);
     }
     return { url: `public/mobile_build/${fileName}` };
   }
