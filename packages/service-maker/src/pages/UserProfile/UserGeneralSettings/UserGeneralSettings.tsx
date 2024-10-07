@@ -4,6 +4,8 @@ import { userActions } from 'services/api/routes/user';
 import styled from 'styled-components';
 
 import { Badge, Button, Separator } from '@radix-ui/themes';
+import api from 'services/api';
+import { ImportedMeta } from 'env';
 
 // eslint-disable-next-line
 interface UserGeneralSettingsProps {}
@@ -18,6 +20,7 @@ export function capitalizeFirstLetterOfEachWord(data: string) {
 function UserGeneralSettings({}: UserGeneralSettingsProps) {
   const { data } = userActions.useGetUser();
   const { mutateAsync: updateUser } = userActions.useUpdateUser();
+  const buildRes = api.mobileApp.useLastMobileBuild();
 
   const handleChangeName = useCallback(
     async (title: string, description: string) => {
@@ -36,6 +39,11 @@ function UserGeneralSettings({}: UserGeneralSettingsProps) {
     },
     [updateUser],
   );
+
+  const downloadLastBuild = () => {
+    if (buildRes.status === 'success')
+      window.location.href = `${ImportedMeta.env.VITE_PUBLIC_BACKEND_URL}/${buildRes.data.url}`;
+  };
 
   return data ? (
     <Container>
@@ -105,6 +113,12 @@ function UserGeneralSettings({}: UserGeneralSettingsProps) {
             createFunction={handleChangePassword}
           />
         </NameContainer>
+        <span
+          style={{ color: '#876BF6', cursor: 'pointer', alignSelf: 'center' }}
+          onClick={downloadLastBuild}
+        >
+          Download mobile app
+        </span>
       </Body>
     </Container>
   ) : null;

@@ -1939,6 +1939,51 @@
         ]
       }
     },
+    "/mobileApp/webhook/new_build": {
+      "post": {
+        "operationId": "MobileAppController_registerSection",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebHookMobileBuild"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "MobileApp"
+        ]
+      }
+    },
+    "/mobileApp/last_build_url": {
+      "get": {
+        "operationId": "MobileAppController_getLastBuildUrl",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "lesson's questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLastBuildUrlResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "MobileApp"
+        ]
+      }
+    },
     "/badge/unlocked": {
       "get": {
         "operationId": "BadgeController_getBadges",
@@ -3936,6 +3981,21 @@
             "description": "Updated lecture data"
           }
         }
+      },
+      "WebHookMobileBuild": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetLastBuildUrlResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
       },
       "BadgeModel": {
         "type": "object",

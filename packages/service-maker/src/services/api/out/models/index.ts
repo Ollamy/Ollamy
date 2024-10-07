@@ -677,6 +677,19 @@ export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof
 /**
  * 
  * @export
+ * @interface GetLastBuildUrlResponse
+ */
+export interface GetLastBuildUrlResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetLastBuildUrlResponse
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
  * @interface GetQuestionModel
  */
 export interface GetQuestionModel {

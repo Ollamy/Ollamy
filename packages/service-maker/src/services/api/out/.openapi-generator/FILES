@@ -6,6 +6,7 @@ apis/DefaultApi.ts
 apis/EventApi.ts
 apis/LectureApi.ts
 apis/LessonApi.ts
+apis/MobileAppApi.ts
 apis/QuestionApi.ts
 apis/SectionApi.ts
 apis/SessionApi.ts
