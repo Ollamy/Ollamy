@@ -3,22 +3,22 @@
     "version": ">= 7.2.0"
   },
   "build": {
-    "production": {
-      "android": {
-        "buildType": "apk"
-      }
-    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "http://x2025ollamy2085549442001.francecentral.cloudapp.azure.com:3000/"
-      },
       "ios": {
         "resourceClass": "m-medium"
       },
       "android": {
         "image": "latest",
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "ios": {
+        "resourceClass": "m-medium"
+      },
+      "android": {
         "buildType": "apk"
       }
     }
