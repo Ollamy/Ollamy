@@ -47,7 +47,7 @@ export class MobileAppService {
     if (!checkWebhookHash(expoSignature, body)) {
       throw new Error("Signatures didn't match!");
     } else if (body.artifacts?.buildUrl === undefined) {
-      throw new Error('We need an build url');
+      throw new Error('We need a build url');
     }
 
     if (
