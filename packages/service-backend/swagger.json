@@ -2019,6 +2019,21 @@
             "schema": {
               "minimum": 1
             }
+          },
+          {
+            "name": "typeOfQuestion",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": "MULTIPLE_CHOICE",
+              "enum": [
+                "FREE_ANSWER",
+                "MULTIPLE_CHOICE",
+                "SQUARE_CHOICE",
+                "ORDER_CHOICE"
+              ],
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -2060,54 +2075,6 @@
         ]
       }
     },
-    "/ai/create-generated-question/{lessonId}": {
-      "post": {
-        "operationId": "AiController_createQuestion",
-        "parameters": [
-          {
-            "name": "lessonId",
-            "required": true,
-            "in": "path",
-            "description": "The lesson id to create the questions for",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "Object containing a list of questions with their answers to create",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Question"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CourseTrueResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Parameters are not valid"
-          }
-        },
-        "tags": [
-          "Ai"
-        ]
-      }
-    },
     "/ai/create-and-generate-question/{lessonId}": {
       "post": {
         "operationId": "AiController_createAndGenerateQuestion",
@@ -2127,6 +2094,21 @@
             "in": "query",
             "schema": {
               "minimum": 1
+            }
+          },
+          {
+            "name": "typeOfQuestion",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": "MULTIPLE_CHOICE",
+              "enum": [
+                "FREE_ANSWER",
+                "MULTIPLE_CHOICE",
+                "SQUARE_CHOICE",
+                "ORDER_CHOICE"
+              ],
+              "type": "string"
             }
           }
         ],
@@ -4060,6 +4042,15 @@
       "Question": {
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "FREE_ANSWER",
+              "MULTIPLE_CHOICE",
+              "SQUARE_CHOICE",
+              "ORDER_CHOICE"
+            ]
+          },
           "question": {
             "type": "string"
           },
@@ -4071,6 +4062,7 @@
           }
         },
         "required": [
+          "type",
           "question",
           "answers"
         ]

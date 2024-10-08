@@ -1,6 +1,7 @@
-import { IsString, IsBoolean, IsArray, ValidateNested } from 'class-validator';
+import { IsString, IsBoolean, IsArray, ValidateNested, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { AnswerType } from '@prisma/client';
 
 export class FileAi {
   @ApiProperty()
@@ -23,6 +24,10 @@ export class Answer {
 }
 
 export class Question {
+  @ApiProperty({enum: AnswerType})
+  @IsEnum(AnswerType)
+  type: AnswerType;
+
   @ApiProperty()
   @IsString()
   question: string;

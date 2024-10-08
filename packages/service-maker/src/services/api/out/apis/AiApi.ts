@@ -3,19 +3,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  CourseTrueResponse,
   Question,
 } from '../models/index';
 
 export interface CreateAndGenerateQuestionRequest {
     lessonId: string;
     numberOfQuestions: any;
+    typeOfQuestion: CreateAndGenerateQuestionTypeOfQuestionEnum;
     file?: Blob;
-}
-
-export interface CreateQuestionRequest {
-    lessonId: string;
-    question: Array<Question>;
 }
 
 export interface GenerateFakeAnswerRequest {
@@ -25,6 +20,7 @@ export interface GenerateFakeAnswerRequest {
 
 export interface GenerateTextRequest {
     numberOfQuestions: any;
+    typeOfQuestion: GenerateTextTypeOfQuestionEnum;
     file?: Blob;
 }
 
@@ -43,10 +39,18 @@ export class AiApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('numberOfQuestions','Required parameter requestParameters.numberOfQuestions was null or undefined when calling createAndGenerateQuestion.');
         }
 
+        if (requestParameters.typeOfQuestion === null || requestParameters.typeOfQuestion === undefined) {
+            throw new runtime.RequiredError('typeOfQuestion','Required parameter requestParameters.typeOfQuestion was null or undefined when calling createAndGenerateQuestion.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.numberOfQuestions !== undefined) {
             queryParameters['numberOfQuestions'] = requestParameters.numberOfQuestions;
+        }
+
+        if (requestParameters.typeOfQuestion !== undefined) {
+            queryParameters['typeOfQuestion'] = requestParameters.typeOfQuestion;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -90,40 +94,6 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    async createQuestionRaw(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
-        if (requestParameters.lessonId === null || requestParameters.lessonId === undefined) {
-            throw new runtime.RequiredError('lessonId','Required parameter requestParameters.lessonId was null or undefined when calling createQuestion.');
-        }
-
-        if (requestParameters.question === null || requestParameters.question === undefined) {
-            throw new runtime.RequiredError('question','Required parameter requestParameters.question was null or undefined when calling createQuestion.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/ai/create-generated-question/{lessonId}`.replace(`{${"lessonId"}}`, encodeURIComponent(String(requestParameters.lessonId))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters.question,
-        }, initOverrides);
-
-        return response.json();
-    }
-
-    /**
-     */
-    static createQuestion(requestParameters: CreateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CourseTrueResponse> {
-        return localAiApi.createQuestionRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
     async generateFakeAnswerRaw(requestParameters: GenerateFakeAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         if (requestParameters.questionId === null || requestParameters.questionId === undefined) {
             throw new runtime.RequiredError('questionId','Required parameter requestParameters.questionId was null or undefined when calling generateFakeAnswer.');
@@ -163,10 +133,18 @@ export class AiApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('numberOfQuestions','Required parameter requestParameters.numberOfQuestions was null or undefined when calling generateText.');
         }
 
+        if (requestParameters.typeOfQuestion === null || requestParameters.typeOfQuestion === undefined) {
+            throw new runtime.RequiredError('typeOfQuestion','Required parameter requestParameters.typeOfQuestion was null or undefined when calling generateText.');
+        }
+
         const queryParameters: any = {};
 
         if (requestParameters.numberOfQuestions !== undefined) {
             queryParameters['numberOfQuestions'] = requestParameters.numberOfQuestions;
+        }
+
+        if (requestParameters.typeOfQuestion !== undefined) {
+            queryParameters['typeOfQuestion'] = requestParameters.typeOfQuestion;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -211,3 +189,24 @@ export class AiApi extends runtime.BaseAPI {
 }
 
 const localAiApi = new AiApi();
+
+/**
+ * @export
+ */
+export const CreateAndGenerateQuestionTypeOfQuestionEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
+} as const;
+export type CreateAndGenerateQuestionTypeOfQuestionEnum = typeof CreateAndGenerateQuestionTypeOfQuestionEnum[keyof typeof CreateAndGenerateQuestionTypeOfQuestionEnum];
+/**
+ * @export
+ */
+export const GenerateTextTypeOfQuestionEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
+} as const;
+export type GenerateTextTypeOfQuestionEnum = typeof GenerateTextTypeOfQuestionEnum[keyof typeof GenerateTextTypeOfQuestionEnum];

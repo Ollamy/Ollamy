@@ -1,7 +1,6 @@
 import {
   Controller,
   Post,
-  Body,
   Param,
   UploadedFile,
   UseInterceptors,
@@ -21,7 +20,7 @@ import { AllowedMimeType, FileAi, Question, } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CourseTrueResponse } from '../course/course.dto';
+import { AnswerType } from '@prisma/client';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Ai')
@@ -52,6 +51,14 @@ export class AiController {
       minimum: 1,
     },
   })
+  @ApiQuery({
+    name: 'typeOfQuestion',
+    type: 'string',
+    enum: AnswerType,
+    schema: {
+      default: 'MULTIPLE_CHOICE',
+    },
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
@@ -59,6 +66,7 @@ export class AiController {
   async generateText(
     @UploadedFile() file: Express.Multer.File,
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
+    @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
   ): Promise<Question[]> {
     if (!file) {
       throw new ConflictException('File is empty');
@@ -77,29 +85,7 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateText(AiFile, numberOfQuestions);
-  }
-
-  @ApiBody({
-    type: [Question],
-    description: 'Object containing a list of questions with their answers to create'
-  })
-  @ApiParam({
-    name: 'lessonId',
-    type: 'string',
-    description: 'The lesson id to create the questions for',
-  })
-  @ApiResponse({
-    status: 200,
-    type: CourseTrueResponse,
-  })
-  @LoggedMiddleware(true)
-  @Post('/create-generated-question/:lessonId')
-  async createQuestion(
-    @Body() questions: Question[],
-    @Param('lessonId') lessonId: string,
-  ) {
-    return await this.aiService.createQuizz(questions, lessonId);
+    return await this.aiService.generateText(AiFile, numberOfQuestions, typeOfQuestion);
   }
 
   @ApiBody({
@@ -130,6 +116,14 @@ export class AiController {
       minimum: 1,
     },
   })
+  @ApiQuery({
+    name: 'typeOfQuestion',
+    type: 'string',
+    enum: AnswerType,
+    schema: {
+      default: 'MULTIPLE_CHOICE',
+    },
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
@@ -138,13 +132,14 @@ export class AiController {
     @UploadedFile() file: Express.Multer.File,
     @Param('lessonId') lessonId: string,
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
+    @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
   ) {
 
-    const questions = await this.generateText(file, numberOfQuestions);
+    const questions = await this.generateText(file, numberOfQuestions, typeOfQuestion);
     if (!questions) {
       throw new ConflictException('Failed to generate questions');
     }
-    return await this.createQuestion(questions, lessonId);
+    return await this.aiService.createQuizz(questions, lessonId);
   }
 
   @ApiResponse({
