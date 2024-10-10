@@ -4,10 +4,10 @@
   },
   "build": {
     "base": {
-      "yarn": "1.22.22"
+      "yarn": "1.22.19"
     },
     "development": {
-      "yarn": "1.22.22",
+      "extends": "base",
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -19,7 +19,7 @@
       }
     },
     "production": {
-      "yarn": "1.22.22",
+      "extends": "base",
       "ios": {
         "resourceClass": "m-medium"
       },
