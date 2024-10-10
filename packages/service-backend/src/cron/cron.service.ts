@@ -9,7 +9,7 @@ export class TasksService {
   private readonly logger = new Logger(TasksService.name);
 
   createHpCron(userId: string, courseId: string) {
-    const job = new CronJob(CronExpression.EVERY_30_SECONDS, async () => {
+    const job = new CronJob('0 */20 * * * *', async () => {
       const { hp } = await prisma.usertoCourse.findUnique({
         where: {
           course_id_user_id: {
