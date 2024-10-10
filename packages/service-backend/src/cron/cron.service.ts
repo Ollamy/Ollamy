@@ -38,6 +38,8 @@ export class TasksService {
 
       if (hp >= 19) {
         this.schedulerRegistry.deleteCronJob(`hp_${userId}_${courseId}`);
+        this.logger.log(`${userId}_${courseId} cron deleted`);
+
         return;
       }
     });

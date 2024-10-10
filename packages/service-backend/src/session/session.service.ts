@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { AnswerType, QuestionType, Status } from '@prisma/client';
 import prisma from 'client';
@@ -15,6 +16,7 @@ import {
 } from './session.dto';
 import { EventService } from '../event/event.service';
 import { LogEventData } from '../event/event.dto';
+import { logger } from 'env-var';
 
 @Injectable()
 export class SessionService {
@@ -118,6 +120,30 @@ export class SessionService {
     };
   }
 
+  private async decreaseHp(userId: string, courseId: string): Promise<number> {
+    const hp = (
+      await prisma.usertoCourse.update({
+        where: {
+          course_id_user_id: {
+            user_id: userId,
+            course_id: courseId,
+          },
+        },
+        data: {
+          hp: {
+            decrement: 1,
+          },
+        },
+        select: {
+          hp: true,
+        },
+      })
+    ).hp;
+
+    this.cronService.createHpCron(userId, courseId);
+    return hp;
+  }
+
   private async processQuestionResult(
     sessionId: string,
     isCorrect: boolean,
@@ -176,27 +202,8 @@ export class SessionService {
         session.lesson_id,
         session.user_id,
       );
-    } else if (isBonus === false) {
-      hp = (
-        await prisma.usertoCourse.update({
-          where: {
-            course_id_user_id: {
-              user_id: session.user_id,
-              course_id: session.course_id,
-            },
-          },
-          data: {
-            hp: {
-              decrement: 1,
-            },
-          },
-          select: {
-            hp: true,
-          },
-        })
-      ).hp;
-
-      this.cronService.createHpCron(session.user_id, session.course_id);
+    } else if (isCorrect === false && isBonus === false) {
+      hp = await this.decreaseHp(session.user_id, session.course_id);
     }
     return hp;
   }
@@ -232,7 +239,7 @@ export class SessionService {
       (question) => question.id === body.questionId,
     );
     const nextQuestion = preloaded_data[indexOfCurrentQuestion + 1] ?? null;
-    const bonus = preloaded_data[indexOfCurrentQuestion].bonus;
+    const bonus = preloaded_data[indexOfCurrentQuestion].bonus ?? false;
     const isCorrect =
       preloaded_data[indexOfCurrentQuestion].Answer[0].id === body.answer.id ||
       preloaded_data[indexOfCurrentQuestion].Answer[0].data ===
