@@ -4,16 +4,20 @@ import { courseActions } from 'services/api/routes/course';
 import styled from 'styled-components';
 
 import { Button } from '@radix-ui/themes';
+import CourseCustomDialogTitleDescription from 'components/RadixUi/Dialog/CourseCustomDialogTitleDescription';
+
+type MoreOptionsType = { picture: string };
 
 function HomeHeader() {
   const { mutateAsync: createNewCourse } = courseActions.useCreateCourse();
 
   const handleCreateCourse = useCallback(
-    async (title: string, description: string) => {
+    async (title: string, description: string, picture: string) => {
       await createNewCourse({
         createCourseModel: {
           title,
           description,
+          picture,
         },
       });
     },
@@ -23,9 +27,11 @@ function HomeHeader() {
   return (
     <Container>
       <Title>All your courses, in the same place</Title>
-      <CustomDialogTitleDescription
+      <CourseCustomDialogTitleDescription
         dialogTitle={'Create a course'}
-        dialogDescription={'Define the title and description of your new course.'}
+        dialogDescription={
+          'Define the title and description of your new course.'
+        }
         actionButtonValue={'Create a course'}
         TriggerButton={
           <CustomButton variant={'soft'}>Create a new course</CustomButton>
