@@ -1,4 +1,5 @@
-import { Dispatch, FormEventHandler, ReactNode, useCallback } from 'react';
+import type { Dispatch, FormEventHandler, ReactNode } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 
 import 'styles/dialog.css';
@@ -26,7 +27,7 @@ function AddImageModal({
         setImage((event.target.files as FileList)[0]);
       }
     },
-    [],
+    []
   );
 
   return (
@@ -84,7 +85,7 @@ function AddImageModal({
   );
 }
 
-const ImageInput = styled.input`
+export const ImageInput = styled.input`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -93,7 +94,7 @@ const ImageInput = styled.input`
   transform: translate(0, -16px);
 `;
 
-const ImageDropZone = styled.div`
+export const ImageDropZone = styled.div`
   margin-top: 24px;
 
   position: relative;

@@ -1,15 +1,18 @@
-import type { ReactNode } from 'react';
+import type { FormEventHandler, ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import {
+  ImageDropZone,
+  ImageInput,
+} from 'components/modal/AddImageModal/AddImageModal';
+import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
 import styled from 'styled-components';
 
 import 'styles/dialog.css';
 
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon, UploadIcon } from '@radix-ui/react-icons';
-import { Button } from '@radix-ui/themes';
-import useUploadPicture from 'pages/QuizEditor/Factory/hooks/useUploadPicture';
-import AddImageModal from 'components/modal/AddImageModal/AddImageModal';
+import { Text } from '@radix-ui/themes';
 
 interface FormInputs {
   title: string;
@@ -51,7 +54,7 @@ function CourseCustomDialogTitleDescription<T>({
       description: defaultDescription,
       picture: defaultPicture,
     }),
-    [defaultTitle, defaultDescription, defaultPicture],
+    [defaultTitle, defaultDescription, defaultPicture]
   );
 
   const [droppedImage, setDroppedImage] = useState<File | null>(null);
@@ -69,13 +72,10 @@ function CourseCustomDialogTitleDescription<T>({
     async (pictureBase64: string) => {
       setPicture(pictureBase64);
     },
-    [setPicture],
+    [setPicture]
   );
 
-  const { onUploadPicture } = useUploadPicture({
-    droppedImage,
-    updater: updateImage,
-  });
+  const [image, setImage] = useState<File | null>(null);
 
   useEffect(() => {
     reset(defaultValues);
@@ -83,10 +83,32 @@ function CourseCustomDialogTitleDescription<T>({
     setDroppedImage(null);
   }, [defaultPicture, reset, defaultValues]);
 
-  const onSubmit = (data: FormInputs) => {
-    createFunction(data.title, data.description, picture ?? '');
+  const onSubmit = async (data: FormInputs) => {
+    let base64Image = '';
+
+    if (image) {
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      await new Promise((resolve) => {
+        reader.onload = resolve;
+      });
+      base64Image = reader.result as string;
+    }
+
+    createFunction(data.title, data.description, base64Image || '');
     setOpen(false);
+    reset(defaultValues);
+    setImage(null);
   };
+
+  const handleFileChange: FormEventHandler<HTMLDivElement> = useCallback(
+    async (event) => {
+      if ('files' in event.target) {
+        setImage((event.target.files as FileList)[0]);
+      }
+    },
+    []
+  );
 
   return (
     <Container>
@@ -138,23 +160,44 @@ function CourseCustomDialogTitleDescription<T>({
                   {errors.description && <span>This field is required</span>}
                 </CustomFieldset>
               )}
-              <CustomFieldset className={'DialogFieldset'}>
-                <ButtonContainer>
-                  <ImageContainer>
-                    <AddImageModal
-                      image={droppedImage}
-                      setImage={setDroppedImage}
-                      onUploadImage={onUploadPicture}
-                      CustomTriggerButton={
-                        <Button variant={'surface'}>
-                          <UploadIcon />
-                          Upload Image
-                        </Button>
-                      }
+              <ImageContainer>
+                {image ? (
+                  <>
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={'Preview'}
+                      style={{
+                        display: 'block',
+                        margin: '0 auto',
+                        maxWidth: '50%',
+                        maxHeight: '50%',
+                      }}
                     />
-                  </ImageContainer>
-                </ButtonContainer>
-              </CustomFieldset>
+                    <CustomButton
+                      type={'button'}
+                      onClick={() => setImage(null)}
+                      className={'DialogButton'}
+                    >
+                      Change Image
+                    </CustomButton>
+                  </>
+                ) : (
+                  <ImageDropZone onChange={handleFileChange}>
+                    <UploadIcon height={24} width={24} />
+                    <Text>Drag & drop any file here</Text>
+                    <Text>
+                      or <Text color={'violet'}>browse file</Text> from device
+                    </Text>
+                    <Text color={'gray'}>Max. 2Mo</Text>
+                    <ImageInput
+                      type={'file'}
+                      className={'Input'}
+                      id={'image'}
+                      accept={'image/*'}
+                    />
+                  </ImageDropZone>
+                )}
+              </ImageContainer>
               <ButtonContainer>
                 <CustomButton type={'submit'} className={'DialogButton green'}>
                   {actionButtonValue}
@@ -177,13 +220,8 @@ const Container = styled.div``;
 
 const ImageContainer = styled.div`
   display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 20px;
-
-  width: 100%;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 const CustomForm = styled.form``;
