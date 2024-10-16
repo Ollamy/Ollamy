@@ -32,6 +32,7 @@ function QuestionSideBarHeader({
       lessonId,
       file: fileTarget,
       numberOfQuestions: numberOfQuestionTarget,
+      typeOfQuestion: 'MULTIPLE_CHOICE',
     }).then(() => {
       setIsLoading(false);
     });

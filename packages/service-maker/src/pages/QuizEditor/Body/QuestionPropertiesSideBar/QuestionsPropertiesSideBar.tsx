@@ -78,7 +78,7 @@ function QuestionsPropertiesSideBar({
               await updateQuestion({
                 id: questionId,
                 updateQuestionModel: {
-                  time: newValue ? 15 : null,
+                  time: newValue ? 15 : undefined,
                 },
               });
             }}
