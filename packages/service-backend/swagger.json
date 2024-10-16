@@ -3595,6 +3595,11 @@
             "type": "boolean",
             "description": "Define a bonus question that will not count in the user evaluation",
             "example": true
+          },
+          "trust_answer_id": {
+            "type": "string",
+            "description": "The unique identifier of the trusted answer",
+            "example": "3a962c98-8f03-4b55-a6a7-31422cbd033a"
           }
         },
         "required": [

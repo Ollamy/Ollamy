@@ -753,6 +753,12 @@ export interface GetQuestionModel {
      * @memberof GetQuestionModel
      */
     bonus?: boolean;
+    /**
+     * The unique identifier of the trusted answer
+     * @type {string}
+     * @memberof GetQuestionModel
+     */
+    trust_answer_id?: string;
 }
 
 
