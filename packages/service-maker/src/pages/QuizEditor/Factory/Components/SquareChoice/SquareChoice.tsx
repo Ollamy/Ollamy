@@ -17,7 +17,7 @@ type SquareChoiceState = {
   }[];
 };
 
-export function deepEqual(x, y): boolean {
+export function deepEqual(x: any, y: any): boolean {
   return x && y && typeof x === 'object' && typeof y === 'object'
     ? Object.keys(x).length === Object.keys(y).length &&
         Object.keys(x).reduce((isEqual, key) => {
@@ -98,7 +98,7 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
                 ...a,
                 data: value,
               }
-            : a,
+            : a
         ),
       };
     });
@@ -130,7 +130,7 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
               data: answer.data,
             },
           });
-        }),
+        })
       );
     } catch (error) {
       console.error(error);
@@ -154,7 +154,7 @@ function SquareChoice({ questionId }: FactoryComponentInterface) {
         trustAnswerId: questionData?.trust_answer_id,
         answers: answerData?.map(({ order, ...data }) => data),
       }),
-    [currentState, answerData, questionData],
+    [currentState, answerData, questionData]
   );
 
   return (
