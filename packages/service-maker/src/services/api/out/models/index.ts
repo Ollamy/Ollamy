@@ -677,6 +677,19 @@ export type GetCourseRequestStatusEnum = typeof GetCourseRequestStatusEnum[keyof
 /**
  * 
  * @export
+ * @interface GetLastBuildUrlResponse
+ */
+export interface GetLastBuildUrlResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetLastBuildUrlResponse
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
  * @interface GetQuestionModel
  */
 export interface GetQuestionModel {
@@ -1251,6 +1264,12 @@ export interface Question {
      * @type {string}
      * @memberof Question
      */
+    type: QuestionTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Question
+     */
     question: string;
     /**
      * 
@@ -1259,6 +1278,19 @@ export interface Question {
      */
     answers: Array<Answer>;
 }
+
+
+/**
+ * @export
+ */
+export const QuestionTypeEnum = {
+    FreeAnswer: 'FREE_ANSWER',
+    MultipleChoice: 'MULTIPLE_CHOICE',
+    SquareChoice: 'SQUARE_CHOICE',
+    OrderChoice: 'ORDER_CHOICE'
+} as const;
+export type QuestionTypeEnum = typeof QuestionTypeEnum[keyof typeof QuestionTypeEnum];
+
 /**
  * 
  * @export

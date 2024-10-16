@@ -1939,6 +1939,51 @@
         ]
       }
     },
+    "/mobileApp/webhook/new_build": {
+      "post": {
+        "operationId": "MobileAppController_registerSection",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebHookMobileBuild"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "MobileApp"
+        ]
+      }
+    },
+    "/mobileApp/last_build_url": {
+      "get": {
+        "operationId": "MobileAppController_getLastBuildUrl",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "lesson's questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLastBuildUrlResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "MobileApp"
+        ]
+      }
+    },
     "/badge/unlocked": {
       "get": {
         "operationId": "BadgeController_getBadges",
@@ -1973,6 +2018,21 @@
             "in": "query",
             "schema": {
               "minimum": 1
+            }
+          },
+          {
+            "name": "typeOfQuestion",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": "MULTIPLE_CHOICE",
+              "enum": [
+                "FREE_ANSWER",
+                "MULTIPLE_CHOICE",
+                "SQUARE_CHOICE",
+                "ORDER_CHOICE"
+              ],
+              "type": "string"
             }
           }
         ],
@@ -2015,54 +2075,6 @@
         ]
       }
     },
-    "/ai/create-generated-question/{lessonId}": {
-      "post": {
-        "operationId": "AiController_createQuestion",
-        "parameters": [
-          {
-            "name": "lessonId",
-            "required": true,
-            "in": "path",
-            "description": "The lesson id to create the questions for",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "Object containing a list of questions with their answers to create",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Question"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CourseTrueResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Parameters are not valid"
-          }
-        },
-        "tags": [
-          "Ai"
-        ]
-      }
-    },
     "/ai/create-and-generate-question/{lessonId}": {
       "post": {
         "operationId": "AiController_createAndGenerateQuestion",
@@ -2082,6 +2094,21 @@
             "in": "query",
             "schema": {
               "minimum": 1
+            }
+          },
+          {
+            "name": "typeOfQuestion",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": "MULTIPLE_CHOICE",
+              "enum": [
+                "FREE_ANSWER",
+                "MULTIPLE_CHOICE",
+                "SQUARE_CHOICE",
+                "ORDER_CHOICE"
+              ],
+              "type": "string"
             }
           }
         ],
@@ -3937,6 +3964,21 @@
           }
         }
       },
+      "WebHookMobileBuild": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetLastBuildUrlResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
       "BadgeModel": {
         "type": "object",
         "properties": {
@@ -4000,6 +4042,15 @@
       "Question": {
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "FREE_ANSWER",
+              "MULTIPLE_CHOICE",
+              "SQUARE_CHOICE",
+              "ORDER_CHOICE"
+            ]
+          },
           "question": {
             "type": "string"
           },
@@ -4011,6 +4062,7 @@
           }
         },
         "required": [
+          "type",
           "question",
           "answers"
         ]

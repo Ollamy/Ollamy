@@ -7,6 +7,8 @@ import { sectionActions } from 'services/api/routes/section';
 import { statisticsActions } from 'services/api/routes/statistics';
 import { userActions } from 'services/api/routes/user';
 
+import { mobileAppActions } from './routes/mobileApp';
+
 const api = {
   user: userActions,
   course: courseActions,
@@ -14,6 +16,7 @@ const api = {
   lesson: lessonActions,
   question: questionActions,
   answer: answerActions,
+  mobileApp: mobileAppActions,
   lecture: lectureActions,
   statistics: statisticsActions,
 };

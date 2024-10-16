@@ -34,6 +34,7 @@ jobs:
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
       REDIS_USERNAME: ${{ secrets.REDIS_USERNAME }}
+      EAS_BUILD_WEBHOOK_SECRET: ${{ secrets.EAS_BUILD_WEBHOOK_SECRET }}
       FRONTEND_URL: "http://localhost:3000"
       FRONTEND_PORT: "3000"
 

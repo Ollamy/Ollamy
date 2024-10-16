@@ -16,6 +16,7 @@ import { LectureModule } from './lecture/lecture.module';
 import { AiModule } from './ai/ai.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { MobileAppModule } from './mobileApp/mobileApp.module';
 import { BadgeModule } from './badge/badge.module';
 import { StripeModule } from './stripe/stripe.module';
 import { SessionModule } from './session/session.module';
@@ -32,6 +33,7 @@ import { EventModule } from './event/event.module';
     AnswerModule,
     PictureModule,
     LectureModule,
+    MobileAppModule,
     BadgeModule,
     AiModule,
     StripeModule,
