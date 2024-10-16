@@ -13,7 +13,7 @@ export class MobileAppController {
   constructor(private readonly mobileAppService: MobileAppService) {}
 
   @Post('webhook/new_build')
-  async registerSection(
+  async handleNewBuild(
     @Headers() headers: WebHookMobileBuildHeader,
     @Body() body: WebHookMobileBuild,
   ): Promise<void> {

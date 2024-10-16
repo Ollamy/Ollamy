@@ -6,7 +6,7 @@ import type {
   GetLastBuildUrlResponse,
 } from '../models/index';
 
-export interface RegisterSectionRequest {
+export interface HandleNewBuildRequest {
     body: object;
 }
 
@@ -39,9 +39,9 @@ export class MobileAppApi extends runtime.BaseAPI {
 
     /**
      */
-    async registerSectionRaw(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async handleNewBuildRaw(requestParameters: HandleNewBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling registerSection.');
+            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling handleNewBuild.');
         }
 
         const queryParameters: any = {};
@@ -62,8 +62,8 @@ export class MobileAppApi extends runtime.BaseAPI {
 
     /**
      */
-    static registerSection(requestParameters: RegisterSectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        return localMobileAppApi.registerSectionRaw(requestParameters, initOverrides);
+    static handleNewBuild(requestParameters: HandleNewBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        return localMobileAppApi.handleNewBuildRaw(requestParameters, initOverrides);
     }
 
 }
