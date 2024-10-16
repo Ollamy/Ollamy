@@ -1941,7 +1941,7 @@
     },
     "/mobileApp/webhook/new_build": {
       "post": {
-        "operationId": "MobileAppController_registerSection",
+        "operationId": "MobileAppController_handleNewBuild",
         "parameters": [],
         "requestBody": {
           "required": true,
