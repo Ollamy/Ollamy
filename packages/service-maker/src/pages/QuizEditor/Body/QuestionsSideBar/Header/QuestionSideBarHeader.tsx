@@ -20,6 +20,7 @@ function QuestionSideBarHeader({
   const [fileTarget, setFileTarget] = useState<File | undefined>(undefined);
   // const [contextTarget, setContextTarget] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const handleGenerateQuiz = useCallback(async () => {
     if (numberOfQuestionTarget < 0 || !fileTarget) {
@@ -33,10 +34,18 @@ function QuestionSideBarHeader({
       file: fileTarget,
       numberOfQuestions: numberOfQuestionTarget,
       typeOfQuestion: 'MULTIPLE_CHOICE',
-    }).then(() => {
-      setIsLoading(false);
-    });
+    })
+      .then(() => {
+        setIsLoading(false);
+        setError(undefined);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.error(err);
+      });
   }, [numberOfQuestionTarget, fileTarget, generateQuiz, lessonId]);
+
+  console.log(error);
 
   return (
     <Container>
@@ -60,7 +69,7 @@ function QuestionSideBarHeader({
           </Button>
         }
       />
-
+      {error && <p>Error: please retry</p>}
       <AddQuestion lessonId={lessonId} />
     </Container>
   );
