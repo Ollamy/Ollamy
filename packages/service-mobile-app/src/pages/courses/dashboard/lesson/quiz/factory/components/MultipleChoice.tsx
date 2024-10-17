@@ -17,7 +17,6 @@ function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryCo
           onPress={() => onPress(a)}
           key={a.id}
           id={a.id}
-          p={4}
           borderRadius={8}
           borderWidth={1}
           borderColor={
@@ -37,7 +36,7 @@ function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryCo
               : 'white'
           }
         >
-          <HStack w={'full'} alignItems={'center'} justifyContent={'space-between'} space={24}>
+          <HStack p={4} w={'full'} alignItems={'center'} justifyContent={'space-between'} space={4}>
             <Circle
               borderWidth={1}
               borderColor={answer === a.id ? '#2C8DE7' : '#303030'}
@@ -48,6 +47,7 @@ function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryCo
               {answer === a.id && <Circle size={4} bg={'#2C8DE7'} />}
             </Circle>
             <Text
+              flex={1}
               color={
                 correctAnswer && answer !== correctAnswer && answer === a.id
                   ? 'white'
