@@ -26,7 +26,6 @@ function BadgeDashboard() {
           icon={TRESOR}
           colorStyle={{ bg: '#FFE5CF', borderColor: '#E57E25', titleColor: '#E6674F', descriptionColor: '#DB8878' }}
         />
-
         <VStack w={'full'}>
           {badges.map((badge, index) => (
             <BadgeListItem badge={badge} index={index} key={badge.id} />

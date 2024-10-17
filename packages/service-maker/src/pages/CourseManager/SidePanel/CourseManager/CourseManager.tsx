@@ -22,6 +22,7 @@ import {
   IconButton,
   Tooltip,
 } from '@radix-ui/themes';
+import CourseCustomDialogTitleDescription from 'components/RadixUi/Dialog/CourseCustomDialogTitleDescription';
 
 interface CourseManagerProps {
   courseId: string;
@@ -40,10 +41,10 @@ function CourseManager({ courseId }: CourseManagerProps) {
     courseActions.useGenerateShareCode();
 
   const handleEditCourse = useCallback(
-    async (title: string, description: string) => {
+    async (title: string, description: string, picture: string) => {
       await updateCourse({
         id: courseId,
-        updateCourseModel: { title, description },
+        updateCourseModel: { title, description, picture },
       });
     },
     [updateCourse, courseId],
@@ -151,7 +152,7 @@ function CourseManager({ courseId }: CourseManagerProps) {
               </DataList.Item>
             </DataList.Root>
             <ButtonContainer>
-              <CustomDialogTitleDescription
+              <CourseCustomDialogTitleDescription
                 dialogTitle={'Edit course'}
                 dialogDescription={
                   'Edit the title and description of your current course.'

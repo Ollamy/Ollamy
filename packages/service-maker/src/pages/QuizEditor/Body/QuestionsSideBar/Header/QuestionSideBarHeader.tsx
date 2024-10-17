@@ -21,6 +21,7 @@ function QuestionSideBarHeader({
   // const [contextTarget, setContextTarget] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const handleGenerateQuiz = useCallback(async () => {
     if (numberOfQuestionTarget < 0 || !fileTarget) {
@@ -37,6 +38,10 @@ function QuestionSideBarHeader({
     }).then(() => {
       setIsLoading(false);
       setIsModalOpen(false);
+      setError(undefined);
+    }).catch((err) => {
+      setIsLoading(false);
+      console.error(err);
     });
   }, [numberOfQuestionTarget, fileTarget, generateQuiz, lessonId]);
 
@@ -65,7 +70,7 @@ function QuestionSideBarHeader({
           </Button>
         }
       />
-
+      {error && <p>Error: please retry</p>}
       <AddQuestion lessonId={lessonId} />
     </Container>
   );

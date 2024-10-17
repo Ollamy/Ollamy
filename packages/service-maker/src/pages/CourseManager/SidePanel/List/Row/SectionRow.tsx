@@ -44,7 +44,6 @@ const Container = styled.div`
   gap: 8px;
 
   width: 100%;
-  height: 40px;
   min-height: 40px;
   border-radius: 4px;
 
@@ -73,7 +72,7 @@ const Index = styled.div`
   align-items: center;
   justify-content: center;
 
-  height: 100%;
+  height: 30px;
   aspect-ratio: 1 / 1;
 
   font-size: 12px;
