@@ -19,7 +19,7 @@ function QuestionRow({ index, questionId, title }: QuestionRowProps) {
     if (courseId) {
       setSearchParams({ courseId, questionId });
     }
-  }, [questionId, setSearchParams]);
+  }, [courseId, questionId, setSearchParams]);
 
   return (
     <Container
