@@ -1,13 +1,20 @@
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { Circle, HStack, Icon, Pressable, Text, VStack } from 'native-base';
 import type { FactoryComponentInterface } from 'src/pages/courses/dashboard/lesson/quiz/factory/QuizFactory';
+import type { GetAnswerRequest } from 'src/services/question/question.dto';
 
 function MultipleChoice({ answers, correctAnswer, answer, setAnswer }: FactoryComponentInterface) {
+  const onPress = (a: GetAnswerRequest) => {
+    if (!correctAnswer) {
+      setAnswer(a.id);
+    }
+  };
+
   return (
     <VStack space={4} w={'full'}>
       {answers.map((a) => (
         <Pressable
-          onPress={() => setAnswer(a.id)}
+          onPress={() => onPress(a)}
           key={a.id}
           id={a.id}
           p={4}
