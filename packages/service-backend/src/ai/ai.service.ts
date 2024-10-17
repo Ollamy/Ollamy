@@ -283,7 +283,7 @@ What was the core problem statement for the travel app?
         }
       }
 
-      return parseCourse(fullResponse);
+      return fullResponse;
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
