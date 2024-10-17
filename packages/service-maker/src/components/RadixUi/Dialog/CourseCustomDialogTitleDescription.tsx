@@ -54,7 +54,7 @@ function CourseCustomDialogTitleDescription<T>({
       description: defaultDescription,
       picture: defaultPicture,
     }),
-    [defaultTitle, defaultDescription, defaultPicture]
+    [defaultTitle, defaultDescription, defaultPicture],
   );
 
   const [droppedImage, setDroppedImage] = useState<File | null>(null);
@@ -72,7 +72,7 @@ function CourseCustomDialogTitleDescription<T>({
     async (pictureBase64: string) => {
       setPicture(pictureBase64);
     },
-    [setPicture]
+    [setPicture],
   );
 
   const [image, setImage] = useState<File | null>(null);
@@ -107,7 +107,7 @@ function CourseCustomDialogTitleDescription<T>({
         setImage((event.target.files as FileList)[0]);
       }
     },
-    []
+    [],
   );
 
   return (
