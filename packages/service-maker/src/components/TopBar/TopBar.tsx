@@ -31,7 +31,7 @@ function TopBar({ isProfileDisplayed = true }: TopBarProps) {
     } else {
       navigate('/home');
     }
-  }, [lessonId, navigate, urlParams.courseId]);
+  }, [navigate, urlParams.courseId]);
 
   const handleClickProfile = useCallback(() => {
     navigate('/user');
