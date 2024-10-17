@@ -45,7 +45,6 @@ function QuestionSideBarHeader({
       });
   }, [numberOfQuestionTarget, fileTarget, generateQuiz, lessonId]);
 
-  console.log(error);
 
   return (
     <Container>
