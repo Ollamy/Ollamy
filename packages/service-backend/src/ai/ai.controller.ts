@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   ConflictException,
   Query,
+  Body,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -16,11 +17,12 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { AllowedMimeType, FileAi, Question, } from 'ai/ai.dto';
+import { AllowedMimeType, FileAi, Question } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AnswerType } from '@prisma/client';
+import { OllContext } from '../context/context.decorator';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Ai')
@@ -76,7 +78,9 @@ export class AiController {
       throw new ConflictException('Number of questions must be at least 1');
     }
 
-    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+    if (
+      !Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)
+    ) {
       throw new ConflictException(`File type ${file.mimetype} is not allowed`);
     }
 
@@ -85,7 +89,11 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateText(AiFile, numberOfQuestions, typeOfQuestion);
+    return await this.aiService.generateText(
+      AiFile,
+      numberOfQuestions,
+      typeOfQuestion,
+    );
   }
 
   @ApiBody({
@@ -134,8 +142,11 @@ export class AiController {
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
     @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
   ) {
-
-    const questions = await this.generateText(file, numberOfQuestions, typeOfQuestion);
+    const questions = await this.generateText(
+      file,
+      numberOfQuestions,
+      typeOfQuestion,
+    );
     if (!questions) {
       throw new ConflictException('Failed to generate questions');
     }
@@ -166,6 +177,24 @@ export class AiController {
     @Param('questionId') questionId: string,
     @Query('numberWrongAnswers') numberWrongAnswers: number = 3,
   ) {
-    return await this.aiService.generateFakeAnswer(questionId, numberWrongAnswers);
+    return await this.aiService.generateFakeAnswer(
+      questionId,
+      numberWrongAnswers,
+    );
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'The fake answer generated from the question',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+    },
+  })
+  @LoggedMiddleware(true)
+  @Post('/generate-course')
+  async generateCourse(@Body() body: any, @OllContext() ctx: any) {
+    return await this.aiService.createCourse(body, ctx.__user.id);
   }
 }
