@@ -1,15 +1,12 @@
-import {
-  ConflictException,
-  Injectable, Logger,
-} from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import {
   GenerateContentRequest,
   GenerateContentResult,
   GenerativeModelPreview,
   HarmBlockThreshold,
   HarmCategory,
-  VertexAI
-} from '@google-cloud/vertexai'
+  VertexAI,
+} from '@google-cloud/vertexai';
 import { AllowedMimeType, FileAi, Question } from './ai.dto';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +21,10 @@ export class AiService {
   static generativeModel: GenerativeModelPreview;
 
   constructor() {
-    AiService.vertexAi = new VertexAI({ project: 'ultimate-opus-422723-q5', location: 'us-central1' });
+    AiService.vertexAi = new VertexAI({
+      project: 'ultimate-opus-422723-q5',
+      location: 'us-central1',
+    });
     AiService.model = 'gemini-experimental';
     AiService.generativeModel = AiService.vertexAi.preview.getGenerativeModel({
       model: AiService.model,
@@ -32,48 +32,55 @@ export class AiService {
         maxOutputTokens: 8192,
         temperature: 1,
         topP: 0.95,
-        responseMimeType: 'application/json'
+        responseMimeType: 'application/json',
       } as any,
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_NONE,
         },
         {
           category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_NONE,
         },
         {
           category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
+          threshold: HarmBlockThreshold.BLOCK_NONE,
         },
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-          threshold: HarmBlockThreshold.BLOCK_NONE
-        }
-      ]
+          threshold: HarmBlockThreshold.BLOCK_NONE,
+        },
+      ],
     });
   }
 
-  async generateText(file: FileAi, numberOfQuestions: number, questionType: AnswerType = 'MULTIPLE_CHOICE'): Promise<Question[]> {
+  async generateText(
+    file: FileAi,
+    numberOfQuestions: number,
+    questionType: AnswerType = 'MULTIPLE_CHOICE',
+  ): Promise<Question[]> {
     const req: GenerateContentRequest = {
       contents: [
         {
           role: 'user',
           parts: [
             {
-              text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate ${questionType} questions from. Please create **${numberOfQuestions}** questions. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`
+              text: `Here is a ${
+                AllowedMimeType[file.mimeType]
+              } file I need you to generate ${questionType} questions from. Please create **${numberOfQuestions}** questions. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`,
             },
             {
-              inlineData: file
-            }
-          ]
-        }
+              inlineData: file,
+            },
+          ],
+        },
       ],
       systemInstruction: {
         role: 'model',
-        parts: [{
-          text: `You are an AI assistant designed to create different types of questions from PDF files. You will receive a PDF file, the desired number of questions, and the question type as input.
+        parts: [
+          {
+            text: `You are an AI assistant designed to create different types of questions from PDF files. You will receive a PDF file, the desired number of questions, and the question type as input.
 
     **Supported Question Types:**
 
@@ -134,18 +141,24 @@ export class AiService {
     **Your Task**
 
     1. **Validate Input:**
-       - Ensure the ${AllowedMimeType[file.mimeType]} file is readable and contains sufficient information for question generation.
+       - Ensure the ${
+         AllowedMimeType[file.mimeType]
+       } file is readable and contains sufficient information for question generation.
        - Check that the requested number of questions is a positive integer. If not, return an error message: { "error": "Invalid number of questions. Please provide a positive integer." }.
        - Check that the question type is one of the supported types. If not, return an error message: { "error": "Invalid question type. Please choose from: FREE_ANSWER, MULTIPLE_CHOICE, SQUARE_CHOICE, ORDER_CHOICE" }.
 
     2. **Extract Information:**
-       - Analyze the ${AllowedMimeType[file.mimeType]} to identify key concepts, facts, and relationships.
+       - Analyze the ${
+         AllowedMimeType[file.mimeType]
+       } to identify key concepts, facts, and relationships.
 
     3. **Formulate Questions:**
        - Craft clear, concise, and relevant questions of the specified type.
 
     4. **Handle Errors:**
-       - If the ${AllowedMimeType[file.mimeType]} is unreadable, lacks sufficient content, or there's an issue generating the specified number of questions, return an error message: { "error": "Your specific error message here" }.
+       - If the ${
+         AllowedMimeType[file.mimeType]
+       } is unreadable, lacks sufficient content, or there's an issue generating the specified number of questions, return an error message: { "error": "Your specific error message here" }.
 
     5. **Return Output:**
        - If successful, return the questions as a JSON in the following format (the JSON should be serialized without spaces or newlines):
@@ -164,21 +177,23 @@ export class AiService {
           ... (more questions)
         ]
        \`\`\`
-         `
-        }]
-      }
+         `,
+          },
+        ],
+      },
     };
-
 
     let response: GenerateContentResult;
     try {
       response = await AiService.generativeModel.generateContent(req);
     } catch (e) {
-      Logger.error(e)
+      Logger.error(e);
       throw new ConflictException('Failed to generate questions');
     }
 
-    const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
+    const data = JSON.parse(
+      response.response.candidates[0].content.parts[0].text,
+    );
 
     if (data.error) {
       throw new ConflictException(data);
@@ -256,6 +271,135 @@ export class AiService {
     return { success: true } as CourseTrueResponse;
   }
 
+  async createCourse(courseData: any, userId: string) {
+    const sectionsToCreate: Prisma.SectionCreateManyInput[] = [];
+    const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
+    const lecturesToCreate: Prisma.LectureCreateManyInput[] = [];
+    const lessonsToCreate: Prisma.LessonCreateManyInput[] = [];
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    const courseId = uuidv4();
+    let currentSectionOrder = 'a0';
+
+    for (const sectionData of courseData.sections) {
+      const sectionId = uuidv4();
+
+      currentSectionOrder = generateKeyBetween(currentSectionOrder, null);
+      const sectionOrder = currentSectionOrder;
+
+      const lessonForThisSection: Prisma.LessonCreateManyInput[] = [];
+
+      let currentLessonOrder = 'a0';
+
+      for (const lessonData of sectionData.lessons) {
+        const lessonId = uuidv4();
+        const lectureId = uuidv4();
+
+        lecturesToCreate.push({
+          id: lectureId,
+          lesson_id: lessonId,
+          data: lessonData.lecture,
+        });
+
+        let currentQuestionOrder = 'a0';
+        const questionsForThisSection: Prisma.QuestionCreateManyInput[] = [];
+
+        for (const questionData of lessonData.quiz) {
+          const questionId = uuidv4();
+
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+          const questionOrder = currentQuestionOrder;
+
+          const answersForThisQuestion: Prisma.AnswerCreateManyInput[] = [];
+          let trustAnswerId: string | undefined;
+
+          let currentAnswerOrder = 'a0';
+
+          for (const answerData of questionData.answers) {
+            const answerId = uuidv4();
+
+            answersForThisQuestion.push({
+              id: answerId,
+              question_id: questionId,
+              data: answerData.answer,
+              order: currentAnswerOrder,
+            });
+
+            if (answerData.correct) {
+              trustAnswerId = answerId;
+            }
+
+            currentAnswerOrder = generateKeyBetween(currentAnswerOrder, null);
+          }
+
+          questionsForThisSection.push({
+            id: questionId,
+            lesson_id: lessonId,
+            title: questionData.question,
+            type_question: QuestionType.TEXT,
+            type_answer: questionData.type,
+            order: questionOrder,
+            trust_answer_id: trustAnswerId,
+          });
+
+          answersToCreate.push(...answersForThisQuestion);
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+        }
+
+        lessonForThisSection.push({
+          id: lessonId,
+          title: lessonData.title,
+          description: lessonData.description,
+          order: currentLessonOrder,
+          section_id: sectionId,
+        });
+
+        questionsToCreate.push(...questionsForThisSection);
+        currentLessonOrder = generateKeyBetween(currentLessonOrder, null);
+      }
+
+      sectionsToCreate.push({
+        id: sectionId,
+        title: sectionData.title,
+        description: sectionData.description,
+        order: sectionOrder,
+        course_id: courseId,
+      });
+
+      lessonsToCreate.push(...lessonForThisSection);
+    }
+
+    try {
+      await prisma.$transaction([
+        prisma.course.create({
+          data: {
+            id: courseId,
+            title: courseData.title,
+            description: courseData.description,
+            owner_id: userId,
+          },
+        }),
+        prisma.usertoCourse.create({
+          data: {
+            user_id: userId,
+            course_id: courseId,
+            role_user: 'OWNER',
+          },
+        }),
+        prisma.section.createMany({ data: sectionsToCreate }),
+        prisma.lesson.createMany({ data: lessonsToCreate }),
+        prisma.lecture.createMany({ data: lecturesToCreate }),
+        prisma.question.createMany({ data: questionsToCreate }),
+        prisma.answer.createMany({ data: answersToCreate }),
+      ]);
+    } catch (e) {
+      Logger.error(e.message);
+      throw new ConflictException(e.message);
+    }
+
+    return { success: true } as CourseTrueResponse;
+  }
+
   async generateFakeAnswer(questionId: string, numberWrongAnswers = 3) {
     const question = await prisma.question.findUnique({
       where: { id: questionId },
@@ -267,12 +411,12 @@ export class AiService {
           select: {
             Lecture: {
               select: {
-                data: true
-              }
-            }
-          }
-        }
-      }
+                data: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!question) {
@@ -282,18 +426,24 @@ export class AiService {
     const existingAnswers = await prisma.answer.findMany({
       where: { question_id: questionId },
       select: { data: true, id: true, order: true },
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     });
 
-    const correctAnswer = existingAnswers.find(a => a.id === question.trust_answer_id)?.data;
-    const incorrectAnswers = existingAnswers.filter(a => a.id !== question.trust_answer_id).map(a => a.data);
+    const correctAnswer = existingAnswers.find(
+      (a) => a.id === question.trust_answer_id,
+    )?.data;
+    const incorrectAnswers = existingAnswers
+      .filter((a) => a.id !== question.trust_answer_id)
+      .map((a) => a.data);
 
     const context = `
     Question: ${question.title}
     ${question.description ? `Description: ${question.description}` : ''}
-    Lesson Content: ${question.Lesson.Lecture.map(l => l.data).join('\n')}
+    Lesson Content: ${question.Lesson.Lecture.map((l) => l.data).join('\n')}
     Correct Answer if available: ${correctAnswer || 'Not available'}
-    Existing Incorrect Answers if available: ${incorrectAnswers.join(', ') || 'Not available'}
+    Existing Incorrect Answers if available: ${
+      incorrectAnswers.join(', ') || 'Not available'
+    }
   `;
 
     const prompt = `
@@ -306,13 +456,14 @@ export class AiService {
       contents: [
         {
           role: 'user',
-          parts: [{ text: prompt + context }]
-        }
+          parts: [{ text: prompt + context }],
+        },
       ],
       systemInstruction: {
         role: 'model',
-        parts: [{
-          text: `You are an AI assistant designed to generate plausible but incorrect answer choices for multiple-choice questions. 
+        parts: [
+          {
+            text: `You are an AI assistant designed to generate plausible but incorrect answer choices for multiple-choice questions. 
 
           You will be given:
           - The question itself
@@ -332,9 +483,10 @@ export class AiService {
               "incorrect answer 2",
               ...
             ]
-            \`\`\` `
-        }]
-      }
+            \`\`\` `,
+          },
+        ],
+      },
     };
 
     let response;
@@ -345,7 +497,9 @@ export class AiService {
       throw new ConflictException('Failed to generate fake answers');
     }
 
-    const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
+    const data = JSON.parse(
+      response.response.candidates[0].content.parts[0].text,
+    );
 
     if (data.error) {
       throw new ConflictException(data);
@@ -353,7 +507,8 @@ export class AiService {
 
     const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
 
-    let lastAnswerOrder = existingAnswers[existingAnswers.length - 1]?.order || null;
+    let lastAnswerOrder =
+      existingAnswers[existingAnswers.length - 1]?.order || null;
 
     for (const answer of data) {
       lastAnswerOrder = generateKeyBetween(lastAnswerOrder, null);
@@ -362,7 +517,7 @@ export class AiService {
         id: uuidv4(),
         question_id: questionId,
         data: answer,
-        order: lastAnswerOrder
+        order: lastAnswerOrder,
       });
     }
 
