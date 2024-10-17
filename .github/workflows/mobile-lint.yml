@@ -1,0 +1,27 @@
+name: Lint - Mobile application
+
+on:
+  pull_request:
+    paths:
+      - "packages/service-mobile-app/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+
+      - name: Switch yarn version
+        id: switch-version
+        run: npm install -g yarn@1.22.19
+
+      - name: Install dependencies
+        id: install
+        run: yarn install
+
+      - name: Lint
+        id: lint
+        run: yarn workspace service-mobile-app lint
