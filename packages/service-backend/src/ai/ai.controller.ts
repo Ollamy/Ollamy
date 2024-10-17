@@ -88,6 +88,57 @@ export class AiController {
     return await this.aiService.generateText(AiFile, numberOfQuestions, typeOfQuestion);
   }
 
+
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+  })
+  @ApiQuery({
+    name: 'numberOfQuestionsPerQuiz',
+    type: 'number',
+    schema: {
+      minimum: 1,
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  @LoggedMiddleware(true)
+  @Post('/generate-course')
+  async generateCourse(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('numberOfQuestionsPerQuiz') numberOfQuestionsPerQuiz: number = 10,
+  ): Promise<any> {
+    if (!file) {10
+      throw new ConflictException('File is empty');
+    }
+
+    if (numberOfQuestionsPerQuiz < 1) {
+      throw new ConflictException('Number of questions must be at least 1');
+    }
+
+    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+      throw new ConflictException(`File type ${file.mimetype} is not allowed`);
+    }
+
+    const AiFile: FileAi = {
+      data: file.buffer.toString('base64'),
+      mimeType: file.mimetype,
+    };
+
+    return await this.aiService.generateCourse(AiFile, numberOfQuestionsPerQuiz);
+  }
+
+
   @ApiBody({
     schema: {
       type: 'object',

@@ -22,10 +22,11 @@ export class AiService {
   static vertexAi: VertexAI;
   static model: string;
   static generativeModel: GenerativeModelPreview;
+  static generativeModelText: GenerativeModelPreview;
 
   constructor() {
     AiService.vertexAi = new VertexAI({ project: 'ultimate-opus-422723-q5', location: 'us-central1' });
-    AiService.model = 'gemini-experimental';
+    AiService.model = 'gemini-1.5-flash-002';
     AiService.generativeModel = AiService.vertexAi.preview.getGenerativeModel({
       model: AiService.model,
       generationConfig: {
@@ -53,16 +54,44 @@ export class AiService {
         }
       ]
     });
+
+    AiService.generativeModelText = AiService.vertexAi.preview.getGenerativeModel({
+      model: AiService.model,
+      generationConfig: {
+        maxOutputTokens: 8192,
+        temperature: 1,
+        topP: 0.95,
+        responseMimeType: 'text/plain'
+      } as any,
+      safetySettings: [
+        {
+          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+          threshold: HarmBlockThreshold.BLOCK_NONE
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_NONE
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+          threshold: HarmBlockThreshold.BLOCK_NONE
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+          threshold: HarmBlockThreshold.BLOCK_NONE
+        }
+      ]
+    });
   }
 
-  async generateText(file: FileAi, numberOfQuestions: number, questionType: AnswerType = 'MULTIPLE_CHOICE'): Promise<Question[]> {
+  async generateCourse(file: FileAi, numberOfQuestionsPerQuiz = 4): Promise<any> {
     const req: GenerateContentRequest = {
       contents: [
         {
           role: 'user',
           parts: [
             {
-              text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate ${questionType} questions from. Please create **${numberOfQuestions}** questions. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`
+              text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate a course from.  If there is an issue with the file, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`
             },
             {
               inlineData: file
@@ -71,9 +100,215 @@ export class AiService {
         }
       ],
       systemInstruction: {
-        role: 'model',
+        role: 'user',
         parts: [{
-          text: `You are an AI assistant designed to create different types of questions from PDF files. You will receive a PDF file, the desired number of questions, and the question type as input.
+          text: `
+You are an AI assistant that generates structured online courses from uploaded files.  You will receive a file of type ${AllowedMimeType[file.mimeType]} as input. Your task is to process this file and create a well-organized course in the **same language as the input file**. The course should consist of sections, lessons within each section, and each lesson will have:
+
+1. **Title:** A concise and descriptive title.
+2. **Description:** A brief summary of the lesson's content.
+3. **Lecture:**  Markdown formatted text derived from the input file.
+4. **Quiz:** A short quiz to assess understanding.
+
+The number of sections, lessons, and quiz questions per lesson should be dynamically determined based on the content and length of the input file. Aim for around ${numberOfQuestionsPerQuiz} questions per quiz as a guideline, but adjust as needed based on the content.
+
+**Quiz Question Formats:**  You can use the following question types, represented directly in the text output:
+
+* **FREE_ANSWER:** Generate one correct answer.
+  *Example:*
+  FREE_ANSWER
+  What is your favorite color?
+  - BLUE
+
+* **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
+  *Example:*
+  MULTIPLE_CHOICE
+  What is the capital of France?
+  - [ ] LONDON
+  - [x] PARIS
+  - [ ] BERLIN
+  - [ ] MADRID
+  - [ ] ROME
+  - [ ] LISBON
+
+* **SQUARE_CHOICE:** Generate four short answer choices with one correct answer.
+  *Example:*
+  SQUARE_CHOICE
+  What is the capital of France?
+  - [ ] LONDON
+  - [ ] MADRID
+  - [x] PARIS
+  - [ ] BERLIN
+
+* **ORDER_CHOICE:** Generate one sentence answer that needs to be ordered correctly. Words in the sentence should be separated by '/'. Only one answer is generated for this question type.
+  *Example:*
+  ORDER_CHOICE
+  What is the color of the fox?
+  - [x] The / color / of / the / fox / is / red!
+
+
+Choose the most appropriate question type for each question. Ensure questions are clear, concise, and directly relevant to the lesson content. [x] marks the correct answer.
+
+**Error Handling:**
+
+If the input file is unreadable, empty, contains insufficient content to create a meaningful course, or if you encounter any issues generating the course structure or quiz questions, return a JSON object with an error message:  {"error": "Descriptive error message explaining the issue"}
+
+
+**Successful Output:**
+
+If successful, return the course content in a plain text format with the following structure. Use Markdown for formatting lecture content.  All text in the output, including titles, descriptions, lectures, and quiz questions, must be in the **same language** as the input document.
+All the keywords in my formatting must be in English and in Upper case, NEVER translate them.
+**Do not stop generating the course content prematurely. Always continue until the entire course is complete, even if it exceeds the maximum token limit.**
+
+# Course title
+
+Course description
+
+## SECTION 1: Title
+
+SECTION 1 description
+
+### LESSON 1 of SECTION 1: Title
+
+**DESCRIPTION:** Lesson 1 description
+
+**LECTURE:** Lesson 1 lecture
+
+
+**QUIZ 1 FOR LESSON 1:**
+
+Question 1
+MULTIPLE_CHOICE
+What was the main problem identified with existing travel apps?
+- [ ] Too many maps
+- [x] Overwhelming information and lack of personalization
+- [ ] Insufficient number of hotels listed
+- [ ] Too many ads
+
+Question 2
+MULTIPLE_CHOICE
+What was the core problem statement for the travel app?
+- [ ] How might we create the best travel app?
+- [x] How might we empower young travelers to discover unique, personalized experiences while simplifying the planning process?
+- [ ] How might we make the most profitable travel app?
+- [ ] How might we get more users for our app?
+
+
+### LESSON 2 OF SECTION 1: Title
+
+**DESCRIPTION:** Lesson 2 description
+
+**LECTURE:** Lesson 2 lecture
+
+
+**QUIZ 1 FOR LESSON 2:**
+
+Question 1
+MULTIPLE_CHOICE
+What innovative approach was used in the travel app design?
+- [ ] A simple list of attractions
+- [x] A gamified app with personalized avatars and quests
+- [ ] A social media-based approach
+- [ ] A map-only application
+
+Question 2
+MULTIPLE_CHOICE
+What tool was used to create the low-fidelity prototype?
+- [ ] Adobe Photoshop
+- [ ] Sketch
+- [x] Figma
+- [ ] GIMP
+
+
+## SECTION 2: Title
+
+Section 2 description
+
+### LESSON 1 OF SECTION 2: Title
+
+**DESCRIPTION:** Lesson 1 description
+
+**LECTURE:** Lesson 1 lecture
+
+**QUIZ 1 FOR LESSON 1:**
+
+Question 1
+MULTIPLE_CHOICE
+What was the main problem identified with existing travel apps?
+- [ ] Too many maps
+- [x] Overwhelming information and lack of personalization
+- [ ] Insufficient number of hotels listed
+- [ ] Too many ads
+
+Question 2
+MULTIPLE_CHOICE
+What was the core problem statement for the travel app?
+- [ ] How might we create the best travel app?
+- [x] How might we empower young travelers to discover unique, personalized experiences while simplifying the planning process?
+- [ ] How might we make the most profitable travel app?
+- [ ] How might we get more users for our app?
+`
+        }]
+      }
+    };
+
+
+    let fullResponse = "";
+    let continueGenerating = true;
+
+    try {
+      while (continueGenerating) {
+        const response: GenerateContentResult = await AiService.generativeModelText.generateContent(req);
+        const candidate = response.response.candidates[0];
+
+        if (candidate.content.parts[0].text.startsWith('```text')) {
+          candidate.content.parts[0].text = candidate.content.parts[0].text.slice(7);
+        }
+        if (candidate.content.parts[0].text.endsWith('```')) {
+          candidate.content.parts[0].text = candidate.content.parts[0].text.slice(0, -3);
+        }
+        fullResponse += candidate.content.parts[0].text;
+
+        if (candidate.finishReason === 'MAX_TOKENS') {
+          req.contents.push({
+            role: 'model',
+            parts: [{ text: fullResponse }]
+          });
+          req.contents.push({
+            role: 'user',
+            parts: [{ text: "continue from here directly: " + fullResponse.slice(-10) }]
+          });
+        } else {
+          continueGenerating = false;
+        }
+      }
+
+      return parseCourse(fullResponse);
+    } catch (e) {
+      Logger.error(e);
+      throw new ConflictException('Failed to generate course');
+    }
+  }
+
+  async generateText(file: FileAi, numberOfQuestions: number, questionType: AnswerType = 'MULTIPLE_CHOICE'): Promise < Question[] > {
+      const req: GenerateContentRequest = {
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: `Here is a ${AllowedMimeType[file.mimeType]} file I need you to generate ${questionType} questions from. Please create **${numberOfQuestions}** questions. If there is an issue with the file, it is not suitable for question generation, or the number of questions is invalid, please return an error in the following JSON format: {"error": "Your error message here"}`
+              },
+              {
+                inlineData: file
+              }
+            ]
+          }
+        ],
+        systemInstruction: {
+          role: 'model',
+          parts: [{
+            text: `You are an AI assistant designed to create different types of questions from PDF files. You will receive a PDF file, the desired number of questions, and the question type as input.
 
     **Supported Question Types:**
 
@@ -165,22 +400,22 @@ export class AiService {
         ]
        \`\`\`
          `
-        }]
+          }]
+        }
+      };
+
+
+      let response: GenerateContentResult;
+      try {
+        response = await AiService.generativeModel.generateContent(req);
+      } catch(e) {
+        Logger.error(e)
+        throw new ConflictException('Failed to generate questions');
       }
-    };
-
-
-    let response: GenerateContentResult;
-    try {
-      response = await AiService.generativeModel.generateContent(req);
-    } catch (e) {
-      Logger.error(e)
-      throw new ConflictException('Failed to generate questions');
-    }
 
     const data = JSON.parse(response.response.candidates[0].content.parts[0].text);
 
-    if (data.error) {
+      if(data.error) {
       throw new ConflictException(data);
     }
 
@@ -312,7 +547,7 @@ export class AiService {
       systemInstruction: {
         role: 'model',
         parts: [{
-          text: `You are an AI assistant designed to generate plausible but incorrect answer choices for multiple-choice questions. 
+          text: `You are an AI assistant designed to generate plausible but incorrect answer choices for multiple-choice questions.
 
           You will be given:
           - The question itself

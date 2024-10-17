@@ -2075,6 +2075,48 @@
         ]
       }
     },
+    "/ai/generate-course": {
+      "post": {
+        "operationId": "AiController_generateCourse",
+        "parameters": [
+          {
+            "name": "numberOfQuestionsPerQuiz",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "Parameters are not valid"
+          }
+        },
+        "tags": [
+          "Ai"
+        ]
+      }
+    },
     "/ai/create-and-generate-question/{lessonId}": {
       "post": {
         "operationId": "AiController_createAndGenerateQuestion",
