@@ -23,6 +23,7 @@ import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AnswerType } from '@prisma/client';
 import { OllContext } from '../context/context.decorator';
+import { CourseTrueResponse } from '../course/course.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Ai')
@@ -116,7 +117,10 @@ export class AiController {
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
   @Post('/generate-course')
-  async generateCourse(@UploadedFile() file: Express.Multer.File): Promise<Course> {
+  async generateCourse(
+    @UploadedFile() file: Express.Multer.File,
+    @OllContext() ctx: any,
+  ): Promise<CourseTrueResponse> {
     if (!file) {10
       throw new ConflictException('File is empty');
     }
@@ -130,7 +134,7 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateCourse(AiFile);
+    return await this.aiService.generateCourse(AiFile, ctx.__user.id);
   }
 
 

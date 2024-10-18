@@ -85,7 +85,7 @@ export class AiService {
       });
   }
 
-  async convertMarkdownCourseToJSON(markdown: string): Promise<Course> {
+  async convertMarkdownCourseToJSON(markdown: string, userId: string): Promise<CourseTrueResponse> {
     const req: GenerateContentRequest = {
       contents: [
         {
@@ -300,14 +300,6 @@ The JSON object you will have to return should be the following format:
           await AiService.generativeModel.generateContent(req);
         const candidate = response.response.candidates[0];
 
-        if (candidate.content.parts[0].text.startsWith('```text')) {
-          candidate.content.parts[0].text =
-            candidate.content.parts[0].text.slice(7);
-        }
-        if (candidate.content.parts[0].text.endsWith('```')) {
-          candidate.content.parts[0].text =
-            candidate.content.parts[0].text.slice(0, -3);
-        }
         fullResponse += candidate.content.parts[0].text;
 
         if (candidate.finishReason === 'MAX_TOKENS') {
@@ -328,7 +320,14 @@ The JSON object you will have to return should be the following format:
         }
       }
 
-      return JSON.parse(fullResponse) as Course;
+      let dataInJson;
+      try {
+        dataInJson = JSON.parse(fullResponse);
+      } catch (e) {
+        throw new ConflictException('Failed to generate course');
+      }
+
+      return await this.createCourse(dataInJson, userId);
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
@@ -337,6 +336,7 @@ The JSON object you will have to return should be the following format:
 
   async generateCourse(
     file: FileAi,
+    userId: string,
   ): Promise<any> {
     const req: GenerateContentRequest = {
       contents: [
@@ -548,8 +548,8 @@ What was the core problem statement for the travel app?
           continueGenerating = false;
         }
       }
-      console.log(fullResponse);
-      return this.convertMarkdownCourseToJSON(fullResponse);
+
+      return this.convertMarkdownCourseToJSON(fullResponse, userId);
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
@@ -712,7 +712,7 @@ What was the core problem statement for the travel app?
     return result?.order ?? null;
   }
 
-  async createQuizz(questions: Question[], lessonId: string) {
+  async createQuizz(questions: Question[], lessonId: string): Promise<CourseTrueResponse> {
     let lastQuestionOrder = await this.getLastOrderQuestion(lessonId);
 
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
@@ -772,7 +772,7 @@ What was the core problem statement for the travel app?
     return { success: true } as CourseTrueResponse;
   }
 
-  async createCourse(courseData: any, userId: string) {
+  async createCourse(courseData: any, userId: string): Promise<CourseTrueResponse> {
     const sectionsToCreate: Prisma.SectionCreateManyInput[] = [];
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
     const lecturesToCreate: Prisma.LectureCreateManyInput[] = [];
