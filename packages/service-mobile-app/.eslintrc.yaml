@@ -1,0 +1,55 @@
+parser: '@typescript-eslint/parser'
+
+parserOptions:
+  ecmaVersion: 6
+  project: tsconfig.json
+
+ignorePatterns:
+  - '**/node_modules'
+
+env:
+  node: true
+  jest: true
+
+extends:
+  - airbnb-typescript/base
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+
+plugins:
+  - import
+  - prettier
+  - simple-import-sort
+
+rules:
+  prettier/prettier: warn
+
+  no-console: 0
+  max-classes-per-file: 0
+  class-methods-use-this: 0
+
+  import/prefer-default-export: 0
+
+  # React
+  react/jsx-props-no-spreading: 0
+  react/no-unescaped-entities: 0
+
+  'simple-import-sort/imports':
+    [
+      'warn',
+      {
+        'groups':
+          [
+            ["^@?\\w"],
+            ['^(@|admin|auth|back-office|bank-information|corporate|document|fiscalite|integrations|invest|kyc|partner|partners-api|pdf-fill|phoenix|private-equity|product|real-estate|savings-account|sponsorship|user|utils|webhooks)(/.*|$)'],
+            ["^\\u0000"],
+            ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+            ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          ],
+      },
+    ]
+  'simple-import-sort/exports': 1
+
+  '@typescript-eslint/no-non-null-assertion': off
+  '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }]
+  '@typescript-eslint/ban-ts-comment': off

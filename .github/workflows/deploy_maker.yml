@@ -1,0 +1,67 @@
+name: Deploy maker test version
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  build:
+    if: ${{ github.event.label.name == 'Deploy-maker-test-version' }}
+    runs-on: ubuntu-latest
+    environment: Docker
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy maker to Staging server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            cd ollamy-deploy
+            git fetch origin
+            git checkout ${{ github.head_ref || github.ref_name }} && git pull origin ${{ github.head_ref || github.ref_name }}
+            sed -i 's#REDIS_PORT=6379#REDIS_PORT=6380#g' .env
+            sed -i 's#POSTGRES_PORT=5432#POSTGRES_PORT=5433#g' .env
+            sed -i 's#BACKEND_PORT=3000#BACKEND_PORT=4545#g' .env
+            sed -i 's#FRONTEND_PORT=5173#FRONTEND_PORT=5174#g' .env
+            sed -i 's#VITE_PUBLIC_BACKEND_URL=#VITE_PUBLIC_BACKEND_URL=http://${{ secrets.REMOTE_HOST }}:5174#g' .env
+            source .env
+            docker compose build maker
+            docker compose up -d maker
+        continue-on-error: true
+
+      - name: send PR comment
+        uses: mshick/add-pr-comment@v2
+        if: ${{ success() }}
+        with:
+          message-id: deploy-test-version
+          message: |
+            The deployment was successful! 🚀🚀🚀
+            The maker test version is now available at: http://${{ secrets.REMOTE_HOST }}:5174
+            🛑🛑 The server will be stopped in 10 minutes. 🛑🛑
+
+      - name: STOP the Staging server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            cd ollamy-deploy
+            sleep 600
+            docker compose stop maker &> /dev/null || true
+            echo "The server has been stopped. cleanup completed."
+            exit 0
+        continue-on-error: true
+
+      - name: send PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: deploy-test-version
+          message: |
+            The server has been stopped. cleanup completed.

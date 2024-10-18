@@ -1,0 +1,73 @@
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import type { CustomCourseSectionModel } from 'pages/CourseManager/SidePanel/CourseSidePanel';
+import SectionRow from 'pages/CourseManager/SidePanel/List/Row/SectionRow';
+import styled from 'styled-components';
+
+import { Skeleton, Text } from '@radix-ui/themes';
+
+interface SectionListProps {
+  data?: CustomCourseSectionModel[];
+}
+
+function SectionList({ data }: SectionListProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sectionId = searchParams.get('sectionId');
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const firstId = data[0].id;
+
+      if (!sectionId && firstId) {
+        setSearchParams({ sectionId: firstId });
+      }
+    }
+  }, [data, sectionId, setSearchParams]);
+
+  return data && data.length ? (
+    <Container>
+      {data.map(({ id, title, description, realIndex }, index) => (
+        <SectionRow
+          id={id}
+          key={id}
+          title={title}
+          index={(realIndex || index) + 1}
+          description={description}
+          isActive={sectionId === id}
+        />
+      ))}
+    </Container>
+  ) : data && !data.length ? (
+    <LoadingContainer>
+      <Text>No results or sections…</Text>
+    </LoadingContainer>
+  ) : (
+    <LoadingContainer>
+      <Skeleton width={'258px'} height={'40px'} />
+      <Skeleton width={'258px'} height={'40px'} />
+    </LoadingContainer>
+  );
+}
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--gray-11);
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  gap: 8px;
+
+  overflow: scroll;
+`;
+
+export default SectionList;

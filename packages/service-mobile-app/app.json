@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "scheme": "ollamy-app",
+    "name": "Ollamy",
+    "slug": "ollamy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/app-icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ollamy-app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "ollamy.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "969b5b48-a26a-4885-8aa8-767c139c4d18"
+      }
+    },
+    "owner": "ollamy"
+  }
+}

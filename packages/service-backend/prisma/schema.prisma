@@ -1,0 +1,375 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgcrypto]
+}
+
+enum Role {
+  MEMBER
+  OWNER
+  ADMIN
+}
+
+enum PermissionUser {
+  READ
+  WRITE
+  DELETE
+  PING
+  ADMIN
+}
+
+enum PermissionCourse {
+  READ
+  WRITE
+  DELETE
+  PING
+  ADMIN
+}
+
+enum PermissionSection {
+  READ
+  WRITE
+  DELETE
+  PING
+}
+
+enum PermissionLesson {
+  READ
+  WRITE
+  DELETE
+  PING
+}
+
+enum SubscriptionPlan {
+  BASIC
+  ESSENTIAL
+  MASTER
+}
+
+model User {
+  id               String             @id @default(uuid()) @db.Uuid
+  firstname        String
+  lastname         String
+  email            String             @unique
+  password         String
+  communities_id   String[]           @db.Uuid
+  UsertoCourse     UsertoCourse[]
+  Course           Course[]
+  Message          Message[]
+  UserDiscussions  UserDiscussions[]
+  UsertoLesson     UsertoLesson[]
+  UsertoScore      UsertoScore[]
+  UserBadges       UserBadges[]
+  UserSubscription UserSubscription[]
+  UsertoSection    UsertoSection[]
+  UserSession      UserSession[]
+  Product          Product[]
+  LogEvent         LogEvent[]
+}
+
+model UsertoCourse {
+  id     String @id @default(uuid()) @db.Uuid
+  course Course @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  user   User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  role_user          Role                @default(MEMBER)
+  permission_user    PermissionUser[]    @default([])
+  permission_course  PermissionCourse[]  @default([])
+  permission_section PermissionSection[] @default([])
+  permission_lesson  PermissionLesson[]  @default([])
+  course_id          String              @db.Uuid
+  user_id            String              @db.Uuid
+  score              Int?                @default(0)
+  hp                 Int?                @default(20)
+  status             Status              @default(NOT_STARTED)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([course_id, user_id])
+}
+
+model UsertoSection {
+  id      String  @id @default(uuid()) @db.Uuid
+  section Section @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  user    User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  section_id String @db.Uuid
+  user_id    String @db.Uuid
+
+  score  Int?   @default(0)
+  status Status @default(NOT_STARTED)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([section_id, user_id])
+}
+
+enum Status {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model UsertoLesson {
+  id                String   @id @default(uuid()) @db.Uuid
+  lesson            Lesson   @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  user              User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  lesson_id         String   @db.Uuid
+  user_id           String   @db.Uuid
+  score             Int?     @default(0)
+  complete_lecture  Boolean  @default(false)
+  complete_question Boolean  @default(false)
+  status            Status   @default(NOT_STARTED)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@unique([lesson_id, user_id])
+}
+
+model Course {
+  id           String         @id @default(uuid()) @db.Uuid
+  section      Section[]
+  userToCourse UsertoCourse[]
+  user         User           @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  owner_id     String         @db.Uuid
+  title        String
+  description  String?
+  picture      Picture?       @relation(references: [id], fields: [picture_id])
+  picture_id   String?        @db.Uuid
+  userSession  UserSession[]
+}
+
+model Section {
+  id            String          @id @default(uuid()) @db.Uuid
+  course        Course          @relation(references: [id], fields: [course_id], onDelete: Cascade)
+  course_id     String          @db.Uuid
+  title         String
+  description   String?
+  Lesson        Lesson[]
+  UsertoSection UsertoSection[]
+  order         String          @default("a0")
+  userSession   UserSession[]
+}
+
+model Lesson {
+  id           String         @id @default(uuid()) @db.Uuid
+  section      Section        @relation(references: [id], fields: [section_id], onDelete: Cascade)
+  section_id   String         @db.Uuid
+  title        String
+  description  String?
+  Questions    Question[]
+  Lecture      Lecture[]
+  UsertoLesson UsertoLesson[]
+  order        String         @default("a0")
+  userSession  UserSession[]
+}
+
+enum AnswerType {
+  FREE_ANSWER
+  MULTIPLE_CHOICE
+  SQUARE_CHOICE
+  ORDER_CHOICE
+}
+
+enum QuestionType {
+  TEXT
+  VIDEO
+  IMAGE
+  AUDIO
+  ORDER
+  OTHER
+}
+
+enum QuestionDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  MASTER
+}
+
+model Lecture {
+  id        String @id @default(uuid()) @db.Uuid
+  Lesson    Lesson @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id String @db.Uuid
+  data      String
+}
+
+model UsertoScore {
+  id      String @id @default(uuid()) @db.Uuid
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id String @db.Uuid
+  score   Int?   @default(0)
+
+  @@unique([user_id])
+}
+
+model Question {
+  id              String              @id @default(uuid()) @db.Uuid
+  Lesson          Lesson              @relation(references: [id], fields: [lesson_id], onDelete: Cascade)
+  lesson_id       String              @db.Uuid
+  title           String
+  type_answer     AnswerType
+  type_question   QuestionType
+  description     String?
+  Answer          Answer[]
+  trust_answer_id String?             @db.Uuid
+  picture         Picture?            @relation(references: [id], fields: [picture_id])
+  picture_id      String?             @db.Uuid
+  points          Int?                @default(0)
+  difficulty      QuestionDifficulty?
+  order           String              @default("a0")
+  time            Int?
+  bonus           Boolean             @default(false)
+}
+
+model Answer {
+  id          String   @id @default(uuid()) @db.Uuid
+  Question    Question @relation(references: [id], fields: [question_id], onDelete: Cascade)
+  question_id String   @db.Uuid
+  data        String?
+  picture     Picture? @relation(references: [id], fields: [picture_id])
+  picture_id  String?  @db.Uuid
+  order       String   @default("a0")
+}
+
+model Discussion {
+  id              String            @id @default(uuid()) @db.Uuid
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  title           String?
+  image_url       String?
+  Message         Message[]
+  UserDiscussions UserDiscussions[]
+}
+
+model Message {
+  id            String      @id @default(uuid()) @db.Uuid
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  discussion_id String      @db.Uuid
+  Discussion    Discussion? @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
+  owner_id      String      @db.Uuid
+  user          User        @relation(references: [id], fields: [owner_id], onDelete: Cascade)
+  content       String
+}
+
+model UserDiscussions {
+  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String     @db.Uuid
+  discussion    Discussion @relation(fields: [discussion_id], references: [id], onDelete: Cascade)
+  discussion_id String     @db.Uuid
+
+  @@id([user_id, discussion_id])
+}
+
+model Picture {
+  id       String     @id @default(uuid()) @db.Uuid
+  filename String
+  Course   Course[]
+  Question Question[]
+  Answer   Answer[]
+}
+
+model Badge {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String
+  image_name  String
+  color       String
+  order       Int
+  trigger     Json?
+  tag        String @unique
+
+  User      UserBadges[]
+  Event     Event?       @relation(fields: [event_name], references: [name])
+  event_name String?
+}
+
+model UserBadges {
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @db.Uuid
+  badge      Badge    @relation(fields: [badge_id], references: [id], onDelete: Cascade)
+  badge_id   String   @db.Uuid
+  created_at DateTime @default(now())
+  seen       Boolean  @default(false)
+
+  @@id([user_id, badge_id])
+}
+
+model Subscription {
+  plan  SubscriptionPlan @id @unique @default(BASIC)
+  slots Int              @default(5)
+  price Int              @default(0)
+
+  UserSubscription UserSubscription[]
+}
+
+model UserSubscription {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  User    User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String? @unique @db.Uuid
+
+  Subscription      Subscription     @relation(fields: [subscription_plan], references: [plan], onDelete: Cascade)
+  subscription_plan SubscriptionPlan
+
+  start_date DateTime  @default(now())
+  end_date   DateTime?
+
+  @@unique([user_id, subscription_plan])
+}
+
+model UserSession {
+  id                  String    @id @default(uuid()) @db.Uuid
+  created_at          DateTime  @default(now())
+  end_date            DateTime?
+  last_update         DateTime  @updatedAt
+  course_id           String    @db.Uuid
+  section_id          String    @db.Uuid
+  lesson_id           String    @db.Uuid
+  user_id             String    @db.Uuid
+  current_question_id String    @db.Uuid
+  correct_answers     Int       @default(0)
+  total_questions     Int
+  status              Status    @default(IN_PROGRESS)
+  preloaded_data      Json?
+
+  course  Course  @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  lesson  Lesson  @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id         String   @id
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  price_id   String
+  user_id    String   @db.Uuid
+  renewals   Boolean  @default(false)
+  active     Boolean  @default(true)
+  created_at DateTime @default(now())
+}
+
+model Event {
+  name       String     @id @unique
+  badge      Badge[]
+  created_at DateTime   @default(now())
+  LogEvent   LogEvent[]
+}
+
+model LogEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String   @db.Uuid
+  event      Event    @relation(fields: [event_name], references: [name], onDelete: Cascade)
+  event_name String
+  data       Json
+  created_at DateTime @default(now())
+}
