@@ -14,7 +14,6 @@ export interface CreateAndGenerateQuestionRequest {
 }
 
 export interface GenerateCourseRequest {
-    numberOfQuestionsPerQuiz: any;
     file?: Blob;
 }
 
@@ -100,15 +99,7 @@ export class AiApi extends runtime.BaseAPI {
     /**
      */
     async generateCourseRaw(requestParameters: GenerateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        if (requestParameters.numberOfQuestionsPerQuiz === null || requestParameters.numberOfQuestionsPerQuiz === undefined) {
-            throw new runtime.RequiredError('numberOfQuestionsPerQuiz','Required parameter requestParameters.numberOfQuestionsPerQuiz was null or undefined when calling generateCourse.');
-        }
-
         const queryParameters: any = {};
-
-        if (requestParameters.numberOfQuestionsPerQuiz !== undefined) {
-            queryParameters['numberOfQuestionsPerQuiz'] = requestParameters.numberOfQuestionsPerQuiz;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -144,7 +135,7 @@ export class AiApi extends runtime.BaseAPI {
 
     /**
      */
-    static generateCourse(requestParameters: GenerateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    static generateCourse(requestParameters: GenerateCourseRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         return localAiApi.generateCourseRaw(requestParameters, initOverrides);
     }
 

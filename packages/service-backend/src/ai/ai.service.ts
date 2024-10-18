@@ -7,7 +7,7 @@ import {
   HarmCategory,
   VertexAI,
 } from '@google-cloud/vertexai';
-import { AllowedMimeType, FileAi, Question } from './ai.dto';
+import { AllowedMimeType, Course, FileAi, Question } from './ai.dto';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import prisma from '../client';
@@ -85,7 +85,7 @@ export class AiService {
       });
   }
 
-  async convertMarkdownCourseToJSON(markdown: string): Promise<string> {
+  async convertMarkdownCourseToJSON(markdown: string): Promise<Course> {
     const req: GenerateContentRequest = {
       contents: [
         {
@@ -118,7 +118,7 @@ You are an AI assistant that format structured online courses from markdown cont
   *Example:*
   FREE_ANSWER
   What is your favorite color?
-  - BLUE
+  - [x] BLUE
 
 * **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
   *Example:*
@@ -297,7 +297,7 @@ The JSON object you will have to return should be the following format:
     try {
       while (continueGenerating) {
         const response: GenerateContentResult =
-          await AiService.generativeModelText.generateContent(req);
+          await AiService.generativeModel.generateContent(req);
         const candidate = response.response.candidates[0];
 
         if (candidate.content.parts[0].text.startsWith('```text')) {
@@ -328,7 +328,7 @@ The JSON object you will have to return should be the following format:
         }
       }
 
-      return fullResponse;
+      return JSON.parse(fullResponse) as Course;
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
@@ -337,7 +337,6 @@ The JSON object you will have to return should be the following format:
 
   async generateCourse(
     file: FileAi,
-    numberOfQuestionsPerQuiz = 4,
   ): Promise<any> {
     const req: GenerateContentRequest = {
       contents: [
@@ -369,7 +368,7 @@ You are an AI assistant that generates structured online courses from uploaded f
 3. **Lecture:**  Markdown formatted text derived from the input file.
 4. **Quiz:** A short quiz to assess understanding.
 
-The number of sections, lessons, and quiz questions per lesson should be dynamically determined based on the content and length of the input file. Aim for around ${numberOfQuestionsPerQuiz} questions per quiz as a guideline, but adjust as needed based on the content.
+The number of sections, lessons, and quiz questions per lesson should be dynamically determined based on the content and length of the input file.
 
 **Quiz Question Formats:**  You can use the following question types, represented directly in the text output:
 
@@ -377,7 +376,8 @@ The number of sections, lessons, and quiz questions per lesson should be dynamic
   *Example:*
   FREE_ANSWER
   What is your favorite color?
-  - BLUE
+  - [x] BLUE
+
 
 * **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
   *Example:*
@@ -548,7 +548,7 @@ What was the core problem statement for the travel app?
           continueGenerating = false;
         }
       }
-
+      console.log(fullResponse);
       return this.convertMarkdownCourseToJSON(fullResponse);
     } catch (e) {
       Logger.error(e);

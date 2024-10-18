@@ -16,7 +16,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { AllowedMimeType, FileAi, Question, } from 'ai/ai.dto';
+import { AllowedMimeType, Course, FileAi, Question, } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -102,28 +102,15 @@ export class AiController {
   })
   @ApiResponse({
     status: 200,
-  })
-  @ApiQuery({
-    name: 'numberOfQuestionsPerQuiz',
-    type: 'number',
-    schema: {
-      minimum: 1,
-    },
+    description: 'The course generated from the pdf file',
   })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @LoggedMiddleware(true)
   @Post('/generate-course')
-  async generateCourse(
-    @UploadedFile() file: Express.Multer.File,
-    @Query('numberOfQuestionsPerQuiz') numberOfQuestionsPerQuiz: number = 10,
-  ): Promise<any> {
+  async generateCourse(@UploadedFile() file: Express.Multer.File): Promise<Course> {
     if (!file) {10
       throw new ConflictException('File is empty');
-    }
-
-    if (numberOfQuestionsPerQuiz < 1) {
-      throw new ConflictException('Number of questions must be at least 1');
     }
 
     if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
@@ -135,7 +122,7 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateCourse(AiFile, numberOfQuestionsPerQuiz);
+    return await this.aiService.generateCourse(AiFile);
   }
 
 
