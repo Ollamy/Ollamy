@@ -323,7 +323,6 @@ The JSON object you will have to return should be the following format:
       let dataInJson;
       try {
         dataInJson = JSON.parse(fullResponse);
-        console.log(dataInJson);
       } catch (e) {
         throw new ConflictException('Failed to generate course');
       }
