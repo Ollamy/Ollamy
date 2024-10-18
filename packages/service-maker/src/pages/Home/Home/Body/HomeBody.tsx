@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import { UploadIcon, MagicWandIcon } from '@radix-ui/react-icons';
 
 import { Skeleton, Spinner, Text } from '@radix-ui/themes';
+import { AiApi } from 'services/api/out';
 
 function HomeBody() {
   const { data } = api.user.useGetUserCourses();
@@ -44,17 +45,13 @@ function HomeBody() {
   );
 
   const handleUploadCourseFile = async (courseFile: File) => {
-    console.log('generate course with ai');
     try {
       setIsGenerating(true);
-      // const response = await generateCourseFromFile(courseFile);
+      await AiApi.generateCourse({ file: courseFile });
     } catch (error) {
       console.error(error);
     }
-    setTimeout(() => {
-      
-      setIsGenerating(false);
-    }, 3000);
+    setIsGenerating(false);
   };
 
   useEffect(() => {
@@ -156,7 +153,7 @@ const FileDropZone = styled.div<{ $disabled?: boolean }>`
 
   border: 1px dashed black;
   border-radius: 8px;
-  
+
   cursor: pointer;
   pointer-events: ${({ $disabled }) => ($disabled ? 'none' : 'all')};
 
