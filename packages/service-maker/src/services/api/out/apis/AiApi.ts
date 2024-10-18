@@ -13,6 +13,10 @@ export interface CreateAndGenerateQuestionRequest {
     file?: Blob;
 }
 
+export interface GenerateCourseRequest {
+    file?: Blob;
+}
+
 export interface GenerateFakeAnswerRequest {
     questionId: string;
     numberWrongAnswers: any;
@@ -90,6 +94,49 @@ export class AiApi extends runtime.BaseAPI {
      */
     static createAndGenerateQuestion(requestParameters: CreateAndGenerateQuestionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Question>> {
         return localAiApi.createAndGenerateQuestionRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async generateCourseRaw(requestParameters: GenerateCourseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
+        }
+
+        const response = await this.request({
+            path: `/ai/generate-course`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        }, initOverrides);
+
+    }
+
+    /**
+     */
+    static generateCourse(requestParameters: GenerateCourseRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        return localAiApi.generateCourseRaw(requestParameters, initOverrides);
     }
 
     /**
