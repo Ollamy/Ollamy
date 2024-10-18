@@ -35,6 +35,7 @@ import {
   Separator,
   Skeleton,
 } from '@radix-ui/themes';
+import toast from 'react-hot-toast';
 
 interface LectureEditorProps {
   lessonId: string;
@@ -62,24 +63,34 @@ function LectureEditor({ lessonId }: LectureEditorProps) {
   }, [data]);
 
   const handleCreateLecture = useCallback(async () => {
-    await createNewLecture({
-      createLectureModel: {
-        lessonId,
-        data: '',
-      },
-    });
+    try {
+      await createNewLecture({
+        createLectureModel: {
+          lessonId,
+          data: '',
+        },
+      });
+      toast.success('Lesson successfully created');
+    } catch (error) {      
+      toast.error('An error occured');
+    }
   }, [createNewLecture, lessonId]);
 
   const handleUpdateLectureValue = useCallback(async () => {
-    if (data && data.length) {
-      const lectureId = data[0].id;
-
-      await updateLecture({
-        id: lectureId,
-        updateLectureModel: {
-          data: mdxEditorRef.current?.getMarkdown(),
-        },
-      });
+    try {
+      if (data && data.length) {
+        const lectureId = data[0].id;
+  
+        await updateLecture({
+          id: lectureId,
+          updateLectureModel: {
+            data: mdxEditorRef.current?.getMarkdown(),
+          },
+        });
+      }
+      toast.success('Lecture successfully updated');
+    } catch (error) {
+      toast.error('An error occured');
     }
   }, [data, updateLecture, value]);
 

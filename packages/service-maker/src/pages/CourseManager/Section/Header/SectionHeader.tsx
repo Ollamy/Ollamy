@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import { GearIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Heading, IconButton, Text } from '@radix-ui/themes';
+import toast from 'react-hot-toast';
 
 interface SectionHeaderProps {
   sectionId: string;
@@ -27,24 +28,34 @@ function SectionHeader({ sectionId }: SectionHeaderProps) {
   }, [removeSection, sectionId, setSearchParams]);
 
   const handleCreateLesson = useCallback(
-    (title: string, description: string) => {
-      createNewLesson({
-        createLessonModel: {
-          sectionId,
-          title,
-          description,
-        },
-      });
+    async (title: string, description: string) => {
+      try {
+        await createNewLesson({
+          createLessonModel: {
+            sectionId,
+            title,
+            description,
+          },
+        });
+        toast.success('Lesson successfully created');
+      } catch (error) {
+        toast.error('An error occured');
+      }
     },
     [createNewLesson, sectionId],
   );
 
   const handleEditSection = useCallback(
     async (title: string, description: string) => {
-      await updateSection({
-        id: sectionId,
-        updateSectionModel: { title, description },
-      });
+      try {
+        await updateSection({
+          id: sectionId,
+          updateSectionModel: { title, description },
+        });
+        toast.success('Section successfully updated');
+      } catch (error) {
+        toast.error('An error occured');
+      }
     },
     [updateSection, sectionId],
   );

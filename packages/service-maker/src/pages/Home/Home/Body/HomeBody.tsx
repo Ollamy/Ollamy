@@ -15,6 +15,7 @@ import { UploadIcon, MagicWandIcon } from '@radix-ui/react-icons';
 import { Skeleton, Spinner, Text } from '@radix-ui/themes';
 import { AiApi } from 'services/api/out';
 import { AIAction } from 'services/api/routes/AI';
+import toast from 'react-hot-toast';
 
 function HomeBody() {
   const { data } = api.user.useGetUserCourses();
@@ -51,8 +52,9 @@ function HomeBody() {
     try {
       setIsGenerating(true);
       await generateCourse({ file: courseFile });
+      toast.success('Course succesfully created')
     } catch (error) {
-      console.error(error);
+      toast.error('An error occured')
     }
     setIsGenerating(false);
   };
