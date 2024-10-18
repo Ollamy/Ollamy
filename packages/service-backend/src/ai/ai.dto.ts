@@ -55,3 +55,28 @@ export enum AllowedMimeType {
   MPEGPS = 'video/mpegps',
   FLV = 'video/flv',
 }
+
+interface QuizQuestion {
+  type: string;
+  question: string;
+  answers: { answer: string; correct: boolean }[];
+}
+
+interface Lesson {
+  title: string;
+  description: string;
+  lecture: string;
+  quiz: QuizQuestion[];
+}
+
+interface Section {
+  title: string;
+  description: string;
+  lessons: Lesson[];
+}
+
+export interface Course {
+  title: string;
+  description: string;
+  sections: Section[];
+}
