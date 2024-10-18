@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { CustomCourseSectionModel } from 'pages/CourseManager/SidePanel/CourseSidePanel';
 import SectionRow from 'pages/CourseManager/SidePanel/List/Row/SectionRow';
@@ -10,8 +11,18 @@ interface SectionListProps {
 }
 
 function SectionList({ data }: SectionListProps) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const sectionId = searchParams.get('sectionId');
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const firstId = data[0].id;
+
+      if (!sectionId && firstId) {
+        setSearchParams({ sectionId: firstId });
+      }
+    }
+  }, [data, sectionId, setSearchParams]);
 
   return data && data.length ? (
     <Container>
@@ -32,8 +43,8 @@ function SectionList({ data }: SectionListProps) {
     </LoadingContainer>
   ) : (
     <LoadingContainer>
-      <Skeleton width="258px" height="40px" />
-      <Skeleton width="258px" height="40px" />
+      <Skeleton width={'258px'} height={'40px'} />
+      <Skeleton width={'258px'} height={'40px'} />
     </LoadingContainer>
   );
 }

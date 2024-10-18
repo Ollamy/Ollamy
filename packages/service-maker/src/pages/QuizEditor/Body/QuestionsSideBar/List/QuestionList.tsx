@@ -3,6 +3,8 @@ import { lessonActions } from 'services/api/routes/lesson';
 import styled from 'styled-components';
 
 import { Skeleton, Text } from '@radix-ui/themes';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 interface QuestionListProps {
   lessonId: string;
@@ -10,6 +12,22 @@ interface QuestionListProps {
 
 function QuestionList({ lessonId }: QuestionListProps) {
   const { data } = lessonActions.useGetLessonQuestions({ id: lessonId! });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentQuestionId = searchParams.get('questionId');
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const firstId = data[0].id;
+
+      if (!currentQuestionId && firstId) {
+        setSearchParams((prevParams) => {
+          const newParams = new URLSearchParams(prevParams);
+          newParams.set('questionId', firstId);
+          return newParams;
+        });
+      }
+    }
+  }, [data, currentQuestionId, setSearchParams]);
 
   return data && data.length ? (
     <Container>
@@ -23,8 +41,8 @@ function QuestionList({ lessonId }: QuestionListProps) {
     </LoadingContainer>
   ) : (
     <Container>
-      <Skeleton width="100%" height="44px" />
-      <Skeleton width="100%" height="44px" />
+      <Skeleton width={'100%'} height={'44px'} />
+      <Skeleton width={'100%'} height={'44px'} />
     </Container>
   );
 }

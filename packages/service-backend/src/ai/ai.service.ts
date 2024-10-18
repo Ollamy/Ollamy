@@ -772,6 +772,135 @@ What was the core problem statement for the travel app?
     return { success: true } as CourseTrueResponse;
   }
 
+  async createCourse(courseData: any, userId: string) {
+    const sectionsToCreate: Prisma.SectionCreateManyInput[] = [];
+    const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
+    const lecturesToCreate: Prisma.LectureCreateManyInput[] = [];
+    const lessonsToCreate: Prisma.LessonCreateManyInput[] = [];
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    const courseId = uuidv4();
+    let currentSectionOrder = 'a0';
+
+    for (const sectionData of courseData.sections) {
+      const sectionId = uuidv4();
+
+      currentSectionOrder = generateKeyBetween(currentSectionOrder, null);
+      const sectionOrder = currentSectionOrder;
+
+      const lessonForThisSection: Prisma.LessonCreateManyInput[] = [];
+
+      let currentLessonOrder = 'a0';
+
+      for (const lessonData of sectionData.lessons) {
+        const lessonId = uuidv4();
+        const lectureId = uuidv4();
+
+        lecturesToCreate.push({
+          id: lectureId,
+          lesson_id: lessonId,
+          data: lessonData.lecture,
+        });
+
+        let currentQuestionOrder = 'a0';
+        const questionsForThisSection: Prisma.QuestionCreateManyInput[] = [];
+
+        for (const questionData of lessonData.quiz) {
+          const questionId = uuidv4();
+
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+          const questionOrder = currentQuestionOrder;
+
+          const answersForThisQuestion: Prisma.AnswerCreateManyInput[] = [];
+          let trustAnswerId: string | undefined;
+
+          let currentAnswerOrder = 'a0';
+
+          for (const answerData of questionData.answers) {
+            const answerId = uuidv4();
+
+            answersForThisQuestion.push({
+              id: answerId,
+              question_id: questionId,
+              data: answerData.answer,
+              order: currentAnswerOrder,
+            });
+
+            if (answerData.correct) {
+              trustAnswerId = answerId;
+            }
+
+            currentAnswerOrder = generateKeyBetween(currentAnswerOrder, null);
+          }
+
+          questionsForThisSection.push({
+            id: questionId,
+            lesson_id: lessonId,
+            title: questionData.question,
+            type_question: QuestionType.TEXT,
+            type_answer: questionData.type,
+            order: questionOrder,
+            trust_answer_id: trustAnswerId,
+          });
+
+          answersToCreate.push(...answersForThisQuestion);
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+        }
+
+        lessonForThisSection.push({
+          id: lessonId,
+          title: lessonData.title,
+          description: lessonData.description,
+          order: currentLessonOrder,
+          section_id: sectionId,
+        });
+
+        questionsToCreate.push(...questionsForThisSection);
+        currentLessonOrder = generateKeyBetween(currentLessonOrder, null);
+      }
+
+      sectionsToCreate.push({
+        id: sectionId,
+        title: sectionData.title,
+        description: sectionData.description,
+        order: sectionOrder,
+        course_id: courseId,
+      });
+
+      lessonsToCreate.push(...lessonForThisSection);
+    }
+
+    try {
+      await prisma.$transaction([
+        prisma.course.create({
+          data: {
+            id: courseId,
+            title: courseData.title,
+            description: courseData.description,
+            owner_id: userId,
+          },
+        }),
+        prisma.usertoCourse.create({
+          data: {
+            user_id: userId,
+            course_id: courseId,
+            role_user: 'OWNER',
+          },
+        }),
+        prisma.section.createMany({ data: sectionsToCreate }),
+        prisma.lesson.createMany({ data: lessonsToCreate }),
+        prisma.lecture.createMany({ data: lecturesToCreate }),
+        prisma.question.createMany({ data: questionsToCreate }),
+        prisma.answer.createMany({ data: answersToCreate }),
+      ]);
+    } catch (e) {
+      Logger.error(e.message);
+      throw new ConflictException(e.message);
+    }
+
+    return { success: true } as CourseTrueResponse;
+  }
+
   async generateFakeAnswer(questionId: string, numberWrongAnswers = 3) {
     const question = await prisma.question.findUnique({
       where: { id: questionId },
