@@ -20,6 +20,7 @@ import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 import UserProfilePage from 'pages/UserProfile/UserProfilePage';
 import Dashboard from 'pages/Dashboard/Dashboard';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -121,5 +122,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </Theme>
+    <Toaster />
   </React.StrictMode>,
 );

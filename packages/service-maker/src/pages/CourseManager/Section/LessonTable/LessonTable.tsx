@@ -8,6 +8,7 @@ import CustomDialogTitleDescription from 'components/RadixUi/Dialog/CustomDialog
 import { useCallback } from 'react';
 import { lessonActions } from 'services/api/routes/lesson';
 import { CreateQuestionModelTypeAnswerEnum } from 'services/api/out';
+import toast from 'react-hot-toast';
 
 interface LessonTableProps {
   sectionId: string;
@@ -25,10 +26,15 @@ function LessonTable({ sectionId }: LessonTableProps) {
       description: string,
       moreOptions?: MoreOptionsType,
     ) => {
-      await updateLesson({
-        id: moreOptions?.lessonId as string,
-        updateLessonModel: { title, description },
-      });
+      try {
+        await updateLesson({
+          id: moreOptions?.lessonId as string,
+          updateLessonModel: { title, description },
+        });
+        toast.success('Lesson successfully updated');
+      } catch (error) {
+        toast.error('An error occured');
+      } 
     },
     [updateLesson],
   );
@@ -74,9 +80,9 @@ function LessonTable({ sectionId }: LessonTableProps) {
                 <Table.Cell justify={'center'}>
                   <ActionsContainer>
                     <CustomDialogTitleDescription<MoreOptionsType>
-                      dialogTitle={'Edit section'}
+                      dialogTitle={'Edit Lesson'}
                       dialogDescription={
-                        'Edit the title and description of your current section.'
+                        'Edit the title and description of your current lesson.'
                       }
                       defaultTitle={title}
                       defaultDescription={description}
