@@ -14,12 +14,15 @@ import { UploadIcon, MagicWandIcon } from '@radix-ui/react-icons';
 
 import { Skeleton, Spinner, Text } from '@radix-ui/themes';
 import { AiApi } from 'services/api/out';
+import { AIAction } from 'services/api/routes/AI';
 
 function HomeBody() {
   const { data } = api.user.useGetUserCourses();
   const [searchValue, setSearchValue] = useState<string>('');
   const [courseFile, setCourseFile] = useState<File | undefined>(undefined);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+
+  const { mutateAsync: generateCourse } = AIAction.useGenerateCourse();
 
   const currentData = useMemo(() => {
     if (!data) return undefined;
@@ -47,7 +50,7 @@ function HomeBody() {
   const handleUploadCourseFile = async (courseFile: File) => {
     try {
       setIsGenerating(true);
-      await AiApi.generateCourse({ file: courseFile });
+      await generateCourse({ file: courseFile });
     } catch (error) {
       console.error(error);
     }
