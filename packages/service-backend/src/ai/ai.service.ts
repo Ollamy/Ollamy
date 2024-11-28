@@ -107,11 +107,12 @@ export class AiService {
     const freeAnswerRegex = /-\s*(.+)/g;
     const orderChoiceRegex = /-\s*\[([ x])\]\s*(.+)/g;
 
-    // Add null checks and default values
-    const titleMatch = markdown.match(/^# (.+)\n/);
+    const titleMatch = markdown.match(/^# (.+)\n/m);
+
     course.title = titleMatch ? titleMatch[1] : 'Untitled Course';
 
-    const descriptionMatch = markdown.match(/^#[^\n]+\n+(.+)\n+(?=##)/s);
+    const descriptionMatch = markdown.match(/^#[^\n]+\n\n(.+?)(?=\n##|\n\Z)/ms);
+
     course.description = descriptionMatch
       ? descriptionMatch[1]?.trim().replace(/\n.*/s, '')
       : 'No description provided';
@@ -196,7 +197,8 @@ export class AiService {
             {
               text: `Here is a ${
                 AllowedMimeType[file.mimeType]
-              } file I need you to generate a course from.  If there is an issue with the file, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`,
+              } file I need you to generate a course from.
+              If there is an issue with the file, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`,
             },
             {
               inlineData: file,
@@ -265,7 +267,7 @@ If the input file is unreadable, empty, contains insufficient content to create 
 **Successful Output:**
 
 If successful, return the course content in a plain text format with the following structure. Use Markdown for formatting lecture content.  All text in the output, including titles, descriptions, lectures, and quiz questions, must be in the **same language** as the input document.
-All the keywords in my formatting must be in English and in Upper case, NEVER translate them.
+All the keywords in my formatting must be in English and in Upper case, NEVER translate them, as a reminder, these are the keyword: SECTION, LESSON, MULTIPLE_CHOICE, FREE_ANSWER, SQUARE_ANSWER, ORDER_CHOICE.
 **Do not stop generating the course content prematurely. Always continue until the entire course is complete, even if it exceeds the maximum token limit.**
 
 # Course title
@@ -378,6 +380,14 @@ What was the core problem statement for the travel app?
           candidate.content.parts[0].text =
             candidate.content.parts[0].text.slice(0, -3);
         }
+        if (candidate.content.parts[0].text.startsWith('```json')) {
+          candidate.content.parts[0].text =
+            candidate.content.parts[0].text.slice(7, -4);
+          throw new ConflictException(
+            JSON.parse(candidate.content.parts[0].text).error,
+          );
+        }
+
         fullResponse += candidate.content.parts[0].text;
 
         if (candidate.finishReason === 'MAX_TOKENS') {
