@@ -17,7 +17,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { AllowedMimeType, Course, FileAi, Question, } from 'ai/ai.dto';
+import { AllowedMimeType, Course, FileAi, Question } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -70,7 +70,7 @@ export class AiController {
     @UploadedFile() file: Express.Multer.File,
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
     @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
-  ): Promise<Question[]> {
+  ): Promise<any> {
     if (!file) {
       throw new ConflictException('File is empty');
     }
@@ -97,7 +97,6 @@ export class AiController {
     );
   }
 
-
   @ApiBody({
     schema: {
       type: 'object',
@@ -121,11 +120,14 @@ export class AiController {
     @UploadedFile() file: Express.Multer.File,
     @OllContext() ctx: any,
   ): Promise<CourseTrueResponse> {
-    if (!file) {10
+    if (!file) {
+      10;
       throw new ConflictException('File is empty');
     }
 
-    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+    if (
+      !Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)
+    ) {
       throw new ConflictException(`File type ${file.mimetype} is not allowed`);
     }
 
@@ -136,7 +138,6 @@ export class AiController {
 
     return await this.aiService.generateCourse(AiFile, ctx.__user.id);
   }
-
 
   @ApiBody({
     schema: {

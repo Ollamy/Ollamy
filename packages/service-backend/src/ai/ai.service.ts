@@ -7,7 +7,15 @@ import {
   HarmCategory,
   VertexAI,
 } from '@google-cloud/vertexai';
-import { AllowedMimeType, Course, FileAi, Question } from './ai.dto';
+import {
+  AllowedMimeType,
+  FileAi,
+  Question,
+  ParsedCourse,
+  ParsedLesson,
+  ParsedQuizQuestion,
+  ParsedSection,
+} from './ai.dto';
 import { AnswerType, Prisma, QuestionType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import prisma from '../client';
@@ -85,259 +93,102 @@ export class AiService {
       });
   }
 
-  async convertMarkdownCourseToJSON(markdown: string, userId: string): Promise<CourseTrueResponse> {
-    const req: GenerateContentRequest = {
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            {
-              text: `Here is a markdown content I need you to generate a course from.  If there is an issue with the content, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`,
-            },
-            {
-              text: markdown,
-            },
-          ],
-        },
-      ],
-      systemInstruction: {
-        role: 'user',
-        parts: [
-          {
-            text: `
-You are an AI assistant that format structured online courses from markdown content.  You will receive a content of type markdown as input of the following type:
+  parseCourse(markdown: string): ParsedCourse {
+    const course: ParsedCourse = { title: '', description: '', sections: [] };
 
-1. **Title:** A concise and descriptive title.
-2. **Description:** A brief summary of the lesson's content.
-3. **Lecture:**  Markdown formatted text derived from the input file.
-4. **Quiz:** A short quiz to assess understanding.
+    const sectionRegex =
+      /## SECTION \d+:\s*(.+)\n+([\s\S]*?)(?=(?:## SECTION \d+:|$))/g;
+    const lessonRegex =
+      /### LESSON \d+ OF SECTION \d+:\s*(.+)\n+\*\*DESCRIPTION:\*\*\s*(.+)\n+\*\*LECTURE:\*\*\s*([\s\S]*?)\*\*QUIZ \d+ FOR LESSON \d+:\*\*([\s\S]*?)(?=(?:### LESSON \d+ OF SECTION \d+:|$))/g;
 
-**Quiz Question Formats:**  You can use the following question types, represented directly in the text output:
+    const questionRegex =
+      /QUESTION|Question \d+\n+([A-Z_]+)\n+([\s\S]+?)(?=\n-\[|\nQUESTION|\nQuestion|\n*$)/g;
+    const answerRegex = /-\s*\[([ x])\]\s*(.+)/g;
+    const freeAnswerRegex = /-\s*(.+)/g;
+    const orderChoiceRegex = /-\s*\[([ x])\]\s*(.+)/g;
 
-* **FREE_ANSWER:** Generate one correct answer.
-  *Example:*
-  FREE_ANSWER
-  What is your favorite color?
-  - [x] BLUE
+    const titleMatch = markdown.match(/^# (.+)\n/m);
 
-* **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
-  *Example:*
-  MULTIPLE_CHOICE
-  What is the capital of France?
-  - [ ] LONDON
-  - [x] PARIS
-  - [ ] BERLIN
-  - [ ] MADRID
-  - [ ] ROME
-  - [ ] LISBON
+    course.title = titleMatch ? titleMatch[1] : 'Untitled Course';
 
-* **SQUARE_CHOICE:** Generate four short answer choices with one correct answer.
-  *Example:*
-  SQUARE_CHOICE
-  What is the capital of France?
-  - [ ] LONDON
-  - [ ] MADRID
-  - [x] PARIS
-  - [ ] BERLIN
+    const descriptionMatch = markdown.match(/^#[^\n]+\n\n(.+?)(?=\n##|\n\Z)/ms);
 
-* **ORDER_CHOICE:** Generate one sentence answer that needs to be ordered correctly. Words in the sentence should be separated by '/'. Only one answer is generated for this question type.
-  *Example:*
-  ORDER_CHOICE
-  What is the color of the fox?
-  - [x] The / color / of / the / fox / is / red!
+    course.description = descriptionMatch
+      ? descriptionMatch[1]?.trim().replace(/\n.*/s, '')
+      : 'No description provided';
 
+    let sectionMatch;
+    while ((sectionMatch = sectionRegex.exec(markdown)) !== null) {
+      const section: ParsedSection = {
+        title: sectionMatch[1],
+        description: sectionMatch[2]?.trim().replace(/\n.*/s, ''),
+        lessons: [],
+      };
 
-The input content will be in the following format:
+      let lessonMatch;
+      while ((lessonMatch = lessonRegex.exec(sectionMatch[0])) !== null) {
+        const lesson: ParsedLesson = {
+          title: lessonMatch[1],
+          description: lessonMatch[2],
+          lecture: lessonMatch[3]?.trim(),
+          quiz: [],
+        };
 
+        let questionMatch;
+        while ((questionMatch = questionRegex.exec(lessonMatch[4])) !== null) {
+          const question: ParsedQuizQuestion = {
+            type: questionMatch[1],
+            question: questionMatch[2]?.trim().replace(/\n.*/s, ''),
+            answers: [],
+          };
 
-# Course title
+          let answerMatch;
+          switch (question.type) {
+            case 'FREE_ANSWER':
+              while (
+                (answerMatch = freeAnswerRegex.exec(questionMatch[2])) !== null
+              ) {
+                question.answers.push({
+                  answer: answerMatch[1]?.trim().replace('[x] ', ''),
+                  correct: true,
+                });
+              }
+              break;
+            case 'ORDER_CHOICE':
+              while (
+                (answerMatch = orderChoiceRegex.exec(questionMatch[2])) !== null
+              ) {
+                question.answers.push({
+                  answer: answerMatch[2]?.trim(),
+                  correct: answerMatch[1] === 'x',
+                });
+              }
+              break;
+            default: // Covers MULTIPLE_CHOICE and SQUARE_CHOICE
+              while (
+                (answerMatch = answerRegex.exec(questionMatch[2])) !== null
+              ) {
+                question.answers.push({
+                  answer: answerMatch[2]?.trim(),
+                  correct: answerMatch[1] === 'x',
+                });
+              }
+              break;
+          }
 
-Course description
-
-## SECTION 1: Title
-
-SECTION 1 description
-
-### LESSON 1 of SECTION 1: Title
-
-**DESCRIPTION:** Lesson 1 description
-
-**LECTURE:** Lesson 1 lecture
-
-
-**QUIZ 1 FOR LESSON 1:**
-
-Question 1
-MULTIPLE_CHOICE
-What was the main problem identified with existing travel apps?
-- [ ] Too many maps
-- [x] Overwhelming information and lack of personalization
-- [ ] Insufficient number of hotels listed
-- [ ] Too many ads
-
-Question 2
-MULTIPLE_CHOICE
-What was the core problem statement for the travel app?
-- [ ] How might we create the best travel app?
-- [x] How might we empower young travelers to discover unique, personalized experiences while simplifying the planning process?
-- [ ] How might we make the most profitable travel app?
-- [ ] How might we get more users for our app?
-
-
-### LESSON 2 OF SECTION 1: Title
-
-**DESCRIPTION:** Lesson 2 description
-
-**LECTURE:** Lesson 2 lecture
-
-
-**QUIZ 1 FOR LESSON 2:**
-
-Question 1
-MULTIPLE_CHOICE
-What innovative approach was used in the travel app design?
-- [ ] A simple list of attractions
-- [x] A gamified app with personalized avatars and quests
-- [ ] A social media-based approach
-- [ ] A map-only application
-
-Question 2
-MULTIPLE_CHOICE
-What tool was used to create the low-fidelity prototype?
-- [ ] Adobe Photoshop
-- [ ] Sketch
-- [x] Figma
-- [ ] GIMP
-
-
-## SECTION 2: Title
-
-Section 2 description
-
-### LESSON 1 OF SECTION 2: Title
-
-**DESCRIPTION:** Lesson 1 description
-
-**LECTURE:** Lesson 1 lecture
-
-**QUIZ 1 FOR LESSON 1:**
-
-Question 1
-MULTIPLE_CHOICE
-What was the main problem identified with existing travel apps?
-- [ ] Too many maps
-- [x] Overwhelming information and lack of personalization
-- [ ] Insufficient number of hotels listed
-- [ ] Too many ads
-
-Question 2
-MULTIPLE_CHOICE
-What was the core problem statement for the travel app?
-- [ ] How might we create the best travel app?
-- [x] How might we empower young travelers to discover unique, personalized experiences while simplifying the planning process?
-- [ ] How might we make the most profitable travel app?
-- [ ] How might we get more users for our app?
-
-
-**Error Handling:**
-
-If the markdown input is unreadable, empty, contains insufficient content to format a meaningful course, or if you encounter any issues generating the course structure or quiz questions, return a JSON object with an error message:  {"error": "Descriptive error message explaining the issue"}
-
-
-**Successful Output:**
-
-If successful, return the course content in a json format with the following structure. Use Markdown for formatting lecture content.  All text in the output, including titles, descriptions, lectures, and quiz questions, must be in the **same language** as the input document.
-All the keywords in my formatting must be in English and in Upper case, NEVER translate them.
-**Do not stop generating the course content prematurely. Always continue until the entire course is formatted, even if it exceeds the maximum token limit.**
-
-Your task is to process this content and create a well-organized course in the **same language as the input content**.
-While formatting the json, ensure to remove any formatting values like 'LESSON <number> OF SECTION <numner>:', 'SECTION <number>:'
-The course should consist of sections, lessons within each section, lectures and quizzes within each lessons with answers.
-The JSON object you will have to return should be the following format:
- {
-    "title": "...",
-    "description": "...",
-    "sections": [
-      {
-        "title": "...",
-        "description": "...",
-        "lessons": [
-          {
-            "title": "...",
-            "description": "...",
-            "lecture": "Mardown content",
-            "quiz": [
-              {
-                "type": "...",
-                "question": "...",
-                "answers": [
-                  {"answer": "...", "correct": true|false},
-                  // ... more answers
-                ]
-              },
-              // ... more quiz questions
-            ]
-          },
-          // ... more lessons
-        ]
-      },
-      // ... more sections
-    ]
-  }
-
-`,
-          },
-        ],
-      },
-    };
-
-    let fullResponse = '';
-    let continueGenerating = true;
-
-    try {
-      while (continueGenerating) {
-        const response: GenerateContentResult =
-          await AiService.generativeModel.generateContent(req);
-        const candidate = response.response.candidates[0];
-
-        fullResponse += candidate.content.parts[0].text;
-
-        if (candidate.finishReason === 'MAX_TOKENS') {
-          req.contents.push({
-            role: 'model',
-            parts: [{ text: fullResponse }],
-          });
-          req.contents.push({
-            role: 'user',
-            parts: [
-              {
-                text: 'continue from here directly: ' + fullResponse.slice(-10),
-              },
-            ],
-          });
-        } else {
-          continueGenerating = false;
+          lesson.quiz.push(question);
         }
+
+        section.lessons.push(lesson);
       }
 
-      let dataInJson;
-      try {
-        dataInJson = JSON.parse(fullResponse);
-      } catch (e) {
-        throw new ConflictException('Failed to generate course');
-      }
-
-      return await this.createCourse(dataInJson, userId);
-    } catch (e) {
-      Logger.error(e);
-      throw new ConflictException('Failed to generate course');
+      course.sections.push(section);
     }
+
+    return course;
   }
 
-  async generateCourse(
-    file: FileAi,
-    userId: string,
-  ): Promise<any> {
+  async generateCourse(file: FileAi, userId: string): Promise<any> {
     const req: GenerateContentRequest = {
       contents: [
         {
@@ -346,7 +197,8 @@ The JSON object you will have to return should be the following format:
             {
               text: `Here is a ${
                 AllowedMimeType[file.mimeType]
-              } file I need you to generate a course from.  If there is an issue with the file, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`,
+              } file I need you to generate a course from.
+              If there is an issue with the file, it is not suitable for course generation, please return an error in the following JSON format: {"error": "Your error message here"}`,
             },
             {
               inlineData: file,
@@ -378,7 +230,6 @@ Try to make quizzes with around 5-10 questions if possible, and also mix up the 
   FREE_ANSWER
   What is your favorite color?
   - [x] BLUE
-
 
 * **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
   *Example:*
@@ -417,7 +268,7 @@ If the input file is unreadable, empty, contains insufficient content to create 
 **Successful Output:**
 
 If successful, return the course content in a plain text format with the following structure. Use Markdown for formatting lecture content.  All text in the output, including titles, descriptions, lectures, and quiz questions, must be in the **same language** as the input document.
-All the keywords in my formatting must be in English and in Upper case, NEVER translate them.
+All the keywords in my formatting must be in English and in Upper case, NEVER translate them, as a reminder, these are the keyword: SECTION, LESSON, MULTIPLE_CHOICE, FREE_ANSWER, SQUARE_ANSWER, ORDER_CHOICE.
 **Do not stop generating the course content prematurely. Always continue until the entire course is complete, even if it exceeds the maximum token limit.**
 
 # Course title
@@ -530,6 +381,14 @@ What was the core problem statement for the travel app?
           candidate.content.parts[0].text =
             candidate.content.parts[0].text.slice(0, -3);
         }
+        if (candidate.content.parts[0].text.startsWith('```json')) {
+          candidate.content.parts[0].text =
+            candidate.content.parts[0].text.slice(7, -4);
+          throw new ConflictException(
+            JSON.parse(candidate.content.parts[0].text).error,
+          );
+        }
+
         fullResponse += candidate.content.parts[0].text;
 
         if (candidate.finishReason === 'MAX_TOKENS') {
@@ -550,7 +409,7 @@ What was the core problem statement for the travel app?
         }
       }
 
-      return this.convertMarkdownCourseToJSON(fullResponse, userId);
+      return this.createCourse(this.parseCourse(fullResponse), userId);
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
@@ -713,7 +572,10 @@ What was the core problem statement for the travel app?
     return result?.order ?? null;
   }
 
-  async createQuizz(questions: Question[], lessonId: string): Promise<CourseTrueResponse> {
+  async createQuizz(
+    questions: Question[],
+    lessonId: string,
+  ): Promise<CourseTrueResponse> {
     let lastQuestionOrder = await this.getLastOrderQuestion(lessonId);
 
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
@@ -773,7 +635,10 @@ What was the core problem statement for the travel app?
     return { success: true } as CourseTrueResponse;
   }
 
-  async createCourse(courseData: any, userId: string): Promise<CourseTrueResponse> {
+  async createCourse(
+    courseData: any,
+    userId: string,
+  ): Promise<CourseTrueResponse> {
     const sectionsToCreate: Prisma.SectionCreateManyInput[] = [];
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
     const lecturesToCreate: Prisma.LectureCreateManyInput[] = [];

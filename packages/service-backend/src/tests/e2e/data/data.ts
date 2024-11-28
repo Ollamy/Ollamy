@@ -13,7 +13,6 @@ import {
   Status,
 } from '@prisma/client';
 import { UpdateOrderModel } from 'order/order.dto';
-import { end } from 'pactum/src/exports/reporter';
 
 const password = '1234aaBB@';
 const hashed_password = new UserService().hashPassword(password);
