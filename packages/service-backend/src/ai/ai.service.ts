@@ -188,7 +188,6 @@ export class AiService {
   }
 
   async generateCourse(file: FileAi, userId: string): Promise<any> {
-    Logger.debug(`Generating course from file ${file.mimeType}`);
     const req: GenerateContentRequest = {
       contents: [
         {
@@ -399,7 +398,7 @@ What was the core problem statement for the travel app?
         }
       }
 
-      return JSON.stringify(this.parseCourse(fullResponse), null, 2);
+      return this.createCourse(this.parseCourse(fullResponse), userId);
     } catch (e) {
       Logger.error(e);
       throw new ConflictException('Failed to generate course');
