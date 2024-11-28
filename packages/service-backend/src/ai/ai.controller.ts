@@ -16,7 +16,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { AllowedMimeType, FileAi, Question, } from 'ai/ai.dto';
+import { AllowedMimeType, FileAi, Question } from 'ai/ai.dto';
 import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -67,7 +67,7 @@ export class AiController {
     @UploadedFile() file: Express.Multer.File,
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
     @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
-  ): Promise<Question[]> {
+  ): Promise<any> {
     if (!file) {
       throw new ConflictException('File is empty');
     }
@@ -76,7 +76,9 @@ export class AiController {
       throw new ConflictException('Number of questions must be at least 1');
     }
 
-    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+    if (
+      !Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)
+    ) {
       throw new ConflictException(`File type ${file.mimetype} is not allowed`);
     }
 
@@ -85,9 +87,8 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateText(AiFile, numberOfQuestions, typeOfQuestion);
+    return await this.aiService.markdownTest();
   }
-
 
   @ApiBody({
     schema: {
@@ -118,7 +119,8 @@ export class AiController {
     @UploadedFile() file: Express.Multer.File,
     @Query('numberOfQuestionsPerQuiz') numberOfQuestionsPerQuiz: number = 10,
   ): Promise<any> {
-    if (!file) {10
+    if (!file) {
+      10;
       throw new ConflictException('File is empty');
     }
 
@@ -126,7 +128,9 @@ export class AiController {
       throw new ConflictException('Number of questions must be at least 1');
     }
 
-    if (!Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)) {
+    if (
+      !Object.values(AllowedMimeType).includes(file.mimetype as AllowedMimeType)
+    ) {
       throw new ConflictException(`File type ${file.mimetype} is not allowed`);
     }
 
@@ -135,9 +139,11 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateCourse(AiFile, numberOfQuestionsPerQuiz);
+    return await this.aiService.generateCourse(
+      AiFile,
+      numberOfQuestionsPerQuiz,
+    );
   }
-
 
   @ApiBody({
     schema: {
@@ -185,8 +191,11 @@ export class AiController {
     @Query('numberOfQuestions') numberOfQuestions: number = 10,
     @Query('typeOfQuestion') typeOfQuestion: AnswerType = 'MULTIPLE_CHOICE',
   ) {
-
-    const questions = await this.generateText(file, numberOfQuestions, typeOfQuestion);
+    const questions = await this.generateText(
+      file,
+      numberOfQuestions,
+      typeOfQuestion,
+    );
     if (!questions) {
       throw new ConflictException('Failed to generate questions');
     }
@@ -217,6 +226,9 @@ export class AiController {
     @Param('questionId') questionId: string,
     @Query('numberWrongAnswers') numberWrongAnswers: number = 3,
   ) {
-    return await this.aiService.generateFakeAnswer(questionId, numberWrongAnswers);
+    return await this.aiService.generateFakeAnswer(
+      questionId,
+      numberWrongAnswers,
+    );
   }
 }

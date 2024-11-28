@@ -1,4 +1,10 @@
-import { IsString, IsBoolean, IsArray, ValidateNested, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+  IsEnum,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { AnswerType } from '@prisma/client';
@@ -24,7 +30,7 @@ export class Answer {
 }
 
 export class Question {
-  @ApiProperty({enum: AnswerType})
+  @ApiProperty({ enum: AnswerType })
   @IsEnum(AnswerType)
   type: AnswerType;
 
@@ -32,7 +38,7 @@ export class Question {
   @IsString()
   question: string;
 
-  @ApiProperty({type: [Answer]})
+  @ApiProperty({ type: [Answer] })
   @Type(() => Answer)
   @ValidateNested({ each: true })
   @IsArray()
@@ -79,4 +85,34 @@ export interface Course {
   title: string;
   description: string;
   sections: Section[];
+}
+
+export interface ParsedAnswer {
+  answer: string;
+  correct: boolean;
+}
+
+export interface ParsedQuizQuestion {
+  type: string;
+  question: string;
+  answers: ParsedAnswer[];
+}
+
+export interface ParsedLesson {
+  title: string;
+  description: string;
+  lecture: string;
+  quiz: ParsedQuizQuestion[];
+}
+
+export interface ParsedSection {
+  title: string;
+  description: string;
+  lessons: ParsedLesson[];
+}
+
+export interface ParsedCourse {
+  title: string;
+  description: string;
+  sections: ParsedSection[];
 }
