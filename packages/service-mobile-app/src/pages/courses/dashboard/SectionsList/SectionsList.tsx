@@ -74,14 +74,14 @@ function SectionsList() {
           >
             <Text bold>Go back</Text>
           </Button>
-          <Button
+          {/* <Button
             onPress={() => navigate(`/course/${id}/statistic`)}
             bg={'coolGray.100'}
             alignSelf={'flex-start'}
             variant={'unstyled'}
           >
             <Text bold>STATS</Text>
-          </Button>
+          </Button> */}
         </HStack>
 
         {isCourseDataFetching || isSectionsDataFetching ? (

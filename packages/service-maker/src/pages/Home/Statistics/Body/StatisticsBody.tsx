@@ -41,7 +41,7 @@ function StatisticsBody() {
         {data?.courses?.map(({ title, id, pictureId }) => (
           <CourseItem key={id}>
             <CourseInfosContainer>
-              <CourseImage src={pictureId} />
+              {pictureId && <CourseImage src={pictureId} />}
               <CourseTitle>{title}</CourseTitle>
             </CourseInfosContainer>
             <Button
@@ -119,7 +119,9 @@ const CourseInfosContainer = styled.div`
 `;
 
 const CourseImage = styled.img`
-  height: 100%;
+  height: 24px;
+  width: 24px;
+  object-fit: contain;
 `;
 
 const CourseTitle = styled.h3`

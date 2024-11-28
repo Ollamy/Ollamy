@@ -11,7 +11,6 @@ import {
   AllowedMimeType,
   FileAi,
   Question,
-  ParsedAnswer,
   ParsedCourse,
   ParsedLesson,
   ParsedQuizQuestion,
@@ -188,10 +187,7 @@ export class AiService {
     return course;
   }
 
-  async generateCourse(
-    file: FileAi,
-    numberOfQuestionsPerQuiz = 4,
-  ): Promise<any> {
+  async generateCourse(file: FileAi, userId: string): Promise<any> {
     Logger.debug(`Generating course from file ${file.mimeType}`);
     const req: GenerateContentRequest = {
       contents: [
@@ -223,7 +219,7 @@ You are an AI assistant that generates structured online courses from uploaded f
 3. **Lecture:**  Markdown formatted text derived from the input file.
 4. **Quiz:** A short quiz to assess understanding.
 
-The number of sections, lessons, and quiz questions per lesson should be dynamically determined based on the content and length of the input file. Aim for around ${numberOfQuestionsPerQuiz} questions per quiz as a guideline, but adjust as needed based on the content.
+The number of sections, lessons, and quiz questions per lesson should be dynamically determined based on the content and length of the input file.
 
 **Quiz Question Formats:**  You can use the following question types, represented directly in the text output:
 
@@ -231,7 +227,8 @@ The number of sections, lessons, and quiz questions per lesson should be dynamic
   *Example:*
   FREE_ANSWER
   What is your favorite color?
-  - BLUE
+  - [x] BLUE
+
 
 * **MULTIPLE_CHOICE:** Generate answers choices with one correct answer.
   *Example:*
@@ -403,7 +400,6 @@ What was the core problem statement for the travel app?
         }
       }
 
-      Logger.log('fullResponse', fullResponse);
       return JSON.stringify(this.parseCourse(fullResponse), null, 2);
     } catch (e) {
       Logger.error(e);
@@ -576,7 +572,10 @@ What was the core problem statement for the travel app?
     return result?.order ?? null;
   }
 
-  async createQuizz(questions: Question[], lessonId: string) {
+  async createQuizz(
+    questions: Question[],
+    lessonId: string,
+  ): Promise<CourseTrueResponse> {
     let lastQuestionOrder = await this.getLastOrderQuestion(lessonId);
 
     const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
@@ -631,6 +630,138 @@ What was the core problem statement for the travel app?
     } catch (e) {
       Logger.error('Failed to create questions !');
       throw new ConflictException('Failed to create questions');
+    }
+
+    return { success: true } as CourseTrueResponse;
+  }
+
+  async createCourse(
+    courseData: any,
+    userId: string,
+  ): Promise<CourseTrueResponse> {
+    const sectionsToCreate: Prisma.SectionCreateManyInput[] = [];
+    const questionsToCreate: Prisma.QuestionCreateManyInput[] = [];
+    const lecturesToCreate: Prisma.LectureCreateManyInput[] = [];
+    const lessonsToCreate: Prisma.LessonCreateManyInput[] = [];
+    const answersToCreate: Prisma.AnswerCreateManyInput[] = [];
+
+    const courseId = uuidv4();
+    let currentSectionOrder = 'a0';
+
+    for (const sectionData of courseData.sections) {
+      const sectionId = uuidv4();
+
+      currentSectionOrder = generateKeyBetween(currentSectionOrder, null);
+      const sectionOrder = currentSectionOrder;
+
+      const lessonForThisSection: Prisma.LessonCreateManyInput[] = [];
+
+      let currentLessonOrder = 'a0';
+
+      for (const lessonData of sectionData.lessons) {
+        const lessonId = uuidv4();
+        const lectureId = uuidv4();
+
+        lecturesToCreate.push({
+          id: lectureId,
+          lesson_id: lessonId,
+          data: lessonData.lecture,
+        });
+
+        let currentQuestionOrder = 'a0';
+        const questionsForThisSection: Prisma.QuestionCreateManyInput[] = [];
+
+        for (const questionData of lessonData.quiz) {
+          const questionId = uuidv4();
+
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+          const questionOrder = currentQuestionOrder;
+
+          const answersForThisQuestion: Prisma.AnswerCreateManyInput[] = [];
+          let trustAnswerId: string | undefined;
+
+          let currentAnswerOrder = 'a0';
+
+          for (const answerData of questionData.answers) {
+            const answerId = uuidv4();
+
+            answersForThisQuestion.push({
+              id: answerId,
+              question_id: questionId,
+              data: answerData.answer,
+              order: currentAnswerOrder,
+            });
+
+            if (answerData.correct) {
+              trustAnswerId = answerId;
+            }
+
+            currentAnswerOrder = generateKeyBetween(currentAnswerOrder, null);
+          }
+
+          questionsForThisSection.push({
+            id: questionId,
+            lesson_id: lessonId,
+            title: questionData.question,
+            type_question: QuestionType.TEXT,
+            type_answer: questionData.type,
+            order: questionOrder,
+            trust_answer_id: trustAnswerId,
+          });
+
+          answersToCreate.push(...answersForThisQuestion);
+          currentQuestionOrder = generateKeyBetween(currentQuestionOrder, null);
+        }
+
+        lessonForThisSection.push({
+          id: lessonId,
+          title: lessonData.title,
+          description: lessonData.description,
+          order: currentLessonOrder,
+          section_id: sectionId,
+        });
+
+        questionsToCreate.push(...questionsForThisSection);
+        currentLessonOrder = generateKeyBetween(currentLessonOrder, null);
+      }
+
+      sectionsToCreate.push({
+        id: sectionId,
+        title: sectionData.title,
+        description: sectionData.description,
+        order: sectionOrder,
+        course_id: courseId,
+      });
+
+      lessonsToCreate.push(...lessonForThisSection);
+    }
+
+    try {
+      await prisma.$transaction([
+        prisma.course.create({
+          data: {
+            id: courseId,
+            title: courseData.title,
+            description: courseData.description,
+            owner_id: userId,
+          },
+        }),
+        prisma.usertoCourse.create({
+          data: {
+            user_id: userId,
+            course_id: courseId,
+            role_user: 'OWNER',
+          },
+        }),
+        prisma.section.createMany({ data: sectionsToCreate }),
+        prisma.lesson.createMany({ data: lessonsToCreate }),
+        prisma.lecture.createMany({ data: lecturesToCreate }),
+        prisma.question.createMany({ data: questionsToCreate }),
+        prisma.answer.createMany({ data: answersToCreate }),
+      ]);
+    } catch (e) {
+      Logger.error(e.message);
+      throw new ConflictException(e.message);
     }
 
     return { success: true } as CourseTrueResponse;

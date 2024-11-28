@@ -24,7 +24,7 @@ function ResultPage({ totalQuestionNb, errorNb }: LectureProps) {
     <>
       <TopBar />
       <VStack backgroundColor={'#EDE8FF'} width={'100%'} height={'100%'} alignItems={'center'}>
-        <View style={{ marginTop: 40, marginBottom: 65, width: 300 }}>
+        <VStack space={8} style={{ marginTop: 40, marginBottom: 65, width: 300 }}>
           <VStack
             width={'100%'}
             borderRadius={8}
@@ -70,8 +70,8 @@ function ResultPage({ totalQuestionNb, errorNb }: LectureProps) {
               </VStack>
             </HStack>
           </VStack>
-        </View>
-        <TextButton title={'Main Menu'} onPress={() => navigate('/home')} />
+          <TextButton title={'Main menu'} onPress={() => navigate('/home')} />
+        </VStack>
       </VStack>
     </>
   );

@@ -45,7 +45,7 @@ const CourseStatistics = () => {
   if (!courseId) return <h1>Error: No course id provided.</h1>;
   if (!courseStatisticsData.data) return <h1>Error: No data.</h1>;
   if (!courseData.data) return <h1>Error: No course data found.</h1>;
-  if (!lessonsData.data) return <h1>Error: No lesson data found.</h1>;
+  if (!lessonsData.data || lessonsData.data.length === 0) return <h1>Error: No lesson data found.</h1>;
 
   return (
     <Container>

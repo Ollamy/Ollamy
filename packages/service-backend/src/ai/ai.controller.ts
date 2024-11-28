@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   ConflictException,
   Query,
+  Body,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -21,6 +22,8 @@ import { AiService } from 'ai/ai.service';
 import { LoggedMiddleware } from 'middleware/middleware.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AnswerType } from '@prisma/client';
+import { OllContext } from '../context/context.decorator';
+import { CourseTrueResponse } from '../course/course.dto';
 
 @ApiBadRequestResponse({ description: 'Parameters are not valid' })
 @ApiTags('Ai')
@@ -87,7 +90,11 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.markdownTest();
+    return await this.aiService.generateText(
+      AiFile,
+      numberOfQuestions,
+      typeOfQuestion,
+    );
   }
 
   @ApiBody({
@@ -103,13 +110,7 @@ export class AiController {
   })
   @ApiResponse({
     status: 200,
-  })
-  @ApiQuery({
-    name: 'numberOfQuestionsPerQuiz',
-    type: 'number',
-    schema: {
-      minimum: 1,
-    },
+    description: 'The course generated from the pdf file',
   })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
@@ -117,15 +118,11 @@ export class AiController {
   @Post('/generate-course')
   async generateCourse(
     @UploadedFile() file: Express.Multer.File,
-    @Query('numberOfQuestionsPerQuiz') numberOfQuestionsPerQuiz: number = 10,
-  ): Promise<any> {
+    @OllContext() ctx: any,
+  ): Promise<CourseTrueResponse> {
     if (!file) {
       10;
       throw new ConflictException('File is empty');
-    }
-
-    if (numberOfQuestionsPerQuiz < 1) {
-      throw new ConflictException('Number of questions must be at least 1');
     }
 
     if (
@@ -139,10 +136,7 @@ export class AiController {
       mimeType: file.mimetype,
     };
 
-    return await this.aiService.generateCourse(
-      AiFile,
-      numberOfQuestionsPerQuiz,
-    );
+    return await this.aiService.generateCourse(AiFile, ctx.__user.id);
   }
 
   @ApiBody({

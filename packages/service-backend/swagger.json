@@ -2078,16 +2078,7 @@
     "/ai/generate-course": {
       "post": {
         "operationId": "AiController_generateCourse",
-        "parameters": [
-          {
-            "name": "numberOfQuestionsPerQuiz",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "minimum": 1
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2106,7 +2097,7 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "The course generated from the pdf file"
           },
           "400": {
             "description": "Parameters are not valid"
