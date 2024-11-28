@@ -1,4 +1,6 @@
 import { NativeBaseProvider, Text } from 'native-base';
+import { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import { Provider } from 'react-redux';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import AppSafeArea from 'src/components/layout/AppSafeArea/AppSafeArea';
@@ -14,6 +16,10 @@ import { store } from 'src/store';
 import customTheme from 'src/theme/theme';
 
 function App() {
+  useEffect(() => {
+    LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
+  }, []);
+
   return (
     <NativeBaseProvider theme={customTheme}>
       <NativeRouter>

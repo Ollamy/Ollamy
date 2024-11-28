@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { Button } from '@radix-ui/themes';
 import CourseCustomDialogTitleDescription from 'components/RadixUi/Dialog/CourseCustomDialogTitleDescription';
+import toast from 'react-hot-toast';
 
 type MoreOptionsType = { picture: string };
 
@@ -13,13 +14,18 @@ function HomeHeader() {
 
   const handleCreateCourse = useCallback(
     async (title: string, description: string, picture: string) => {
-      await createNewCourse({
-        createCourseModel: {
-          title,
-          description,
-          picture,
-        },
-      });
+      try {
+        await createNewCourse({
+          createCourseModel: {
+            title,
+            description,
+            picture,
+          },
+        });
+        toast.success('Course successfully created');
+      } catch (error) {
+        toast.error('An error occured');
+      }
     },
     [createNewCourse],
   );

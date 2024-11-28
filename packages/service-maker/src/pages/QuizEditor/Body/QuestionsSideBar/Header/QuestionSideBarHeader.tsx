@@ -20,6 +20,7 @@ function QuestionSideBarHeader({
   const [fileTarget, setFileTarget] = useState<File | undefined>(undefined);
   // const [contextTarget, setContextTarget] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleGenerateQuiz = useCallback(async () => {
@@ -34,17 +35,15 @@ function QuestionSideBarHeader({
       file: fileTarget,
       numberOfQuestions: numberOfQuestionTarget,
       typeOfQuestion: 'MULTIPLE_CHOICE',
-    })
-      .then(() => {
-        setIsLoading(false);
-        setError(undefined);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+    }).then(() => {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      setError(undefined);
+    }).catch((err) => {
+      setIsLoading(false);
+      console.error(err);
+    });
   }, [numberOfQuestionTarget, fileTarget, generateQuiz, lessonId]);
-
 
   return (
     <Container>
@@ -55,8 +54,11 @@ function QuestionSideBarHeader({
         onAction={handleGenerateQuiz}
         numberOfQuestionTarget={numberOfQuestionTarget}
         setNumberOfQuestionTarget={setNumberOfQuestionTarget}
+        isLoading={isLoading}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
         triggerButton={
-          <Button variant={'soft'} color={'orange'}>
+          <Button variant={'soft'} color={'orange'} onClick={() => setIsModalOpen(true)}>
             {isLoading ? (
               <Spinner />
             ) : (

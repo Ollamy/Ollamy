@@ -77,7 +77,9 @@ function LessonLecture(props: LectureProps) {
     <>
       <TopBarContainer>
         <IconButton onPress={() => navigate('/home')} iconName={'close'} style={{}} />
-        <Heading>{lessonData.title}</Heading>
+        <Heading textAlign={'center'} flex={'1'} isTruncated>
+          {lessonData.title}
+        </Heading>
         <HealthPoints health={userHp.hp} />
       </TopBarContainer>
       <VStack width={'100%'} height={'100%'} alignItems={'center'} px={4} paddingBottom={4}>

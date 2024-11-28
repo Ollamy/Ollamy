@@ -10,6 +10,7 @@ import { Button, RadioGroup, Skeleton, Text, Flex } from '@radix-ui/themes';
 import { answerActions } from 'services/api/routes/answer';
 import { deepEqual } from 'pages/QuizEditor/Factory/Components/SquareChoice/SquareChoice';
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 type MultipleChoiceState = {
   trustAnswerId: string;
@@ -113,8 +114,9 @@ function MultipleChoice({ questionId }: FactoryComponentInterface) {
           });
         }),
       );
+      toast.success('Quiz successfully saved');
     } catch (error) {
-      console.error(error);
+      toast.error('An error occured');
     }
   };
 

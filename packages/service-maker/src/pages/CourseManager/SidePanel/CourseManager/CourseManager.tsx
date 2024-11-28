@@ -23,6 +23,7 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import CourseCustomDialogTitleDescription from 'components/RadixUi/Dialog/CourseCustomDialogTitleDescription';
+import toast from 'react-hot-toast';
 
 interface CourseManagerProps {
   courseId: string;
@@ -42,10 +43,15 @@ function CourseManager({ courseId }: CourseManagerProps) {
 
   const handleEditCourse = useCallback(
     async (title: string, description: string, picture: string) => {
-      await updateCourse({
-        id: courseId,
-        updateCourseModel: { title, description, picture },
-      });
+      try {
+        await updateCourse({
+          id: courseId,
+          updateCourseModel: { title, description, picture },
+        });
+        toast.success('Course successfully updated')
+      } catch (error) {
+        toast.error('An error occured')
+      }
     },
     [updateCourse, courseId],
   );
