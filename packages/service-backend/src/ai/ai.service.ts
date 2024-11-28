@@ -113,14 +113,14 @@ export class AiService {
 
     const descriptionMatch = markdown.match(/^#[^\n]+\n+(.+)\n+(?=##)/s);
     course.description = descriptionMatch
-      ? descriptionMatch[1].trim().replace(/\n.*/s, '')
+      ? descriptionMatch[1]?.trim().replace(/\n.*/s, '')
       : 'No description provided';
 
     let sectionMatch;
     while ((sectionMatch = sectionRegex.exec(markdown)) !== null) {
       const section: ParsedSection = {
         title: sectionMatch[1],
-        description: sectionMatch[2].trim().replace(/\n.*/s, ''),
+        description: sectionMatch[2]?.trim().replace(/\n.*/s, ''),
         lessons: [],
       };
 
@@ -129,7 +129,7 @@ export class AiService {
         const lesson: ParsedLesson = {
           title: lessonMatch[1],
           description: lessonMatch[2],
-          lecture: lessonMatch[3].trim(),
+          lecture: lessonMatch[3]?.trim(),
           quiz: [],
         };
 
@@ -137,7 +137,7 @@ export class AiService {
         while ((questionMatch = questionRegex.exec(lessonMatch[4])) !== null) {
           const question: ParsedQuizQuestion = {
             type: questionMatch[1],
-            question: questionMatch[2].trim().replace(/\n.*/s, ''),
+            question: questionMatch[2]?.trim().replace(/\n.*/s, ''),
             answers: [],
           };
 
@@ -148,7 +148,7 @@ export class AiService {
                 (answerMatch = freeAnswerRegex.exec(questionMatch[2])) !== null
               ) {
                 question.answers.push({
-                  answer: answerMatch[1].trim(),
+                  answer: answerMatch[1]?.trim().replace('[x] ', ''),
                   correct: true,
                 });
               }
@@ -158,7 +158,7 @@ export class AiService {
                 (answerMatch = orderChoiceRegex.exec(questionMatch[2])) !== null
               ) {
                 question.answers.push({
-                  answer: answerMatch[2].trim(),
+                  answer: answerMatch[2]?.trim(),
                   correct: answerMatch[1] === 'x',
                 });
               }
@@ -168,7 +168,7 @@ export class AiService {
                 (answerMatch = answerRegex.exec(questionMatch[2])) !== null
               ) {
                 question.answers.push({
-                  answer: answerMatch[2].trim(),
+                  answer: answerMatch[2]?.trim(),
                   correct: answerMatch[1] === 'x',
                 });
               }
